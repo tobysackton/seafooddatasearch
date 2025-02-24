@@ -1,6 +1,6 @@
 # Site settings
 title: Seafood Datasearch
-email: your-email@example.com
+email: tsackton@gmail.com
 description: >-
   Market analysis and forecasts for the seafood industry.
 
@@ -8,7 +8,7 @@ description: >-
 baseurl: ""  # Leave empty for root deployment
 url: "https://tobysackton.github.io"  # If using GitHub Pages
 
-# If using a custom domain (like seafooddatasearch.com), replace with:
+# If using a custom domain later (like seafooddatasearch.com), replace with:
 # url: "https://seafooddatasearch.com"
 
 # Social media (optional)
@@ -29,7 +29,6 @@ include:
 
 # Exclude unnecessary files
 exclude:
-  - README.md
   - Gemfile
   - Gemfile.lock
   - node_modules/
