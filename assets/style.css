@@ -1,0 +1,40 @@
+body {
+    font-family: "Arial", sans-serif;
+    background-color: #E0F2F1; /* Very light sea green */
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+header {
+    padding: 20px;
+}
+
+.logo {
+    width: 600px;
+    height: auto;
+    margin: 20px auto;
+    display: block;
+}
+
+.species-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px;
+}
+
+.species-icons img {
+    width: 150px; /* Reduced from 200px */
+    height: auto;
+}
+
+footer {
+    padding: 20px;
+    background-color: #D1EDE1;
+}
+
+.footer-contact {
+    margin-top: 20px;
+    font-size: 14px;
+}
