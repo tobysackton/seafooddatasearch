@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Spending and Income Trends</title>
+    <!-- Load Chart.js from a reliable CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .chart-container {
+            height: 400px;
+            width: 100%;
+            position: relative;
+        }
+    </style>
+    
+    <!-- Simple password protection script -->
+    <script>
+        // Uncomment this section when you're ready to add password protection
+        /*
+        (function() {
+            const password = "yourSecurePassword"; // Change this
+            let input = prompt("Please enter the password to view this page:");
+            
+            if (input !== password) {
+                alert("Incorrect password!");
+                window.location.href = "about:blank";
+            }
+        })();
+        */
+    </script>
+</head>
+<body>
+    <div class="p-6">
+        <h2 class="text-2xl font-bold mb-6">Food Spending and Income Trends</h2>
+        <div class="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+        <div id="error-message" class="mt-4 text-red-600 hidden">Error loading chart. Please check your connection.</div>
+        
+        <div class="mt-8 bg-gray-50 p-4 rounded-lg">
+            <h3 class="text-lg font-semibold mb-4">Key Findings (2022-2024)</h3>
+            <ul class="space-y-2" id="findings">
+                <!-- Findings will be inserted here -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const data = [
+            { year: 2019, foodService: 65.3, grocery: 67.2, income: 52000 },
+            { year: 2020, foodService: 51.2, grocery: 74.6, income: 51000 },
+            { year: 2021, foodService: 60.8, grocery: 73.3, income: 54000 },
+            { year: 2022, foodService: 70.5, grocery: 78.6, income: 56000 },
+            { year: 2023, foodService: 75.2, grocery: 77.3, income: 57200 },
+            { year: 2024, foodService: 77.1, grocery: 77.0, income: 58100 }
+        ];
+
+        // Calculate changes from 2022 to 2024
+        const data2022 = data.find(d => d.year === 2022);
+        const data2024 = data.find(d => d.year === 2024);
+        
+        const changes = {
+            foodService: ((data2024.foodService - data2022.foodService) / data2022.foodService * 100).toFixed(1),
+            grocery: ((data2024.grocery - data2022.grocery) / data2022.grocery * 100).toFixed(1),
+            income: ((data2024.income - data2022.income) / data2022.income * 100).toFixed(1)
+        };
+
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                // Check if Chart.js is loaded
+                if (typeof Chart === 'undefined') {
+                    throw new Error('Chart.js not loaded');
+                }
+                
+                // Update findings
+                const findingsElement = document.getElementById('findings');
+                findingsElement.innerHTML = `
+                    <li><strong>Foodservice Growth:</strong> ${changes.foodService}% increase in spending, reaching $${data2024.foodService.toFixed(1)}B</li>
+                    <li><strong>Grocery Trend:</strong> ${changes.grocery}% change, to $${data2024.grocery.toFixed(1)}B</li>
+                    <li><strong>Income Context:</strong> ${changes.income}% growth in disposable income per capita during this period</li>
+                `;
+                
+                // Setup the chart
+                const ctx = document.getElementById('myChart').getContext('2d');
+                
+                // Extract data for chart
+                const years = data.map(d => d.year);
+                const foodServiceData = data.map(d => d.foodService);
+                const groceryData = data.map(d => d.grocery);
+                const incomeData = data.map(d => d.income);
+                
+                // Create the chart
+                const myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: years,
+                        datasets: [
+                            {
+                                label: 'Foodservice (Billions USD)',
+                                data: foodServiceData,
+                                backgroundColor: '#8884d8',
+                                order: 2
+                            },
+                            {
+                                label: 'Grocery (Billions USD)',
+                                data: groceryData,
+                                backgroundColor: '#82ca9d',
+                                order: 3
+                            },
+                            {
+                                label: 'Income per Capita',
+                                data: incomeData,
+                                type: 'line',
+                                borderColor: '#ff7300',
+                                backgroundColor: '#ff7300',
+                                borderWidth: 2,
+                                pointRadius: 4,
+                                yAxisID: 'y1',
+                                order: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                min: 40,
+                                max: 90,
+                                title: {
+                                    display: true,
+                                    text: 'Food Spending (Billions USD)'
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                min: 45000,
+                                max: 65000,
+                                title: {
+                                    display: true,
+                                    text: 'Income per Capita'
+                                },
+                                // Grid line settings
+                                grid: {
+                                    drawOnChartArea: false
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return '$' + (value/1000).toFixed(0) + 'K';
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.dataset.yAxisID === 'y1') {
+                                            label += '$' + Math.round(context.raw).toLocaleString();
+                                        } else {
+                                            label += '$' + context.raw.toFixed(1) + 'B';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error initializing chart:', error);
+                document.getElementById('error-message').classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
