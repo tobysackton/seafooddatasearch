@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Newfoundland Snow Crab 2025</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="../assets/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script>
         function checkPassword() {
             var password = prompt("Enter Password:");
             if (password !== "Crab2025") {
                 alert("Incorrect password. Access denied.");
-                window.location.href = "index.html";
+                window.location.href = "../index.html";
             }
         }
     </script>
@@ -21,13 +22,21 @@
     </header>
     <main>
         <p>Market insights and analysis for the 2025 season...</p>
+        
+        <!-- Link to Open Chart -->
+        <section>
+            <h2>Market Trends</h2>
+            <a href="../visualizations/market-trends/Food_Spending_and_Income_Trends.html">
+                <img src="../assets/images/Food_Spending_and_Income_Trends.png" alt="View Market Trends Chart" width="300">
+            </a>
+        </section>
     </main>
     <footer>
         <div class="species-icons">
-            <img src="assets/images/Lobster_icon.png" alt="Lobster">
-            <img src="assets/images/shrimp_icon.png" alt="Shrimp">
-            <img src="assets/images/crab_icon.png" alt="Crab">
-            <img src="assets/images/salmon_icon.png" alt="Salmon">
+            <img src="../assets/images/Lobster_icon.png" alt="Lobster">
+            <img src="../assets/images/shrimp_icon.png" alt="Shrimp">
+            <img src="../assets/images/crab_icon.png" alt="Crab">
+            <img src="../assets/images/salmon_icon.png" alt="Salmon">
         </div>
         <div class="footer-contact">
             <p>Questions or Comments? Email <a href="mailto:jsackton@seafoodlink.com">John Sackton</a></p>
