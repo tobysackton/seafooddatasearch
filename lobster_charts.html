@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seafood Datasearch</title>
+    <title>Lobster Charts - Seafood Datasearch</title>
     <link rel="stylesheet" href="assets/style.css">
     <style>
         body {
@@ -62,34 +62,12 @@
             text-align: center;
         }
         
-        .project-data {
+        .chart-content {
             background-color: #F5F5F5;
             border-radius: 8px;
             padding: 20px;
             margin: 20px 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .project-data ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        
-        .project-data li {
-            margin: 10px 0;
-        }
-        
-        .project-data a {
-            text-decoration: none;
-            color: #00796B;
-            font-weight: bold;
-            padding: 5px 10px;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-        
-        .project-data a:hover {
-            background-color: #B2DFDB;
         }
         
         .nav-menu {
@@ -121,6 +99,53 @@
         
         .nav-menu a:hover {
             background-color: #B2DFDB;
+        }
+        
+        .chart-preview {
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #B2DFDB;
+            border-radius: 8px;
+            background-color: white;
+            transition: transform 0.2s;
+        }
+        
+        .chart-preview:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .chart-preview img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .chart-preview h4 {
+            margin: 10px 0;
+            color: #00796B;
+        }
+        
+        .chart-preview p {
+            color: #555;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .chart-preview a {
+            display: inline-block;
+            background-color: #00796B;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .chart-preview a:hover {
+            background-color: #00695C;
         }
         
         .species-icons {
@@ -170,30 +195,29 @@
             </div>
         </div>
         
-        <!-- Center Pane - Project Data and Links -->
+        <!-- Center Pane - Lobster Charts -->
         <div class="center-pane">
-            <h2>Project Data</h2>
-            <div class="project-data">
-                <h3>Interactive Charts</h3>
-                <ul>
-                    <li><a href="crab_charts.html">Crab Charts</a></li>
-                    <li><a href="lobster_charts.html">Lobster Charts</a></li>
-                </ul>
+            <h2>Lobster Charts</h2>
+            <div class="chart-content">
+                <h3>Available Lobster Market Visualizations</h3>
+                <p>Select a chart to view detailed data and interactive visualizations</p>
+                
+                <div class="chart-preview">
+                    <img src="assets/images/lobster_icon.png" alt="Regional Lobster Production Chart Preview" style="width: 120px; height: auto;">
+                    <h4>Regional Lobster Production (2010-2022)</h4>
+                    <p>Compare lobster production across Canadian regions and the United States over time. View trends in metric tonnes for Newfoundland, Quebec, Gulf Region, Maritimes, and U.S. production.</p>
+                    <a href="visualizations/regional_lobster_production.html">View Chart</a>
+                </div>
+                
+                <div id="lobsterChartContainer" style="width: 100%; height: 400px; margin-top: 20px;">
+                    <p>More charts coming soon...</p>
+                </div>
             </div>
             
-            <div class="project-data">
-                <h3>Current Forecasts</h3>
-                <ul>
-                    <li><a href="newfoundland_snow_crab_2025.html">Newfoundland Snow Crab 2025</a></li>
-                    <li><a href="lobster_2025.html">Lobster 2025</a></li>
-                </ul>
-            </div>
-            
-            <div class="project-data">
-                <h3>Market Trends</h3>
-                <ul>
-                    <li><a href="visualizations/market-trends/Food_Spending_and_Income_Trends.html">Food Spending and Income Trends</a></li>
-                </ul>
+            <div class="chart-content">
+                <h3>Species Information</h3>
+                <p>Key information about Maine lobster, spiny lobster, and other commercial lobster species.</p>
+                <p>Our data team is currently developing additional species-specific visualizations to provide deeper insights into market trends for different lobster varieties.</p>
             </div>
         </div>
         
@@ -204,7 +228,14 @@
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="crab_charts.html">Crab Charts</a></li>
-                    <li><a href="lobster_charts.html">Lobster Charts</a></li>
+                    <li><a href="lobster_2025.html">Lobster Forecast 2025</a></li>
+                </ul>
+            </div>
+            
+            <div class="nav-menu">
+                <h3>Lobster Charts</h3>
+                <ul>
+                    <li><a href="visualizations/regional_lobster_production.html">Regional Production</a></li>
                 </ul>
             </div>
         </div>
