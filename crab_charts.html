@@ -101,6 +101,38 @@
             background-color: #B2DFDB;
         }
         
+        .chart-links {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .chart-links ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .chart-links li {
+            margin: 15px 0;
+        }
+        
+        .chart-links a {
+            text-decoration: none;
+            color: #00796B;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: block;
+            background-color: #E0F2F1;
+        }
+        
+        .chart-links a:hover {
+            background-color: #B2DFDB;
+        }
+        
         .species-icons {
             display: flex;
             justify-content: center;
@@ -153,12 +185,19 @@
             <h2>Crab Charts</h2>
             <div class="chart-content">
                 <h3>Crab Market Data</h3>
-                <p>This section will contain interactive charts and data visualizations for crab markets.</p>
+                <p>This section contains interactive charts and data visualizations for crab markets.</p>
+                
+                <div class="chart-links">
+                    <h4>Available Chart Visualizations:</h4>
+                    <ul>
+                        <li><a href="ca_crab_exports_us_and_mktshare_start_2012.html">Canada Snow Crab Exports to US (2012-2024)</a></li>
+                        <li><a href="newfoundland_snow_crab_2025.html">Newfoundland Snow Crab Forecast</a></li>
+                    </ul>
+                </div>
                 
                 <!-- Placeholder for Chart.js content -->
                 <div id="crabChartContainer" style="width: 100%; height: 400px; margin-top: 20px;">
-                    <p>Charts loading...</p>
-                    <!-- Chart.js content will be placed here -->
+                    <p>Select a chart from the links above to view detailed visualizations.</p>
                 </div>
             </div>
             
