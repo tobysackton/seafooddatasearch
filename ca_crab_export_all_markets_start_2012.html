@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canada Crab Exports to All Markets - Seafood Datasearch</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #E0F2F1; /* Very light sea green */
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            padding: 20px;
+            text-align: center;
+            background-color: #B2DFDB; /* Slightly darker sea green for header */
+        }
+        
+        .page-container {
+            display: flex;
+            min-height: calc(100vh - 200px); /* Adjust based on header and footer height */
+        }
+        
+        .left-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #E0F2F1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #B2DFDB;
+        }
+        
+        .center-pane {
+            flex: 2;
+            padding: 20px;
+            background-color: #FFFFFF;
+            text-align: center;
+        }
+        
+        .right-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #E0F2F1;
+            border-left: 1px solid #B2DFDB;
+        }
+        
+        .logo {
+            width: 90%;
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        
+        .tagline {
+            font-style: italic;
+            color: #00796B;
+            text-align: center;
+        }
+        
+        .chart-content {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-menu {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .nav-menu li {
+            margin: 10px 0;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: #00796B;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: block;
+        }
+        
+        .nav-menu a:hover {
+            background-color: #B2DFDB;
+        }
+        
+        .species-icons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 10px;
+        }
+        
+        .species-icons img {
+            width: 80px;
+            height: auto;
+        }
+        
+        footer {
+            padding: 20px;
+            background-color: #B2DFDB;
+            text-align: center;
+        }
+        
+        /* Chart container styles */
+        #chart-container-wrapper {
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        #chart-container {
+            height: 400px;
+            width: 100%;
+        }
+        
+        /* Chart legend style */
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 15px;
+            padding: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+        
+        .chart-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .page-container {
+                flex-direction: column;
+            }
+            
+            .left-pane, .center-pane, .right-pane {
+                width: 100%;
+                border: none;
+            }
+            
+            #chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+    
+    <!-- Load Chart.js and PapaParse -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Seafood Datasearch</h1>
+    </header>
+    
+    <div class="page-container">
+        <!-- Left Pane - Logo and Tagline -->
+        <div class="left-pane">
+            <img src="assets/images/SD_Logo.png" alt="Seafood Datasearch Logo" class="logo">
+            <div class="tagline">
+                <h3>Market Analysis and Forecasts</h3>
+                <p>Providing expert insights into the seafood industry.</p>
+            </div>
+        </div>
+        
+        <!-- Center Pane - Chart Content -->
+        <div class="center-pane">
+            <h2>Canada Crab Exports to Global Markets</h2>
+            <div class="chart-content">
+                <h3>Canada's Top 8 Crab Export Markets (2012-2024)</h3>
+                <p>This visualization shows Canada's crab exports to its top 8 global markets with percentage of exports to the US.</p>
+                
+                <!-- Chart Container -->
+                <div id="chart-container-wrapper">
+                    <div class="chart-title">Canada's Crab Exports by Destination (2012-2024)</div>
+                    <div style="position: relative; height: 400px; width: 100%">
+                        <canvas id="chart-container"></canvas>
+                    </div>
+                    <div id="chart-legend" class="chart-legend"></div>
+                </div>
+            </div>
+            
+            <div class="chart-content">
+                <h3>About This Data</h3>
+                <p>This chart displays Canada's crab export volumes to its top 8 global markets in metric tons. The stacked bars show export volumes to each country, while the green line represents the percentage of total exports going to the United States.</p>
+                <p>Data source: Trade flow data from Canada to global markets (2012-2024)</p>
+            </div>
+        </div>
+        
+        <!-- Right Pane - Navigation -->
+        <div class="right-pane">
+            <div class="nav-menu">
+                <h3>Navigation</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="crab_charts.html">Crab Charts</a></li>
+                    <li><a href="ca_crab_exports_us_and_mktshare_start_2012.html">Canada-US Crab Trade</a></li>
+                    <li><a href="lobster_charts.html">Lobster Charts</a></li>
+                    <li><a href="newfoundland_snow_crab_2025.html">Newfoundland Snow Crab</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="species-icons">
+            <img src="assets/images/Lobster_icon.png" alt="Lobster">
+            <img src="assets/images/shrimp_icon.png" alt="Shrimp">
+            <img src="assets/images/crab_icon.png" alt="Crab">
+            <img src="assets/images/salmon_icon.png" alt="Salmon">
+        </div>
+        <p>&copy; 2025 Seafood Datasearch. All rights reserved.</p>
+    </footer>
+    
+    <!-- Chart.js implementation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Declare variables at higher scope
+            let chart = null;
+            
+            // Check if required libraries are loaded
+            if (!window.Chart || !window.Papa || !window._) {
+                document.getElementById('chart-container-wrapper').innerHTML = 
+                    '<div style="color: #cc0000; padding: 20px;">Error: One or more required libraries failed to load. Please check the console for details.</div>';
+                console.error('Missing libraries:', {
+                    'Chart.js': !!window.Chart,
+                    'PapaParse': !!window.Papa,
+                    'Lodash': !!window._
+                });
+                return;
+            }
+            
+            // Show loading indicator
+            const chartContainer = document.getElementById('chart-container-wrapper');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.style.cssText = 'display: flex; justify-content: center; align-items: center; height: 200px;';
+            loadingDiv.textContent = 'Loading crab export data...';
+            chartContainer.appendChild(loadingDiv);
+            
+            // Load and process CSV data
+            loadData();
+            
+            async function loadData() {
+                try {
+                    // Path to the CSV file
+                    const csvPath = 'data/species/crab/trade_flow/ca_crab_exports_all_markets_start_2012.csv';
+                    
+                    // Fetch the CSV file
+                    const response = await fetch(csvPath);
+                    if (!response.ok) {
+                        throw new Error(`Failed to load CSV file: ${response.status} ${response.statusText}`);
+                    }
+                    
+                    const csvText = await response.text();
+                    
+                    // Parse CSV using PapaParse
+                    Papa.parse(csvText, {
+                        header: true,
+                        dynamicTyping: true,
+                        skipEmptyLines: true,
+                        complete: (results) => {
+                            // Remove loading indicator
+                            if (loadingDiv && loadingDiv.parentNode) {
+                                loadingDiv.parentNode.removeChild(loadingDiv);
+                            }
+                            processData(results.data);
+                        },
+                        error: (error) => {
+                            showError(`Error parsing CSV: ${error}`);
+                        }
+                    });
+                } catch (err) {
+                    showError(`Error loading data: ${err.message}`);
+                }
+            }
+            
+            function processData(rawData) {
+                try {
+                    // Filter for Canada's exports between 2012-2024
+                    const canadaExports = rawData.filter(row => 
+                      row['reporter name'] === "Canada" && 
+                      row['trade flow'] === "EXPORT" &&
+                      row.year >= 2012 && 
+                      row.year <= 2024 &&
+                      row['quantity unit'] === "KG"
+                    );
+                    
+                    // Group by partner country to find top 8 markets by total quantity
+                    const exportsByPartner = _.groupBy(canadaExports, 'partner name');
+                    const partnerTotals = Object.entries(exportsByPartner).map(([partner, rows]) => ({
+                      partner,
+                      totalQuantity: _.sumBy(rows, 'quantity')
+                    }));
+                    
+                    // Sort by total quantity and get top 8
+                    const top8Partners = _.orderBy(partnerTotals, ['totalQuantity'], ['desc'])
+                      .slice(0, 8)
+                      .map(p => p.partner);
+                    
+                    // Filter data to include only top 8 partners and group by year
+                    const filteredExports = canadaExports.filter(row => top8Partners.includes(row['partner name']));
+                    const exportsByYear = _.groupBy(filteredExports, 'year');
+                    
+                    // Calculate yearly export totals and percentages
+                    const chartData = Object.entries(exportsByYear).map(([year, rows]) => {
+                      // Group this year's data by partner
+                      const byPartner = _.groupBy(rows, 'partner name');
+                      
+                      // Get total exports for this year
+                      const yearTotal = _.sumBy(rows, 'quantity');
+                      
+                      // Calculate quantity for each top partner
+                      const result = { year: parseInt(year) };
+                      
+                      // Add quantity for each top partner (in metric tons)
+                      top8Partners.forEach(partner => {
+                        const partnerRows = byPartner[partner] || [];
+                        result[partner] = _.sumBy(partnerRows, 'quantity') / 1000; // Convert kg to metric tons
+                      });
+                      
+                      // Calculate percentage to US
+                      const usRows = byPartner['United States'] || [];
+                      const usTotal = _.sumBy(usRows, 'quantity');
+                      result.usPercentage = yearTotal > 0 ? (usTotal / yearTotal * 100) : 0;
+                      
+                      return result;
+                    });
+                    
+                    // Sort by year
+                    const sortedChartData = _.orderBy(chartData, ['year'], ['asc']);
+                    
+                    // Create the chart
+                    createChart(sortedChartData, top8Partners);
+                } catch (err) {
+                    showError(`Error processing data: ${err.message}`);
+                }
+            }
+            
+            function createChart(data, partners) {
+                const ctx = document.getElementById('chart-container').getContext('2d');
+                
+                // Clean up existing chart if it exists
+                if (chart) {
+                    chart.destroy();
+                }
+                
+                // Years for x-axis labels
+                const years = data.map(item => item.year);
+                
+                // Prepare datasets for Chart.js
+                const datasets = [];
+                
+                // Define colors for partners
+                const partnerColors = {
+                    'United States': '#0066CC',
+                    'China (People\'s Republic of)': '#CC0000',
+                    'Japan': '#9400D3',
+                    'Indonesia': '#2E8B57',
+                    'Viet-Nam': '#FF9900',
+                    'Hong Kong': '#DC143C',
+                    'Thailand': '#1E90FF',
+                    'Netherlands': '#FF6347'
+                };
+                
+                // Custom color mapping for any partners not defined above
+                const defaultColors = ['#5470C6', '#91CC75', '#FAC858', '#EE6666', '#73C0DE', '#3BA272', '#FC8452', '#9A60B4'];
+                
+                // Add bar datasets for each partner
+                partners.forEach((partner, index) => {
+                    datasets.push({
+                        label: partner,
+                        data: data.map(item => item[partner] || 0),
+                        backgroundColor: partnerColors[partner] || defaultColors[index % defaultColors.length],
+                        borderColor: partnerColors[partner] || defaultColors[index % defaultColors.length],
+                        borderWidth: 1,
+                        stack: 'Stack 0',
+                        yAxisID: 'y'
+                    });
+                });
+                
+                // Add line dataset for US percentage
+                datasets.push({
+                    label: 'US Market Share (%)',
+                    data: data.map(item => item.usPercentage),
+                    type: 'line',
+                    fill: false,
+                    backgroundColor: '#006400',
+                    borderColor: '#006400',
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    yAxisID: 'y1',
+                    datalabels: {
+                        color: '#006400',
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: function(value) {
+                            return value.toFixed(0) + '%';
+                        }
+                    }
+                });
+                
+                // Load the datalabels plugin for Chart.js
+                const datalabelsPlugin = {
+                    id: 'datalabels',
+                    afterDatasetsDraw(chart, args, options) {
+                        const { ctx } = chart;
+                        
+                        // Find the US Market Share dataset (last one)
+                        const usShareDataset = chart.data.datasets[chart.data.datasets.length - 1];
+                        if (!usShareDataset || !usShareDataset.label.includes('US Market Share')) return;
+                        
+                        ctx.save();
+                        ctx.font = 'bold 12px Arial';
+                        ctx.fillStyle = '#006400';
+                        ctx.textAlign = 'center';
+                        
+                        // Draw the percentage labels above each point on the line
+                        for (let i = 0; i < usShareDataset.data.length; i++) {
+                            const value = usShareDataset.data[i];
+                            const x = chart.getDatasetMeta(chart.data.datasets.length - 1).data[i].x;
+                            const y = chart.getDatasetMeta(chart.data.datasets.length - 1).data[i].y;
+                            
+                            // Draw the percentage text above the point
+                            ctx.fillText(value.toFixed(0) + '%', x, y - 10);
+                        }
+                        
+                        ctx.restore();
+                    }
+                };
+                
+                // Create chart with two y-axes (volume and percentage)
+                chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: years,
+                        datasets: datasets
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: 'Metric Tons'
+                                },
+                                stacked: true
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: 'US Market Share (%)'
+                                },
+                                min: 0,
+                                max: 100,
+                                grid: {
+                                    drawOnChartArea: false
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (label.includes('Market Share')) {
+                                            label += context.parsed.y.toFixed(1) + '%';
+                                        } else {
+                                            label += context.parsed.y.toFixed(2) + ' metric tons';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    plugins: [datalabelsPlugin]
+                });
+                
+                // Create custom legend
+                createCustomLegend(partners, partnerColors, defaultColors);
+            }
+            
+            function createCustomLegend(partners, partnerColors, defaultColors) {
+                const legendContainer = document.getElementById('chart-legend');
+                legendContainer.innerHTML = '';
+                
+                // Create legend items for each partner
+                partners.forEach((partner, index) => {
+                    const legendItem = document.createElement('div');
+                    legendItem.className = 'legend-item';
+                    
+                    const colorBox = document.createElement('div');
+                    colorBox.className = 'legend-color';
+                    colorBox.style.backgroundColor = partnerColors[partner] || defaultColors[index % defaultColors.length];
+                    
+                    const label = document.createElement('span');
+                    label.textContent = partner;
+                    
+                    legendItem.appendChild(colorBox);
+                    legendItem.appendChild(label);
+                    legendContainer.appendChild(legendItem);
+                });
+                
+                // Add US Market Share line to legend
+                const usShareItem = document.createElement('div');
+                usShareItem.className = 'legend-item';
+                
+                const lineBox = document.createElement('div');
+                lineBox.className = 'legend-color';
+                lineBox.style.backgroundColor = '#006400';
+                lineBox.style.height = '4px';
+                lineBox.style.marginTop = '8px';
+                
+                const lineLabel = document.createElement('span');
+                lineLabel.textContent = 'US Market Share (%)';
+                
+                usShareItem.appendChild(lineBox);
+                usShareItem.appendChild(lineLabel);
+                legendContainer.appendChild(usShareItem);
+            }
+            
+            function showError(message) {
+                chartContainer.innerHTML = `<div style="color: #cc0000; padding: 20px;">${message}</div>`;
+                console.error(message);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresh Crab Monthly Volume (Nov 2023 - Jan 2025) - Seafood Datasearch</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #E0F2F1; /* Very light sea green */
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            padding: 20px;
+            text-align: center;
+            background-color: #B2DFDB; /* Slightly darker sea green for header */
+        }
+        
+        .page-container {
+            display: flex;
+            min-height: calc(100vh - 200px); /* Adjust based on header and footer height */
+        }
+        
+        .left-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #E0F2F1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #B2DFDB;
+        }
+        
+        .center-pane {
+            flex: 2;
+            padding: 20px;
+            background-color: #FFFFFF;
+            text-align: center;
+        }
+        
+        .right-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #E0F2F1;
+            border-left: 1px solid #B2DFDB;
+        }
+        
+        .logo {
+            width: 90%;
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        
+        .tagline {
+            font-style: italic;
+            color: #00796B;
+            text-align: center;
+        }
+        
+        .chart-content {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-menu {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .nav-menu li {
+            margin: 10px 0;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: #00796B;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: block;
+        }
+        
+        .nav-menu a:hover {
+            background-color: #B2DFDB;
+        }
+        
+        .species-icons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 10px;
+        }
+        
+        .species-icons img {
+            width: 80px;
+            height: auto;
+        }
+        
+        footer {
+            padding: 20px;
+            background-color: #B2DFDB;
+            text-align: center;
+        }
+        
+        /* Chart container styles */
+        #chart-container-wrapper {
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        #chart-container {
+            height: 500px;
+            width: 100%;
+        }
+        
+        /* Chart legend style */
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 15px;
+            padding: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+        
+        .chart-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .insight-box {
+            background-color: #E0F7FA;
+            border-left: 4px solid #00BCD4;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+            text-align: left;
+        }
+        
+        .insight-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #00796B;
+        }
+        
+        .negative {
+            color: #D32F2F;
+            font-weight: bold;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .page-container {
+                flex-direction: column;
+            }
+            
+            .left-pane, .center-pane, .right-pane {
+                width: 100%;
+                border: none;
+            }
+            
+            #chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+    
+    <!-- Load Chart.js and PapaParse -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Seafood Datasearch</h1>
+    </header>
+    
+    <div class="page-container">
+        <!-- Left Pane - Logo and Tagline -->
+        <div class="left-pane">
+            <img src="assets/images/SD_Logo.png" alt="Seafood Datasearch Logo" class="logo">
+            <div class="tagline">
+                <h3>Market Analysis and Forecasts</h3>
+                <p>Providing expert insights into the seafood industry.</p>
+            </div>
+        </div>
+        
+        <!-- Center Pane - Chart Content -->
+        <div class="center-pane">
+            <h2>Fresh Crab Recent Volume Analysis</h2>
+            <div class="chart-content">
+                <h3>Recent Volume Trends (Nov 2023 - Jan 2025)</h3>
+                <p>This chart focuses on recent fresh crab volume trends over the past 15 months, highlighting continued market challenges.</p>
+                
+                <div class="insight-box">
+                    <div class="insight-title">Key Insight:</div>
+                    <p>In the peak sales period of December, retail crab volume declined <span class="negative">17.6%</span> year over year.</p>
+                </div>
+                
+                <!-- Chart Container -->
+                <div id="chart-container-wrapper">
+                    <div class="chart-title">Fresh Crab Monthly Volume (lbs) with Trend Line</div>
+                    <div style="position: relative; height: 500px; width: 100%">
+                        <canvas id="chart-container"></canvas>
+                    </div>
+                    <div id="chart-legend" class="chart-legend"></div>
+                </div>
+            </div>
+            
+            <div class="chart-content">
+                <h3>About This Data</h3>
+                <p>This chart visualizes the monthly volume trends for fresh crab in the retail market from November 2023 through January 2025. The bar chart represents actual monthly volumes in pounds, while the red trendline illustrates the overall declining pattern in market volume.</p>
+                <p>The continued volume declines reflect ongoing market challenges including supply constraints, shifts in consumer purchasing behavior, and pricing pressures in the retail sector.</p>
+                <p>Data source: Retail Fresh Monthly Sales Data</p>
+            </div>
+        </div>
+        
+        <!-- Right Pane - Navigation -->
+        <div class="right-pane">
+            <div class="nav-menu">
+                <h3>Navigation</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="crab_charts.html">Crab Charts</a></li>
+                    <li><a href="retail_fresh_crab_vol_month.html">Monthly Volume Trends</a></li>
+                    <li><a href="retail_crab_buying_patterns.html">Retail Buying Patterns</a></li>
+                    <li><a href="seasonal_buying_patterns.html">Seasonal Patterns</a></li>
+                    <li><a href="consumer_preferences_crab.html">Consumer Preferences</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="species-icons">
+            <img src="assets/images/Lobster_icon.png" alt="Lobster">
+            <img src="assets/images/shrimp_icon.png" alt="Shrimp">
+            <img src="assets/images/crab_icon.png" alt="Crab">
+            <img src="assets/images/salmon_icon.png" alt="Salmon">
+        </div>
+        <p>&copy; 2025 Seafood Datasearch. All rights reserved.</p>
+    </footer>
+    
+    <!-- Chart.js implementation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Declare variables at higher scope
+            let chart = null;
+            
+            // Check if required libraries are loaded
+            if (!window.Chart || !window.Papa || !window._) {
+                document.getElementById('chart-container-wrapper').innerHTML = 
+                    '<div style="color: #cc0000; padding: 20px;">Error: One or more required libraries failed to load. Please check the console for details.</div>';
+                console.error('Missing libraries:', {
+                    'Chart.js': !!window.Chart,
+                    'PapaParse': !!window.Papa,
+                    'Lodash': !!window._
+                });
+                return;
+            }
+            
+            // Show loading indicator
+            const chartContainer = document.getElementById('chart-container-wrapper');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.style.cssText = 'display: flex; justify-content: center; align-items: center; height: 200px;';
+            loadingDiv.textContent = 'Loading data...';
+            chartContainer.appendChild(loadingDiv);
+            
+            // Load and process CSV data
+            loadData();
+            
+            async function loadData() {
+                try {
+                    // Fetch the CSV file with the correct path
+                    const response = await fetch('data/species/crab/market_trends/Retail_Fresh_Monthly.csv');
+                    if (!response.ok) {
+                        throw new Error(`Failed to load CSV file: ${response.status} ${response.statusText}`);
+                    }
+                    
+                    const csvText = await response.text();
+                    
+                    // Parse CSV using PapaParse
+                    Papa.parse(csvText, {
+                        header: true,
+                        dynamicTyping: true,
+                        skipEmptyLines: true,
+                        complete: (results) => {
+                            // Remove loading indicator
+                            if (loadingDiv && loadingDiv.parentNode) {
+                                loadingDiv.parentNode.removeChild(loadingDiv);
+                            }
+                            processData(results.data);
+                        },
+                        error: (error) => {
+                            showError(`Error parsing CSV: ${error}`);
+                        }
+                    });
+                } catch (err) {
+                    showError(`Error loading data: ${err.message}`);
+                }
+            }
+            
+            function processData(rawData) {
+                try {
+                    // Group data by month and sum Total Vol
+                    const volumeByMonth = _.chain(rawData)
+                        .groupBy('Month')
+                        .map((group, month) => ({
+                            month: month,
+                            totalVolume: _.sumBy(group, 'Total Vol')
+                        }))
+                        .value();
+                    
+                    // Target months for our chart (Nov 2023 - Jan 2025)
+                    const targetMonths = ['11/30/23', '12/31/23', '1/31/24', '2/29/24', '3/31/24', 
+                                        '4/30/24', '5/31/24', '6/30/24', '7/31/24', '8/31/24', 
+                                        '9/30/24', '10/31/24', '11/30/24', '12/31/24', '1/31/25'];
+                    
+                    // Filter and sort the data for our selected range
+                    let selectedMonths = volumeByMonth
+                        .filter(item => targetMonths.includes(item.month))
+                        .map(item => {
+                            // Parse date from month string
+                            const dateParts = item.month.split('/');
+                            const month = parseInt(dateParts[0]) - 1; // 0-based month
+                            const day = parseInt(dateParts[1]);
+                            const year = 2000 + parseInt(dateParts[2]); // Convert YY to YYYY
+                            const date = new Date(year, month, day);
+                            
+                            return {
+                                ...item, 
+                                date: date,
+                                // Format month as MMM YY for display
+                                displayMonth: date.toLocaleString('default', { month: 'short' }) + ' ' + 
+                                            date.getFullYear().toString().substr(2, 2)
+                            };
+                        })
+                        .sort((a, b) => a.date - b.date);
+                    
+                    // Calculate trendline using linear regression
+                    function linearRegression(y, x) {
+                        const n = y.length;
+                        let sum_x = 0;
+                        let sum_y = 0;
+                        let sum_xy = 0;
+                        let sum_xx = 0;
+                        
+                        if (!x) {
+                            x = Array.from({length: n}, (_, i) => i);
+                        }
+                        
+                        for (let i = 0; i < n; i++) {
+                            sum_x += x[i];
+                            sum_y += y[i];
+                            sum_xy += x[i] * y[i];
+                            sum_xx += x[i] * x[i];
+                        }
+                        
+                        const slope = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x);
+                        const intercept = (sum_y - slope * sum_x) / n;
+                        
+                        return {
+                            slope: slope,
+                            intercept: intercept,
+                            fn: function(x) { return slope * x + intercept; }
+                        };
+                    }
+                    
+                    // Prepare data for trendline
+                    const y = selectedMonths.map(item => item.totalVolume);
+                    const x = Array.from({length: selectedMonths.length}, (_, i) => i);
+                    
+                    const regression = linearRegression(y, x);
+                    
+                    // Calculate trendline points
+                    const trendlinePoints = selectedMonths.map((item, i) => ({
+                        month: item.displayMonth,
+                        totalVolume: Math.round(regression.fn(i))
+                    }));
+                    
+                    // Prepare chart data
+                    const chartData = {
+                        labels: selectedMonths.map(item => item.displayMonth),
+                        datasets: [
+                            {
+                                type: 'bar',
+                                label: 'Monthly Volume (lbs)',
+                                data: selectedMonths.map(item => item.totalVolume),
+                                backgroundColor: 'rgba(0, 121, 107, 0.7)',
+                                borderColor: 'rgba(0, 121, 107, 1)',
+                                borderWidth: 1,
+                                order: 2
+                            },
+                            {
+                                type: 'line',
+                                label: 'Trend Line',
+                                data: trendlinePoints.map(item => item.totalVolume),
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                                borderWidth: 3,
+                                pointRadius: 0,
+                                fill: false,
+                                tension: 0.1,
+                                order: 1
+                            }
+                        ]
+                    };
+                    
+                    createChart(chartData);
+                } catch (err) {
+                    showError(`Error processing data: ${err.message}`);
+                }
+            }
+            
+            function createChart(data) {
+                const ctx = document.getElementById('chart-container').getContext('2d');
+                
+                // Clean up existing chart if it exists
+                if (chart) {
+                    chart.destroy();
+                }
+                
+                // Create the chart
+                chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Volume (lbs)'
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        if (value >= 1000000) {
+                                            return (value / 1000000).toFixed(1) + 'M';
+                                        } else if (value >= 1000) {
+                                            return (value / 1000).toFixed(0) + 'K';
+                                        }
+                                        return value;
+                                    }
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Month'
+                                },
+                                ticks: {
+                                    maxRotation: 45,
+                                    minRotation: 45
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += new Intl.NumberFormat('en-US').format(context.parsed.y) + ' lbs';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            },
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+                
+                // Create custom legend
+                createCustomLegend(data);
+            }
+            
+            function createCustomLegend(data) {
+                const legendContainer = document.getElementById('chart-legend');
+                legendContainer.innerHTML = '';
+                
+                data.datasets.forEach(dataset => {
+                    const legendItem = document.createElement('div');
+                    legendItem.className = 'legend-item';
+                    
+                    const colorBox = document.createElement('div');
+                    colorBox.className = 'legend-color';
+                    if (dataset.type === 'bar') {
+                        colorBox.style.backgroundColor = dataset.backgroundColor;
+                    } else {
+                        colorBox.style.backgroundColor = dataset.borderColor;
+                    }
+                    
+                    const label = document.createElement('span');
+                    label.textContent = dataset.label;
+                    
+                    legendItem.appendChild(colorBox);
+                    legendItem.appendChild(label);
+                    legendContainer.appendChild(legendItem);
+                });
+            }
+            
+            function showError(message) {
+                chartContainer.innerHTML = `<div style="color: #cc0000; padding: 20px;">${message}</div>`;
+                console.error(message);
+            }
+        });
+    </script>
+</body>
+</html>

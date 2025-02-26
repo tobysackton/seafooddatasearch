@@ -1,0 +1,188 @@
+# Seafood Data Chart Template - Usage Instructions
+
+This template provides a reliable foundation for creating Chart.js visualizations for your seafood data website. It includes proper sizing, error handling, and responsive design to ensure charts display correctly across devices.
+
+## Setup Instructions
+
+1. Save the template file as `seafood_chart_template.html` in your project directory
+2. For each new chart, make a copy of this template with an appropriate filename
+3. Replace the placeholder text (in ALL_CAPS) with your specific chart information
+
+## Key Placeholders to Update
+
+### Basic Information
+- `CHART_TITLE_HERE` - Page title (appears in browser tab)
+- `CHART_HEADING_HERE` - Main heading on the page
+- `CHART_SUBHEADING_HERE` - Subheading above the chart
+- `CHART_DESCRIPTION_HERE` - Brief description of what the chart shows
+- `CHART_TITLE_INSIDE` - Title displayed directly above the chart
+- `CHART_DATA_DESCRIPTION` - Detailed explanation of the data and metrics
+- `DATA_SOURCE_DESCRIPTION` - Source of the data (e.g., "Trade flow data from Canada to global markets (2012-2024)")
+
+### Data and Chart Configuration
+- `CSV_FILE_PATH_HERE.csv` - Path to your CSV data file
+- `processData()` function - Customize to transform your CSV data for the chart
+- `createChart()` function - Configure chart type, colors, axes, etc.
+- Chart options (scales, tooltips, plugins) - Adjust based on chart type
+- `Y_AXIS_TITLE` and `X_AXIS_TITLE` - Labels for your chart axes
+
+### Navigation
+- `ADD_MORE_NAV_LINKS_HERE` - Add links to other relevant pages
+
+## Common Chart Types Examples
+
+### For a Bar Chart
+```javascript
+chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: years,  // X-axis labels (e.g., years)
+        datasets: [{
+            label: 'Label Text',
+            data: values,  // Your data values
+            backgroundColor: '#0066CC',
+            borderColor: '#0066CC',
+            borderWidth: 1
+        }]
+    },
+    options: { /* as in template */ }
+});
+```
+
+### For a Line Chart
+```javascript
+chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: months,  // X-axis labels
+        datasets: [{
+            label: 'Trend Line',
+            data: values,
+            fill: false,
+            borderColor: '#FF9900',
+            tension: 0.1  // Curved line (0 for straight)
+        }]
+    },
+    options: { /* as in template */ }
+});
+```
+
+### For a Stacked Bar Chart
+```javascript
+chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: categories,
+        datasets: [
+            {
+                label: 'Dataset 1',
+                data: values1,
+                backgroundColor: '#0066CC',
+                stack: 'Stack 0'  // All datasets with same stack value will stack
+            },
+            {
+                label: 'Dataset 2',
+                data: values2,
+                backgroundColor: '#CC0000',
+                stack: 'Stack 0'
+            }
+        ]
+    },
+    options: {
+        scales: {
+            y: {
+                stacked: true  // Enable stacking on Y axis
+            }
+        }
+    }
+});
+```
+
+### For a Mixed Chart (Bar + Line)
+```javascript
+chart = new Chart(ctx, {
+    type: 'bar',  // Base chart type
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Bar Data',
+                data: barValues,
+                backgroundColor: '#0066CC',
+                type: 'bar'  // Explicitly set type
+            },
+            {
+                label: 'Line Data',
+                data: lineValues,
+                borderColor: '#CC0000',
+                type: 'line',  // Override base type
+                fill: false,
+                yAxisID: 'y1'  // Use secondary Y-axis
+            }
+        ]
+    },
+    options: {
+        scales: {
+            y: {
+                type: 'linear',
+                position: 'left'
+            },
+            y1: {
+                type: 'linear',
+                position: 'right',
+                grid: {
+                    drawOnChartArea: false  // Only draw grid for primary axis
+                }
+            }
+        }
+    }
+});
+```
+
+## Adding Data Labels
+To add data labels to your chart (like the percentage labels we added to the market share line), use the custom plugin approach:
+
+```javascript
+const datalabelsPlugin = {
+    id: 'datalabels',
+    afterDatasetsDraw(chart, args, options) {
+        const { ctx } = chart;
+        
+        // Get the dataset you want to label
+        const dataset = chart.data.datasets[INDEX_OF_DATASET];
+        const meta = chart.getDatasetMeta(INDEX_OF_DATASET);
+        
+        ctx.save();
+        ctx.font = 'bold 12px Arial';
+        ctx.fillStyle = '#006400';  // Label color
+        ctx.textAlign = 'center';
+        
+        // Draw labels
+        for (let i = 0; i < dataset.data.length; i++) {
+            const value = dataset.data[i];
+            const x = meta.data[i].x;
+            const y = meta.data[i].y;
+            
+            // Format and position your label
+            ctx.fillText(value.toFixed(0) + '%', x, y - 10);
+        }
+        
+        ctx.restore();
+    }
+};
+
+// Add the plugin to your chart
+chart = new Chart(ctx, {
+    // Chart config...
+    plugins: [datalabelsPlugin]
+});
+```
+
+## Troubleshooting
+
+- **Chart not appearing**: Check browser console for errors. Ensure CSV path is correct.
+- **Chart appears then disappears**: This indicates a layout issue. Make sure the container div has explicit height.
+- **Data not displaying correctly**: Verify data processing in the `processData()` function.
+- **Chart too small/large**: Adjust the height in the container style.
+
+For any issues, refer to the [Chart.js documentation](https://www.chartjs.org/docs/latest/).

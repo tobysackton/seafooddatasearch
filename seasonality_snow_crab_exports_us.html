@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seasonality of Snow Crab Exports - Seafood Datasearch</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #E0F2F1; /* Very light sea green */
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            padding: 20px;
+            text-align: center;
+            background-color: #B2DFDB; /* Slightly darker sea green for header */
+        }
+        
+        .page-container {
+            display: flex;
+            min-height: calc(100vh - 200px); /* Adjust based on header and footer height */
+        }
+        
+        .left-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #E0F2F1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #B2DFDB;
+        }
+        
+        .center-pane {
+            flex: 2;
+            padding: 20px;
+            background-color: #FFFFFF;
+            text-align: center;
+        }
+        
+        .right-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #E0F2F1;
+            border-left: 1px solid #B2DFDB;
+        }
+        
+        .logo {
+            width: 90%;
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        
+        .tagline {
+            font-style: italic;
+            color: #00796B;
+            text-align: center;
+        }
+        
+        .chart-content {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-menu {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .nav-menu li {
+            margin: 10px 0;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: #00796B;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: block;
+        }
+        
+        .nav-menu a:hover {
+            background-color: #B2DFDB;
+        }
+        
+        .species-icons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 10px;
+        }
+        
+        .species-icons img {
+            width: 80px;
+            height: auto;
+        }
+        
+        footer {
+            padding: 20px;
+            background-color: #B2DFDB;
+            text-align: center;
+        }
+        
+        /* Chart container styles */
+        #chart-container-wrapper {
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        #chart-container {
+            height: 400px;
+            width: 100%;
+        }
+        
+        /* Chart legend style */
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 15px;
+            padding: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+        
+        .chart-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .page-container {
+                flex-direction: column;
+            }
+            
+            .left-pane, .center-pane, .right-pane {
+                width: 100%;
+                border: none;
+            }
+            
+            #chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+    
+    <!-- Load Chart.js and PapaParse -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Seafood Datasearch</h1>
+    </header>
+    
+    <div class="page-container">
+        <!-- Left Pane - Logo and Tagline -->
+        <div class="left-pane">
+            <img src="assets/images/SD_Logo.png" alt="Seafood Datasearch Logo" class="logo">
+            <div class="tagline">
+                <h3>Market Analysis and Forecasts</h3>
+                <p>Providing expert insights into the seafood industry.</p>
+            </div>
+        </div>
+        
+        <!-- Center Pane - Chart Content -->
+        <div class="center-pane">
+            <h2>Canadian Snow Crab Market Analysis</h2>
+            <div class="chart-content">
+                <h3>Export Patterns and Seasonality</h3>
+                <p>The chart below shows the monthly distribution of Canadian snow crab exports to the US market, highlighting the industry's strong seasonal pattern.</p>
+                
+                <!-- Chart Container -->
+                <div id="chart-container-wrapper">
+                    <div class="chart-title">Seasonality of Snow Crab Exports</div>
+                    <div style="position: relative; height: 400px; width: 100%">
+                        <canvas id="chart-container"></canvas>
+                    </div>
+                    <div id="chart-legend" class="chart-legend"></div>
+                </div>
+            </div>
+            
+            <div class="chart-content">
+                <h3>About This Data</h3>
+                <p>This chart represents the average monthly distribution of Canadian snow crab exports to the US market as a percentage of total pack year exports. The pack year runs from April to the following March. All crab sold during that period was caught in one pack year, excluding inventory overhang. The key insight is that 95% of all crab is sold between April and Sept. The values are averaged over the 12 year period.</p>
+                <p>Data source: Trade flow data from Canada to US markets (2012-2024)</p>
+            </div>
+        </div>
+        
+        <!-- Right Pane - Navigation -->
+        <div class="right-pane">
+            <div class="nav-menu">
+                <h3>Navigation</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="crab_charts.html">Crab Charts</a></li>
+                    <li><a href="lobster_charts.html">Lobster Charts</a></li>
+                    <li><a href="shrimp_charts.html">Shrimp Charts</a></li>
+                    <li><a href="salmon_charts.html">Salmon Charts</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="species-icons">
+            <img src="assets/images/Lobster_icon.png" alt="Lobster">
+            <img src="assets/images/shrimp_icon.png" alt="Shrimp">
+            <img src="assets/images/crab_icon.png" alt="Crab">
+            <img src="assets/images/salmon_icon.png" alt="Salmon">
+        </div>
+        <p>&copy; 2025 Seafood Datasearch. All rights reserved.</p>
+    </footer>
+    
+    <!-- Chart.js implementation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Declare variables at higher scope
+            let chart = null;
+            
+            // Check if required libraries are loaded
+            try {
+                if (typeof Chart === 'undefined' || typeof Papa === 'undefined' || typeof _ === 'undefined') {
+                    document.getElementById('chart-container-wrapper').innerHTML = 
+                        '<div style="color: #cc0000; padding: 20px;">Error: One or more required libraries failed to load. Please check the console for details.</div>';
+                    console.error('Missing libraries. Make sure Chart.js, PapaParse, and Lodash are loaded.');
+                    return;
+                }
+            } catch (e) {
+                document.getElementById('chart-container-wrapper').innerHTML = 
+                    '<div style="color: #cc0000; padding: 20px;">Error checking libraries: ' + e.message + '</div>';
+                return;
+            }
+            
+            // Show loading indicator
+            const chartContainer = document.getElementById('chart-container-wrapper');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.style.cssText = 'display: flex; justify-content: center; align-items: center; height: 200px;';
+            loadingDiv.textContent = 'Loading data...';
+            chartContainer.appendChild(loadingDiv);
+            
+            // Skip data loading and use fixed data
+            createChart();
+            
+            // Remove loading div
+            if (loadingDiv && loadingDiv.parentNode) {
+                loadingDiv.parentNode.removeChild(loadingDiv);
+            }
+            
+            function createChart() {
+                const ctx = document.getElementById('chart-container').getContext('2d');
+                
+                // Clean up existing chart if it exists
+                if (chart) {
+                    chart.destroy();
+                }
+                
+                // Pre-calculated data
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const values = [0.7, 0.5, 0.7, 10.4, 30.1, 27.3, 18.8, 6.3, 2.1, 1.3, 0.9, 0.8];
+                const formattedValues = ['0.7%', '0.5%', '0.7%', '10.4%', '30.1%', '27.3%', '18.8%', '6.3%', '2.1%', '1.3%', '0.9%', '0.8%'];
+                
+                // Create chart data structure
+                const chartData = {
+                    labels: monthNames,
+                    datasets: [{
+                        label: 'Percentage of Annual Exports',
+                        data: values,
+                        backgroundColor: '#005b96', // Deep blue color
+                        borderColor: '#003f69',
+                        borderWidth: 1
+                    }]
+                };
+                
+                // Define custom plugin for data labels
+                const datalabelsPlugin = {
+                    id: 'datalabels',
+                    afterDatasetsDraw(chart, args, options) {
+                        const { ctx } = chart;
+                        
+                        // Get the dataset
+                        const dataset = chart.data.datasets[0];
+                        const meta = chart.getDatasetMeta(0);
+                        
+                        ctx.save();
+                        ctx.font = 'bold 14px Arial';
+                        ctx.fillStyle = '#000000';
+                        ctx.textAlign = 'center';
+                        
+                        // Draw labels
+                        for (let i = 0; i < dataset.data.length; i++) {
+                            const value = formattedValues[i];
+                            const x = meta.data[i].x;
+                            const y = meta.data[i].y - 10; // Position above the bar
+                            
+                            ctx.fillText(value, x, y);
+                        }
+                        
+                        ctx.restore();
+                    }
+                };
+                
+                // Create the chart
+                chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Percentage of Annual Exports'
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                },
+                                max: 35 // Set max value to leave room for labels
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Month'
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '%';
+                                    }
+                                }
+                            },
+                            legend: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: [datalabelsPlugin]
+                });
+                
+                // Create custom legend if needed
+                createCustomLegend(chartData);
+            }
+            
+            function createCustomLegend(data) {
+                const legendContainer = document.getElementById('chart-legend');
+                legendContainer.innerHTML = '';
+                
+                // Only create a legend item if we have at least one dataset
+                if (data.datasets && data.datasets.length > 0) {
+                    const dataset = data.datasets[0];
+                    const legendItem = document.createElement('div');
+                    legendItem.className = 'legend-item';
+                    
+                    const colorBox = document.createElement('div');
+                    colorBox.className = 'legend-color';
+                    colorBox.style.backgroundColor = dataset.backgroundColor;
+                    
+                    const label = document.createElement('span');
+                    label.textContent = dataset.label;
+                    
+                    legendItem.appendChild(colorBox);
+                    legendItem.appendChild(label);
+                    legendContainer.appendChild(legendItem);
+                }
+            }
+            
+            function showError(message) {
+                chartContainer.innerHTML = `<div style="color: #cc0000; padding: 20px;">${message}</div>`;
+                console.error(message);
+            }
+        });
+    </script>
+</body>
+</html>

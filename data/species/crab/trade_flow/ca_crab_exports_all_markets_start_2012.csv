@@ -1,0 +1,853 @@
+﻿date,year,month,reporter genome 2,reporter genome 3,reporter name,mirror,trade flow,HS Code,HS Description,value,value currency,quantity,quantity unit,quantity type,partner genome 2,partner genome 3,partner name
+201901,2019,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",6531206.256,USD,357264,KG,primary,US,USA,United States
+201901,2019,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",552223.2558,USD,47948,KG,primary,VN,VNM,Viet-Nam
+201701,2017,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5323.5108,USD,390,KG,primary,AT,AUT,Austria
+201901,2019,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",141447.8062,USD,7348,KG,primary,SG,SGP,Singapore
+201701,2017,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1369771.173,USD,91556,KG,primary,US,USA,United States
+201901,2019,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2433494.643,USD,389586,KG,primary,CN,CHN,China (People's Republic of)
+201701,2017,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",95029.9757,USD,9695,KG,primary,TH,THA,Thailand
+201701,2017,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",107151.2002,USD,14726,KG,primary,VN,VNM,Viet-Nam
+201401,2014,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1093926.126,USD,88294,KG,primary,US,USA,United States
+201901,2019,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",150022.907,USD,7484,KG,primary,HK,HKG,Hong Kong
+201701,2017,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",288131.6082,USD,16601,KG,primary,SG,SGP,Singapore
+201902,2019,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",370337.6244,USD,17488,KG,primary,FR,FRA,France
+201701,2017,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",479599.0291,USD,80190,KG,primary,CN,CHN,China (People's Republic of)
+201401,2014,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",22861.7524,USD,1352,KG,primary,TH,THA,Thailand
+201902,2019,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3121533.377,USD,165306,KG,primary,US,USA,United States
+201702,2017,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1298988.993,USD,91370,KG,primary,US,USA,United States
+201401,2014,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",378979.9351,USD,37362,KG,primary,CN,CHN,China (People's Republic of)
+201902,2019,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",599834.2611,USD,34020,KG,primary,VN,VNM,Viet-Nam
+201702,2017,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",690179.6988,USD,110222,KG,primary,VN,VNM,Viet-Nam
+201402,2014,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",451825.2158,USD,48095,KG,primary,US,USA,United States
+201902,2019,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1472162.517,USD,192424,KG,primary,CN,CHN,China (People's Republic of)
+201702,2017,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",211671.5473,USD,17256,KG,primary,CN,CHN,China (People's Republic of)
+201902,2019,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",74068.5847,USD,22563,KG,primary,JP,JPN,Japan
+201402,2014,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3620.2131,USD,250,KG,primary,SG,SGP,Singapore
+201703,2017,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1769950.206,USD,123196,KG,primary,US,USA,United States
+201903,2019,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1367021.436,USD,78516,KG,primary,US,USA,United States
+201403,2014,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",473968.3161,USD,41201,KG,primary,US,USA,United States
+201704,2017,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",42916435.35,USD,2627169,KG,primary,US,USA,United States
+201903,2019,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",224526.083,USD,14669,KG,primary,VN,VNM,Viet-Nam
+201403,2014,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",287644.3403,USD,50967,KG,primary,CN,CHN,China (People's Republic of)
+201704,2017,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",115345.405,USD,18370,KG,primary,VN,VNM,Viet-Nam
+201904,2019,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",50078394.16,USD,2538607,KG,primary,US,USA,United States
+201404,2014,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",24639673.4,USD,2125602,KG,primary,US,USA,United States
+201904,2019,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",299333.9743,USD,17636,KG,primary,CN,CHN,China (People's Republic of)
+201704,2017,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",493285.2412,USD,81448,KG,primary,CN,CHN,China (People's Republic of)
+201404,2014,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",172644.6151,USD,18850,KG,primary,VN,VNM,Viet-Nam
+201905,2019,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",226547597.7,USD,11946070,KG,primary,US,USA,United States
+201704,2017,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1784.4852,USD,83,KG,primary,KR,KOR,Korea (Rep. of)
+201404,2014,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1535464.398,USD,165078,KG,primary,CN,CHN,China (People's Republic of)
+201201,2012,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5059191.925,USD,425747,KG,primary,US,USA,United States
+201905,2019,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",6816471.083,USD,439694,KG,primary,VN,VNM,Viet-Nam
+201705,2017,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",180793307.7,USD,11405431,KG,primary,US,USA,United States
+201405,2014,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",82704.499,USD,5006,KG,primary,RU,RUS,Russian Federation
+201905,2019,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5392630.002,USD,290823,KG,primary,ID,IDN,Indonesia
+201201,2012,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1506654.146,USD,198100,KG,primary,CN,CHN,China (People's Republic of)
+201705,2017,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",332129.3517,USD,37216,KG,primary,VN,VNM,Viet-Nam
+201905,2019,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",166846.0608,USD,9117,KG,primary,SG,SGP,Singapore
+201202,2012,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2217656.693,USD,204922,KG,primary,US,USA,United States
+201705,2017,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5264360.408,USD,341193,KG,primary,ID,IDN,Indonesia
+201202,2012,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",270809.1578,USD,33148,KG,primary,CN,CHN,China (People's Republic of)
+201905,2019,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8213336.478,USD,524257,KG,primary,CN,CHN,China (People's Republic of)
+201705,2017,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",13430492.19,USD,895349,KG,primary,CN,CHN,China (People's Republic of)
+201405,2014,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",122382118,USD,10671491,KG,primary,US,USA,United States
+201202,2012,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1199.9487,USD,68,KG,primary,JP,JPN,Japan
+201905,2019,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",236273.3597,USD,21432,KG,primary,KR,KOR,Korea (Rep. of)
+201705,2017,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",25109039.72,USD,1710222,KG,primary,JP,JPN,Japan
+201405,2014,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1113805.14,USD,95616,KG,primary,TH,THA,Thailand
+201905,2019,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",14803580.51,USD,982824,KG,primary,JP,JPN,Japan
+201203,2012,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",597565.2643,USD,49114,KG,primary,US,USA,United States
+201405,2014,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1393129.146,USD,159223,KG,primary,VN,VNM,Viet-Nam
+201705,2017,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",317484.5987,USD,17906,KG,primary,TW,TWN,Taiwan
+201906,2019,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",708732.5437,USD,64290,KG,primary,FR,FRA,France
+201203,2012,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",329782.6722,USD,34650,KG,primary,CN,CHN,China (People's Republic of)
+201405,2014,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5023458.177,USD,467901,KG,primary,ID,IDN,Indonesia
+201705,2017,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2219084.86,USD,140163,KG,primary,HK,HKG,Hong Kong
+201906,2019,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",165263418.9,USD,8871114,KG,primary,US,USA,United States
+201204,2012,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",94.7276,USD,18,KG,primary,FR,FRA,France
+201405,2014,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",36454825.73,USD,3417580,KG,primary,CN,CHN,China (People's Republic of)
+201706,2017,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",162741062.7,USD,10089974,KG,primary,US,USA,United States
+201906,2019,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",327594.1423,USD,16983,KG,primary,TH,THA,Thailand
+201204,2012,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",80727298.57,USD,7346837,KG,primary,US,USA,United States
+201405,2014,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",15014554.34,USD,1236845,KG,primary,JP,JPN,Japan
+201706,2017,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",527413.2229,USD,34423,KG,primary,TH,THA,Thailand
+201906,2019,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",4854548.043,USD,275019,KG,primary,VN,VNM,Viet-Nam
+201204,2012,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",7080916.961,USD,651329,KG,primary,CN,CHN,China (People's Republic of)
+201706,2017,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3713458.892,USD,293292,KG,primary,VN,VNM,Viet-Nam
+201406,2014,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",727116.7765,USD,73299,KG,primary,NL,NLD,Netherlands
+201906,2019,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",12262311.93,USD,662891,KG,primary,ID,IDN,Indonesia
+201204,2012,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",7798507.616,USD,628419,KG,primary,JP,JPN,Japan
+201706,2017,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",6976708.207,USD,451731,KG,primary,ID,IDN,Indonesia
+201406,2014,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",157190005.1,USD,13795253,KG,primary,US,USA,United States
+201906,2019,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",13090248.3,USD,863094,KG,primary,CN,CHN,China (People's Republic of)
+201204,2012,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",99158.6154,USD,8500,KG,primary,HK,HKG,Hong Kong
+201406,2014,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",225405.333,USD,18861,KG,primary,TH,THA,Thailand
+201906,2019,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",236243.9304,USD,21432,KG,primary,KR,KOR,Korea (Rep. of)
+201706,2017,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",24155835.91,USD,1682393,KG,primary,CN,CHN,China (People's Republic of)
+201205,2012,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",131866700.9,USD,12290661,KG,primary,US,USA,United States
+201406,2014,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2518511.209,USD,217358,KG,primary,VN,VNM,Viet-Nam
+201906,2019,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",17953216.4,USD,1184843,KG,primary,JP,JPN,Japan
+201706,2017,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",315031.9382,USD,17964,KG,primary,KR,KOR,Korea (Rep. of)
+201906,2019,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1164770.894,USD,74777,KG,primary,HK,HKG,Hong Kong
+201706,2017,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",26849224.48,USD,1842714,KG,primary,JP,JPN,Japan
+201406,2014,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",4526117.633,USD,432369,KG,primary,ID,IDN,Indonesia
+201205,2012,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1186481.145,USD,97733,KG,primary,VN,VNM,Viet-Nam
+201706,2017,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2060769.157,USD,124152,KG,primary,HK,HKG,Hong Kong
+201907,2019,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",424650.3382,USD,26398,KG,primary,NL,NLD,Netherlands
+201406,2014,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",407403.7678,USD,37699,KG,primary,SG,SGP,Singapore
+201205,2012,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",4030132.306,USD,375830,KG,primary,ID,IDN,Indonesia
+201707,2017,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",906848.9375,USD,56580,KG,primary,NL,NLD,Netherlands
+201907,2019,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",114756237.7,USD,6007337,KG,primary,US,USA,United States
+201406,2014,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",34808338.87,USD,3343826,KG,primary,CN,CHN,China (People's Republic of)
+201205,2012,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",32510477.89,USD,3099133,KG,primary,CN,CHN,China (People's Republic of)
+201707,2017,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",142222544.5,USD,8538789,KG,primary,US,USA,United States
+201205,2012,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",550604.6461,USD,51494,KG,primary,KR,KOR,Korea (Rep. of)
+201406,2014,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",24421705.66,USD,2102184,KG,primary,JP,JPN,Japan
+201707,2017,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3483280.835,USD,236790,KG,primary,VN,VNM,Viet-Nam
+201205,2012,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",24812249.14,USD,2020110,KG,primary,JP,JPN,Japan
+201907,2019,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",324237.4965,USD,16330,KG,primary,TH,THA,Thailand
+201707,2017,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3760795.043,USD,302407,KG,primary,ID,IDN,Indonesia
+201205,2012,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",512687.688,USD,40540,KG,primary,HK,HKG,Hong Kong
+201406,2014,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",918242.0881,USD,77399,KG,primary,HK,HKG,Hong Kong
+201907,2019,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2500802.175,USD,153971,KG,primary,VN,VNM,Viet-Nam
+201707,2017,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",124007.0837,USD,7348,KG,primary,SG,SGP,Singapore
+201206,2012,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1052619.852,USD,94248,KG,primary,NL,NLD,Netherlands
+201407,2014,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",392199.5127,USD,35098,KG,primary,NL,NLD,Netherlands
+201907,2019,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",235937.2886,USD,18074,KG,primary,ID,IDN,Indonesia
+201707,2017,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",14757689.28,USD,1114870,KG,primary,CN,CHN,China (People's Republic of)
+201206,2012,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",74538283.53,USD,6824506,KG,primary,US,USA,United States
+201407,2014,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",97179777.41,USD,8316144,KG,primary,US,USA,United States
+201907,2019,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",38231.9075,USD,1819,KG,primary,MY,MYS,Malaysia
+201707,2017,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",307484.2531,USD,16329,KG,primary,KR,KOR,Korea (Rep. of)
+201206,2012,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",394732.4447,USD,37740,KG,primary,TH,THA,Thailand
+201407,2014,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",479877.8194,USD,32535,KG,primary,TH,THA,Thailand
+201707,2017,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8338713.9,USD,639661,KG,primary,JP,JPN,Japan
+201907,2019,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",263936.0695,USD,17500,KG,primary,SG,SGP,Singapore
+201206,2012,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3179877.255,USD,299601,KG,primary,ID,IDN,Indonesia
+201407,2014,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",185443.3911,USD,16738,KG,primary,VN,VNM,Viet-Nam
+201707,2017,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",174645.5008,USD,17625,KG,primary,TW,TWN,Taiwan
+201206,2012,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",20796852.32,USD,1928065,KG,primary,CN,CHN,China (People's Republic of)
+201907,2019,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2863858.401,USD,215537,KG,primary,CN,CHN,China (People's Republic of)
+201407,2014,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",6294446.409,USD,572206,KG,primary,ID,IDN,Indonesia
+201707,2017,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",11506.8345,USD,653,KG,primary,HK,HKG,Hong Kong
+201206,2012,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",557697.2921,USD,53167,KG,primary,KR,KOR,Korea (Rep. of)
+202101,2021,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",808296.3512,USD,32644,KG,primary,US,USA,United States
+201907,2019,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",4395936.03,USD,288690,KG,primary,JP,JPN,Japan
+201407,2014,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",184579.9279,USD,17799,KG,primary,SG,SGP,Singapore
+201708,2017,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",35166493.77,USD,2141517,KG,primary,US,USA,United States
+201206,2012,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8869372.851,USD,714698,KG,primary,JP,JPN,Japan
+201907,2019,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",923037.9471,USD,53369,KG,primary,HK,HKG,Hong Kong
+202101,2021,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",329026.441,USD,18850,KG,primary,VN,VNM,Viet-Nam
+201407,2014,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",10196151.55,USD,940764,KG,primary,CN,CHN,China (People's Republic of)
+201708,2017,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",334913.031,USD,68961,KG,primary,TH,THA,Thailand
+201206,2012,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",34895.5146,USD,3130,KG,primary,HK,HKG,Hong Kong
+202102,2021,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2259332.508,USD,86814,KG,primary,US,USA,United States
+201708,2017,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",570532.1431,USD,37267,KG,primary,VN,VNM,Viet-Nam
+201407,2014,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",217409.2269,USD,16983,KG,primary,KR,KOR,Korea (Rep. of)
+201207,2012,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",791512.4472,USD,74860,KG,primary,NL,NLD,Netherlands
+201908,2019,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",34710328.97,USD,1756180,KG,primary,US,USA,United States
+202102,2021,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3827.6191,USD,270,KG,primary,TH,THA,Thailand
+201708,2017,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",345077.4062,USD,25511,KG,primary,ID,IDN,Indonesia
+201407,2014,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",4865344.034,USD,413322,KG,primary,JP,JPN,Japan
+201207,2012,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",81341.4144,USD,7485,KG,primary,DK,DNK,Denmark
+201908,2019,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",459043.5616,USD,32182,KG,primary,ID,IDN,Indonesia
+202102,2021,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",326855.044,USD,18835,KG,primary,VN,VNM,Viet-Nam
+201407,2014,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",120522.5091,USD,11421,KG,primary,HK,HKG,Hong Kong
+201708,2017,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3119414.321,USD,275967,KG,primary,CN,CHN,China (People's Republic of)
+201207,2012,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",59429720.31,USD,5543389,KG,primary,US,USA,United States
+202103,2021,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8253737.112,USD,279249,KG,primary,US,USA,United States
+201408,2014,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",68696.4213,USD,6421,KG,primary,NL,NLD,Netherlands
+201708,2017,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",285995.4394,USD,18681,KG,primary,KR,KOR,Korea (Rep. of)
+201207,2012,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",389439.0899,USD,37721,KG,primary,ID,IDN,Indonesia
+202103,2021,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",253746.0669,USD,26590,KG,primary,CN,CHN,China (People's Republic of)
+201908,2019,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",6481.7123,USD,360,KG,primary,CN,CHN,China (People's Republic of)
+201408,2014,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",32635326.64,USD,2738816,KG,primary,US,USA,United States
+201708,2017,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1438514.765,USD,104644,KG,primary,JP,JPN,Japan
+201207,2012,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",9664158.611,USD,946870,KG,primary,CN,CHN,China (People's Republic of)
+202103,2021,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",80005.5648,USD,5815,KG,primary,HK,HKG,Hong Kong
+201908,2019,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",136806.8493,USD,8824,KG,primary,JP,JPN,Japan
+201408,2014,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1766778.531,USD,128045,KG,primary,VN,VNM,Viet-Nam
+201708,2017,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",31281.16,USD,4083,KG,primary,HK,HKG,Hong Kong
+201207,2012,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3841163.318,USD,305553,KG,primary,JP,JPN,Japan
+202104,2021,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",257256513,USD,9213792,KG,primary,US,USA,United States
+201908,2019,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",678839.3836,USD,37687,KG,primary,HK,HKG,Hong Kong
+201408,2014,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",369545.3996,USD,36511,KG,primary,ID,IDN,Indonesia
+201207,2012,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",22125.4957,USD,1905,KG,primary,HK,HKG,Hong Kong
+202104,2021,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",877300.5814,USD,51418,KG,primary,VN,VNM,Viet-Nam
+201909,2019,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",13131999.25,USD,645768,KG,primary,US,USA,United States
+201408,2014,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",84782.8393,USD,15840,KG,primary,SG,SGP,Singapore
+201208,2012,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",23502383.61,USD,2204900,KG,primary,US,USA,United States
+201709,2017,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",11828731.21,USD,709137,KG,primary,US,USA,United States
+201909,2019,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",90202.3954,USD,20464,KG,primary,CN,CHN,China (People's Republic of)
+202104,2021,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",57645.919,USD,8001,KG,primary,ID,IDN,Indonesia
+201408,2014,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3285886.65,USD,370107,KG,primary,CN,CHN,China (People's Republic of)
+201208,2012,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",195270.8669,USD,17873,KG,primary,VN,VNM,Viet-Nam
+201709,2017,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",307440.9828,USD,17010,KG,primary,VN,VNM,Viet-Nam
+201909,2019,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",321717.3973,USD,18097,KG,primary,JP,JPN,Japan
+202104,2021,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1270084.74,USD,55860,KG,primary,CN,CHN,China (People's Republic of)
+201408,2014,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",397977.2509,USD,34325,KG,primary,KR,KOR,Korea (Rep. of)
+201208,2012,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",602682.2384,USD,57121,KG,primary,ID,IDN,Indonesia
+201910,2019,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",14661.2108,USD,1143,KG,primary,NL,NLD,Netherlands
+201408,2014,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1856992.482,USD,154637,KG,primary,JP,JPN,Japan
+202104,2021,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8949355.647,USD,503996,KG,primary,JP,JPN,Japan
+201208,2012,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1717790.174,USD,189860,KG,primary,CN,CHN,China (People's Republic of)
+201709,2017,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",396506.4163,USD,29277,KG,primary,ID,IDN,Indonesia
+201910,2019,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",889.2244,USD,45,KG,primary,UA,UKR,Ukraine
+201408,2014,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",413725.8267,USD,38316,KG,primary,HK,HKG,Hong Kong
+202105,2021,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",32518.3272,USD,2189,KG,primary,NL,NLD,Netherlands
+201208,2012,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",14501.8631,USD,1252,KG,primary,KR,KOR,Korea (Rep. of)
+201709,2017,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1165943.2,USD,83160,KG,primary,CN,CHN,China (People's Republic of)
+201910,2019,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3914520.545,USD,214981,KG,primary,US,USA,United States
+201208,2012,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1031597.033,USD,78276,KG,primary,JP,JPN,Japan
+201409,2014,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8788061.392,USD,780463,KG,primary,US,USA,United States
+202105,2021,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",187893.2054,USD,15450,KG,primary,GB,GBR,United Kingdom
+201709,2017,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",209950.0668,USD,16569,KG,primary,KR,KOR,Korea (Rep. of)
+201208,2012,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",123906.1435,USD,12247,KG,primary,HK,HKG,Hong Kong
+201409,2014,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",415862.4929,USD,38080,KG,primary,MM,MMR,Myanmar
+201709,2017,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3889.1852,USD,265,KG,primary,JP,JPN,Japan
+202105,2021,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",343370246.5,USD,12072305,KG,primary,US,USA,United States
+201910,2019,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",405660.6933,USD,23046,KG,primary,VN,VNM,Viet-Nam
+201209,2012,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",9441399.647,USD,874578,KG,primary,US,USA,United States
+201409,2014,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",735502.1241,USD,112665,KG,primary,TH,THA,Thailand
+201709,2017,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",59498.5096,USD,2722,KG,primary,HK,HKG,Hong Kong
+202105,2021,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5003191.413,USD,244874,KG,primary,VN,VNM,Viet-Nam
+201910,2019,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",460955.5939,USD,35931,KG,primary,ID,IDN,Indonesia
+201209,2012,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",89.8966,USD,14,KG,primary,PM,SPM,Saint Pierre and Miquelon
+201409,2014,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",56715.2567,USD,12363,KG,primary,SG,SGP,Singapore
+201710,2017,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3518002.196,USD,211682,KG,primary,US,USA,United States
+201910,2019,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",318569.0074,USD,16329,KG,primary,SG,SGP,Singapore
+201209,2012,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",187233.0647,USD,17873,KG,primary,TH,THA,Thailand
+201409,2014,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",303976.3957,USD,36543,KG,primary,CN,CHN,China (People's Republic of)
+201710,2017,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",13365.2056,USD,936,KG,primary,TH,THA,Thailand
+201910,2019,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",476785.7596,USD,23814,KG,primary,HK,HKG,Hong Kong
+202105,2021,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1460633.295,USD,101319,KG,primary,ID,IDN,Indonesia
+201209,2012,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",585652.5388,USD,54576,KG,primary,VN,VNM,Viet-Nam
+201710,2017,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",106091.7248,USD,9750,KG,primary,VN,VNM,Viet-Nam
+201911,2019,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2985996.553,USD,140353,KG,primary,US,USA,United States
+202105,2021,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",29104609.32,USD,1486757,KG,primary,CN,CHN,China (People's Republic of)
+201409,2014,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",973062.2562,USD,76381,KG,primary,JP,JPN,Japan
+201209,2012,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",959116.5259,USD,106717,KG,primary,CN,CHN,China (People's Republic of)
+201710,2017,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",446086.0524,USD,32137,KG,primary,CN,CHN,China (People's Republic of)
+202105,2021,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",21508051.6,USD,1196933,KG,primary,JP,JPN,Japan
+201911,2019,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",271182.8816,USD,40736,KG,primary,ID,IDN,Indonesia
+201410,2014,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2746010.769,USD,225691,KG,primary,US,USA,United States
+201710,2017,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",205029.1569,USD,18528,KG,primary,JP,JPN,Japan
+202105,2021,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",946835.4723,USD,63310,KG,primary,HK,HKG,Hong Kong
+201410,2014,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",207922.0418,USD,18861,KG,primary,TH,THA,Thailand
+201911,2019,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",487432.6452,USD,61087,KG,primary,CN,CHN,China (People's Republic of)
+201209,2012,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",101560.6293,USD,8791,KG,primary,KR,KOR,Korea (Rep. of)
+201710,2017,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",59516.2246,USD,2722,KG,primary,HK,HKG,Hong Kong
+202106,2021,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",251032480.7,USD,8387172,KG,primary,US,USA,United States
+201410,2014,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",10698.3299,USD,682,KG,primary,VN,VNM,Viet-Nam
+201209,2012,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",31614.9828,USD,2538,KG,primary,JP,JPN,Japan
+201711,2017,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5260043.776,USD,337810,KG,primary,US,USA,United States
+202106,2021,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",75602.9029,USD,22861,KG,primary,DO,DOM,Dominican Republic
+201911,2019,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1291.0952,USD,360,KG,primary,JP,JPN,Japan
+201210,2012,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",46385.9027,USD,2950,KG,primary,FR,FRA,France
+201410,2014,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1371291.423,USD,164761,KG,primary,CN,CHN,China (People's Republic of)
+202106,2021,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",7472734.274,USD,292815,KG,primary,VN,VNM,Viet-Nam
+201210,2012,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",265226.9623,USD,17100,KG,primary,DE,DEU,Germany
+201711,2017,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",225870.9802,USD,17975,KG,primary,CN,CHN,China (People's Republic of)
+201410,2014,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",214867.041,USD,34214,KG,primary,JP,JPN,Japan
+201912,2019,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",4934044.692,USD,214291,KG,primary,US,USA,United States
+202106,2021,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",4086516.298,USD,176302,KG,primary,ID,IDN,Indonesia
+201210,2012,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",202.7489,USD,30,KG,primary,GB,GBR,United Kingdom
+201711,2017,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1050.0965,USD,68,KG,primary,JP,JPN,Japan
+201410,2014,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",21040.0488,USD,750,KG,primary,HK,HKG,Hong Kong
+201912,2019,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",151781.2663,USD,17690,KG,primary,VN,VNM,Viet-Nam
+202106,2021,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",384013.5755,USD,25869,KG,primary,SG,SGP,Singapore
+201210,2012,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3660671.595,USD,312404,KG,primary,US,USA,United States
+201711,2017,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",96281.5548,USD,4763,KG,primary,HK,HKG,Hong Kong
+201411,2014,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2068374.826,USD,167628,KG,primary,US,USA,United States
+201912,2019,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",432358.0439,USD,58023,KG,primary,ID,IDN,Indonesia
+201210,2012,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1929249.88,USD,229857,KG,primary,CN,CHN,China (People's Republic of)
+201712,2017,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",6486851.433,USD,376204,KG,primary,US,USA,United States
+201411,2014,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",375064.8755,USD,35435,KG,primary,VN,VNM,Viet-Nam
+201912,2019,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",991960.3946,USD,199119,KG,primary,CN,CHN,China (People's Republic of)
+202106,2021,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",16345704.27,USD,720738,KG,primary,CN,CHN,China (People's Republic of)
+201210,2012,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",78816.6,USD,5610,KG,primary,JP,JPN,Japan
+201712,2017,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",959338.7585,USD,68584,KG,primary,TH,THA,Thailand
+201411,2014,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",33380.9391,USD,2722,KG,primary,SG,SGP,Singapore
+202106,2021,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",12393818.2,USD,635289,KG,primary,JP,JPN,Japan
+201210,2012,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",21976.9649,USD,2040,KG,primary,HK,HKG,Hong Kong
+201712,2017,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",988865.1254,USD,71496,KG,primary,CN,CHN,China (People's Republic of)
+201301,2013,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1178879.177,USD,106815,KG,primary,US,USA,United States
+201411,2014,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",285070.5703,USD,30321,KG,primary,CN,CHN,China (People's Republic of)
+202106,2021,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1615177.254,USD,91244,KG,primary,HK,HKG,Hong Kong
+201712,2017,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",44636.795,USD,2722,KG,primary,HK,HKG,Hong Kong
+201301,2013,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",738933.5515,USD,83258,KG,primary,CN,CHN,China (People's Republic of)
+201411,2014,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",72143.4507,USD,6096,KG,primary,HK,HKG,Hong Kong
+202107,2021,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",466943.1629,USD,40203,KG,primary,NL,NLD,Netherlands
+201211,2012,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2029645.839,USD,174910,KG,primary,US,USA,United States
+201301,2013,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",20.1541,USD,5,KG,primary,KR,KOR,Korea (Rep. of)
+201412,2014,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2159863.792,USD,184461,KG,primary,US,USA,United States
+202107,2021,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",171258375.1,USD,5673071,KG,primary,US,USA,United States
+201211,2012,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",391496.1886,USD,18860,KG,primary,VN,VNM,Viet-Nam
+201302,2013,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",901998.7442,USD,75005,KG,primary,US,USA,United States
+201412,2014,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",360200.4836,USD,32588,KG,primary,ID,IDN,Indonesia
+202107,2021,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",525950.1308,USD,18850,KG,primary,TH,THA,Thailand
+201302,2013,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1227703.157,USD,150246,KG,primary,CN,CHN,China (People's Republic of)
+201412,2014,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1141581.232,USD,122782,KG,primary,CN,CHN,China (People's Republic of)
+202107,2021,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",474211.3912,USD,17683,KG,primary,VN,VNM,Viet-Nam
+201303,2013,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1079166.178,USD,89770,KG,primary,US,USA,United States
+201211,2012,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",532711.7853,USD,64266,KG,primary,ID,IDN,Indonesia
+202107,2021,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",378043.6409,USD,33522,KG,primary,ID,IDN,Indonesia
+202201,2022,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",6571022.743,USD,195319,KG,primary,US,USA,United States
+201304,2013,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",34969744.98,USD,3034165,KG,primary,US,USA,United States
+201211,2012,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1421876.546,USD,141785,KG,primary,CN,CHN,China (People's Republic of)
+202001,2020,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1064572.133,USD,49315,KG,primary,US,USA,United States
+202107,2021,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5963896.938,USD,228285,KG,primary,CN,CHN,China (People's Republic of)
+202202,2022,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3825237.461,USD,114787,KG,primary,US,USA,United States
+201304,2013,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",255152.1753,USD,40787,KG,primary,CN,CHN,China (People's Republic of)
+201211,2012,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1968871.917,USD,157562,KG,primary,JP,JPN,Japan
+202001,2020,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",411383.5188,USD,61151,KG,primary,ID,IDN,Indonesia
+202107,2021,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1138725.541,USD,37696,KG,primary,JP,JPN,Japan
+201305,2013,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",546572.7473,USD,54437,KG,primary,NL,NLD,Netherlands
+201212,2012,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1374042.647,USD,119478,KG,primary,US,USA,United States
+202107,2021,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",868186.5543,USD,58561,KG,primary,HK,HKG,Hong Kong
+202202,2022,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1073836.708,USD,57364,KG,primary,ID,IDN,Indonesia
+202001,2020,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5005.9149,USD,360,KG,primary,CN,CHN,China (People's Republic of)
+201305,2013,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",185726662.2,USD,17347846,KG,primary,US,USA,United States
+201212,2012,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",275671.658,USD,33000,KG,primary,ID,IDN,Indonesia
+202108,2021,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",225614.3245,USD,15795,KG,primary,ES,ESP,Spain
+201305,2013,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1798795.319,USD,169742,KG,primary,TH,THA,Thailand
+202002,2020,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",836153.0292,USD,42704,KG,primary,US,USA,United States
+202202,2022,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",444435.2892,USD,31435,KG,primary,CN,CHN,China (People's Republic of)
+201212,2012,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1125970.49,USD,125963,KG,primary,CN,CHN,China (People's Republic of)
+202108,2021,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",67099758.26,USD,2193528,KG,primary,US,USA,United States
+202203,2022,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",10559926.3,USD,324333,KG,primary,US,USA,United States
+202002,2020,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",6806.3967,USD,378,KG,primary,CN,CHN,China (People's Republic of)
+201305,2013,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",790062.7287,USD,75409,KG,primary,VN,VNM,Viet-Nam
+202108,2021,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",782798.2487,USD,44850,KG,primary,CN,CHN,China (People's Republic of)
+202002,2020,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",282092.7657,USD,13608,KG,primary,HK,HKG,Hong Kong
+202204,2022,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",313972.6551,USD,22081,KG,primary,NL,NLD,Netherlands
+201305,2013,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5773412.691,USD,543098,KG,primary,ID,IDN,Indonesia
+202108,2021,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1915970.002,USD,56779,KG,primary,HK,HKG,Hong Kong
+202204,2022,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",149254041.8,USD,5539701,KG,primary,US,USA,United States
+202109,2021,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",21720420.42,USD,681309,KG,primary,US,USA,United States
+202003,2020,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1135140.904,USD,64566,KG,primary,US,USA,United States
+201305,2013,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",16309762.29,USD,1619083,KG,primary,CN,CHN,China (People's Republic of)
+202109,2021,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",221161.1185,USD,15486,KG,primary,CL,CHL,Chile
+202204,2022,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3403504.788,USD,130223,KG,primary,VN,VNM,Viet-Nam
+201305,2013,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",18607571.36,USD,1593364,KG,primary,JP,JPN,Japan
+202109,2021,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1326112.838,USD,59412,KG,primary,CN,CHN,China (People's Republic of)
+202204,2022,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1060198.031,USD,37699,KG,primary,ID,IDN,Indonesia
+202003,2020,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",160001.7127,USD,15608,KG,primary,VN,VNM,Viet-Nam
+201305,2013,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",147321.5706,USD,12247,KG,primary,HK,HKG,Hong Kong
+202109,2021,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",168359.0672,USD,21046,KG,primary,JP,JPN,Japan
+202204,2022,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1060198.031,USD,37699,KG,primary,CN,CHN,China (People's Republic of)
+202003,2020,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2594673.407,USD,191525,KG,primary,ID,IDN,Indonesia
+201306,2013,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",386478.1216,USD,37721,KG,primary,NL,NLD,Netherlands
+202109,2021,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",145252.399,USD,10982,KG,primary,HK,HKG,Hong Kong
+201306,2013,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",14690.244,USD,1361,KG,primary,UA,UKR,Ukraine
+202110,2021,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",303447.4757,USD,14696,KG,primary,NL,NLD,Netherlands
+202204,2022,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",183455.7651,USD,7776,KG,primary,JP,JPN,Japan
+202003,2020,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8747.6805,USD,486,KG,primary,CN,CHN,China (People's Republic of)
+201306,2013,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",138147441.4,USD,12703577,KG,primary,US,USA,United States
+202110,2021,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",14038890.64,USD,503381,KG,primary,US,USA,United States
+202205,2022,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",369109.6439,USD,16329,KG,primary,GB,GBR,United Kingdom
+202004,2020,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",16284741.1,USD,985391,KG,primary,US,USA,United States
+201306,2013,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",608701.8545,USD,56549,KG,primary,TH,THA,Thailand
+202110,2021,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",660896.3458,USD,45147,KG,primary,CN,CHN,China (People's Republic of)
+202004,2020,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",214427.1832,USD,16343,KG,primary,VN,VNM,Viet-Nam
+202205,2022,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",295520.2771,USD,14109,KG,primary,ES,ESP,Spain
+201306,2013,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",174502.9679,USD,19200,KG,primary,VN,VNM,Viet-Nam
+202004,2020,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",106725.1462,USD,15300,KG,primary,ID,IDN,Indonesia
+202205,2022,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",302823104.7,USD,11677597,KG,primary,US,USA,United States
+201306,2013,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",6053929.887,USD,572281,KG,primary,ID,IDN,Indonesia
+202110,2021,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",175.3423,USD,50,KG,primary,JP,JPN,Japan
+202004,2020,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",65374.8441,USD,4070,KG,primary,CN,CHN,China (People's Republic of)
+202205,2022,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",203733.0131,USD,9639,KG,primary,JM,JAM,Jamaica
+201306,2013,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",15798326.97,USD,1421361,KG,primary,CN,CHN,China (People's Republic of)
+202110,2021,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",99032.9866,USD,6969,KG,primary,HK,HKG,Hong Kong
+202004,2020,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1039650.916,USD,76703,KG,primary,JP,JPN,Japan
+202301,2023,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",23847726.49,USD,1306024,KG,primary,US,USA,United States
+202205,2022,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",747221.3356,USD,29936,KG,primary,TH,THA,Thailand
+201306,2013,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",268090.8975,USD,33530,KG,primary,KR,KOR,Korea (Rep. of)
+202111,2021,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",18947200.54,USD,556160,KG,primary,US,USA,United States
+202005,2020,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",166888740.4,USD,10487176,KG,primary,US,USA,United States
+202301,2023,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",280314.4378,USD,17010,KG,primary,SG,SGP,Singapore
+201306,2013,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",10663894.35,USD,954363,KG,primary,JP,JPN,Japan
+202111,2021,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",235037.7978,USD,9875,KG,primary,CN,CHN,China (People's Republic of)
+202005,2020,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",178872.6659,USD,16332,KG,primary,VN,VNM,Viet-Nam
+202301,2023,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",258751.9034,USD,17013,KG,primary,CN,CHN,China (People's Republic of)
+202205,2022,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8802217.272,USD,368208,KG,primary,VN,VNM,Viet-Nam
+201307,2013,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",238724.5795,USD,18850,KG,primary,NL,NLD,Netherlands
+202111,2021,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",97375.9262,USD,6730,KG,primary,HK,HKG,Hong Kong
+202005,2020,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1067014.089,USD,120904,KG,primary,ID,IDN,Indonesia
+202205,2022,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",12750694.76,USD,468695,KG,primary,ID,IDN,Indonesia
+202302,2023,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",16673.2675,USD,1246,KG,primary,FR,FRA,France
+201307,2013,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",82659689.39,USD,7336773,KG,primary,US,USA,United States
+202112,2021,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",12568580.67,USD,344458,KG,primary,US,USA,United States
+202005,2020,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2216571.473,USD,156538,KG,primary,CN,CHN,China (People's Republic of)
+201307,2013,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",445591.0334,USD,56582,KG,primary,TH,THA,Thailand
+202302,2023,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",18566700.41,USD,1124922,KG,primary,US,USA,United States
+202005,2020,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",11171440.84,USD,957042,KG,primary,JP,JPN,Japan
+202205,2022,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",17123646.89,USD,778266,KG,primary,CN,CHN,China (People's Republic of)
+201307,2013,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",384168.0676,USD,56043,KG,primary,VN,VNM,Viet-Nam
+202302,2023,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2829482.337,USD,189285,KG,primary,ID,IDN,Indonesia
+202005,2020,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",293152.2657,USD,18126,KG,primary,HK,HKG,Hong Kong
+202205,2022,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",14471702.45,USD,730663,KG,primary,JP,JPN,Japan
+201307,2013,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2370498.182,USD,224172,KG,primary,ID,IDN,Indonesia
+202302,2023,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1422390.456,USD,91964,KG,primary,CN,CHN,China (People's Republic of)
+202006,2020,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1847651.789,USD,108170,KG,primary,NL,NLD,Netherlands
+202205,2022,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1990921.251,USD,94382,KG,primary,HK,HKG,Hong Kong
+201307,2013,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8894847.282,USD,971279,KG,primary,CN,CHN,China (People's Republic of)
+202006,2020,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",212466916,USD,13036412,KG,primary,US,USA,United States
+202206,2022,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",213191.8423,USD,13268,KG,primary,NL,NLD,Netherlands
+201307,2013,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",224723.7211,USD,12492,KG,primary,KR,KOR,Korea (Rep. of)
+202302,2023,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",221941.9628,USD,13608,KG,primary,HK,HKG,Hong Kong
+202006,2020,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8512051.307,USD,499863,KG,primary,VN,VNM,Viet-Nam
+202206,2022,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",113216.1906,USD,22680,KG,primary,DK,DNK,Denmark
+201307,2013,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",335948.5464,USD,27731,KG,primary,JP,JPN,Japan
+202303,2023,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",32591.8945,USD,1361,KG,primary,FR,FRA,France
+202006,2020,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1923927.328,USD,144964,KG,primary,ID,IDN,Indonesia
+202206,2022,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",172752911.7,USD,7149240,KG,primary,US,USA,United States
+201307,2013,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",76758.2915,USD,6782,KG,primary,HK,HKG,Hong Kong
+202303,2023,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",24595105.61,USD,1588586,KG,primary,US,USA,United States
+202006,2020,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",306508.0392,USD,16792,KG,primary,SG,SGP,Singapore
+202206,2022,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",21032393.41,USD,818434,KG,primary,VN,VNM,Viet-Nam
+202303,2023,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",171032.1778,USD,17024,KG,primary,ID,IDN,Indonesia
+202206,2022,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8205764.356,USD,329712,KG,primary,ID,IDN,Indonesia
+202006,2020,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",25113040.36,USD,1592981,KG,primary,CN,CHN,China (People's Republic of)
+201308,2013,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",20117397.18,USD,1745198,KG,primary,US,USA,United States
+202303,2023,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",789882.1013,USD,35986,KG,primary,CN,CHN,China (People's Republic of)
+202006,2020,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8553976.102,USD,637525,KG,primary,JP,JPN,Japan
+202206,2022,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",405241.207,USD,16738,KG,primary,SG,SGP,Singapore
+201308,2013,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",701885.4193,USD,72265,KG,primary,ID,IDN,Indonesia
+202303,2023,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",82749.0663,USD,5402,KG,primary,HK,HKG,Hong Kong
+202006,2020,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1983393.541,USD,126949,KG,primary,HK,HKG,Hong Kong
+202206,2022,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",23316094.19,USD,1019825,KG,primary,CN,CHN,China (People's Republic of)
+201308,2013,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1146290.627,USD,123482,KG,primary,CN,CHN,China (People's Republic of)
+202304,2023,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",83758112.08,USD,6590965,KG,primary,US,USA,United States
+202007,2020,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1549604.8,USD,90302,KG,primary,NL,NLD,Netherlands
+202206,2022,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",13190136.15,USD,705375,KG,primary,JP,JPN,Japan
+202304,2023,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",509327.3745,USD,52516,KG,primary,ID,IDN,Indonesia
+202007,2020,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",34293.4743,USD,1715,KG,primary,UA,UKR,Ukraine
+202206,2022,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",879940.3144,USD,47765,KG,primary,HK,HKG,Hong Kong
+202304,2023,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",341408.9612,USD,39989,KG,primary,CN,CHN,China (People's Republic of)
+201308,2013,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",324485.9453,USD,19987,KG,primary,JP,JPN,Japan
+202007,2020,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",146971728.4,USD,7888592,KG,primary,US,USA,United States
+202207,2022,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",315782.7316,USD,11975,KG,primary,GB,GBR,United Kingdom
+202304,2023,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2576725.064,USD,274808,KG,primary,JP,JPN,Japan
+201309,2013,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8164787.401,USD,656688,KG,primary,US,USA,United States
+202207,2022,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",240606.2679,USD,13350,KG,primary,DK,DNK,Denmark
+202007,2020,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3849231.034,USD,238987,KG,primary,VN,VNM,Viet-Nam
+202305,2023,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",100244578.2,USD,8375138,KG,primary,US,USA,United States
+201309,2013,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1038796.229,USD,74903,KG,primary,VN,VNM,Viet-Nam
+202207,2022,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",232190.5479,USD,8818,KG,primary,ES,ESP,Spain
+202007,2020,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",267419.7748,USD,16738,KG,primary,ID,IDN,Indonesia
+202305,2023,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",254940.7847,USD,34006,KG,primary,VN,VNM,Viet-Nam
+201309,2013,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1486570.978,USD,146045,KG,primary,CN,CHN,China (People's Republic of)
+202207,2022,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",120596969.9,USD,5753864,KG,primary,US,USA,United States
+202007,2020,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",11604273.41,USD,728369,KG,primary,CN,CHN,China (People's Republic of)
+202305,2023,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2332009.55,USD,235529,KG,primary,ID,IDN,Indonesia
+201310,2013,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2378839.307,USD,193263,KG,primary,US,USA,United States
+202401,2024,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",11386658.44,USD,736664,KG,primary,US,USA,United States
+202207,2022,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5422738.863,USD,235805,KG,primary,VN,VNM,Viet-Nam
+202305,2023,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",243684.9152,USD,16738,KG,primary,SG,SGP,Singapore
+201310,2013,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1075528.33,USD,74724,KG,primary,VN,VNM,Viet-Nam
+202207,2022,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3393353.853,USD,174415,KG,primary,ID,IDN,Indonesia
+202401,2024,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1547664.789,USD,169436,KG,primary,VN,VNM,Viet-Nam
+202305,2023,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3091365.169,USD,322931,KG,primary,CN,CHN,China (People's Republic of)
+202007,2020,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2614274.157,USD,201441,KG,primary,JP,JPN,Japan
+201310,2013,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",312690.8732,USD,42521,KG,primary,CN,CHN,China (People's Republic of)
+202207,2022,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",61538.0197,USD,2450,KG,primary,SG,SGP,Singapore
+202401,2024,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",142404.0679,USD,7591,KG,primary,KR,KOR,Korea (Rep. of)
+202007,2020,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",20995.8837,USD,1361,KG,primary,HK,HKG,Hong Kong
+202305,2023,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",24451.3096,USD,1832,KG,primary,KR,KOR,Korea (Rep. of)
+201310,2013,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",318490.7736,USD,26975,KG,primary,HK,HKG,Hong Kong
+202207,2022,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",9649902.12,USD,455358,KG,primary,CN,CHN,China (People's Republic of)
+202401,2024,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",37504.7888,USD,2798,KG,primary,JP,JPN,Japan
+202008,2020,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",39555271.99,USD,2119972,KG,primary,US,USA,United States
+201310,2013,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",16502.2126,USD,1361,KG,primary,AU,AUS,Australia
+202207,2022,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",486526.4662,USD,28682,KG,primary,JP,JPN,Japan
+202402,2024,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",10510621.49,USD,730828,KG,primary,US,USA,United States
+202008,2020,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",139983.7299,USD,15897,KG,primary,VN,VNM,Viet-Nam
+201311,2013,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2233376.848,USD,201123,KG,primary,US,USA,United States
+202305,2023,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",9055991.776,USD,802251,KG,primary,JP,JPN,Japan
+202207,2022,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1085719.079,USD,57054,KG,primary,HK,HKG,Hong Kong
+202402,2024,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",982140.9044,USD,96635,KG,primary,CN,CHN,China (People's Republic of)
+202008,2020,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1318882.808,USD,103211,KG,primary,CN,CHN,China (People's Republic of)
+201311,2013,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",581633.4292,USD,72672,KG,primary,TH,THA,Thailand
+202208,2022,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",58933117.16,USD,2856044,KG,primary,US,USA,United States
+202305,2023,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",184975.7435,USD,15649,KG,primary,HK,HKG,Hong Kong
+202403,2024,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",12093686.51,USD,828213,KG,primary,US,USA,United States
+202008,2020,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1227.2583,USD,54,KG,primary,TW,TWN,Taiwan
+201311,2013,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",591224.5228,USD,57443,KG,primary,CN,CHN,China (People's Republic of)
+202208,2022,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1668204.116,USD,102888,KG,primary,VN,VNM,Viet-Nam
+202306,2023,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1432545.403,USD,107475,KG,primary,FR,FRA,France
+202008,2020,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",53613.4415,USD,3504,KG,primary,HK,HKG,Hong Kong
+201311,2013,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1434668.782,USD,132025,KG,primary,JP,JPN,Japan
+202208,2022,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1290366.512,USD,112406,KG,primary,ID,IDN,Indonesia
+202306,2023,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",236946.9909,USD,18681,KG,primary,ES,ESP,Spain
+202009,2020,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8294148.01,USD,469870,KG,primary,US,USA,United States
+201311,2013,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",83969.9719,USD,15991,KG,primary,HK,HKG,Hong Kong
+202403,2024,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",117015.5678,USD,17119,KG,primary,VN,VNM,Viet-Nam
+202208,2022,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5689418.948,USD,337599,KG,primary,CN,CHN,China (People's Republic of)
+202306,2023,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",153872349.8,USD,12459417,KG,primary,US,USA,United States
+202009,2020,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",332928.6794,USD,15649,KG,primary,VN,VNM,Viet-Nam
+201312,2013,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1699582.903,USD,135940,KG,primary,US,USA,United States
+202403,2024,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",123374.6759,USD,34088,KG,primary,CN,CHN,China (People's Republic of)
+202208,2022,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",330072.4142,USD,14194,KG,primary,KR,KOR,Korea (Rep. of)
+202306,2023,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",349305.6039,USD,32658,KG,primary,TH,THA,Thailand
+202009,2020,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",462066.0861,USD,35292,KG,primary,CN,CHN,China (People's Republic of)
+202404,2024,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",130946053.9,USD,8158844,KG,primary,US,USA,United States
+202208,2022,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",664058.5224,USD,63273,KG,primary,JP,JPN,Japan
+202306,2023,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5209407.869,USD,462063,KG,primary,VN,VNM,Viet-Nam
+202009,2020,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",240903.1292,USD,18124,KG,primary,HK,HKG,Hong Kong
+202404,2024,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",403851.1895,USD,51193,KG,primary,VN,VNM,Viet-Nam
+201312,2013,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",25374.4835,USD,2364,KG,primary,VN,VNM,Viet-Nam
+202208,2022,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",4427.2066,USD,272,KG,primary,TW,TWN,Taiwan
+202306,2023,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1483950.916,USD,179250,KG,primary,ID,IDN,Indonesia
+202010,2020,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5255333.823,USD,229575,KG,primary,US,USA,United States
+202404,2024,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",158334.2575,USD,16320,KG,primary,ID,IDN,Indonesia
+201312,2013,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",805665.2247,USD,76160,KG,primary,ID,IDN,Indonesia
+202208,2022,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1050666.117,USD,57556,KG,primary,HK,HKG,Hong Kong
+202306,2023,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",11447291.85,USD,1023641,KG,primary,CN,CHN,China (People's Republic of)
+202010,2020,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",185029.2493,USD,17154,KG,primary,ID,IDN,Indonesia
+202404,2024,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1489520.851,USD,120379,KG,primary,CN,CHN,China (People's Republic of)
+202208,2022,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",85572.2642,USD,4083,KG,primary,AU,AUS,Australia
+202306,2023,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",85959.153,USD,7062,KG,primary,KR,KOR,Korea (Rep. of)
+202010,2020,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",632136.4708,USD,51018,KG,primary,CN,CHN,China (People's Republic of)
+202404,2024,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",7895091.006,USD,655590,KG,primary,JP,JPN,Japan
+201312,2013,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1222771.924,USD,190842,KG,primary,CN,CHN,China (People's Republic of)
+202209,2022,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",36140711.44,USD,2031732,KG,primary,US,USA,United States
+202306,2023,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",4832743.756,USD,418658,KG,primary,JP,JPN,Japan
+202011,2020,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2776917.168,USD,155962,KG,primary,US,USA,United States
+202405,2024,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",252075456.5,USD,15937962,KG,primary,US,USA,United States
+202209,2022,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2789749.211,USD,198698,KG,primary,VN,VNM,Viet-Nam
+202306,2023,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1341252.76,USD,101514,KG,primary,HK,HKG,Hong Kong
+202011,2020,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",177533.7352,USD,16466,KG,primary,ID,IDN,Indonesia
+202405,2024,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1166648.598,USD,85700,KG,primary,TH,THA,Thailand
+202209,2022,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1667369.1,USD,126679,KG,primary,ID,IDN,Indonesia
+202307,2023,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",220851.6462,USD,16869,KG,primary,FR,FRA,France
+202405,2024,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",6439523.533,USD,469609,KG,primary,VN,VNM,Viet-Nam
+202209,2022,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5890602.097,USD,406090,KG,primary,CN,CHN,China (People's Republic of)
+202011,2020,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",192812.5565,USD,17146,KG,primary,CN,CHN,China (People's Republic of)
+202307,2023,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",158802969,USD,12528102,KG,primary,US,USA,United States
+202405,2024,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",897247.4074,USD,100738,KG,primary,ID,IDN,Indonesia
+202209,2022,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",258411.0984,USD,16876,KG,primary,JP,JPN,Japan
+202307,2023,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",4189956.181,USD,350014,KG,primary,VN,VNM,Viet-Nam
+202011,2020,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",34441.8293,USD,6097,KG,primary,HK,HKG,Hong Kong
+202405,2024,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",161798.173,USD,10559,KG,primary,SG,SGP,Singapore
+202209,2022,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",266677.6601,USD,16030,KG,primary,HK,HKG,Hong Kong
+202307,2023,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2562686.042,USD,260275,KG,primary,ID,IDN,Indonesia
+202012,2020,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2111257.028,USD,101374,KG,primary,US,USA,United States
+202209,2022,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",173609.0523,USD,9172,KG,primary,AU,AUS,Australia
+202405,2024,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",9702573.23,USD,673143,KG,primary,CN,CHN,China (People's Republic of)
+202307,2023,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",222574.1099,USD,17145,KG,primary,SG,SGP,Singapore
+202210,2022,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",29583236.77,USD,1567874,KG,primary,US,USA,United States
+202405,2024,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",347474.1451,USD,16329,KG,primary,KR,KOR,Korea (Rep. of)
+202012,2020,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",94383.0609,USD,12897,KG,primary,ID,IDN,Indonesia
+202307,2023,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",11816478.06,USD,1021907,KG,primary,CN,CHN,China (People's Republic of)
+202405,2024,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",11151355.8,USD,840651,KG,primary,JP,JPN,Japan
+202210,2022,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",114737.7077,USD,22861,KG,primary,DO,DOM,Dominican Republic
+202012,2020,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",309137.3863,USD,30033,KG,primary,CN,CHN,China (People's Republic of)
+202307,2023,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1681418.341,USD,151609,KG,primary,JP,JPN,Japan
+202405,2024,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",112227.9969,USD,8165,KG,primary,HK,HKG,Hong Kong
+202210,2022,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1369506.846,USD,85680,KG,primary,VN,VNM,Viet-Nam
+202307,2023,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2078192.208,USD,178919,KG,primary,HK,HKG,Hong Kong
+202406,2024,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",167908521.3,USD,10917261,KG,primary,US,USA,United States
+202210,2022,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3019628.496,USD,159978,KG,primary,ID,IDN,Indonesia
+202308,2023,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",83296838.24,USD,6573361,KG,primary,US,USA,United States
+202406,2024,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",32995.9652,USD,2506,KG,primary,BR,BRA,Brazil
+202210,2022,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",4113040.711,USD,244863,KG,primary,CN,CHN,China (People's Republic of)
+202308,2023,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1549816.928,USD,89998,KG,primary,VN,VNM,Viet-Nam
+202406,2024,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",566496.5012,USD,35986,KG,primary,TH,THA,Thailand
+202210,2022,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",283612.4473,USD,17010,KG,primary,HK,HKG,Hong Kong
+202308,2023,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1088850.542,USD,109574,KG,primary,ID,IDN,Indonesia
+202406,2024,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8755448.265,USD,627265,KG,primary,VN,VNM,Viet-Nam
+202210,2022,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",237171.2373,USD,10764,KG,primary,AU,AUS,Australia
+202308,2023,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2644741.956,USD,238778,KG,primary,CN,CHN,China (People's Republic of)
+202211,2022,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",16034.2326,USD,1197,KG,primary,GB,GBR,United Kingdom
+202406,2024,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3268817.842,USD,313301,KG,primary,ID,IDN,Indonesia
+202308,2023,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",131905.2495,USD,8845,KG,primary,KR,KOR,Korea (Rep. of)
+202211,2022,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",19602661.21,USD,1015701,KG,primary,US,USA,United States
+202406,2024,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",15051063.7,USD,1084457,KG,primary,CN,CHN,China (People's Republic of)
+202308,2023,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",921173.6475,USD,56787,KG,primary,JP,JPN,Japan
+202211,2022,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",250213.9535,USD,35635,KG,primary,VN,VNM,Viet-Nam
+202406,2024,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2974576.163,USD,231993,KG,primary,JP,JPN,Japan
+202308,2023,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1134426.998,USD,85082,KG,primary,HK,HKG,Hong Kong
+202211,2022,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2534478.14,USD,112146,KG,primary,ID,IDN,Indonesia
+202406,2024,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",891686.8036,USD,49914,KG,primary,HK,HKG,Hong Kong
+202309,2023,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",26433.2644,USD,6677,KG,primary,BE,BEL,Belgium
+202407,2024,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",11246.9206,USD,2286,KG,primary,GB,GBR,United Kingdom
+202211,2022,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",39503.6279,USD,2000,KG,primary,SG,SGP,Singapore
+202309,2023,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",13439055.09,USD,989217,KG,primary,US,USA,United States
+202407,2024,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",32175.7319,USD,2286,KG,primary,BE,BEL,Belgium
+202211,2022,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2960992,USD,171194,KG,primary,CN,CHN,China (People's Republic of)
+202309,2023,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",248124.2004,USD,34058,KG,primary,VN,VNM,Viet-Nam
+202407,2024,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",126846161.2,USD,8096961,KG,primary,US,USA,United States
+202211,2022,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",45690.0465,USD,3411,KG,primary,HK,HKG,Hong Kong
+202309,2023,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",802390.3186,USD,70061,KG,primary,ID,IDN,Indonesia
+202407,2024,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2545752.371,USD,168816,KG,primary,VN,VNM,Viet-Nam
+202212,2022,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",13057358.1,USD,738606,KG,primary,US,USA,United States
+202309,2023,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",944508.9081,USD,106054,KG,primary,CN,CHN,China (People's Republic of)
+202212,2022,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2054964.771,USD,150528,KG,primary,ID,IDN,Indonesia
+202407,2024,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1856000.797,USD,181585,KG,primary,ID,IDN,Indonesia
+202309,2023,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",708750.8102,USD,40891,KG,primary,JP,JPN,Japan
+202212,2022,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",233442.0556,USD,18741,KG,primary,CN,CHN,China (People's Republic of)
+202407,2024,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5979089.664,USD,401968,KG,primary,CN,CHN,China (People's Republic of)
+202309,2023,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",89399.7863,USD,5008,KG,primary,AU,AUS,Australia
+202212,2022,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",144690.886,USD,8028,KG,primary,HK,HKG,Hong Kong
+202310,2023,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",12501257.51,USD,880902,KG,primary,US,USA,United States
+202407,2024,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",918089.8792,USD,28404,KG,primary,KR,KOR,Korea (Rep. of)
+202310,2023,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1086438.259,USD,91058,KG,primary,VN,VNM,Viet-Nam
+202407,2024,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1052885.922,USD,87473,KG,primary,JP,JPN,Japan
+202310,2023,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",274112.8754,USD,17136,KG,primary,ID,IDN,Indonesia
+202407,2024,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",567026.5355,USD,34414,KG,primary,HK,HKG,Hong Kong
+202310,2023,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1073386.481,USD,106964,KG,primary,CN,CHN,China (People's Republic of)
+202408,2024,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",12824.6761,USD,1361,KG,primary,FR,FRA,France
+202310,2023,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",76297.3778,USD,13962,KG,primary,HK,HKG,Hong Kong
+202408,2024,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",54259.3146,USD,2858,KG,primary,GB,GBR,United Kingdom
+202310,2023,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",45895.243,USD,3008,KG,primary,AU,AUS,Australia
+202408,2024,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",41513.6857,USD,2296,KG,primary,BE,BEL,Belgium
+202311,2023,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",11388.5143,USD,1361,KG,primary,FR,FRA,France
+202408,2024,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",36704503.94,USD,2380811,KG,primary,US,USA,United States
+202311,2023,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",31898.7801,USD,3429,KG,primary,NL,NLD,Netherlands
+202311,2023,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",7300106.982,USD,494281,KG,primary,US,USA,United States
+202408,2024,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",747663.5368,USD,56569,KG,primary,VN,VNM,Viet-Nam
+202311,2023,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",278742.5494,USD,42168,KG,primary,VN,VNM,Viet-Nam
+202408,2024,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1671253.202,USD,169487,KG,primary,ID,IDN,Indonesia
+202311,2023,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",371690.0387,USD,85517,KG,primary,CN,CHN,China (People's Republic of)
+202408,2024,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",7431.1686,USD,503,KG,primary,SG,SGP,Singapore
+202312,2023,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1348.2033,USD,109,KG,primary,UA,UKR,Ukraine
+202408,2024,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5592559.295,USD,420871,KG,primary,CN,CHN,China (People's Republic of)
+202312,2023,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",6873407.248,USD,474037,KG,primary,US,USA,United States
+202408,2024,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",426135.3968,USD,19800,KG,primary,KR,KOR,Korea (Rep. of)
+202408,2024,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",647131.6024,USD,59749,KG,primary,JP,JPN,Japan
+202312,2023,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",202306.4759,USD,37422,KG,primary,ID,IDN,Indonesia
+202312,2023,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",219333.3157,USD,17146,KG,primary,SG,SGP,Singapore
+202408,2024,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",505644.436,USD,36190,KG,primary,HK,HKG,Hong Kong
+202312,2023,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1127298.354,USD,72975,KG,primary,CN,CHN,China (People's Republic of)
+201801,2018,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",845.2308,USD,14,KG,primary,FR,FRA,France
+202408,2024,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",55079.0633,USD,3716,KG,primary,AU,AUS,Australia
+201801,2018,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2029100.386,USD,116171,KG,primary,US,USA,United States
+202409,2024,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",21712.5352,USD,1143,KG,primary,GB,GBR,United Kingdom
+201801,2018,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",252717.5548,USD,22680,KG,primary,CN,CHN,China (People's Republic of)
+202409,2024,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",16969479.02,USD,1091361,KG,primary,US,USA,United States
+201802,2018,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1683980.682,USD,92217,KG,primary,US,USA,United States
+202409,2024,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1225668.331,USD,163700,KG,primary,ID,IDN,Indonesia
+202409,2024,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",725046.8571,USD,89719,KG,primary,CN,CHN,China (People's Republic of)
+201802,2018,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5935.0535,USD,408,KG,primary,SG,SGP,Singapore
+202409,2024,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",16021.5235,USD,681,KG,primary,KR,KOR,Korea (Rep. of)
+201802,2018,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",126304.3901,USD,18547,KG,primary,CN,CHN,China (People's Republic of)
+202409,2024,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",167021.2626,USD,11533,KG,primary,JP,JPN,Japan
+201803,2018,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1135509.206,USD,76024,KG,primary,US,USA,United States
+202409,2024,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",126192.4809,USD,9525,KG,primary,HK,HKG,Hong Kong
+201803,2018,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",234870.0454,USD,22680,KG,primary,CN,CHN,China (People's Republic of)
+202410,2024,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",26126.3451,USD,2613,KG,primary,BE,BEL,Belgium
+201803,2018,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",87751.4776,USD,5443,KG,primary,HK,HKG,Hong Kong
+202410,2024,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",15146394.96,USD,831349,KG,primary,US,USA,United States
+201804,2018,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",31371314.06,USD,1752860,KG,primary,US,USA,United States
+201804,2018,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",659165.9791,USD,37362,KG,primary,ID,IDN,Indonesia
+202410,2024,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1696370.463,USD,141142,KG,primary,ID,IDN,Indonesia
+201804,2018,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1053955.247,USD,70716,KG,primary,CN,CHN,China (People's Republic of)
+202410,2024,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",497922.6925,USD,46964,KG,primary,CN,CHN,China (People's Republic of)
+201804,2018,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",161029.8586,USD,8605,KG,primary,JP,JPN,Japan
+202410,2024,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",214485.0671,USD,8845,KG,primary,KR,KOR,Korea (Rep. of)
+201805,2018,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",263258.04,USD,17784,KG,primary,NL,NLD,Netherlands
+202410,2024,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",347759.085,USD,23133,KG,primary,HK,HKG,Hong Kong
+201805,2018,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",179783729.4,USD,9509848,KG,primary,US,USA,United States
+202411,2024,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",220877.5691,USD,11677,KG,primary,FR,FRA,France
+201805,2018,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",189158.5736,USD,17693,KG,primary,VE,VEN,Venezuela
+202411,2024,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",39646.8582,USD,3048,KG,primary,BE,BEL,Belgium
+202411,2024,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",14100879.97,USD,791462,KG,primary,US,USA,United States
+201805,2018,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",598847.4261,USD,33966,KG,primary,TH,THA,Thailand
+202411,2024,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1070693.565,USD,89785,KG,primary,VN,VNM,Viet-Nam
+201805,2018,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5251989.236,USD,300489,KG,primary,VN,VNM,Viet-Nam
+201805,2018,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",7357001.695,USD,454987,KG,primary,ID,IDN,Indonesia
+202411,2024,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",251471.6981,USD,36930,KG,primary,ID,IDN,Indonesia
+201805,2018,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",22840935.24,USD,1359243,KG,primary,CN,CHN,China (People's Republic of)
+202411,2024,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",154500.6739,USD,7022,KG,primary,KR,KOR,Korea (Rep. of)
+201805,2018,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",263258.04,USD,20400,KG,primary,KR,KOR,Korea (Rep. of)
+202412,2024,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",15672.336,USD,1306,KG,primary,GB,GBR,United Kingdom
+202412,2024,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",9342665.24,USD,569909,KG,primary,US,USA,United States
+201805,2018,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",14553680.87,USD,956514,KG,primary,JP,JPN,Japan
+202412,2024,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",49567.6162,USD,7384,KG,primary,VN,VNM,Viet-Nam
+201806,2018,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",345189.359,USD,18861,KG,primary,NL,NLD,Netherlands
+201806,2018,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",152311768.7,USD,7984269,KG,primary,US,USA,United States
+201806,2018,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1062009.993,USD,83736,KG,primary,VN,VNM,Viet-Nam
+201806,2018,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8682343.546,USD,569459,KG,primary,ID,IDN,Indonesia
+201806,2018,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",22452779.77,USD,1422322,KG,primary,CN,CHN,China (People's Republic of)
+201806,2018,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",14800956.35,USD,946502,KG,primary,JP,JPN,Japan
+201806,2018,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1336252.311,USD,69128,KG,primary,HK,HKG,Hong Kong
+201807,2018,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",108305102.2,USD,5701679,KG,primary,US,USA,United States
+201807,2018,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1293981.798,USD,69717,KG,primary,VN,VNM,Viet-Nam
+201807,2018,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",802312.2253,USD,54721,KG,primary,ID,IDN,Indonesia
+201807,2018,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",165210.2602,USD,7348,KG,primary,SG,SGP,Singapore
+201807,2018,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",6579636.44,USD,419249,KG,primary,CN,CHN,China (People's Republic of)
+201807,2018,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3205743.057,USD,213300,KG,primary,JP,JPN,Japan
+201807,2018,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",684523.0057,USD,38349,KG,primary,HK,HKG,Hong Kong
+201808,2018,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",24257709.83,USD,1313422,KG,primary,US,USA,United States
+201808,2018,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1753812.481,USD,106570,KG,primary,VN,VNM,Viet-Nam
+201808,2018,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3489120.457,USD,223862,KG,primary,CN,CHN,China (People's Republic of)
+201808,2018,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",679965.3891,USD,45724,KG,primary,JP,JPN,Japan
+201808,2018,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",362892.869,USD,18891,KG,primary,HK,HKG,Hong Kong
+201809,2018,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",236193.4444,USD,21432,KG,primary,FR,FRA,France
+201809,2018,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",13294242.56,USD,764201,KG,primary,US,USA,United States
+201809,2018,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",273534.3688,USD,16330,KG,primary,VN,VNM,Viet-Nam
+201809,2018,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1943301.677,USD,128839,KG,primary,CN,CHN,China (People's Republic of)
+201809,2018,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",76987.043,USD,6221,KG,primary,JP,JPN,Japan
+201809,2018,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",490535.4998,USD,25351,KG,primary,HK,HKG,Hong Kong
+201810,2018,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",472629.1465,USD,42864,KG,primary,FR,FRA,France
+201810,2018,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",10443473.95,USD,592900,KG,primary,US,USA,United States
+201810,2018,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",521090.4661,USD,35238,KG,primary,ID,IDN,Indonesia
+201810,2018,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2205051.163,USD,184258,KG,primary,CN,CHN,China (People's Republic of)
+201810,2018,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",57506.8277,USD,12600,KG,primary,JP,JPN,Japan
+201810,2018,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",198873.5505,USD,10726,KG,primary,HK,HKG,Hong Kong
+201811,2018,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",236185.0916,USD,21432,KG,primary,FR,FRA,France
+201811,2018,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",422283.9479,USD,34834,KG,primary,GB,GBR,United Kingdom
+201811,2018,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",9494283.204,USD,501607,KG,primary,US,USA,United States
+201811,2018,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",299917.5766,USD,17010,KG,primary,VN,VNM,Viet-Nam
+201811,2018,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",256654.4662,USD,17177,KG,primary,ID,IDN,Indonesia
+201811,2018,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",168578.6712,USD,8845,KG,primary,MY,MYS,Malaysia
+201811,2018,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",624360.9888,USD,60676,KG,primary,CN,CHN,China (People's Republic of)
+201811,2018,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",77398.4263,USD,5376,KG,primary,JP,JPN,Japan
+201811,2018,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",34903.2867,USD,2041,KG,primary,HK,HKG,Hong Kong
+201812,2018,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5926421.382,USD,324576,KG,primary,US,USA,United States
+201812,2018,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",604702.1334,USD,34292,KG,primary,VN,VNM,Viet-Nam
+201812,2018,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",164214.1154,USD,15626,KG,primary,ID,IDN,Indonesia
+201812,2018,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2012217.665,USD,173831,KG,primary,CN,CHN,China (People's Republic of)
+201812,2018,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",72830.7109,USD,22563,KG,primary,JP,JPN,Japan
+201812,2018,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",33099.9287,USD,2193,KG,primary,HK,HKG,Hong Kong
+201601,2016,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2020983.739,USD,157421,KG,primary,US,USA,United States
+201601,2016,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",593034.8087,USD,55249,KG,primary,VN,VNM,Viet-Nam
+201601,2016,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",667118.1161,USD,90703,KG,primary,CN,CHN,China (People's Republic of)
+201601,2016,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",16497.0116,USD,1256,KG,primary,HK,HKG,Hong Kong
+201602,2016,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1710839.4,USD,142434,KG,primary,US,USA,United States
+201602,2016,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",181053.6981,USD,17677,KG,primary,CN,CHN,China (People's Republic of)
+201603,2016,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1098198.74,USD,83928,KG,primary,US,USA,United States
+201604,2016,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",55928835.3,USD,4337019,KG,primary,US,USA,United States
+201604,2016,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",227465.3659,USD,18681,KG,primary,CN,CHN,China (People's Republic of)
+201604,2016,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",219003.3842,USD,17641,KG,primary,JP,JPN,Japan
+201605,2016,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",220992.2803,USD,16738,KG,primary,NL,NLD,Netherlands
+201605,2016,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",16774.6759,USD,1361,KG,primary,GB,GBR,United Kingdom
+201605,2016,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",182898413.4,USD,14120246,KG,primary,US,USA,United States
+201605,2016,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1639486.643,USD,107392,KG,primary,TH,THA,Thailand
+201605,2016,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1055501.173,USD,87918,KG,primary,VN,VNM,Viet-Nam
+201605,2016,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1616370.754,USD,133280,KG,primary,ID,IDN,Indonesia
+201605,2016,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",224675.7677,USD,18412,KG,primary,SG,SGP,Singapore
+201605,2016,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",11804575.47,USD,1112029,KG,primary,CN,CHN,China (People's Republic of)
+201605,2016,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1060576.766,USD,94660,KG,primary,KR,KOR,Korea (Rep. of)
+201605,2016,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",18937013.43,USD,1552116,KG,primary,JP,JPN,Japan
+201605,2016,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1172960.153,USD,130310,KG,primary,HK,HKG,Hong Kong
+201606,2016,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",228872.2665,USD,16728,KG,primary,NL,NLD,Netherlands
+201606,2016,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",19061.4402,USD,1361,KG,primary,UA,UKR,Ukraine
+201606,2016,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",115824745.7,USD,8462742,KG,primary,US,USA,United States
+201606,2016,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",249896.4044,USD,37720,KG,primary,TH,THA,Thailand
+201606,2016,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",179023.6253,USD,18860,KG,primary,VN,VNM,Viet-Nam
+201606,2016,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",4950580.529,USD,419079,KG,primary,ID,IDN,Indonesia
+201606,2016,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",19336364.51,USD,1717185,KG,primary,CN,CHN,China (People's Republic of)
+201606,2016,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",678051.5251,USD,51597,KG,primary,KR,KOR,Korea (Rep. of)
+201606,2016,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",13536537.12,USD,1081060,KG,primary,JP,JPN,Japan
+201606,2016,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",465136.0679,USD,37351,KG,primary,HK,HKG,Hong Kong
+201607,2016,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",230792.2153,USD,16738,KG,primary,NL,NLD,Netherlands
+201607,2016,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",97404515.09,USD,6940704,KG,primary,US,USA,United States
+201607,2016,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",817501.0195,USD,76824,KG,primary,TH,THA,Thailand
+201607,2016,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",337705.373,USD,34624,KG,primary,ID,IDN,Indonesia
+201607,2016,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",7212522.622,USD,626554,KG,primary,CN,CHN,China (People's Republic of)
+201607,2016,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",406613.3815,USD,41620,KG,primary,KR,KOR,Korea (Rep. of)
+201501,2015,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3628378.992,USD,298351,KG,primary,US,USA,United States
+201607,2016,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3012490.475,USD,231107,KG,primary,JP,JPN,Japan
+201501,2015,01,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1586970.533,USD,183625,KG,primary,CN,CHN,China (People's Republic of)
+201607,2016,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",50036.5602,USD,3582,KG,primary,HK,HKG,Hong Kong
+201502,2015,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1950960.614,USD,152550,KG,primary,US,USA,United States
+201608,2016,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",35972.0874,USD,2597,KG,primary,AT,AUT,Austria
+201502,2015,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",564783.8072,USD,75320,KG,primary,TH,THA,Thailand
+201608,2016,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",34116567.59,USD,2463597,KG,primary,US,USA,United States
+201502,2015,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",422134.0243,USD,74053,KG,primary,CN,CHN,China (People's Republic of)
+201608,2016,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1669555.402,USD,120354,KG,primary,VN,VNM,Viet-Nam
+201502,2015,02,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1060.3851,USD,71,KG,primary,TW,TWN,Taiwan
+201608,2016,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",336312.3495,USD,31970,KG,primary,ID,IDN,Indonesia
+201503,2015,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2231830.394,USD,182777,KG,primary,US,USA,United States
+201608,2016,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2832071.306,USD,250925,KG,primary,CN,CHN,China (People's Republic of)
+201503,2015,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",627017.1259,USD,99087,KG,primary,CN,CHN,China (People's Republic of)
+201608,2016,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",223181.0234,USD,18367,KG,primary,KR,KOR,Korea (Rep. of)
+201503,2015,03,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",57604.2231,USD,4000,KG,primary,HK,HKG,Hong Kong
+201608,2016,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",857069.8666,USD,65738,KG,primary,JP,JPN,Japan
+201504,2015,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",34.8805,USD,3,KG,primary,FR,FRA,France
+201608,2016,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",458430.7326,USD,38377,KG,primary,HK,HKG,Hong Kong
+201504,2015,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2839.1144,USD,179,KG,primary,GB,GBR,United Kingdom
+201609,2016,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",11522.726,USD,838,KG,primary,NL,NLD,Netherlands
+201504,2015,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",10572064.68,USD,905617,KG,primary,US,USA,United States
+201609,2016,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8892689.967,USD,603706,KG,primary,US,USA,United States
+201504,2015,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",70819.681,USD,4964,KG,primary,TH,THA,Thailand
+201609,2016,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1742025.77,USD,93765,KG,primary,VN,VNM,Viet-Nam
+201504,2015,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",6632.1713,USD,462,KG,primary,KR,KOR,Korea (Rep. of)
+201609,2016,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",293229.0618,USD,27431,KG,primary,ID,IDN,Indonesia
+201504,2015,04,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",128554.2894,USD,16769,KG,primary,JP,JPN,Japan
+201609,2016,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2121522.206,USD,220225,KG,primary,CN,CHN,China (People's Republic of)
+201505,2015,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",72859855.08,USD,6480807,KG,primary,US,USA,United States
+201609,2016,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",87796.5609,USD,8197,KG,primary,JP,JPN,Japan
+201505,2015,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",214228.5469,USD,18860,KG,primary,TH,THA,Thailand
+201609,2016,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",48469.0458,USD,3035,KG,primary,HK,HKG,Hong Kong
+201505,2015,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",540246.3581,USD,75441,KG,primary,VN,VNM,Viet-Nam
+201610,2016,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2706916.389,USD,192811,KG,primary,US,USA,United States
+201505,2015,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",943275.0807,USD,112086,KG,primary,ID,IDN,Indonesia
+201505,2015,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",10635753.08,USD,1243541,KG,primary,CN,CHN,China (People's Republic of)
+201610,2016,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",31850.4202,USD,1430,KG,primary,SG,SGP,Singapore
+201505,2015,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",99511.4606,USD,7197,KG,primary,KR,KOR,Korea (Rep. of)
+201610,2016,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",605329.4293,USD,53792,KG,primary,CN,CHN,China (People's Republic of)
+201505,2015,05,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",7003443.553,USD,650512,KG,primary,JP,JPN,Japan
+201610,2016,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",28700.196,USD,1620,KG,primary,HK,HKG,Hong Kong
+201611,2016,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",4176.6375,USD,312,KG,primary,AT,AUT,Austria
+201506,2015,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",153424.8111,USD,18860,KG,primary,NL,NLD,Netherlands
+201611,2016,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",988996.6759,USD,71889,KG,primary,US,USA,United States
+201506,2015,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",204266628.3,USD,18447630,KG,primary,US,USA,United States
+201611,2016,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",292573.6064,USD,36892,KG,primary,TH,THA,Thailand
+201506,2015,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",774155.652,USD,93405,KG,primary,IR,IRN,Iran (Islamic Rep. of)
+201506,2015,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",816655.7341,USD,97235,KG,primary,TH,THA,Thailand
+201611,2016,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2697449.655,USD,186269,KG,primary,VN,VNM,Viet-Nam
+201506,2015,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2146394.841,USD,250447,KG,primary,VN,VNM,Viet-Nam
+201611,2016,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",354702.5768,USD,72304,KG,primary,CN,CHN,China (People's Republic of)
+201506,2015,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",4018030.209,USD,479129,KG,primary,ID,IDN,Indonesia
+201611,2016,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",17120.0491,USD,1919,KG,primary,JP,JPN,Japan
+201612,2016,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1491055.946,USD,104508,KG,primary,US,USA,United States
+201506,2015,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",18652669.86,USD,1979502,KG,primary,CN,CHN,China (People's Republic of)
+201612,2016,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",579756.0565,USD,61336,KG,primary,CN,CHN,China (People's Republic of)
+201506,2015,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",188023.2417,USD,17013,KG,primary,KR,KOR,Korea (Rep. of)
+201612,2016,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",44502.1453,USD,3750,KG,primary,HK,HKG,Hong Kong
+201506,2015,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",29857310.32,USD,2856344,KG,primary,JP,JPN,Japan
+201506,2015,06,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",235712.9266,USD,20532,KG,primary,HK,HKG,Hong Kong
+201507,2015,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",340.9174,USD,41,KG,primary,GB,GBR,United Kingdom
+201507,2015,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",96146131.21,USD,8391899,KG,primary,US,USA,United States
+201507,2015,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1132814.078,USD,128230,KG,primary,TH,THA,Thailand
+201507,2015,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",605912.2065,USD,46822,KG,primary,VN,VNM,Viet-Nam
+201507,2015,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3394606.525,USD,337538,KG,primary,ID,IDN,Indonesia
+201507,2015,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",10134485.4,USD,1192553,KG,primary,CN,CHN,China (People's Republic of)
+201507,2015,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",194881.0025,USD,17010,KG,primary,KR,KOR,Korea (Rep. of)
+201507,2015,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",5943856.175,USD,608931,KG,primary,JP,JPN,Japan
+201507,2015,07,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",418413.8562,USD,33213,KG,primary,HK,HKG,Hong Kong
+201508,2015,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",66046.079,USD,14006,KG,primary,CV,CPV,Cape-Verde
+201508,2015,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",28546566.87,USD,2540961,KG,primary,US,USA,United States
+201508,2015,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",167.4037,USD,18,KG,primary,PM,SPM,Saint Pierre and Miquelon
+201508,2015,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",88045.9665,USD,18861,KG,primary,TH,THA,Thailand
+201508,2015,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1774319.233,USD,131352,KG,primary,VN,VNM,Viet-Nam
+201508,2015,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",275820.3936,USD,35001,KG,primary,ID,IDN,Indonesia
+201508,2015,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2069143.749,USD,273809,KG,primary,CN,CHN,China (People's Republic of)
+201508,2015,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",50587.8708,USD,4497,KG,primary,KR,KOR,Korea (Rep. of)
+201508,2015,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",2830586.244,USD,277572,KG,primary,JP,JPN,Japan
+201508,2015,08,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",187297.3266,USD,18360,KG,primary,HK,HKG,Hong Kong
+201509,2015,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",46.7164,USD,3,KG,primary,GB,GBR,United Kingdom
+201509,2015,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",90.4189,USD,30,KG,primary,DK,DNK,Denmark
+201509,2015,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",8220265.868,USD,715654,KG,primary,US,USA,United States
+201509,2015,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",170.2889,USD,14,KG,primary,BR,BRA,Brazil
+201509,2015,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",219924.3325,USD,37722,KG,primary,TH,THA,Thailand
+201509,2015,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1368932.787,USD,131082,KG,primary,VN,VNM,Viet-Nam
+201509,2015,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1784757.156,USD,211577,KG,primary,CN,CHN,China (People's Republic of)
+201509,2015,09,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1551552.551,USD,188839,KG,primary,JP,JPN,Japan
+201510,2015,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",10004363.26,USD,856463,KG,primary,US,USA,United States
+201510,2015,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",569103.0799,USD,110290,KG,primary,TH,THA,Thailand
+201510,2015,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",1123456.592,USD,56583,KG,primary,VN,VNM,Viet-Nam
+201510,2015,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",184560.9791,USD,20935,KG,primary,CN,CHN,China (People's Republic of)
+201510,2015,10,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",79854.2002,USD,6205,KG,primary,HK,HKG,Hong Kong
+201511,2015,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",81753.5559,USD,4459,KG,primary,NL,NLD,Netherlands
+201511,2015,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",4120521.691,USD,339386,KG,primary,US,USA,United States
+201511,2015,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",183300.3475,USD,18744,KG,primary,VN,VNM,Viet-Nam
+201511,2015,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",199279.5167,USD,34945,KG,primary,CN,CHN,China (People's Republic of)
+201511,2015,11,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",75263.2421,USD,18801,KG,primary,JP,JPN,Japan
+201512,2015,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",3707485.005,USD,314463,KG,primary,US,USA,United States
+201512,2015,12,CA,CAN,Canada,FALSE,EXPORT,3061410,"crabs, snow (queen), frozen",175023.2749,USD,18101,KG,primary,TH,THA,Thailand

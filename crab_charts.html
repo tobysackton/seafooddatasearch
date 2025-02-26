@@ -133,6 +133,25 @@
             background-color: #B2DFDB;
         }
         
+        .chart-category {
+            margin-bottom: 25px;
+            background-color: #E8F5F3;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        
+        .chart-category h4 {
+            border-bottom: 2px solid #B2DFDB;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            color: #004D40;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
         .species-icons {
             display: flex;
             justify-content: center;
@@ -189,10 +208,41 @@
                 
                 <div class="chart-links">
                     <h4>Available Chart Visualizations:</h4>
-                    <ul>
-                        <li><a href="ca_crab_exports_us_and_mktshare_start_2012.html">Canada Snow Crab Exports to US (2012-2024)</a></li>
-                        <li><a href="newfoundland_snow_crab_2025.html">Newfoundland Snow Crab Forecast</a></li>
-                    </ul>
+                    
+                    <!-- Production and Trade Section -->
+                    <div class="chart-category">
+                        <h4>Production and Trade</h4>
+                        <ul>
+                            <li><a href="seasonality_snow_crab_exports_us.html">Seasonality of Snow Crab Exports to US</a></li>
+                            <li><a href="ca_crab_exports_us_and_mktshare_start_2012.html">Canada Snow Crab Exports to US (2012-2024)</a></li>
+                            <li><a href="ca_crab_export_all_markets_start_2012.html">Canada Snow Crab Exports to All Markets (2012-2024)</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Retail Crab Buying Section -->
+                    <div class="chart-category">
+                        <h4>Retail Crab Buying</h4>
+                        <ul>
+                            <li><a href="retail_fresh_crab_vol_month.html">Fresh Crab Monthly Volume Trends</a></li>
+                            <li><a href="recent_volume_trends_nov23_jan25.html">Recent Volume Trends (Nov 2023-Jan 2025)</a></li>
+                            <li><a href="retail_crab_price_trends.html">Monthly Price Trends (2020-2025)</a></li>
+                            <li><a href="retail_crab_price_elasticity.html">Price Elasticity Analysis</a></li>
+                            <li><a href="retail_crab_december_price_elasticity.html">December Price Elasticity</a></li>
+                            <li><a href="retail_crab_buying_patterns.html">Retail Crab Buying Patterns</a></li>
+                            <li><a href="seasonal_buying_patterns.html">Seasonal Buying Patterns</a></li>
+                            <li><a href="consumer_preferences_crab.html">Consumer Preferences Analysis</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Pricing and Forecasts Section -->
+                    <div class="chart-category">
+                        <h4>Pricing and Forecasts</h4>
+                        <ul>
+                            <li><a href="newfoundland_snow_crab_2025.html">Newfoundland Snow Crab Forecast</a></li>
+                            <li><a href="retail_crab_pricing_trends.html">Retail Crab Pricing Trends</a></li>
+                            <li><a href="price_elasticity_crab.html">Price Elasticity of Demand</a></li>
+                        </ul>
+                    </div>
                 </div>
                 
                 <!-- Placeholder for Chart.js content -->
