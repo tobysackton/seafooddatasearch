@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UBNL58 Q2 Price Trends (2018-2024) - Seafood Datasearch</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #E0F2F1; /* Very light sea green */
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            padding: 20px;
+            text-align: center;
+            background-color: #B2DFDB; /* Slightly darker sea green for header */
+        }
+        
+        .page-container {
+            display: flex;
+            min-height: calc(100vh - 200px); /* Adjust based on header and footer height */
+        }
+        
+        .left-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #E0F2F1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #B2DFDB;
+        }
+        
+        .center-pane {
+            flex: 2;
+            padding: 20px;
+            background-color: #FFFFFF;
+            text-align: center;
+        }
+        
+        .right-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #E0F2F1;
+            border-left: 1px solid #B2DFDB;
+        }
+        
+        .logo {
+            width: 90%;
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        
+        .tagline {
+            font-style: italic;
+            color: #00796B;
+            text-align: center;
+        }
+        
+        .chart-content {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-menu {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .nav-menu li {
+            margin: 10px 0;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: #00796B;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: block;
+        }
+        
+        .nav-menu a:hover {
+            background-color: #B2DFDB;
+        }
+        
+        .species-icons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 10px;
+        }
+        
+        .species-icons img {
+            width: 80px;
+            height: auto;
+        }
+        
+        footer {
+            padding: 20px;
+            background-color: #B2DFDB;
+            text-align: center;
+        }
+        
+        /* Chart container styles */
+        #chart-container-wrapper {
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        #price-chart-container {
+            height: 500px;
+            width: 100%;
+        }
+        
+        /* Chart legend style */
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 15px;
+            padding: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+        
+        .chart-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .insight-box {
+            background-color: #E0F7FA;
+            border-left: 4px solid #00BCD4;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+            text-align: left;
+        }
+        
+        .insight-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #00796B;
+        }
+        
+        .negative {
+            color: #D32F2F;
+            font-weight: bold;
+        }
+        
+        .positive {
+            color: #388E3C;
+            font-weight: bold;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .page-container {
+                flex-direction: column;
+            }
+            
+            .left-pane, .center-pane, .right-pane {
+                width: 100%;
+                border: none;
+            }
+            
+            #price-chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+    
+    <!-- Load Chart.js and PapaParse -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Seafood Datasearch</h1>
+    </header>
+    
+    <div class="page-container">
+        <!-- Left Pane - Logo and Tagline -->
+        <div class="left-pane">
+            <img src="assets/images/SD_Logo.png" alt="Seafood Datasearch Logo" class="logo">
+            <div class="tagline">
+                <h3>Market Analysis and Forecasts</h3>
+                <p>Providing expert insights into the seafood industry.</p>
+            </div>
+        </div>
+        
+        <!-- Center Pane - Chart Content -->
+        <div class="center-pane">
+            <h2>2nd Quarter UBNL58 Price Trends (2018-2024)</h2>
+            
+            <!-- Chart Content -->
+            <div class="chart-content">
+                <h3>Q2 Average UBNL58 Price by Year</h3>
+                <p>This chart displays the average UBNL58 price per pound during the second quarter (April-June) for each year from 2018 to 2024, with percentage changes from the previous year.</p>
+                
+                <!-- Chart Container -->
+                <div id="chart-container-wrapper">
+                    <div class="chart-title">Q2 Average UBNL58 Price ($/lb) with Year-over-Year % Change</div>
+                    <div style="position: relative; height: 500px; width: 100%">
+                        <canvas id="price-chart-container"></canvas>
+                    </div>
+                    <div id="price-chart-legend" class="chart-legend"></div>
+                </div>
+                
+                <p><em>Because of their contracting practices, retailers are most sensitive to the year over year change in average price. The 21% increase in 2024 was due to growing market demand. That demand has now softened. Any tariff uncertainty will be on top of adjustments made for softening demand.</em></p>
+            </div>
+            
+            <div class="chart-content">
+                <h3>About This Analysis</h3>
+                <p>This analysis examines the average UBNL58 pricing during the second quarter (April-June) of each year from 2018 through 2024. The data reveals significant market volatility with dramatic price increases during the pandemic period (2021) followed by substantial corrections through 2023.</p>
+                <p>The 2024 data suggests a moderate recovery trend that may be impacted by current market softening. These price fluctuations have significant implications for industry stakeholders, especially retailers who must adjust their contracting and pricing strategies.</p>
+                <p>Data source: Final Tariff Model Dataset</p>
+            </div>
+        </div>
+        
+        <!-- Right Pane - Navigation -->
+        <div class="right-pane">
+            <div class="nav-menu">
+                <h3>Navigation</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="crab_charts.html">Crab Charts</a></li>
+                    <li><a href="retail_fresh_crab_vol_month.html">Monthly Volume Trends</a></li>
+                    <li><a href="retail_crab_price_trends.html">Price Trends</a></li>
+                    <li><a href="ubnl_q2_price_trends.html">Q2 UBNL Price Trends</a></li>
+                    <li><a href="retail_crab_price_elasticity.html">Price Elasticity</a></li>
+                    <li><a href="retail_crab_december_price_elasticity.html">December Price Analysis</a></li>
+                    <li><a href="seasonal_buying_patterns.html">Seasonal Patterns</a></li>
+                    <li><a href="consumer_preferences_crab.html">Consumer Preferences</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="species-icons">
+            <img src="assets/images/Lobster_icon.png" alt="Lobster">
+            <img src="assets/images/shrimp_icon.png" alt="Shrimp">
+            <img src="assets/images/crab_icon.png" alt="Crab">
+            <img src="assets/images/salmon_icon.png" alt="Salmon">
+        </div>
+        <p>&copy; 2025 Seafood Datasearch. All rights reserved.</p>
+    </footer>
+    
+    <!-- Chart.js implementation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Declare variables at higher scope
+            let priceChart = null;
+            
+            // Check if required libraries are loaded
+            if (!window.Chart || !window.Papa || !window._) {
+                console.error('Missing libraries:', {
+                    'Chart.js': !!window.Chart,
+                    'PapaParse': !!window.Papa,
+                    'Lodash': !!window._
+                });
+                return;
+            }
+            
+            // Setup chart data
+            setupCharts();
+            
+            async function setupCharts() {
+                try {
+                    // Read and parse the CSV file from local path
+                    const csvPath = '/github_seafood_datasearch/data/species/crab/trade_flow/Final_Tariff_Model.csv';
+                    const fileContent = await window.fs.readFile(csvPath, { encoding: 'utf8' });
+                    
+                    const parsedData = Papa.parse(fileContent, {
+                        header: true,
+                        dynamicTyping: true,
+                        skipEmptyLines: true
+                    });
+                    
+                    // Filter for Q2 months (4, 5, 6) for each year
+                    const secondQuarterData = parsedData.data.filter(row => 
+                        row.Month >= 4 && row.Month <= 6 && row.Year >= 2018 && row.Year <= 2024
+                    );
+                    
+                    // Group by year and calculate average UBNL price for Q2
+                    const yearlyQ2Data = _.chain(secondQuarterData)
+                        .groupBy('Year')
+                        .map((group, year) => {
+                            const avgPrice = _.meanBy(group, 'UBNL58_lb');
+                            return {
+                                year: parseInt(year),
+                                avgPrice: avgPrice
+                            };
+                        })
+                        .sortBy('year')
+                        .value();
+                    
+                    // Calculate percentage change from previous year
+                    const yearlyQ2DataWithPercentChange = yearlyQ2Data.map((item, index) => {
+                        if (index === 0) {
+                            return {
+                                ...item,
+                                percentChange: null
+                            };
+                        }
+                        
+                        const prevYear = yearlyQ2Data[index - 1];
+                        const percentChange = ((item.avgPrice - prevYear.avgPrice) / prevYear.avgPrice) * 100;
+                        
+                        return {
+                            ...item,
+                            percentChange: percentChange
+                        };
+                    });
+                    
+                    // Prepare data for Chart.js
+                    const yearlyData = {
+                        labels: yearlyQ2DataWithPercentChange.map(item => item.year),
+                        datasets: [
+                            {
+                                type: 'bar',
+                                label: 'Q2 Avg Price ($/lb)',
+                                data: yearlyQ2DataWithPercentChange.map(item => item.avgPrice),
+                                backgroundColor: 'rgba(0, 121, 107, 0.7)',
+                                borderColor: 'rgba(0, 121, 107, 1)',
+                                borderWidth: 1,
+                                order: 2
+                            }
+                        ]
+                    };
+                    
+                    // Create the chart with percentage changes
+                    createPriceChart(yearlyData, yearlyQ2DataWithPercentChange.map(item => item.percentChange));
+                    
+                } catch (err) {
+                    console.error(`Error setting up charts: ${err.message}`);
+                    
+                    // Fallback to hardcoded data if file reading fails
+                    const yearlyData = {
+                        labels: [2018, 2019, 2020, 2021, 2022, 2023, 2024],
+                        datasets: [
+                            {
+                                type: 'bar',
+                                label: 'Q2 Avg Price ($/lb)',
+                                data: [8.63, 8.32, 8.01, 12.63, 10.32, 4.93, 5.96],
+                                backgroundColor: 'rgba(0, 121, 107, 0.7)',
+                                borderColor: 'rgba(0, 121, 107, 1)',
+                                borderWidth: 1,
+                                order: 2
+                            }
+                        ]
+                    };
+                    
+                    const percentChanges = [null, -3.59, -3.77, 57.74, -18.29, -52.23, 20.96];
+                    createPriceChart(yearlyData, percentChanges);
+                }
+            }
+            
+            function createPriceChart(data, percentChanges) {
+                const ctx = document.getElementById('price-chart-container').getContext('2d');
+                
+                // Clean up existing chart if it exists
+                if (priceChart) {
+                    priceChart.destroy();
+                }
+                
+                // Create the chart
+                priceChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                title: {
+                                    display: true,
+                                    text: 'Price ($/lb)'
+                                },
+                                min: 0,
+                                max: 14,
+                                ticks: {
+                                    callback: function(value) {
+                                        return '$' + value.toFixed(2);
+                                    }
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Year'
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += '$' + context.parsed.y.toFixed(2);
+                                        }
+                                        return label;
+                                    },
+                                    afterLabel: function(context) {
+                                        const index = context.dataIndex;
+                                        if (percentChanges[index] !== null) {
+                                            return 'YoY Change: ' + percentChanges[index].toFixed(2) + '%';
+                                        }
+                                        return '';
+                                    }
+                                }
+                            },
+                            legend: {
+                                display: false
+                            },
+                            annotation: {
+                                annotations: {
+                                    // Create percentage change annotations above each bar
+                                    ...percentChanges.map((change, index) => {
+                                        if (change === null) return {};
+                                        return {
+                                            [`change${index}`]: {
+                                                type: 'label',
+                                                content: change.toFixed(1) + '%',
+                                                xValue: index,
+                                                yValue: data.datasets[0].data[index] + 0.5,
+                                                color: change > 0 ? 'rgba(56, 142, 60, 0.9)' : 'rgba(211, 47, 47, 0.9)',
+                                                font: {
+                                                    weight: 'bold',
+                                                    size: 12
+                                                }
+                                            }
+                                        };
+                                    }).reduce((acc, curr) => ({ ...acc, ...curr }), {})
+                                }
+                            }
+                        }
+                    },
+                    plugins: [{
+                        afterDraw: function(chart) {
+                            const ctx = chart.ctx;
+                            const meta = chart.getDatasetMeta(0);
+                            
+                            ctx.save();
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+                            ctx.font = 'bold 12px Arial';
+                            
+                            meta.data.forEach((bar, index) => {
+                                const change = percentChanges[index];
+                                if (change !== null) {
+                                    const xPos = bar.x;
+                                    const yPos = bar.y - 10;
+                                    
+                                    ctx.fillStyle = change > 0 ? '#388E3C' : '#D32F2F';
+                                    ctx.fillText((change > 0 ? '+' : '') + change.toFixed(1) + '%', xPos, yPos);
+                                }
+                            });
+                            
+                            ctx.restore();
+                        }
+                    }]
+                });
+                
+                // Create custom legend
+                createCustomLegend(data, 'price-chart-legend');
+            }
+            
+            function createCustomLegend(data, containerId) {
+                const legendContainer = document.getElementById(containerId);
+                legendContainer.innerHTML = '';
+                
+                data.datasets.forEach(dataset => {
+                    const legendItem = document.createElement('div');
+                    legendItem.className = 'legend-item';
+                    
+                    const colorBox = document.createElement('div');
+                    colorBox.className = 'legend-color';
+                    colorBox.style.backgroundColor = dataset.type === 'bar' ? 
+                        dataset.backgroundColor : dataset.borderColor;
+                    
+                    const label = document.createElement('span');
+                    label.textContent = dataset.label;
+                    
+                    legendItem.appendChild(colorBox);
+                    legendItem.appendChild(label);
+                    legendContainer.appendChild(legendItem);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
