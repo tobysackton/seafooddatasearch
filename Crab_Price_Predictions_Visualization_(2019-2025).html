@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crab Price Predictions - Seafood Datasearch</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #E0F2F1; /* Very light sea green */
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            padding: 20px;
+            text-align: center;
+            background-color: #B2DFDB; /* Slightly darker sea green for header */
+        }
+        
+        .page-container {
+            display: flex;
+            min-height: calc(100vh - 200px); /* Adjust based on header and footer height */
+        }
+        
+        .left-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #E0F2F1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #B2DFDB;
+        }
+        
+        .center-pane {
+            flex: 2;
+            padding: 20px;
+            background-color: #FFFFFF;
+            text-align: center;
+        }
+        
+        .right-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #E0F2F1;
+            border-left: 1px solid #B2DFDB;
+        }
+        
+        .logo {
+            width: 90%;
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        
+        .tagline {
+            font-style: italic;
+            color: #00796B;
+            text-align: center;
+        }
+        
+        .chart-content {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-menu {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .nav-menu li {
+            margin: 10px 0;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: #00796B;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: block;
+        }
+        
+        .nav-menu a:hover {
+            background-color: #B2DFDB;
+        }
+        
+        .species-icons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 10px;
+        }
+        
+        .species-icons img {
+            width: 80px;
+            height: auto;
+        }
+        
+        footer {
+            padding: 20px;
+            background-color: #B2DFDB;
+            text-align: center;
+        }
+        
+        /* Chart container styles */
+        #chart-container-wrapper {
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        #chart-container {
+            height: 400px;
+            width: 100%;
+        }
+        
+        /* Chart legend style */
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 15px;
+            padding: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+        
+        .chart-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .page-container {
+                flex-direction: column;
+            }
+            
+            .left-pane, .center-pane, .right-pane {
+                width: 100%;
+                border: none;
+            }
+            
+            #chart-container {
+                height: 300px;
+            }
+        }
+        
+        /* Custom toggle buttons */
+        .toggle-buttons {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0 20px 0;
+        }
+        
+        .toggle-button {
+            background-color: #E0F2F1;
+            border: 1px solid #00796B;
+            color: #00796B;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .toggle-button:first-child {
+            border-radius: 4px 0 0 4px;
+        }
+        
+        .toggle-button:last-child {
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .toggle-button.active {
+            background-color: #00796B;
+            color: white;
+        }
+        
+        /* Error message */
+        .error-message {
+            color: #cc0000;
+            padding: 20px;
+            background-color: #ffebee;
+            border-radius: 4px;
+            margin: 10px 0;
+            border: 1px solid #ffcdd2;
+        }
+        
+        /* File upload area */
+        .file-upload {
+            margin: 15px 0;
+            padding: 15px;
+            border: 2px dashed #B2DFDB;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .file-upload input {
+            display: none;
+        }
+        
+        .file-upload label {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #00796B;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .file-upload p {
+            margin: 10px 0;
+            color: #00796B;
+        }
+    </style>
+    
+    <!-- Load Chart.js, PapaParse and Lodash -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Seafood Datasearch</h1>
+    </header>
+    
+    <div class="page-container">
+        <!-- Left Pane - Logo and Tagline -->
+        <div class="left-pane">
+            <img src="/api/placeholder/240/240" alt="Seafood Datasearch Logo" class="logo">
+            <div class="tagline">
+                <h3>Market Analysis and Forecasts</h3>
+                <p>Providing expert insights into the seafood industry.</p>
+            </div>
+        </div>
+        
+        <!-- Center Pane - Chart Content -->
+        <div class="center-pane">
+            <h2>Crab Market Price Analysis</h2>
+            <div class="chart-content">
+                <h3>Crab Price Trends & Forecasts</h3>
+                <p>This chart displays historical crab prices alongside market predictions through 2025, including confidence intervals to indicate forecast reliability.</p>
+                
+                <!-- File upload option -->
+                <div class="file-upload">
+                    <p>Upload custom crab price data (CSV format)</p>
+                    <input type="file" id="csv-file-input" accept=".csv" />
+                    <label for="csv-file-input">Choose CSV File</label>
+                    <p id="file-name">No file selected</p>
+                </div>
+                
+                <div class="toggle-buttons">
+                    <button id="btn-forecast" class="toggle-button active">Price Forecast</button>
+                    <button id="btn-tariff" class="toggle-button">Tariff-Adjusted</button>
+                </div>
+                
+                <!-- Chart Container -->
+                <div id="chart-container-wrapper">
+                    <div class="chart-title">Crab Price Historical Data & Predictions ($/lb)</div>
+                    <div style="position: relative; height: 400px; width: 100%">
+                        <canvas id="chart-container"></canvas>
+                    </div>
+                    <div id="chart-legend" class="chart-legend"></div>
+                </div>
+            </div>
+            
+            <div class="chart-content">
+                <h3>About This Data</h3>
+                <p>This visualization compares actual crab prices (UBNL58 $/lb) with model predictions based on market factors including trade volumes, exchange rates, and seasonal variations. The confidence intervals (shaded area) represent the statistical uncertainty in our forecasts, with wider bands indicating higher levels of uncertainty.</p>
+                <p>The tariff-adjusted view shows how prices might be impacted by changes in international trade policies, highlighting the potential effects of tariff shocks.</p>
+                <p>Data source: Compilation of market data, trade statistics, and forecasting models (2019-2025)</p>
+            </div>
+        </div>
+        
+        <!-- Right Pane - Navigation -->
+        <div class="right-pane">
+            <div class="nav-menu">
+                <h3>Navigation</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#" class="active">Crab Charts</a></li>
+                    <li><a href="#">Lobster Charts</a></li>
+                    <li><a href="#">Shrimp Analysis</a></li>
+                    <li><a href="#">Salmon Trends</a></li>
+                    <li><a href="#">Market Reports</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="species-icons">
+            <img src="/api/placeholder/80/80" alt="Lobster">
+            <img src="/api/placeholder/80/80" alt="Shrimp">
+            <img src="/api/placeholder/80/80" alt="Crab">
+            <img src="/api/placeholder/80/80" alt="Salmon">
+        </div>
+        <p>&copy; 2025 Seafood Datasearch. All rights reserved.</p>
+    </footer>
+    
+    <!-- Chart.js implementation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Declare variables at higher scope
+            let chart = null;
+            let viewMode = 'forecast'; // Default view mode
+            let processedData = null;
+            
+            // Check if required libraries are loaded
+            if (!window.Chart || !window.Papa || !window._) {
+                document.getElementById('chart-container-wrapper').innerHTML = 
+                    '<div class="error-message">Error: One or more required libraries failed to load. Please check the console for details.</div>';
+                console.error('Missing libraries:', {
+                    'Chart.js': !!window.Chart,
+                    'PapaParse': !!window.Papa,
+                    'Lodash': !!window._
+                });
+                return;
+            }
+            
+            // Show loading indicator
+            const chartContainer = document.getElementById('chart-container-wrapper');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.style.cssText = 'display: flex; justify-content: center; align-items: center; height: 200px;';
+            loadingDiv.textContent = 'Loading data...';
+            chartContainer.appendChild(loadingDiv);
+            
+            // Create function for chart creation
+            function createChart(data) {
+                const ctx = document.getElementById('chart-container').getContext('2d');
+                
+                // Clean up existing chart if it exists
+                if (chart) {
+                    chart.destroy();
+                }
+                
+                // Create datasets based on current view mode
+                const datasets = [];
+                
+                // Historical data - always show this
+                datasets.push({
+                    label: 'Actual Price',
+                    data: data.actualPrices,
+                    borderColor: '#00796B',
+                    backgroundColor: '#00796B',
+                    borderWidth: 2,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    pointBackgroundColor: '#00796B',
+                    fill: false,
+                    tension: 0.1
+                });
+                
+                // Prediction line
+                if (viewMode === 'forecast') {
+                    // Standard predictions
+                    datasets.push({
+                        label: 'Price Prediction',
+                        data: data.predictedPrices,
+                        borderColor: '#FF9800',
+                        backgroundColor: '#FF9800',
+                        borderWidth: 2,
+                        borderDash: data.transitionIndex > 0 ? [0, 0] : [5, 5],
+                        pointRadius: (ctx) => {
+                            // Only show points for historic predictions, not future ones
+                            const index = ctx.dataIndex;
+                            return index < data.transitionIndex ? 3 : 2;
+                        },
+                        pointHoverRadius: 5,
+                        pointBackgroundColor: '#FF9800',
+                        fill: false,
+                        tension: 0.1
+                    });
+                    
+                    // Confidence interval
+                    datasets.push({
+                        label: 'Confidence Interval',
+                        data: data.lowerCI,
+                        borderColor: 'rgba(255, 152, 0, 0)',
+                        backgroundColor: 'rgba(255, 152, 0, 0.2)',
+                        pointRadius: 0,
+                        fill: '+1',
+                        tension: 0.1
+                    });
+                    
+                    datasets.push({
+                        label: 'Upper CI',
+                        data: data.upperCI,
+                        borderColor: 'rgba(255, 152, 0, 0)',
+                        pointRadius: 0,
+                        tension: 0.1
+                    });
+                } else {
+                    // Tariff-adjusted view
+                    datasets.push({
+                        label: 'Tariff-Adjusted Price',
+                        data: data.tariffAdjustedPrices,
+                        borderColor: '#F44336',
+                        backgroundColor: '#F44336',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        pointRadius: 2,
+                        pointHoverRadius: 5,
+                        pointBackgroundColor: '#F44336',
+                        fill: false,
+                        tension: 0.1
+                    });
+                }
+                
+                // Custom plugin for vertical line at transition point
+                const transitionPlugin = {
+                    id: 'transitionLine',
+                    afterDraw: (chart) => {
+                        if (data.transitionIndex > 0 && data.transitionIndex < data.labels.length) {
+                            const meta = chart.getDatasetMeta(0);
+                            const transitionX = meta.data[data.transitionIndex].x;
+                            
+                            const ctx = chart.ctx;
+                            const yAxis = chart.scales.y;
+                            
+                            // Draw vertical line
+                            ctx.save();
+                            ctx.beginPath();
+                            ctx.moveTo(transitionX, yAxis.top);
+                            ctx.lineTo(transitionX, yAxis.bottom);
+                            ctx.lineWidth = 2;
+                            ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+                            ctx.setLineDash([5, 5]);
+                            ctx.stroke();
+                            
+                            // Add "Forecast Start" label
+                            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                            ctx.textAlign = 'center';
+                            ctx.font = '12px Arial';
+                            ctx.fillText('Forecast →', transitionX + 5, yAxis.top + 15);
+                            ctx.restore();
+                        }
+                    }
+                };
+                
+                // Create the chart
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: datasets
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                title: {
+                                    display: true,
+                                    text: 'Price ($/lb)'
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return '
+            
+            document.getElementById('btn-tariff').addEventListener('click', function() {
+                setViewMode('tariff');
+            });
+            
+            // File input event handler
+            const fileInput = document.getElementById('csv-file-input');
+            const fileNameDisplay = document.getElementById('file-name');
+            
+            fileInput.addEventListener('change', function(e) {
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    fileNameDisplay.textContent = file.name;
+                    
+                    // Process the uploaded file
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        processCSV(e.target.result);
+                    };
+                    reader.readAsText(file);
+                } else {
+                    fileNameDisplay.textContent = 'No file selected';
+                }
+            });
+            
+            function setViewMode(mode) {
+                viewMode = mode;
+                
+                // Update button states
+                document.getElementById('btn-forecast').classList.toggle('active', mode === 'forecast');
+                document.getElementById('btn-tariff').classList.toggle('active', mode === 'tariff');
+                
+                // Reload chart with the new mode
+                if (chart && processedData) {
+                    createChart(processedData);
+                }
+            }
+            
+            // Load the CSV data from the proper location
+            loadCsvData();
+            
+            function loadCsvData() {
+                // Path to the CSV file - relative to the web page in /github_seafood_datasearch
+                const csvPath = 'data/species/crab/trade_flow/crab_price_predictions_updated_visualization_2019_2025.csv';
+                
+                // Show loading message
+                const statusMessage = document.createElement('div');
+                statusMessage.textContent = 'Loading crab price data...';
+                statusMessage.style.padding = '10px';
+                statusMessage.style.color = '#00796B';
+                chartContainer.appendChild(statusMessage);
+                
+                // Fetch the CSV file
+                fetch(csvPath)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Failed to load CSV: ${response.status} ${response.statusText}`);
+                        }
+                        return response.text();
+                    })
+                    .then(csvText => {
+                        // Remove status message
+                        if (statusMessage.parentNode) {
+                            statusMessage.parentNode.removeChild(statusMessage);
+                        }
+                        processCSV(csvText);
+                    })
+                    .catch(error => {
+                        if (statusMessage.parentNode) {
+                            statusMessage.parentNode.removeChild(statusMessage);
+                        }
+                        showError(`Error loading data: ${error.message}. Please check that the CSV file exists at ${csvPath}`);
+                    });
+            }
+            
+            function processCSV(csvText) {
+                // Parse CSV using PapaParse
+                Papa.parse(csvText, {
+                    header: true,
+                    dynamicTyping: true,
+                    skipEmptyLines: true,
+                    complete: (results) => {
+                        // Remove loading indicator
+                        if (loadingDiv && loadingDiv.parentNode) {
+                            loadingDiv.parentNode.removeChild(loadingDiv);
+                        }
+                        processData(results.data);
+                    },
+                    error: (error) => {
+                        showError(`Error parsing CSV: ${error}`);
+                    }
+                });
+            }
+            
+            function showError(message) {
+                chartContainer.innerHTML = `<div class="error-message">${message}</div>`;
+                console.error(message);
+            }
+            
+            function processData(rawData) {
+                try {
+                    // Filter out rows with NA or invalid year
+                    const validData = rawData.filter(row => 
+                        row.Year && typeof row.Year === 'number' && !isNaN(row.Year));
+                    
+                    // Sort data by date
+                    const sortedData = _.sortBy(validData, ['Year', 'Month']);
+                    
+                    // Create date labels in format MMM YYYY
+                    const labels = sortedData.map(row => {
+                        const date = new Date(row.Year, row.Month - 1);
+                        return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                    });
+                    
+                    // Get actual prices and predictions
+                    const actualPrices = sortedData.map(row => row.UBNL58_lb);
+                    const predictedPrices = sortedData.map(row => row.New_Predicted_Price || row.Predicted_Price);
+                    const tariffAdjustedPrices = sortedData.map(row => row.Predicted_Price_Tariff_Adjusted);
+                    const lowerCI = sortedData.map(row => row.New_Lower_CI || row.Lower_CI);
+                    const upperCI = sortedData.map(row => row.New_Upper_CI || row.Upper_CI);
+                    
+                    // Find the point where we transition from actual to prediction data
+                    // Assuming data is sorted chronologically and we want to mark present time
+                    const currentDate = new Date(2023, 3, 1); // Using April 2023 as our dividing line
+                    let transitionIndex = -1;
+                    
+                    sortedData.forEach((row, index) => {
+                        const rowDate = new Date(row.Year, row.Month - 1);
+                        if (rowDate >= currentDate && transitionIndex === -1) {
+                            transitionIndex = index;
+                        }
+                    });
+                    
+                    if (transitionIndex === -1) {
+                        transitionIndex = sortedData.length;
+                    }
+                    
+                    // Store the processed data
+                    processedData = {
+                        labels: labels,
+                        actualPrices: actualPrices,
+                        predictedPrices: predictedPrices,
+                        tariffAdjustedPrices: tariffAdjustedPrices,
+                        lowerCI: lowerCI,
+                        upperCI: upperCI,
+                        transitionIndex: transitionIndex,
+                        rawData: sortedData
+                    };
+                    
+                    // Create chart with the processed data
+                    createChart(processedData);
+                } catch (err) {
+                    showError(`Error processing data: ${err.message}`);
+                } + value.toFixed(2);
+                                    }
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Month/Year'
+                                },
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    maxRotation: 45,
+                                    minRotation: 45,
+                                    autoSkip: true,
+                                    maxTicksLimit: 12
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        
+                                        if (context.parsed.y !== null) {
+                                            label += '
+            
+            document.getElementById('btn-tariff').addEventListener('click', function() {
+                setViewMode('tariff');
+            });
+            
+            // File input event handler
+            const fileInput = document.getElementById('csv-file-input');
+            const fileNameDisplay = document.getElementById('file-name');
+            
+            fileInput.addEventListener('change', function(e) {
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    fileNameDisplay.textContent = file.name;
+                    
+                    // Process the uploaded file
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        processCSV(e.target.result);
+                    };
+                    reader.readAsText(file);
+                } else {
+                    fileNameDisplay.textContent = 'No file selected';
+                }
+            });
+            
+            function setViewMode(mode) {
+                viewMode = mode;
+                
+                // Update button states
+                document.getElementById('btn-forecast').classList.toggle('active', mode === 'forecast');
+                document.getElementById('btn-tariff').classList.toggle('active', mode === 'tariff');
+                
+                // Reload chart with the new mode
+                if (chart && processedData) {
+                    createChart(processedData);
+                }
+            }
+            
+            // Load the default CSV data using data URL
+            loadDefaultData();
+            
+            function loadDefaultData() {
+                // Create a data URL for the CSV
+                // In a real implementation, you would use fetch() to get the CSV from a server
+                // For demo purposes, using this shortened sample data
+                const csvSample = `Dateyyymm,Year,Month,Pack_Year,UBNL58_lb,CAUS_Total,USD_Cost,CADUSDEXCH,Dock_Cost_CAD,log_CAUS_Total,log_USD_Cost,log_UBNL58_lb,log_CADUSDEXCH,log_Dock_Cost_CAD,Market_Shock_Factor,Season_Factor_1,Pandemic_Shock,Extra_Demand_Factor,Tariff_Shock,Tariff_Amt,Predicted_Price_Tariff_Adjusted,Lower_CI,Upper_CI,Non_Canada_Imports_Lbs,Predicted_Price,Market_Shock_2025,New_Predicted_Price,New_Lower_CI,New_Upper_CI
+1/1/19,2019,1,2018,8.56,787624,5.639945857,1.3298,4.8,13.5767761,1.729874466,2.14710019,0.285028555,1.568615918,0,0,0,1,0,0,6.295154839,8.24362910646129,8.85347664169277,2181934,8.5431128833016,0,8.5431128833016,8.24362910646129,8.85347664169277
+2/1/19,2019,2,2018,8.63,376162,5.676657584,1.3212,4.8,12.83777518,1.736362606,2.155244505,0.278540415,1.568615918,0,0,0,1,0,0,6.511545183,8.45604102326282,9.09101009206891,2300750,8.76777932440313,0,8.76777932440313,8.45604102326282,9.09101009206891
+3/1/19,2019,3,2018,8.78,318622,5.775086505,1.3367,4.8,12.67177866,1.753642493,2.172511667,0.290533611,1.568615918,0,0,0,1,0,0,6.593622832,8.52947348580862,9.17153456542926,1773300,8.84886984252113,0,8.84886984252113,8.52947348580862,9.17153456542926
+1/1/20,2020,1,2019,9.56,427272,5.775086505,1.3083,4.99,12.96516183,1.753642493,2.257698729,0.268784602,1.607455023,0,0,0,1,0,0,6.86326213,8.9827839992033,9.61141791413452,2168454,9.29546422910391,0,9.29546422910391,8.9827839992033,9.61141791413452
+1/1/21,2021,1,2020,11.40,403544,5.949770294,1.2729,5.79,12.90808147,1.783323542,2.433613362,0.241254929,1.756167247,0.05,0,0.2,1.1,0,0,5.889850249,10.9483889799,11.8596602561,1979822,11.3950144798,0,11.3950144798,10.9483889799,11.8596602561
+1/1/22,2022,1,2021,18.50,400688,7.65577503,1.2659,7.85,12.90084828,2.035385158,2.917770732,0.23570249,2.06069784,0.05,0,0.2,1.1,0,0,7.629380294,17.3968073257,20.1126702917,1931880,18.7284389097,0,18.7284389097,17.3968073257,20.1126702917
+1/1/23,2023,1,2022,7.27,446462,5.909972808,1.3385,7.85,13.0091283,1.776616444,1.983756927,0.291781557,2.06069784,0,0,0,1,0,0,5.836787389,7.60601692030804,8.53551815625557,1918290,8.05737522522542,0,8.05737522522542,7.60601692030804,8.53551815625557
+1/1/24,2024,1,2023,5.92,457712,5.909972808,1.3385,7.85,13.03394967,1.776616444,1.778462651,0.291781557,2.06069784,0,0,0,1,0,0,5.859456913,6.8962152683,7.2546284521,1918290,7.0756216,0,7.0756216,6.8962152683,7.2546284521
+1/1/25,2025,1,2024,5.92,457712,5.909972808,1.3385,7.85,13.03394967,1.776616444,1.778462651,0.291781557,2.06069784,0,0,0,1,0.1,0.25,5.859456913,6.8962152683,7.2546284521,1918290,7.0756216,0.05,7.4294027,7.241124031715,7.617383368285`;
+                
+                const dataUrl = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvSample);
+                
+                // Now fetch this data URL
+                fetch(dataUrl)
+                    .then(response => response.text())
+                    .then(csvText => {
+                        processCSV(csvText);
+                    })
+                    .catch(error => {
+                        showError(`Error loading default data: ${error.message}`);
+                    });
+            }
+            
+            function processCSV(csvText) {
+                // Parse CSV using PapaParse
+                Papa.parse(csvText, {
+                    header: true,
+                    dynamicTyping: true,
+                    skipEmptyLines: true,
+                    complete: (results) => {
+                        // Remove loading indicator
+                        if (loadingDiv && loadingDiv.parentNode) {
+                            loadingDiv.parentNode.removeChild(loadingDiv);
+                        }
+                        processData(results.data);
+                    },
+                    error: (error) => {
+                        showError(`Error parsing CSV: ${error}`);
+                    }
+                });
+            }
+            
+            function showError(message) {
+                chartContainer.innerHTML = `<div class="error-message">${message}</div>`;
+                console.error(message);
+            }
+            
+            function processData(rawData) {
+                try {
+                    // Filter out rows with NA or invalid year
+                    const validData = rawData.filter(row => 
+                        row.Year && typeof row.Year === 'number' && !isNaN(row.Year));
+                    
+                    // Sort data by date
+                    const sortedData = _.sortBy(validData, ['Year', 'Month']);
+                    
+                    // Create date labels in format MMM YYYY
+                    const labels = sortedData.map(row => {
+                        const date = new Date(row.Year, row.Month - 1);
+                        return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                    });
+                    
+                    // Get actual prices and predictions
+                    const actualPrices = sortedData.map(row => row.UBNL58_lb);
+                    const predictedPrices = sortedData.map(row => row.New_Predicted_Price || row.Predicted_Price);
+                    const tariffAdjustedPrices = sortedData.map(row => row.Predicted_Price_Tariff_Adjusted);
+                    const lowerCI = sortedData.map(row => row.New_Lower_CI || row.Lower_CI);
+                    const upperCI = sortedData.map(row => row.New_Upper_CI || row.Upper_CI);
+                    
+                    // Find the point where we transition from actual to prediction data
+                    // Assuming data is sorted chronologically and we want to mark present time
+                    const currentDate = new Date(2023, 3, 1); // Using April 2023 as our dividing line
+                    let transitionIndex = -1;
+                    
+                    sortedData.forEach((row, index) => {
+                        const rowDate = new Date(row.Year, row.Month - 1);
+                        if (rowDate >= currentDate && transitionIndex === -1) {
+                            transitionIndex = index;
+                        }
+                    });
+                    
+                    if (transitionIndex === -1) {
+                        transitionIndex = sortedData.length;
+                    }
+                    
+                    // Store the processed data
+                    processedData = {
+                        labels: labels,
+                        actualPrices: actualPrices,
+                        predictedPrices: predictedPrices,
+                        tariffAdjustedPrices: tariffAdjustedPrices,
+                        lowerCI: lowerCI,
+                        upperCI: upperCI,
+                        transitionIndex: transitionIndex,
+                        rawData: sortedData
+                    };
+                    
+                    // Create chart with the processed data
+                    createChart(processedData);
+                } catch (err) {
+                    showError(`Error processing data: ${err.message}`);
+                } + context.parsed.y.toFixed(2);
+                                        }
+                                        
+                                        return label;
+                                    }
+                                }
+                            },
+                            legend: {
+                                display: false
+                            }
+                        },
+                        interaction: {
+                            mode: 'nearest',
+                            axis: 'x',
+                            intersect: false
+                        }
+                    },
+                    plugins: [transitionPlugin]
+                });
+                
+                // Create custom legend
+                createCustomLegend(datasets);
+            }
+            
+            function createCustomLegend(datasets) {
+                const legendContainer = document.getElementById('chart-legend');
+                legendContainer.innerHTML = '';
+                
+                // Only show legend items for visible datasets (not CI)
+                const visibleDatasets = datasets.filter(ds => 
+                    ds.label !== 'Confidence Interval' && ds.label !== 'Upper CI');
+                
+                visibleDatasets.forEach(dataset => {
+                    const legendItem = document.createElement('div');
+                    legendItem.className = 'legend-item';
+                    
+                    const colorBox = document.createElement('div');
+                    colorBox.className = 'legend-color';
+                    colorBox.style.backgroundColor = dataset.backgroundColor;
+                    
+                    const label = document.createElement('span');
+                    label.textContent = dataset.label;
+                    
+                    legendItem.appendChild(colorBox);
+                    legendItem.appendChild(label);
+                    legendContainer.appendChild(legendItem);
+                });
+                
+                // Add confidence interval legend item if we're in forecast mode
+                if (viewMode === 'forecast') {
+                    const ciLegendItem = document.createElement('div');
+                    ciLegendItem.className = 'legend-item';
+                    
+                    const ciColorBox = document.createElement('div');
+                    ciColorBox.className = 'legend-color';
+                    ciColorBox.style.backgroundColor = 'rgba(255, 152, 0, 0.2)';
+                    
+                    const ciLabel = document.createElement('span');
+                    ciLabel.textContent = 'Confidence Interval (95%)';
+                    
+                    ciLegendItem.appendChild(ciColorBox);
+                    ciLegendItem.appendChild(ciLabel);
+                    legendContainer.appendChild(ciLegendItem);
+                }
+            }
+            
+            // Toggle buttons event handlers
+            document.getElementById('btn-forecast').addEventListener('click', function() {
+                setViewMode('forecast');
+            });
+            
+            document.getElementById('btn-tariff').addEventListener('click', function() {
+                setViewMode('tariff');
+            });
+            
+            // File input event handler
+            const fileInput = document.getElementById('csv-file-input');
+            const fileNameDisplay = document.getElementById('file-name');
+            
+            fileInput.addEventListener('change', function(e) {
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    fileNameDisplay.textContent = file.name;
+                    
+                    // Process the uploaded file
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        processCSV(e.target.result);
+                    };
+                    reader.readAsText(file);
+                } else {
+                    fileNameDisplay.textContent = 'No file selected';
+                }
+            });
+            
+            function setViewMode(mode) {
+                viewMode = mode;
+                
+                // Update button states
+                document.getElementById('btn-forecast').classList.toggle('active', mode === 'forecast');
+                document.getElementById('btn-tariff').classList.toggle('active', mode === 'tariff');
+                
+                // Reload chart with the new mode
+                if (chart && processedData) {
+                    createChart(processedData);
+                }
+            }
+            
+            // Load the default CSV data using data URL
+            loadDefaultData();
+            
+            function loadDefaultData() {
+                // Create a data URL for the CSV
+                // In a real implementation, you would use fetch() to get the CSV from a server
+                // For demo purposes, using this shortened sample data
+                const csvSample = `Dateyyymm,Year,Month,Pack_Year,UBNL58_lb,CAUS_Total,USD_Cost,CADUSDEXCH,Dock_Cost_CAD,log_CAUS_Total,log_USD_Cost,log_UBNL58_lb,log_CADUSDEXCH,log_Dock_Cost_CAD,Market_Shock_Factor,Season_Factor_1,Pandemic_Shock,Extra_Demand_Factor,Tariff_Shock,Tariff_Amt,Predicted_Price_Tariff_Adjusted,Lower_CI,Upper_CI,Non_Canada_Imports_Lbs,Predicted_Price,Market_Shock_2025,New_Predicted_Price,New_Lower_CI,New_Upper_CI
+1/1/19,2019,1,2018,8.56,787624,5.639945857,1.3298,4.8,13.5767761,1.729874466,2.14710019,0.285028555,1.568615918,0,0,0,1,0,0,6.295154839,8.24362910646129,8.85347664169277,2181934,8.5431128833016,0,8.5431128833016,8.24362910646129,8.85347664169277
+2/1/19,2019,2,2018,8.63,376162,5.676657584,1.3212,4.8,12.83777518,1.736362606,2.155244505,0.278540415,1.568615918,0,0,0,1,0,0,6.511545183,8.45604102326282,9.09101009206891,2300750,8.76777932440313,0,8.76777932440313,8.45604102326282,9.09101009206891
+3/1/19,2019,3,2018,8.78,318622,5.775086505,1.3367,4.8,12.67177866,1.753642493,2.172511667,0.290533611,1.568615918,0,0,0,1,0,0,6.593622832,8.52947348580862,9.17153456542926,1773300,8.84886984252113,0,8.84886984252113,8.52947348580862,9.17153456542926
+1/1/20,2020,1,2019,9.56,427272,5.775086505,1.3083,4.99,12.96516183,1.753642493,2.257698729,0.268784602,1.607455023,0,0,0,1,0,0,6.86326213,8.9827839992033,9.61141791413452,2168454,9.29546422910391,0,9.29546422910391,8.9827839992033,9.61141791413452
+1/1/21,2021,1,2020,11.40,403544,5.949770294,1.2729,5.79,12.90808147,1.783323542,2.433613362,0.241254929,1.756167247,0.05,0,0.2,1.1,0,0,5.889850249,10.9483889799,11.8596602561,1979822,11.3950144798,0,11.3950144798,10.9483889799,11.8596602561
+1/1/22,2022,1,2021,18.50,400688,7.65577503,1.2659,7.85,12.90084828,2.035385158,2.917770732,0.23570249,2.06069784,0.05,0,0.2,1.1,0,0,7.629380294,17.3968073257,20.1126702917,1931880,18.7284389097,0,18.7284389097,17.3968073257,20.1126702917
+1/1/23,2023,1,2022,7.27,446462,5.909972808,1.3385,7.85,13.0091283,1.776616444,1.983756927,0.291781557,2.06069784,0,0,0,1,0,0,5.836787389,7.60601692030804,8.53551815625557,1918290,8.05737522522542,0,8.05737522522542,7.60601692030804,8.53551815625557
+1/1/24,2024,1,2023,5.92,457712,5.909972808,1.3385,7.85,13.03394967,1.776616444,1.778462651,0.291781557,2.06069784,0,0,0,1,0,0,5.859456913,6.8962152683,7.2546284521,1918290,7.0756216,0,7.0756216,6.8962152683,7.2546284521
+1/1/25,2025,1,2024,5.92,457712,5.909972808,1.3385,7.85,13.03394967,1.776616444,1.778462651,0.291781557,2.06069784,0,0,0,1,0.1,0.25,5.859456913,6.8962152683,7.2546284521,1918290,7.0756216,0.05,7.4294027,7.241124031715,7.617383368285`;
+                
+                const dataUrl = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvSample);
+                
+                // Now fetch this data URL
+                fetch(dataUrl)
+                    .then(response => response.text())
+                    .then(csvText => {
+                        processCSV(csvText);
+                    })
+                    .catch(error => {
+                        showError(`Error loading default data: ${error.message}`);
+                    });
+            }
+            
+            function processCSV(csvText) {
+                // Parse CSV using PapaParse
+                Papa.parse(csvText, {
+                    header: true,
+                    dynamicTyping: true,
+                    skipEmptyLines: true,
+                    complete: (results) => {
+                        // Remove loading indicator
+                        if (loadingDiv && loadingDiv.parentNode) {
+                            loadingDiv.parentNode.removeChild(loadingDiv);
+                        }
+                        processData(results.data);
+                    },
+                    error: (error) => {
+                        showError(`Error parsing CSV: ${error}`);
+                    }
+                });
+            }
+            
+            function showError(message) {
+                chartContainer.innerHTML = `<div class="error-message">${message}</div>`;
+                console.error(message);
+            }
+            
+            function processData(rawData) {
+                try {
+                    // Filter out rows with NA or invalid year
+                    const validData = rawData.filter(row => 
+                        row.Year && typeof row.Year === 'number' && !isNaN(row.Year));
+                    
+                    // Sort data by date
+                    const sortedData = _.sortBy(validData, ['Year', 'Month']);
+                    
+                    // Create date labels in format MMM YYYY
+                    const labels = sortedData.map(row => {
+                        const date = new Date(row.Year, row.Month - 1);
+                        return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                    });
+                    
+                    // Get actual prices and predictions
+                    const actualPrices = sortedData.map(row => row.UBNL58_lb);
+                    const predictedPrices = sortedData.map(row => row.New_Predicted_Price || row.Predicted_Price);
+                    const tariffAdjustedPrices = sortedData.map(row => row.Predicted_Price_Tariff_Adjusted);
+                    const lowerCI = sortedData.map(row => row.New_Lower_CI || row.Lower_CI);
+                    const upperCI = sortedData.map(row => row.New_Upper_CI || row.Upper_CI);
+                    
+                    // Find the point where we transition from actual to prediction data
+                    // Assuming data is sorted chronologically and we want to mark present time
+                    const currentDate = new Date(2023, 3, 1); // Using April 2023 as our dividing line
+                    let transitionIndex = -1;
+                    
+                    sortedData.forEach((row, index) => {
+                        const rowDate = new Date(row.Year, row.Month - 1);
+                        if (rowDate >= currentDate && transitionIndex === -1) {
+                            transitionIndex = index;
+                        }
+                    });
+                    
+                    if (transitionIndex === -1) {
+                        transitionIndex = sortedData.length;
+                    }
+                    
+                    // Store the processed data
+                    processedData = {
+                        labels: labels,
+                        actualPrices: actualPrices,
+                        predictedPrices: predictedPrices,
+                        tariffAdjustedPrices: tariffAdjustedPrices,
+                        lowerCI: lowerCI,
+                        upperCI: upperCI,
+                        transitionIndex: transitionIndex,
+                        rawData: sortedData
+                    };
+                    
+                    // Create chart with the processed data
+                    createChart(processedData);
+                } catch (err) {
+                    showError(`Error processing data: ${err.message}`);
+                }

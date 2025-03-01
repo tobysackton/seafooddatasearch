@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snow Crab Price Model Forecast - Seafood Datasearch</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #E0F2F1;
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            padding: 20px;
+            text-align: center;
+            background-color: #B2DFDB;
+        }
+        
+        .chart-content {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .chart-container {
+            height: 400px;
+            margin-top: 20px;
+        }
+        
+        .chart-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 15px;
+            padding: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+        
+        .debug-log {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+    
+    <!-- Load Chart.js and PapaParse -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Seafood Datasearch</h1>
+        <h2>Snow Crab Price Forecast Model</h2>
+    </header>
+    
+    <div class="chart-content">
+        <h3>Price Model Historical Performance & Future Projections</h3>
+        
+        <!-- Chart Container -->
+        <div>
+            <div class="chart-title">Snow Crab Price Model: Historical & Forecast (2020-2025)</div>
+            <div class="chart-container">
+                <canvas id="chart-canvas"></canvas>
+            </div>
+            <div id="chart-legend" class="chart-legend"></div>
+        </div>
+        
+        <!-- Debug Log -->
+        <div id="debug-log" class="debug-log"></div>
+    </div>
+    
+    <!-- Chart.js implementation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Debug logging function
+            function log(message) {
+                console.log(message);
+                const logElem = document.getElementById('debug-log');
+                
+                const line = document.createElement('div');
+                line.textContent = message;
+                logElem.appendChild(line);
+                logElem.scrollTop = logElem.scrollHeight;
+            }
+            
+            // Variables
+            let chart = null;
+            const csvPath = './data/species/crab/trade_flow/crab_price_predictions_updated.csv';
+            
+            log('Starting chart initialization...');
+            log('Using CSV path: ' + csvPath);
+            
+            // Check if Chart.js and PapaParse are loaded
+            if (!window.Chart) {
+                log('ERROR: Chart.js is not loaded');
+                return;
+            }
+            
+            if (!window.Papa) {
+                log('ERROR: PapaParse is not loaded');
+                return;
+            }
+            
+            // Load CSV data
+            log('Loading CSV data...');
+            
+            Papa.parse(csvPath, {
+                download: true,
+                header: true,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    log('CSV loaded successfully. Rows: ' + results.data.length);
+                    
+                    if (results.data.length === 0) {
+                        log('ERROR: No data rows found in CSV');
+                        return;
+                    }
+                    
+                    // Log first few rows
+                    log('First row sample: ' + JSON.stringify(results.data[0]));
+                    
+                    // Log headers
+                    log('CSV headers: ' + results.meta.fields.join(', '));
+                    
+                    // Check for required columns
+                    const requiredColumns = ['Dateyyymm', 'UBNL58_lb', 'New_Predicted_Price', 'New_Lower_CI', 'New_Upper_CI'];
+                    const missingColumns = requiredColumns.filter(col => !results.meta.fields.includes(col));
+                    
+                    if (missingColumns.length > 0) {
+                        log('ERROR: Missing columns: ' + missingColumns.join(', '));
+                        return;
+                    }
+                    
+                    // Process data - Filter for date range 2020-2025
+                    log('Processing data...');
+                    let processedData = filterDataByDateRange(results.data);
+                    log('Data filtered. Remaining rows: ' + processedData.length);
+                    
+                    // Create chart
+                    log('Creating chart...');
+                    createChart(processedData);
+                },
+                error: function(error) {
+                    log('ERROR parsing CSV: ' + error);
+                }
+            });
+            
+            // Filter data by date range
+            function filterDataByDateRange(data) {
+                log('Filtering data by date range...');
+                
+                // Setup for date filtering
+                const filteredData = [];
+                const startDate = new Date(2020, 0, 1); // Jan 1, 2020
+                const endDate = new Date(2025, 11, 31); // Dec 31, 2025
+                
+                // Log a few dates for debugging
+                log('Sample dates from data:');
+                for (let i = 0; i < Math.min(5, data.length); i++) {
+                    log(`Row ${i}: ${data[i].Dateyyymm}`);
+                }
+                
+                // Convert dates and filter
+                data.forEach(row => {
+                    const dateStr = row.Dateyyymm;
+                    if (!dateStr) return;
+                    
+                    try {
+                        // Parse date
+                        let year, month, day;
+                        
+                        if (dateStr.includes('/')) {
+                            // Format MM/DD/YY
+                            const parts = dateStr.split('/');
+                            month = parseInt(parts[0], 10);
+                            day = parseInt(parts[1], 10);
+                            year = parseInt(parts[2], 10);
+                            
+                            // Adjust 2-digit year
+                            if (year < 100) {
+                                year += 2000;
+                            }
+                            
+                            // Create a date object
+                            const date = new Date(year, month - 1, day);
+                            
+                            // Check if in range
+                            if (date >= startDate && date <= endDate) {
+                                // Add parsed date to row for sorting
+                                row._parsedDate = date;
+                                filteredData.push(row);
+                            }
+                        }
+                    } catch (e) {
+                        log('Error parsing date: ' + dateStr + ' - ' + e.message);
+                    }
+                });
+                
+                // Sort by date
+                filteredData.sort((a, b) => a._parsedDate - b._parsedDate);
+                
+                return filteredData;
+            }
+            
+            // Create the chart
+            function createChart(data) {
+                log('Setting up chart data...');
+                
+                // Split data into historical (actual prices exist) and forecast
+                const historicalData = [];
+                const forecastData = [];
+                
+                data.forEach(row => {
+                    if (row.UBNL58_lb && row.UBNL58_lb !== 'NA') {
+                        historicalData.push(row);
+                    } else {
+                        forecastData.push(row);
+                    }
+                });
+                
+                log('Historical data points: ' + historicalData.length);
+                log('Forecast data points: ' + forecastData.length);
+                
+                // Format dates for display
+                const formatDate = function(date) {
+                    const d = new Date(date);
+                    return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear().toString().substr(-2)}`;
+                };
+                
+                // Setup chart data
+                const chartData = {
+                    labels: [...historicalData.map(r => formatDate(r._parsedDate)), ...forecastData.map(r => formatDate(r._parsedDate))],
+                    datasets: [
+                        {
+                            label: 'Actual Price',
+                            data: [...historicalData.map(r => r.UBNL58_lb), ...forecastData.map(() => null)],
+                            borderColor: '#059669',
+                            backgroundColor: '#059669',
+                            borderWidth: 2,
+                            pointRadius: 4,
+                            fill: false,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Predicted Price (Historical)',
+                            data: [...historicalData.map(r => r.New_Predicted_Price), ...forecastData.map(() => null)],
+                            borderColor: '#3b82f6',
+                            backgroundColor: '#3b82f6',
+                            borderWidth: 2,
+                            pointRadius: 4,
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Forecast',
+                            data: [...historicalData.map(() => null), ...forecastData.map(r => r.New_Predicted_Price)],
+                            borderColor: '#f97316',
+                            backgroundColor: '#f97316',
+                            borderWidth: 2,
+                            pointRadius: 4,
+                            borderDash: [8, 4],
+                            fill: false,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Lower 95% Bound (Historical)',
+                            data: [...historicalData.map(r => r.New_Lower_CI), ...forecastData.map(() => null)],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'transparent',
+                            borderWidth: 1,
+                            pointRadius: 0,
+                            borderDash: [3, 3],
+                            fill: false,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Upper 95% Bound (Historical)',
+                            data: [...historicalData.map(r => r.New_Upper_CI), ...forecastData.map(() => null)],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'transparent',
+                            borderWidth: 1,
+                            pointRadius: 0,
+                            borderDash: [3, 3],
+                            fill: '+1',
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Confidence Interval (Historical)',
+                            data: [...historicalData.map(r => r.New_Lower_CI), ...forecastData.map(() => null)],
+                            borderColor: 'transparent',
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            fill: '+1',
+                            tension: 0.1,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Lower 95% Bound (Forecast)',
+                            data: [...historicalData.map(() => null), ...forecastData.map(r => r.New_Lower_CI)],
+                            borderColor: '#f97316',
+                            backgroundColor: 'transparent',
+                            borderWidth: 1,
+                            pointRadius: 0,
+                            borderDash: [3, 3],
+                            fill: false,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Upper 95% Bound (Forecast)',
+                            data: [...historicalData.map(() => null), ...forecastData.map(r => r.New_Upper_CI)],
+                            borderColor: '#f97316',
+                            backgroundColor: 'transparent',
+                            borderWidth: 1,
+                            pointRadius: 0,
+                            borderDash: [3, 3],
+                            fill: '+1',
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Confidence Interval (Forecast)',
+                            data: [...historicalData.map(() => null), ...forecastData.map(r => r.New_Lower_CI)],
+                            borderColor: 'transparent',
+                            backgroundColor: 'rgba(249, 115, 22, 0.2)',
+                            fill: '+1',
+                            tension: 0.1,
+                            pointRadius: 0
+                        }
+                    ]
+                };
+                
+                // Render the chart
+                log('Rendering chart...');
+                const ctx = document.getElementById('chart-canvas').getContext('2d');
+                
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        scales: {
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Price ($/lb)'
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return '$' + value.toFixed(2);
+                                    }
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                },
+                                ticks: {
+                                    maxRotation: 45,
+                                    minRotation: 45
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false // Use custom legend instead
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.dataset.label || '';
+                                        const value = context.parsed.y;
+                                        if (label.includes('Confidence Interval')) {
+                                            return null; // Don't show these in tooltip
+                                        }
+                                        if (value === null || value === undefined) {
+                                            return null;
+                                        }
+                                        return label + ': $' + value.toFixed(2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Create custom legend
+                createCustomLegend();
+                
+                log('Chart created successfully!');
+            }
+            
+            // Create custom legend
+            function createCustomLegend() {
+                const legendContainer = document.getElementById('chart-legend');
+                legendContainer.innerHTML = '';
+                
+                const legendItems = [
+                    { label: 'Actual Price', color: '#059669' },
+                    { label: 'Predicted Price', color: '#3b82f6' },
+                    { label: '95% Confidence Interval', color: 'rgba(59, 130, 246, 0.2)' },
+                    { label: 'Price Forecast', color: '#f97316' },
+                    { label: 'Forecast Confidence Interval', color: 'rgba(249, 115, 22, 0.2)' }
+                ];
+                
+                legendItems.forEach(item => {
+                    const legendItem = document.createElement('div');
+                    legendItem.className = 'legend-item';
+                    
+                    const colorBox = document.createElement('div');
+                    colorBox.className = 'legend-color';
+                    colorBox.style.backgroundColor = item.color;
+                    
+                    const label = document.createElement('span');
+                    label.textContent = item.label;
+                    
+                    legendItem.appendChild(colorBox);
+                    legendItem.appendChild(label);
+                    legendContainer.appendChild(legendItem);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
