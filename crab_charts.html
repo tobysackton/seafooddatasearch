@@ -31,7 +31,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             border-right: 1px solid #B2DFDB;
         }
         
@@ -56,10 +55,18 @@
             margin-bottom: 20px;
         }
         
-        .tagline {
-            font-style: italic;
-            color: #00796B;
-            text-align: center;
+        .about-text {
+            text-align: left;
+            margin: 30px 0;
+            line-height: 1.6;
+        }
+        
+        .contact-info {
+            text-align: left;
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #B2DFDB;
+            width: 100%;
         }
         
         .chart-content {
@@ -171,6 +178,44 @@
             text-align: center;
         }
         
+        .search-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .search-container h3 {
+            margin-top: 0;
+            color: #004D40;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #B2DFDB;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .search-button {
+            background-color: #00796B;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        .search-button:hover {
+            background-color: #004D40;
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .page-container {
@@ -190,12 +235,20 @@
     </header>
     
     <div class="page-container">
-        <!-- Left Pane - Logo and Tagline -->
+        <!-- Left Pane - Logo and About Text -->
         <div class="left-pane">
             <img src="assets/images/SD_Logo.png" alt="Seafood Datasearch Logo" class="logo">
-            <div class="tagline">
-                <h3>Market Analysis and Forecasts</h3>
-                <p>Providing expert insights into the seafood industry.</p>
+            
+            <div class="about-text">
+                <p>Seafood Datasearch was founded by John Sackton in 1994 to provide market analysis to individual sectors of the seafood industry with market updates and price forecasts. Since then he has specialized in annual reviews of the lobster, crab, and other industries in Atlantic Canada with emphasis on the US market, but including Europe, China, and Japan. This new website is to provide data support for the industry in 2025 in the face of potential disruptive tariffs.</p>
+            </div>
+            
+            <div class="contact-info">
+                <p>Seafood Datasearch<br>
+                8 White Pine Ln<br>
+                Lexington, MA</p>
+                
+                <p>email: jsackton@seafoodlink.com</p>
             </div>
         </div>
         
@@ -216,7 +269,7 @@
                             <li><a href="seasonality_snow_crab_exports_us.html">Seasonality of Snow Crab Exports to US</a></li>
                             <li><a href="ca_crab_exports_us_and_mktshare_start_2012.html">Canada Snow Crab Exports to US (2012-2024)</a></li>
                             <li><a href="ca_crab_export_all_markets_start_2012.html">Canada Snow Crab Exports to All Markets (2012-2024)</a></li>
-			<li><a href="us_snow_crab_supply_with_market_share.html">US Snow Crab Supply With Market Share (2018-2024)</a></li>
+                            <li><a href="us_snow_crab_supply_with_market_share.html">US Snow Crab Supply With Market Share (2018-2024)</a></li>
                         </ul>
                     </div>
                     
@@ -229,7 +282,6 @@
                             <li><a href="retail_crab_price_trends.html">Monthly Price Trends (2020-2025)</a></li>
                             <li><a href="retail_crab_price_elasticity.html">Price Elasticity Analysis</a></li>
                             <li><a href="retail_crab_december_price_elasticity.html">December Price Elasticity</a></li>
-                            
                         </ul>
                     </div>
                     
@@ -237,9 +289,12 @@
                     <div class="chart-category">
                         <h4>Pricing and Forecasts</h4>
                         <ul>
-                          <li><a href="ubnl_q2_price_trends.html">2nd Qtr Section Prices by Year</a></li> 
-<li><a href="snow_crab_price_elasticity_evolution.html">Snow Crab Price Elasticity Evolution (2012-2024)</a></li> 
-<li><a href="snow_crab_price_elasticity_june.html">Snow Crab Price Elasticity (June Only) (2013-2024)</a></li>
+                            <li><a href="ubnl_q2_price_trends.html">2nd Qtr Section Prices by Year</a></li> 
+                            <li><a href="snow_crab_price_elasticity_evolution.html">Snow Crab Price Elasticity Evolution (2012-2024)</a></li> 
+                            <li><a href="snow_crab_price_elasticity_june.html">Snow Crab Price Elasticity (June Only) (2013-2024)</a></li>
+                            <li><a href="snow_crab_price_model_historical_fit.html">Snow Crab Price Model Historical Fit</a></li>
+                            <li><a href="snow_crab_price_forecast.html">Snow Crab Price Forecast</a></li>
+                            <li><a href="snow_crab_price_forecast_with_tariff.html">Snow Crab Price Forecast (With Tariff)</a></li>
                         </ul>
                     </div>
                 </div>
@@ -249,22 +304,48 @@
                     <p>Select a chart from the links above to view detailed visualizations.</p>
                 </div>
             </div>
-            
-            <div class="chart-content">
-                <h3>Species Information</h3>
-                <p>Key information about snow crab, king crab, and other commercial crab species.</p>
-            </div>
         </div>
         
-        <!-- Right Pane - Navigation -->
+        <!-- Right Pane - Navigation and Search -->
         <div class="right-pane">
             <div class="nav-menu">
                 <h3>Navigation</h3>
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="lobster_charts.html">Lobster Charts</a></li>
-                    <li><a href="newfoundland_snow_crab_2025.html">Newfoundland Snow Crab</a></li>
+                    <li><a href="economic_data.html">Economic Data</a></li>
                 </ul>
+            </div>
+            
+            <div class="search-container">
+                <h3>Search</h3>
+                <input type="text" class="search-box" placeholder="Search by keywords..." id="searchInput">
+                <button class="search-button" id="searchButton">Search</button>
+                <div id="searchResults" style="margin-top: 15px;"></div>
+                
+                <script>
+                    document.getElementById('searchButton').addEventListener('click', function() {
+                        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                        const resultsDiv = document.getElementById('searchResults');
+                        
+                        if (searchTerm.trim() === '') {
+                            resultsDiv.innerHTML = '<p>Please enter a search term</p>';
+                            return;
+                        }
+                        
+                        // This is a placeholder for server-side search functionality
+                        // In a real implementation, this would make an AJAX call to a server endpoint
+                        // that would search through HTML files only
+                        
+                        resultsDiv.innerHTML = '<p>Searching for: "' + searchTerm + '"...</p>';
+                        
+                        // Simulated search results
+                        // In a real implementation, this would be populated by server response
+                        setTimeout(function() {
+                            resultsDiv.innerHTML = '<p>Search results will appear here when implemented.</p>';
+                        }, 1000);
+                    });
+                </script>
             </div>
         </div>
     </div>
