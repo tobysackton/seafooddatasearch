@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6539VRG29E"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6539VRG29E');
+</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canadian Lobster Landings (2007-2024) - Seafood Datasearch</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #E0F2F1; /* Very light sea green */
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            padding: 20px;
+            text-align: center;
+            background-color: #B2DFDB; /* Slightly darker sea green for header */
+        }
+        
+        .page-container {
+            display: flex;
+            min-height: calc(100vh - 200px); /* Adjust based on header and footer height */
+        }
+        
+        .left-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #E0F2F1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #B2DFDB;
+        }
+        
+        .center-pane {
+            flex: 2;
+            padding: 20px;
+            background-color: #FFFFFF;
+            text-align: center;
+        }
+        
+        .right-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #E0F2F1;
+            border-left: 1px solid #B2DFDB;
+        }
+        
+        .logo {
+            width: 90%;
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        
+        .tagline {
+            font-style: italic;
+            color: #00796B;
+            text-align: center;
+        }
+        
+        .chart-content {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-menu {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .nav-menu li {
+            margin: 10px 0;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: #00796B;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: block;
+        }
+        
+        .nav-menu a:hover {
+            background-color: #B2DFDB;
+        }
+        
+        .species-icons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 10px;
+        }
+        
+        .species-icons img {
+            width: 80px;
+            height: auto;
+        }
+        
+        footer {
+            padding: 20px;
+            background-color: #B2DFDB;
+            text-align: center;
+        }
+        
+        /* Chart container styles */
+        #chart-container-wrapper {
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        #chart-container {
+            height: 400px;
+            width: 100%;
+        }
+        
+        /* Chart legend style */
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 15px;
+            padding: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+        
+        .chart-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        /* View selector buttons */
+        .view-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .view-button {
+            padding: 8px 16px;
+            background-color: #E0F2F1;
+            border: 1px solid #B2DFDB;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .view-button.active {
+            background-color: #00796B;
+            color: white;
+        }
+        
+        /* Year selection */
+        .year-selection {
+            margin: 15px 0;
+        }
+        
+        .year-toggle {
+            margin: 10px 0;
+        }
+        
+        .year-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+        
+        .year-button {
+            padding: 4px 8px;
+            background-color: #E0F2F1;
+            border: 1px solid #B2DFDB;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .year-button.active {
+            background-color: #00796B;
+            color: white;
+        }
+        
+        .toggle-all {
+            font-size: 12px;
+            color: #00796B;
+            text-decoration: underline;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .page-container {
+                flex-direction: column;
+            }
+            
+            .left-pane, .center-pane, .right-pane {
+                width: 100%;
+                border: none;
+            }
+            
+            #chart-container {
+                height: 300px;
+            }
+            
+            .view-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+    
+    <!-- Load Chart.js and Lodash -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js" integrity="sha384-6k2LJ58KdS1FfMmJH4zJubvVMBz7JyO8z9rJ6roF/56etGTrj0yJ3YJmxZ+6K9Wv" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha384-UvHCDxuzxRpCQyQr+xhj0jKUVJJ9USlWplP8h5hLGz7CYAd/N44lJtqGylKjVlqk" crossorigin="anonymous"></script>
+    
+    <!-- Fallback for Chart.js if CDN fails -->
+    <script>
+        window.addEventListener('error', function(e) {
+            if (e.target.src && e.target.src.includes('chart.js')) {
+                console.log('Chart.js failed to load from primary CDN, attempting fallback...');
+                var fallbackScript = document.createElement('script');
+                fallbackScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js';
+                fallbackScript.onerror = function() {
+                    console.error('Fallback Chart.js failed to load');
+                    document.getElementById('chart-container-wrapper').innerHTML = 
+                        '<div style="color: #cc0000; padding: 20px;">Error: Failed to load Chart.js library. Please check your internet connection and try again.</div>';
+                };
+                document.head.appendChild(fallbackScript);
+            }
+        }, true);</script>
+</head>
+<body>
+    <header>
+        <h1>Seafood Datasearch</h1>
+    </header>
+    
+    <div class="page-container">
+        <!-- Left Pane - Logo and Tagline -->
+        <div class="left-pane">
+            <img src="assets/images/SD_Logo.png" alt="Seafood Datasearch Logo" class="logo">
+            <div class="tagline">
+                <h3>Market Analysis and Forecasts</h3>
+                <p>Providing expert insights into the seafood industry.</p>
+            </div>
+        </div>
+        
+        <!-- Center Pane - Chart Content -->
+        <div class="center-pane">
+            <h2>Canadian Lobster Landings (2007-2024)</h2>
+            <div class="chart-content">
+                <h3>Canadian Lobster Fishery Production</h3>
+                <p>A comprehensive view of Canadian lobster landings from 2007 to 2024, showing yearly totals, monthly trends, and seasonal patterns.</p>
+                
+                <!-- View Selection Buttons -->
+                <div class="view-buttons">
+                    <button class="view-button active" data-view="yearly">Yearly Totals</button>
+                    <button class="view-button" data-view="monthly">Monthly Trend</button>
+                    <button class="view-button" data-view="seasonality">Seasonality</button>
+                </div>
+                
+                <!-- Year Selection (hidden by default, shown for monthly and seasonality views) -->
+                <div id="year-selection" class="year-selection" style="display: none;">
+                    <div class="year-toggle">
+                        <span><strong>Select Years:</strong></span>
+                        <button id="toggle-all" class="toggle-all">Select All</button>
+                    </div>
+                    <div id="year-buttons" class="year-buttons">
+                        <!-- Year buttons will be added here by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Chart Container -->
+                <div id="chart-container-wrapper">
+                    <div id="chart-title" class="chart-title">Canadian Lobster Annual Landings (2007-2024)</div>
+                    <div style="position: relative; height: 400px; width: 100%">
+                        <canvas id="chart-container"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-content">
+                <h3>About Canadian Lobster Landings</h3>
+                <p>The data represents lobster landings in Canada measured in metric tons. It illustrates the growth of the Canadian lobster industry over time, with significant increases in total landings from around 48,000 MT in 2007 to over 90,000 MT in recent years.</p>
+                <ul>
+                    <li>Total Canadian landings have increased from around 48,000 MT in 2007 to over 90,000 MT in recent years.</li>
+                    <li>Peak landings occurred in 2021 with approximately 106,395 MT.</li>
+                    <li>Strong seasonality with highest landings typically in May-June and December-January.</li>
+                    <li>Lowest landings occur in February-March across all years.</li>
+                </ul>
+                <p>Data source: Monthly landings data from Canadian fisheries agencies (2007-2024)</p>
+                <p>Chart based on Seafood Datasearch 'Master_Monthly_Lobster_Landings' file.</p>
+            </div>
+        </div>
+        
+        <!-- Right Pane - Navigation -->
+        <div class="right-pane">
+            <div class="nav-menu">
+                <h3>Navigation</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="lobster_charts.html">Lobster Charts</a></li>
+                    <li><a href="crab_charts.html">Crab Charts</a></li>
+                    <li><a href="ca_crab_export_all_markets_start_2012.html">Canada Crab Exports</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="species-icons">
+            <img src="assets/images/Lobster_icon.png" alt="Lobster">
+            <img src="assets/images/shrimp_icon.png" alt="Shrimp">
+            <img src="assets/images/crab_icon.png" alt="Crab">
+            <img src="assets/images/salmon_icon.png" alt="Salmon">
+        </div>
+        <p>&copy; 2025 Seafood Datasearch. All rights reserved.</p>
+    </footer>
+    
+    <!-- Chart.js implementation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if Chart.js is loaded
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js library failed to load');
+                document.getElementById('chart-container-wrapper').innerHTML = 
+                    '<div style="color: #cc0000; padding: 20px;">Error: Chart.js library is not available. Please check your internet connection and try again.</div>';
+                return;
+            }
+            // Lobster landings data
+            const lobsterData = [
+                {"Year":2007,"January":5516.589,"February":59.550000000000004,"March":59.550000000000004,"April":1284.3500000000001,"May":15793.349999999999,"June":9688.599999999999,"July":900.4499999999999,"August":326.1,"September":326.1,"October":564.3000000000001,"November":1074.15,"December":12773.1,"Total":48366.189},
+                {"Year":2008,"January":5120.05,"February":74.4,"March":74.4,"April":1376.3000000000002,"May":17485.35,"June":10915.25,"July":1211.4,"August":333.20000000000005,"September":333.20000000000005,"October":630.8000000000001,"November":1389.95,"December":13141.800000000001,"Total":52086.1},
+                {"Year":2009,"January":5358.110000000001,"February":80.85000000000001,"March":80.85000000000001,"April":1436.3500000000004,"May":18179.2,"June":11274.550000000001,"July":1052.95,"August":396,"September":396,"October":719.4000000000001,"November":1375.5,"December":13691.399999999998,"Total":54041.16},
+                {"Year":2010,"January":5981.599999999999,"February":94.9,"March":94.9,"April":1607.25,"May":18894.8,"June":11612.9,"July":1096.1000000000001,"August":432.90000000000003,"September":432.90000000000003,"October":812.5,"November":1570.05,"December":15343.900000000001,"Total":57974.700000000004},
+                {"Year":2011,"January":6316.06,"February":127.30000000000001,"March":127.30000000000001,"April":1779.1,"May":17712.8,"June":10693.9,"July":1051.1000000000001,"August":401.8,"September":401.8,"October":911,"November":1905.8,"December":16374.4,"Total":57802.36000000001},
+                {"Year":2012,"January":8123.4,"February":161.55,"March":161.55,"April":859.7,"May":23178,"June":14332.15,"July":1512.55,"August":503.9,"September":503.9,"October":1150.1,"November":2224.8,"December":19940.9,"Total":72652.5},
+                {"Year":2013,"January":7624.25,"February":179.9,"March":179.9,"April":961.635,"May":25056.4,"June":15857.8,"July":1757.7000000000003,"August":504,"September":504,"October":1223.6,"November":2629.7000000000003,"December":18761.8,"Total":75240.68499999998},
+                {"Year":2014,"January":10129.199999999999,"February":210.6,"March":210.6,"April":1232.09,"May":28115.95,"June":17504.75,"July":1938.4,"August":591.6,"September":591.6,"October":1434,"November":3543.3,"December":24691.550000000003,"Total":90193.64000000001},
+                {"Year":2015,"January":10038.75,"February":177.1,"March":177.1,"April":1159.4850000000001,"May":28858.25,"June":18098.649999999998,"July":1987.3999999999999,"August":578.6,"September":578.6,"October":1287,"November":3424.9,"December":24311.100000000002,"Total":90676.935},
+                {"Year":2016,"January":10228.95,"February":161.1,"March":161.1,"April":1132.765,"May":27390.45,"June":17074.749999999996,"July":1947.3,"August":643.6,"September":643.6,"October":1288,"November":3380.7,"December":24689.3,"Total":88741.615},
+                {"Year":2017,"January":9290.65,"February":186.75,"March":186.75,"April":1116.8049999999998,"May":31506.450000000004,"June":20223.4,"July":2581.65,"August":589.8,"September":589.8,"October":1336.8,"November":3157.2,"December":22686.8,"Total":93452.85500000001},
+                {"Year":2018,"January":8550.1,"February":152.55,"March":152.55,"April":1027.3200000000002,"May":32647.35,"June":21299.6,"July":2834.8500000000004,"August":600,"September":600,"October":1210.2,"November":2980.5,"December":20789.399999999998,"Total":92844.41999999998},
+                {"Year":2019,"January":9079.6,"February":149.05,"March":149.05,"April":1008.19,"May":35002.25000000001,"June":22986.5,"July":3131.75,"August":874.3,"September":874.3,"October":1470.5,"November":2859.7,"December":22069.3,"Total":99654.49000000002},
+                {"Year":2020,"January":7209.8,"February":118.55,"March":118.55,"April":847.74,"May":34671.09999999999,"June":23228.649999999998,"July":2988.45,"August":925.9,"September":925.9,"October":1400.1,"November":2473.4,"December":17495.65,"Total":92403.78999999998},
+                {"Year":2021,"January":8783.45,"February":126.15,"March":126.15,"April":934.6350000000001,"May":39319.65,"June":26099.799999999996,"July":3181.05,"August":1121.7,"September":1121.7,"October":1626.3000000000002,"November":2687.1,"December":21267.65,"Total":106395.33499999999},
+                {"Year":2022,"January":6632.85,"February":123.35,"March":123.35,"April":746.5749999999999,"May":37686.75,"June":25572.4,"July":3639.5499999999997,"August":851,"September":851,"October":1344.4,"November":2069.3,"December":16188.199999999999,"Total":95828.72499999999},
+                {"Year":2023,"January":6298.35,"February":108.8,"March":108.8,"April":638.4950000000001,"May":37525.95,"June":25707.149999999994,"July":3691.4000000000005,"August":1061.2,"September":1061.2,"October":1496.4,"November":1704.8,"December":15367.4,"Total":94769.94499999996},
+                {"Year":2024,"January":5394.25,"April":107.885,"May":14042.7,"June":9508,"July":2377,"December":12946.199999999999,"Total":44376.034999999996}
+            ];
+            
+            // Chart configuration
+            let currentView = 'yearly';
+            let chart = null;
+            let selectedYears = lobsterData.map(d => d.Year);
+            
+            // Initialize the page
+            setupYearButtons();
+            updateChart();
+            
+            // Set up view buttons
+            const viewButtons = document.querySelectorAll('.view-button');
+            viewButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    viewButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    currentView = this.dataset.view;
+                    
+                    // Show/hide year selection based on view
+                    const yearSelection = document.getElementById('year-selection');
+                    if (currentView === 'yearly') {
+                        yearSelection.style.display = 'none';
+                    } else {
+                        yearSelection.style.display = 'block';
+                    }
+                    
+                    updateChart();
+                });
+            });
+            
+            // Setup year toggle button
+            document.getElementById('toggle-all').addEventListener('click', function() {
+                if (selectedYears.length === lobsterData.length) {
+                    // If all are selected, select only the most recent complete year
+                    const completeYears = lobsterData
+                        .filter(item => item.Total > 50000) // Filter for complete years only
+                        .map(item => item.Year);
+                    if (completeYears.length > 0) {
+                        selectedYears = [Math.max(...completeYears)];
+                    }
+                    this.textContent = 'Select All';
+                } else {
+                    // Otherwise select all
+                    selectedYears = lobsterData.map(item => item.Year);
+                    this.textContent = 'Deselect All';
+                }
+                
+                // Update year buttons UI
+                updateYearButtonsUI();
+                updateChart();
+            });
+            
+            function setupYearButtons() {
+                const yearButtonsContainer = document.getElementById('year-buttons');
+                yearButtonsContainer.innerHTML = '';
+                
+                lobsterData.forEach(yearData => {
+                    const button = document.createElement('button');
+                    button.className = 'year-button active';
+                    button.textContent = yearData.Year;
+                    button.dataset.year = yearData.Year;
+                    
+                    button.addEventListener('click', function() {
+                        const year = parseInt(this.dataset.year);
+                        if (selectedYears.includes(year)) {
+                            // Only deselect if we would still have at least one year selected
+                            if (selectedYears.length > 1) {
+                                selectedYears = selectedYears.filter(y => y !== year);
+                                this.classList.remove('active');
+                            }
+                        } else {
+                            selectedYears.push(year);
+                            this.classList.add('active');
+                        }
+                        
+                        // Update toggle all button text
+                        const toggleAllBtn = document.getElementById('toggle-all');
+                        toggleAllBtn.textContent = selectedYears.length === lobsterData.length ? 'Deselect All' : 'Select All';
+                        
+                        updateChart();
+                    });
+                    
+                    yearButtonsContainer.appendChild(button);
+                });
+                
+                // Set toggle all button initial text
+                document.getElementById('toggle-all').textContent = 'Deselect All';
+            }
+            
+            function updateYearButtonsUI() {
+                const yearButtons = document.querySelectorAll('.year-button');
+                yearButtons.forEach(button => {
+                    const year = parseInt(button.dataset.year);
+                    if (selectedYears.includes(year)) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                });
+            }
+            
+            function updateChart() {
+                if (chart) {
+                    chart.destroy();
+                }
+                
+                // Update chart title based on view
+                const chartTitle = document.getElementById('chart-title');
+                if (currentView === 'yearly') {
+                    chartTitle.textContent = 'Canadian Lobster Annual Landings (2007-2024)';
+                } else if (currentView === 'monthly') {
+                    chartTitle.textContent = 'Canadian Lobster Monthly Landings Trend';
+                } else if (currentView === 'seasonality') {
+                    chartTitle.textContent = 'Canadian Lobster Landing Seasonality';
+                }
+                
+                // Create appropriate chart based on view
+                if (currentView === 'yearly') {
+                    createYearlyChart();
+                } else if (currentView === 'monthly') {
+                    createMonthlyChart();
+                } else if (currentView === 'seasonality') {
+                    createSeasonalityChart();
+                }
+            }
+            
+            function createYearlyChart() {
+                const ctx = document.getElementById('chart-container').getContext('2d');
+                
+                // Prepare data for yearly totals
+                const yearlyData = lobsterData.map(item => ({
+                    year: item.Year,
+                    total: item.Total
+                }));
+                
+                chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: yearlyData.map(d => d.year),
+                        datasets: [{
+                            label: 'Annual Landings (MT)',
+                            data: yearlyData.map(d => d.total),
+                            backgroundColor: '#2563eb',
+                            borderColor: '#1e40af',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Metric Tons'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Year'
+                                },
+                                ticks: {
+                                    maxRotation: 45,
+                                    minRotation: 45
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        return label + context.parsed.y.toLocaleString() + ' MT';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>            }
+                        }
+                    }
+                });
+            }
+            
+            function createMonthlyChart() {
+                const ctx = document.getElementById('chart-container').getContext('2d');
+                
+                // Create monthly time series data
+                const monthlyTimeSeries = [];
+                const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                
+                // Filter data for selected years
+                const filteredData = lobsterData.filter(d => selectedYears.includes(d.Year));
+                
+                filteredData.forEach(yearData => {
+                    months.forEach((month, index) => {
+                        if (yearData[month] !== undefined) {
+                            monthlyTimeSeries.push({
+                                date: `${yearData.Year}-${index + 1}`,
+                                year: yearData.Year,
+                                month: month,
+                                value: yearData[month]
+                            });
+                        }
+                    });
+                });
+                
+                // Sort by date
+                monthlyTimeSeries.sort((a, b) => a.date.localeCompare(b.date));
+                
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: monthlyTimeSeries.map(d => d.date),
+                        datasets: [{
+                            label: 'Monthly Landings (MT)',
+                            data: monthlyTimeSeries.map(d => d.value),
+                            backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                            borderColor: '#2563eb',
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Metric Tons'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    maxRotation: 45,
+                                    minRotation: 45,
+                                    callback: function(value, index) {
+                                        // Only show some tick marks to avoid overcrowding
+                                        const date = monthlyTimeSeries[index].date.split('-');
+                                        if (date[1] === '1') { // January
+                                            return date[0]; // Just show the year
+                                        }
+                                        return '';
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    title: function(tooltipItems) {
+                                        const item = tooltipItems[0];
+                                        const data = monthlyTimeSeries[item.dataIndex];
+                                        return `${data.month} ${data.year}`;
+                                    },
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + context.raw.toLocaleString() + ' MT';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            function createSeasonalityChart() {
+                const ctx = document.getElementById('chart-container').getContext('2d');
+                
+                // Calculate monthly averages based on selected years
+                const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                
+                const monthlyAverages = months.map(month => {
+                    const values = lobsterData
+                        .filter(item => selectedYears.includes(item.Year) && item[month] !== undefined)
+                        .map(item => item[month]);
+                    
+                    const avg = values.length > 0 ? values.reduce((sum, val) => sum + val, 0) / values.length : 0;
+                    
+                    return {
+                        month: month,
+                        average: avg
+                    };
+                });
+                
+                chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: monthlyAverages.map(d => d.month),
+                        datasets: [{
+                            label: 'Average Monthly Landings (MT)',
+                            data: monthlyAverages.map(d => d.average),
+                            backgroundColor: '#2563eb',
+                            borderColor: '#1e40af',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Metric Tons'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Month'
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        return label + context.parsed.y.toLocaleString() + ' MT';
+                                    }
+                                }
