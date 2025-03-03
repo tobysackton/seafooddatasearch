@@ -258,11 +258,7 @@
         }
     </style>
     
-    <!-- Load Chart.js and Lodash -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js" integrity="sha384-6k2LJ58KdS1FfMmJH4zJubvVMBz7JyO8z9rJ6roF/56etGTrj0yJ3YJmxZ+6K9Wv" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha384-UvHCDxuzxRpCQyQr+xhj0jKUVJJ9USlWplP8h5hLGz7CYAd/N44lJtqGylKjVlqk" crossorigin="anonymous"></script>
-    
-    <!-- Fallback for Chart.js if CDN fails -->
+    <!-- Library loading with promise-based approach -->
     <script>
         // Create a promise to track Chart.js loading status
         window.chartJsLoadPromise = new Promise((resolve, reject) => {
@@ -440,7 +436,7 @@
     </footer>
     
     <!-- Chart.js implementation -->
-     <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Wait for both Chart.js and Lodash to load
             Promise.all([window.chartJsLoadPromise, window.lodashLoadPromise])
@@ -464,11 +460,19 @@
                 });
                 
             function initializeCharts() {
-                // Check if Chart.js is loaded
+                // Additional check to ensure Chart.js is loaded
                 if (typeof Chart === 'undefined') {
                     console.error('Chart.js is not available even though loading promise resolved');
                     document.getElementById('chart-container-wrapper').innerHTML = 
                         '<div style="color: #cc0000; padding: 20px;">Error: Chart.js library failed to initialize properly.</div>';
+                    return;
+                }
+                
+                // Check if Lodash is loaded
+                if (typeof _ === 'undefined') {
+                    console.error('Lodash is not available even though loading promise resolved');
+                    document.getElementById('chart-container-wrapper').innerHTML = 
+                        '<div style="color: #cc0000; padding: 20px;">Error: Lodash library failed to initialize properly.</div>';
                     return;
                 }
                 
@@ -523,161 +527,313 @@
                     });
                 });
                 
-                // Rest of the chart code remains the same...
-                // (setupYearButtons, updateYearButtonsUI, updateChart, createYearlyChart, createMonthlyChart, createSeasonalityChart functions)
+                // Setup year toggle button
+                document.getElementById('toggle-all').addEventListener('click', function() {
+                    if (selectedYears.length === lobsterData.length) {
+                        // If all are selected, select only the most recent complete year
+                        const completeYears = lobsterData
+                            .filter(item => item.Total > 50000) // Filter for complete years only
+                            .map(item => item.Year);
+                        if (completeYears.length > 0) {
+                            selectedYears = [Math.max(...completeYears)];
+                        }
+                        this.textContent = 'Select All';
+                    } else {
+                        // Otherwise select all
+                        selectedYears = lobsterData.map(item => item.Year);
+                        this.textContent = 'Deselect All';
+                    }
+                    
+                    // Update year buttons UI
+                    updateYearButtonsUI();
+                    updateChart();
+                });
                 
-                // ... (rest of the original chart functions)
+                function setupYearButtons() {
+                    const yearButtonsContainer = document.getElementById('year-buttons');
+                    yearButtonsContainer.innerHTML = '';
+                    
+                    lobsterData.forEach(yearData => {
+                        const button = document.createElement('button');
+                        button.className = 'year-button active';
+                        button.textContent = yearData.Year;
+                        button.dataset.year = yearData.Year;
+                        
+                        button.addEventListener('click', function() {
+                            const year = parseInt(this.dataset.year);
+                            if (selectedYears.includes(year)) {
+                                // Only deselect if we would still have at least one year selected
+                                if (selectedYears.length > 1) {
+                                    selectedYears = selectedYears.filter(y => y !== year);
+                                    this.classList.remove('active');
+                                }
+                            } else {
+                                selectedYears.push(year);
+                                this.classList.add('active');
+                            }
+                            
+                            // Update toggle all button text
+                            const toggleAllBtn = document.getElementById('toggle-all');
+                            toggleAllBtn.textContent = selectedYears.length === lobsterData.length ? 'Deselect All' : 'Select All';
+                            
+                            updateChart();
+                        });
+                        
+                        yearButtonsContainer.appendChild(button);
+                    });
+                    
+                    // Set toggle all button initial text
+                    document.getElementById('toggle-all').textContent = 'Deselect All';
+                }
+                
+                function updateYearButtonsUI() {
+                    const yearButtons = document.querySelectorAll('.year-button');
+                    yearButtons.forEach(button => {
+                        const year = parseInt(button.dataset.year);
+                        if (selectedYears.includes(year)) {
+                            button.classList.add('active');
+                        } else {
+                            button.classList.remove('active');
+                        }
+                    });
+                }
+                
+                function updateChart() {
+                    if (chart) {
+                        chart.destroy();
+                    }
+                    
+                    // Update chart title based on view
+                    const chartTitle = document.getElementById('chart-title');
+                    if (currentView === 'yearly') {
+                        chartTitle.textContent = 'Canadian Lobster Annual Landings (2007-2024)';
+                    } else if (currentView === 'monthly') {
+                        chartTitle.textContent = 'Canadian Lobster Monthly Landings Trend';
+                    } else if (currentView === 'seasonality') {
+                        chartTitle.textContent = 'Canadian Lobster Landing Seasonality';
+                    }
+                    
+                    // Create appropriate chart based on view
+                    if (currentView === 'yearly') {
+                        createYearlyChart();
+                    } else if (currentView === 'monthly') {
+                        createMonthlyChart();
+                    } else if (currentView === 'seasonality') {
+                        createSeasonalityChart();
+                    }
+                }
+                
+                function createYearlyChart() {
+                    const ctx = document.getElementById('chart-container').getContext('2d');
+                    
+                    // Prepare data for yearly totals
+                    const yearlyData = lobsterData.map(item => ({
+                        year: item.Year,
+                        total: item.Total
+                    }));
+                    
+                    chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: yearlyData.map(d => d.year),
+                            datasets: [{
+                                label: 'Annual Landings (MT)',
+                                data: yearlyData.map(d => d.total),
+                                backgroundColor: '#2563eb',
+                                borderColor: '#1e40af',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Metric Tons'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Year'
+                                    },
+                                    ticks: {
+                                        maxRotation: 45,
+                                        minRotation: 45
+                                    }
+                                }
+                            },
+                            plugins: {
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            let label = context.dataset.label || '';
+                                            if (label) {
+                                                label += ': ';
+                                            }
+                                            return label + context.parsed.y.toLocaleString() + ' MT';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                function createMonthlyChart() {
+                    const ctx = document.getElementById('chart-container').getContext('2d');
+                    
+                    // Create monthly time series data
+                    const monthlyTimeSeries = [];
+                    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                    
+                    // Filter data for selected years
+                    const filteredData = lobsterData.filter(d => selectedYears.includes(d.Year));
+                    
+                    filteredData.forEach(yearData => {
+                        months.forEach((month, index) => {
+                            if (yearData[month] !== undefined) {
+                                monthlyTimeSeries.push({
+                                    date: `${yearData.Year}-${index + 1}`,
+                                    year: yearData.Year,
+                                    month: month,
+                                    value: yearData[month]
+                                });
+                            }
+                        });
+                    });
+                    
+                    // Sort by date
+                    monthlyTimeSeries.sort((a, b) => a.date.localeCompare(b.date));
+                    
+                    chart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: monthlyTimeSeries.map(d => d.date),
+                            datasets: [{
+                                label: 'Monthly Landings (MT)',
+                                data: monthlyTimeSeries.map(d => d.value),
+                                backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                                borderColor: '#2563eb',
+                                borderWidth: 2,
+                                pointRadius: 0,
+                                tension: 0.1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Metric Tons'
+                                    }
+                                },
+                                x: {
+                                    ticks: {
+                                        maxRotation: 45,
+                                        minRotation: 45,
+                                        callback: function(value, index) {
+                                            // Only show some tick marks to avoid overcrowding
+                                            const date = monthlyTimeSeries[index].date.split('-');
+                                            if (date[1] === '1') { // January
+                                                return date[0]; // Just show the year
+                                            }
+                                            return '';
+                                        }
+                                    }
+                                }
+                            },
+                            plugins: {
+                                tooltip: {
+                                    callbacks: {
+                                        title: function(tooltipItems) {
+                                            const item = tooltipItems[0];
+                                            const data = monthlyTimeSeries[item.dataIndex];
+                                            return `${data.month} ${data.year}`;
+                                        },
+                                        label: function(context) {
+                                            return context.dataset.label + ': ' + context.raw.toLocaleString() + ' MT';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                function createSeasonalityChart() {
+                    const ctx = document.getElementById('chart-container').getContext('2d');
+                    
+                    // Calculate monthly averages based on selected years
+                    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                    
+                    const monthlyAverages = months.map(month => {
+                        const values = lobsterData
+                            .filter(item => selectedYears.includes(item.Year) && item[month] !== undefined)
+                            .map(item => item[month]);
+                        
+                        const avg = values.length > 0 ? values.reduce((sum, val) => sum + val, 0) / values.length : 0;
+                        
+                        return {
+                            month: month,
+                            average: avg
+                        };
+                    });
+                    
+                    chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: monthlyAverages.map(d => d.month),
+                            datasets: [{
+                                label: 'Average Monthly Landings (MT)',
+                                data: monthlyAverages.map(d => d.average),
+                                backgroundColor: '#2563eb',
+                                borderColor: '#1e40af',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Metric Tons'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Month'
+                                    }
+                                }
+                            },
+                            plugins: {
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            let label = context.dataset.label || '';
+                                            if (label) {
+                                                label += ': ';
+                                            }
+                                            return label + context.parsed.y.toLocaleString() + ' MT';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
             }
         });
     </script>
 </body>
-</html>            }
-                        }
-                    }
-                });
-            }
-            
-            function createMonthlyChart() {
-                const ctx = document.getElementById('chart-container').getContext('2d');
-                
-                // Create monthly time series data
-                const monthlyTimeSeries = [];
-                const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                
-                // Filter data for selected years
-                const filteredData = lobsterData.filter(d => selectedYears.includes(d.Year));
-                
-                filteredData.forEach(yearData => {
-                    months.forEach((month, index) => {
-                        if (yearData[month] !== undefined) {
-                            monthlyTimeSeries.push({
-                                date: `${yearData.Year}-${index + 1}`,
-                                year: yearData.Year,
-                                month: month,
-                                value: yearData[month]
-                            });
-                        }
-                    });
-                });
-                
-                // Sort by date
-                monthlyTimeSeries.sort((a, b) => a.date.localeCompare(b.date));
-                
-                chart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: monthlyTimeSeries.map(d => d.date),
-                        datasets: [{
-                            label: 'Monthly Landings (MT)',
-                            data: monthlyTimeSeries.map(d => d.value),
-                            backgroundColor: 'rgba(37, 99, 235, 0.2)',
-                            borderColor: '#2563eb',
-                            borderWidth: 2,
-                            pointRadius: 0,
-                            tension: 0.1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Metric Tons'
-                                }
-                            },
-                            x: {
-                                ticks: {
-                                    maxRotation: 45,
-                                    minRotation: 45,
-                                    callback: function(value, index) {
-                                        // Only show some tick marks to avoid overcrowding
-                                        const date = monthlyTimeSeries[index].date.split('-');
-                                        if (date[1] === '1') { // January
-                                            return date[0]; // Just show the year
-                                        }
-                                        return '';
-                                    }
-                                }
-                            }
-                        },
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    title: function(tooltipItems) {
-                                        const item = tooltipItems[0];
-                                        const data = monthlyTimeSeries[item.dataIndex];
-                                        return `${data.month} ${data.year}`;
-                                    },
-                                    label: function(context) {
-                                        return context.dataset.label + ': ' + context.raw.toLocaleString() + ' MT';
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-            
-            function createSeasonalityChart() {
-                const ctx = document.getElementById('chart-container').getContext('2d');
-                
-                // Calculate monthly averages based on selected years
-                const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                
-                const monthlyAverages = months.map(month => {
-                    const values = lobsterData
-                        .filter(item => selectedYears.includes(item.Year) && item[month] !== undefined)
-                        .map(item => item[month]);
-                    
-                    const avg = values.length > 0 ? values.reduce((sum, val) => sum + val, 0) / values.length : 0;
-                    
-                    return {
-                        month: month,
-                        average: avg
-                    };
-                });
-                
-                chart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: monthlyAverages.map(d => d.month),
-                        datasets: [{
-                            label: 'Average Monthly Landings (MT)',
-                            data: monthlyAverages.map(d => d.average),
-                            backgroundColor: '#2563eb',
-                            borderColor: '#1e40af',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Metric Tons'
-                                }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Month'
-                                }
-                            }
-                        },
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        let label = context.dataset.label || '';
-                                        if (label) {
-                                            label += ': ';
-                                        }
-                                        return label + context.parsed.y.toLocaleString() + ' MT';
-                                    }
-                                }
+</html>
