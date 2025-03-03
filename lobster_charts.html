@@ -42,7 +42,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             border-right: 1px solid #B2DFDB;
         }
         
@@ -67,10 +66,18 @@
             margin-bottom: 20px;
         }
         
-        .tagline {
-            font-style: italic;
-            color: #00796B;
-            text-align: center;
+        .about-text {
+            text-align: left;
+            margin: 30px 0;
+            line-height: 1.6;
+        }
+        
+        .contact-info {
+            text-align: left;
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #B2DFDB;
+            width: 100%;
         }
         
         .chart-content {
@@ -112,51 +119,55 @@
             background-color: #B2DFDB;
         }
         
-        .chart-preview {
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid #B2DFDB;
+        .chart-links {
+            background-color: #F5F5F5;
             border-radius: 8px;
-            background-color: white;
-            transition: transform 0.2s;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
-        .chart-preview:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        .chart-links ul {
+            list-style-type: none;
+            padding: 0;
         }
         
-        .chart-preview img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-            margin-bottom: 10px;
+        .chart-links li {
+            margin: 15px 0;
         }
         
-        .chart-preview h4 {
-            margin: 10px 0;
+        .chart-links a {
+            text-decoration: none;
             color: #00796B;
-        }
-        
-        .chart-preview p {
-            color: #555;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-        }
-        
-        .chart-preview a {
-            display: inline-block;
-            background-color: #00796B;
-            color: white;
+            font-weight: bold;
             padding: 8px 15px;
             border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
             transition: background-color 0.3s;
+            display: block;
+            background-color: #E0F2F1;
         }
         
-        .chart-preview a:hover {
-            background-color: #00695C;
+        .chart-links a:hover {
+            background-color: #B2DFDB;
+        }
+        
+        .chart-category {
+            margin-bottom: 25px;
+            background-color: #E8F5F3;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        
+        .chart-category h4 {
+            border-bottom: 2px solid #B2DFDB;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            color: #004D40;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .species-icons {
@@ -178,6 +189,44 @@
             text-align: center;
         }
         
+        .search-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .search-container h3 {
+            margin-top: 0;
+            color: #004D40;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #B2DFDB;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .search-button {
+            background-color: #00796B;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        .search-button:hover {
+            background-color: #004D40;
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .page-container {
@@ -197,12 +246,20 @@
     </header>
     
     <div class="page-container">
-        <!-- Left Pane - Logo and Tagline -->
+        <!-- Left Pane - Logo and About Text -->
         <div class="left-pane">
             <img src="assets/images/SD_Logo.png" alt="Seafood Datasearch Logo" class="logo">
-            <div class="tagline">
-                <h3>Market Analysis and Forecasts</h3>
-                <p>Providing expert insights into the seafood industry.</p>
+            
+            <div class="about-text">
+                <p>Seafood Datasearch was founded by John Sackton in 1994 to provide market analysis to individual sectors of the seafood industry with market updates and price forecasts. Since then he has specialized in annual reviews of the lobster, crab, and other industries in Atlantic Canada with emphasis on the US market, but including Europe, China, and Japan. This new website is to provide data support for the industry in 2025 in the face of potential disruptive tariffs.</p>
+            </div>
+            
+            <div class="contact-info">
+                <p>Seafood Datasearch<br>
+                8 White Pine Ln<br>
+                Lexington, MA</p>
+                
+                <p>email: jsackton@seafoodlink.com</p>
             </div>
         </div>
         
@@ -210,44 +267,107 @@
         <div class="center-pane">
             <h2>Lobster Charts</h2>
             <div class="chart-content">
-                <h3>Available Lobster Market Visualizations</h3>
-                <p>Select a chart to view detailed data and interactive visualizations</p>
+                <h3>Lobster Market Data</h3>
+                <p>This section contains interactive charts and data visualizations for lobster markets.</p>
                 
-                <div class="chart-preview">
-                    <img src="assets/images/lobster_icon.png" alt="Regional Lobster Production Chart Preview" style="width: 120px; height: auto;">
-                    <h4>Regional Lobster Production (2010-2022)</h4>
-                    <p>Compare lobster production across Canadian regions and the United States over time. View trends in metric tonnes for Newfoundland, Quebec, Gulf Region, Maritimes, and U.S. production.</p>
-                    <a href="visualizations/regional_lobster_production.html">View Chart</a>
+                <div class="chart-links">
+                    <h4>Available Chart Visualizations:</h4>
+                    
+                    <!-- Production and Seasonality Section -->
+                    <div class="chart-category">
+                        <h4>Production and Seasonality</h4>
+                        <ul>
+                            <li><a href="regional_lobster_production.html">Regional Lobster Production (2010-2024)</a></li>
+                            <li><a href="lobster_landings_seasonality.html">Seasonality of Lobster Landings</a></li>
+                            <li><a href="maine_vs_canada_production.html">Maine vs Canadian Production Comparison</a></li>
+                            <li><a href="annual_production_trends.html">Annual Production Trends (2015-2024)</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Trade Flow Section -->
+                    <div class="chart-category">
+                        <h4>Trade Flow</h4>
+                        <ul>
+                            <li><a href="canada_us_lobster_exports.html">Canada to US Lobster Exports (2015-2024)</a></li>
+                            <li><a href="lobster_export_markets.html">Global Lobster Export Markets</a></li>
+                            <li><a href="us_lobster_exports_china.html">US Lobster Exports to China</a></li>
+                            <li><a href="eu_lobster_imports.html">European Union Lobster Imports</a></li>
+                            <li><a href="asia_lobster_trade_flow.html">Asian Markets Trade Flow Analysis</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Pricing Metrics Section -->
+                    <div class="chart-category">
+                        <h4>Pricing Metrics</h4>
+                        <ul>
+                            <li><a href="lobster_seasonal_price_variations.html">Seasonal Price Variations</a></li>
+                            <li><a href="lobster_shore_prices_trends.html">Shore Prices Historical Trends</a></li>
+                            <li><a href="wholesale_vs_retail_prices.html">Wholesale vs Retail Price Comparison</a></li>
+                            <li><a href="live_vs_processed_price_comparison.html">Live vs Processed Lobster Pricing</a></li>
+                            <li><a href="lobster_price_elasticity.html">Lobster Price Elasticity Analysis</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Tariff Impacts Section -->
+                    <div class="chart-category">
+                        <h4>Tariff Impacts</h4>
+                        <ul>
+                            <li><a href="tariff_impact_price_forecast.html">Tariff Impact on Price Forecast</a></li>
+                            <li><a href="china_tariff_historical_analysis.html">China Tariff Historical Analysis</a></li>
+                            <li><a href="us_tariff_trade_diversion.html">US Tariff and Trade Diversion Effects</a></li>
+                            <li><a href="processor_margins_with_tariffs.html">Processor Margins with Tariff Scenarios</a></li>
+                            <li><a href="consumer_price_impact_tariffs.html">Consumer Price Impact of Tariffs</a></li>
+                        </ul>
+                    </div>
                 </div>
                 
+                <!-- Placeholder for Chart.js content -->
                 <div id="lobsterChartContainer" style="width: 100%; height: 400px; margin-top: 20px;">
-                    <p>More charts coming soon...</p>
+                    <p>Select a chart from the links above to view detailed visualizations.</p>
                 </div>
-            </div>
-            
-            <div class="chart-content">
-                <h3>Species Information</h3>
-                <p>Key information about Maine lobster, spiny lobster, and other commercial lobster species.</p>
-                <p>Our data team is currently developing additional species-specific visualizations to provide deeper insights into market trends for different lobster varieties.</p>
             </div>
         </div>
         
-        <!-- Right Pane - Navigation -->
+        <!-- Right Pane - Navigation and Search -->
         <div class="right-pane">
             <div class="nav-menu">
                 <h3>Navigation</h3>
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="crab_charts.html">Crab Charts</a></li>
-                    <li><a href="lobster_2025.html">Lobster Forecast 2025</a></li>
+                    <li><a href="economic_data.html">Economic Data</a></li>
                 </ul>
             </div>
             
-            <div class="nav-menu">
-                <h3>Lobster Charts</h3>
-                <ul>
-                    <li><a href="visualizations/regional_lobster_production.html">Regional Production</a></li>
-                </ul>
+            <div class="search-container">
+                <h3>Search</h3>
+                <input type="text" class="search-box" placeholder="Search by keywords..." id="searchInput">
+                <button class="search-button" id="searchButton">Search</button>
+                <div id="searchResults" style="margin-top: 15px;"></div>
+                
+                <script>
+                    document.getElementById('searchButton').addEventListener('click', function() {
+                        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                        const resultsDiv = document.getElementById('searchResults');
+                        
+                        if (searchTerm.trim() === '') {
+                            resultsDiv.innerHTML = '<p>Please enter a search term</p>';
+                            return;
+                        }
+                        
+                        // This is a placeholder for server-side search functionality
+                        // In a real implementation, this would make an AJAX call to a server endpoint
+                        // that would search through HTML files only
+                        
+                        resultsDiv.innerHTML = '<p>Searching for: "' + searchTerm + '"...</p>';
+                        
+                        // Simulated search results
+                        // In a real implementation, this would be populated by server response
+                        setTimeout(function() {
+                            resultsDiv.innerHTML = '<p>Search results will appear here when implemented.</p>';
+                        }, 1000);
+                    });
+                </script>
             </div>
         </div>
     </div>
@@ -261,5 +381,6 @@
         </div>
         <p>&copy; 2025 Seafood Datasearch. All rights reserved.</p>
     </footer>
+    
 </body>
 </html>
