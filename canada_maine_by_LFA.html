@@ -3,7 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canadian and Maine Lobster Landings (2017-2023)</title>
+    <title>Canadian and Maine Lobster Landings (2017-2023) - Seafood Datasearch</title>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6539VRG29E"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-6539VRG29E');
+    </script>
+    
     <style>
         body {
             font-family: "Arial", sans-serif;
@@ -20,10 +31,61 @@
             margin-bottom: 20px;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .page-container {
+            display: flex;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .left-pane {
+            flex: 1;
             padding: 20px;
+            background-color: #E0F2F1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #B2DFDB;
+        }
+        
+        .center-pane {
+            flex: 2;
+            padding: 20px;
+            background-color: #FFFFFF;
+            text-align: center;
+        }
+        
+        .right-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #E0F2F1;
+            border-left: 1px solid #B2DFDB;
+        }
+        
+        .logo {
+            width: 90%;
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        
+        .tagline {
+            font-style: italic;
+            color: #00796B;
+            text-align: center;
+        }
+        
+        .about-text {
+            text-align: left;
+            margin: 30px 0;
+            line-height: 1.6;
+        }
+        
+        .contact-info {
+            text-align: left;
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #B2DFDB;
+            width: 100%;
         }
         
         .chart-content {
@@ -32,11 +94,6 @@
             padding: 20px;
             margin: 20px 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .chart-container {
-            height: 500px;
-            position: relative;
         }
         
         .controls {
@@ -73,19 +130,48 @@
             color: white;
         }
         
+        .nav-menu {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .nav-menu li {
+            margin: 10px 0;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: #00796B;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: block;
+        }
+        
+        .nav-menu a:hover {
+            background-color: #B2DFDB;
+        }
+        
+        .chart-container {
+            height: 500px;
+            position: relative;
+        }
+        
         .legend-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 15px;
             margin-top: 15px;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #B2DFDB;
-            margin-top: 20px;
         }
         
         .chart-title {
@@ -102,15 +188,24 @@
             margin-top: 20px;
         }
         
-        @media (max-width: 768px) {
-            .controls {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .chart-container {
-                height: 400px;
-            }
+        .species-icons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 10px;
+        }
+        
+        .species-icons img {
+            width: 80px;
+            height: auto;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #B2DFDB;
+            margin-top: 20px;
         }
         
         .loading {
@@ -130,53 +225,178 @@
             border-radius: 4px;
             margin: 20px 0;
         }
+        
+        .search-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .search-container h3 {
+            margin-top: 0;
+            color: #004D40;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #B2DFDB;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .search-button {
+            background-color: #00796B;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        .search-button:hover {
+            background-color: #004D40;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .page-container {
+                flex-direction: column;
+            }
+            
+            .left-pane, .center-pane, .right-pane {
+                width: 100%;
+                border: none;
+            }
+            
+            .chart-container {
+                height: 400px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Canadian and Maine Lobster Landings (2017-2023)</h1>
-        <p>Visualization of the proportion of total landings for each month from different regions</p>
+        <h1>Seafood Datasearch</h1>
     </header>
     
-    <div class="container">
-        <div class="chart-content">
-            <div class="chart-title">Monthly Lobster Landings by Region</div>
+    <div class="page-container">
+        <!-- Left Pane - Logo and About Text -->
+        <div class="left-pane">
+            <img src="assets/images/SD_Logo.png" alt="Seafood Datasearch Logo" class="logo">
             
-            <div class="controls">
-                <div class="year-buttons">
-                    <button class="year-button" data-year="all">All Years (2017-2023)</button>
-                    <button class="year-button active" data-year="2017">2017</button>
-                    <button class="year-button" data-year="2018">2018</button>
-                    <button class="year-button" data-year="2019">2019</button>
-                    <button class="year-button" data-year="2020">2020</button>
-                    <button class="year-button" data-year="2021">2021</button>
-                    <button class="year-button" data-year="2022">2022</button>
-                    <button class="year-button" data-year="2023">2023</button>
+            <div class="about-text">
+                <p>Seafood Datasearch was founded by John Sackton in 1994 to provide market analysis to individual sectors of the seafood industry with market updates and price forecasts. Since then he has specialized in annual reviews of the lobster, crab, and other industries in Atlantic Canada with emphasis on the US market, but including Europe, China, and Japan.</p>
+            </div>
+            
+            <div class="contact-info">
+                <p>Seafood Datasearch<br>
+                8 White Pine Ln<br>
+                Lexington, MA</p>
+                
+                <p>email: jsackton@seafoodlink.com</p>
+            </div>
+        </div>
+        
+        <!-- Center Pane - Chart Content -->
+        <div class="center-pane">
+            <h2>Canadian and Maine Lobster Landings (2017-2023)</h2>
+            <div class="chart-content">
+                <h3>Monthly Lobster Landings by Region</h3>
+                <p>Visualization of the proportion of total landings for each month from different regions</p>
+                
+                <div class="controls">
+                    <div class="year-buttons">
+                        <button class="year-button" data-year="all">All Years (2017-2023)</button>
+                        <button class="year-button active" data-year="2017">2017</button>
+                        <button class="year-button" data-year="2018">2018</button>
+                        <button class="year-button" data-year="2019">2019</button>
+                        <button class="year-button" data-year="2020">2020</button>
+                        <button class="year-button" data-year="2021">2021</button>
+                        <button class="year-button" data-year="2022">2022</button>
+                        <button class="year-button" data-year="2023">2023</button>
+                    </div>
+                    
+                    <div class="view-buttons">
+                        <button class="view-button active" data-view="stacked">Stacked View</button>
+                        <button class="view-button" data-view="grouped">Grouped View</button>
+                    </div>
                 </div>
                 
-                <div class="view-buttons">
-                    <button class="view-button active" data-view="stacked">Stacked View</button>
-                    <button class="view-button" data-view="grouped">Grouped View</button>
+                <div class="chart-container">
+                    <div class="loading">
+                        <p>Loading chart data...</p>
+                    </div>
+                    <canvas id="lobsterChart" style="display: none;"></canvas>
+                </div>
+                
+                <div class="info-panel">
+                    <h3>About This Visualization</h3>
+                    <p>This chart shows the proportion of total lobster landings for each month that come from different Lobster Fishing Areas (LFAs) in Canada and Maine. The data covers the years 2017-2023 and is measured in metric tons.</p>
+                    <p>You can select individual years or view data across all years. Toggle between stacked view (showing proportions) and grouped view (comparing absolute values).</p>
+                    <p>Data source: Master Monthly Lobster Landings file with corrected Maine values in metric tons.</p>
                 </div>
             </div>
-            
-            <div class="chart-container">
-                <div class="loading">
-                    <p>Loading chart data...</p>
-                </div>
-                <canvas id="lobsterChart" style="display: none;"></canvas>
+        </div>
+        
+        <!-- Right Pane - Navigation and Search -->
+        <div class="right-pane">
+            <div class="nav-menu">
+                <h3>Navigation</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="lobster_charts.html">Lobster Charts</a></li>
+                    <li><a href="crab_charts.html">Crab Charts</a></li>
+                    <li><a href="economic_data.html">Economic Data</a></li>
+                </ul>
             </div>
             
-            <div class="info-panel">
-                <h3>About This Visualization</h3>
-                <p>This chart shows the proportion of total lobster landings for each month that come from different Lobster Fishing Areas (LFAs) in Canada and Maine. The data covers the years 2017-2023 and is measured in metric tons.</p>
-                <p>You can select individual years or view data across all years. Toggle between stacked view (showing proportions) and grouped view (comparing absolute values).</p>
-                <p>Data source: Master Monthly Lobster Landings file with corrected Maine values in metric tons.</p>
+            <div class="search-container">
+                <h3>Search</h3>
+                <input type="text" class="search-box" placeholder="Search by keywords..." id="searchInput">
+                <button class="search-button" id="searchButton">Search</button>
+                <div id="searchResults" style="margin-top: 15px;"></div>
+                
+                <script>
+                    document.getElementById('searchButton').addEventListener('click', function() {
+                        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                        const resultsDiv = document.getElementById('searchResults');
+                        
+                        if (searchTerm.trim() === '') {
+                            resultsDiv.innerHTML = '<p>Please enter a search term</p>';
+                            return;
+                        }
+                        
+                        resultsDiv.innerHTML = '<p>Searching for: "' + searchTerm + '"...</p>';
+                        
+                        // Simulated search results
+                        setTimeout(function() {
+                            resultsDiv.innerHTML = '<p>Search results will appear here when implemented.</p>';
+                        }, 1000);
+                    });
+                </script>
             </div>
         </div>
     </div>
     
     <footer>
+        <div class="species-icons">
+            <img src="assets/images/Lobster_icon.png" alt="Lobster">
+            <img src="assets/images/shrimp_icon.png" alt="Shrimp">
+            <img src="assets/images/crab_icon.png" alt="Crab">
+            <img src="assets/images/salmon_icon.png" alt="Salmon">
+        </div>
         <p>&copy; 2025 Seafood Datasearch. All rights reserved.</p>
     </footer>
     
@@ -436,43 +656,106 @@
                 }
             };
             
-            // Maine lobster landings data (estimated based on industry reports)
+            // Maine lobster landings data (actual values from CSV in metric tons)
             const maineData = {
-                "2017": {
-                    "January": 4500, "February": 2200, "March": 1800, "April": 2300, "May": 5200, 
-                    "June": 12000, "July": 13500, "August": 14000, "September": 12500, 
-                    "October": 9700, "November": 6500, "December": 5000
-                },
-                "2018": {
-                    "January": 4300, "February": 2000, "March": 1700, "April": 2200, "May": 5000, 
-                    "June": 11700, "July": 13200, "August": 13800, "September": 12200, 
-                    "October": 9500, "November": 6300, "December": 4800
-                },
-                "2019": {
-                    "January": 4600, "February": 2300, "March": 1900, "April": 2400, "May": 5400, 
-                    "June": 12300, "July": 13800, "August": 14300, "September": 12800, 
-                    "October": 10000, "November": 6700, "December": 5200
-                },
-                "2020": {
-                    "January": 4100, "February": 1900, "March": 1600, "April": 2100, "May": 4800, 
-                    "June": 11300, "July": 12800, "August": 13300, "September": 11700, 
-                    "October": 9200, "November": 6000, "December": 4500
-                },
-                "2021": {
-                    "January": 4800, "February": 2400, "March": 2000, "April": 2500, "May": 5600, 
-                    "June": 12700, "July": 14200, "August": 14700, "September": 13200, 
-                    "October": 10300, "November": 6900, "December": 5300
-                },
-                "2022": {
-                    "January": 4700, "February": 2300, "March": 1900, "April": 2400, "May": 5500, 
-                    "June": 12400, "July": 13900, "August": 14400, "September": 12900, 
-                    "October": 10100, "November": 6800, "December": 5200
-                },
-                "2023": {
-                    "January": 4600, "February": 2200, "March": 1800, "April": 2300, "May": 5300, 
-                    "June": 12100, "July": 13700, "August": 14100, "September": 12600, 
-                    "October": 9800, "November": 6600, "December": 5000
-                }
+              "2017": {
+                "January": 1185.85,
+                "February": 361.19,
+                "March": 411.58,
+                "April": 598.83,
+                "May": 1231.10,
+                "June": 1472.83,
+                "July": 6582.71,
+                "August": 12969.13,
+                "September": 8250.01,
+                "October": 8923.80,
+                "November": 6522.46,
+                "December": 2338.83
+              },
+              "2018": {
+                "January": 1150.14,
+                "February": 683.52,
+                "March": 590.58,
+                "April": 739.91,
+                "May": 1201.21,
+                "June": 1544.98,
+                "July": 9629.80,
+                "August": 12283.85,
+                "September": 9083.93,
+                "October": 9600.11,
+                "November": 5313.54,
+                "December": 3081.32
+              },
+              "2019": {
+                "January": 825.73,
+                "February": 532.91,
+                "March": 486.77,
+                "April": 571.84,
+                "May": 1064.49,
+                "June": 1049.02,
+                "July": 3917.14,
+                "August": 10183.48,
+                "September": 8355.10,
+                "October": 9787.20,
+                "November": 6286.57,
+                "December": 3320.30
+              },
+              "2020": {
+                "January": 1378.17,
+                "February": 443.24,
+                "March": 247.07,
+                "April": 356.62,
+                "May": 624.21,
+                "June": 1247.96,
+                "July": 7515.74,
+                "August": 7983.21,
+                "September": 7017.44,
+                "October": 9356.37,
+                "November": 5795.55,
+                "December": 2465.91
+              },
+              "2021": {
+                "January": 1672.48,
+                "February": 526.65,
+                "March": 497.48,
+                "April": 580.42,
+                "May": 1005.15,
+                "June": 2697.45,
+                "July": 9078.87,
+                "August": 7758.54,
+                "September": 8222.29,
+                "October": 9048.69,
+                "November": 6582.94,
+                "December": 2534.13
+              },
+              "2022": {
+                "January": 454.34,
+                "February": 182.78,
+                "March": 342.89,
+                "April": 463.23,
+                "May": 1087.19,
+                "June": 2153.28,
+                "July": 8697.99,
+                "August": 9556.39,
+                "September": 7338.90,
+                "October": 7330.35,
+                "November": 5000.42,
+                "December": 2186.24
+              },
+              "2023": {
+                "January": 968.45,
+                "February": 495.28,
+                "March": 387.78,
+                "April": 635.67,
+                "May": 1133.10,
+                "June": 2421.16,
+                "July": 8143.67,
+                "August": 8405.35,
+                "September": 6664.70,
+                "October": 6649.54,
+                "November": 4179.83,
+                "December": 2432.59
+              }
             };
             
             // For "all" years, calculate the average
