@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chart Test</title>
+    <link href="./build/static/css/main.e6c13ad2.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Simple Chart Test</h1>
+    
+    <div id="chart-root" style="height: 400px; width: 100%; border: 1px solid #ccc;"></div>
+
+    <script>
+        // Configure chart
+        window.chartConfig = {
+            chart: 'lobsterInventory',
+            embed: true,
+            containerId: 'chart-root'
+        };
+        console.log('Chart configuration set:', window.chartConfig);
+    </script>
+    
+    <!-- Use only the main JS file from your build -->
+    <script src="./build/static/js/main.8784d9b3.js"></script>
+</body>
+</html>

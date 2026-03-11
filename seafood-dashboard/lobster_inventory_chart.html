@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lobster Inventory Analysis - Seafood Datasearch</title>
+    <style>
+        /* Your existing styles */
+        #chart-root {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Seafood Datasearch</h1>
+    </header>
+    
+    <div class="page-container">
+        <!-- Left Pane -->
+        <div class="left-pane">
+            <!-- Left pane content -->
+        </div>
+        
+        <!-- Center Pane - Chart Content -->
+        <div class="center-pane">
+            <h2>Lobster Inventory Analysis</h2>
+            <div class="chart-content">
+                <!-- Important: This ID must match the containerId in chartConfig -->
+                <div id="chart-root"></div>
+            </div>
+        </div>
+        
+        <!-- Right Pane -->
+        <div class="right-pane">
+            <!-- Right pane content -->
+        </div>
+    </div>
+    
+    <footer>
+        <!-- Footer content -->
+    </footer>
+    
+    <!-- Configure chart options -->
+    <script>
+        // Set containerId to match the ID of your container div
+        window.chartConfig = {
+            chart: 'lobsterInventory',
+            embed: true,
+            containerId: 'chart-root'
+        };
+        
+        console.log('Chart configuration set:', window.chartConfig);
+    </script>
+    
+    <!-- Load your React app -->
+    <script src="./static/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lobster Inventory Analysis - Seafood Datasearch</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #E0F2F1; /* Very light sea green */
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            padding: 20px;
+            text-align: center;
+            background-color: #B2DFDB; /* Slightly darker sea green for header */
+        }
+        
+        .page-container {
+            display: flex;
+            min-height: calc(100vh - 200px); /* Adjust based on header and footer height */
+        }
+        
+        .left-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #E0F2F1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #B2DFDB;
+        }
+        
+        .center-pane {
+            flex: 2;
+            padding: 20px;
+            background-color: #FFFFFF;
+            text-align: center;
+        }
+        
+        .right-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #E0F2F1;
+            border-left: 1px solid #B2DFDB;
+        }
+        
+        .logo {
+            width: 90%;
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        
+        .tagline {
+            font-style: italic;
+            color: #00796B;
+            text-align: center;
+        }
+        
+        .chart-content {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-menu {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .nav-menu li {
+            margin: 10px 0;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: #00796B;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: block;
+        }
+        
+        .nav-menu a:hover {
+            background-color: #B2DFDB;
+        }
+        
+        .species-icons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 10px;
+        }
+        
+        .species-icons img {
+            width: 80px;
+            height: auto;
+        }
+        
+        footer {
+            padding: 20px;
+            background-color: #B2DFDB;
+            text-align: center;
+        }
+        
+        /* Chart container styles */
+        #chart-container-wrapper {
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        #root {
+            height: 500px;
+            width: 100%;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .page-container {
+                flex-direction: column;
+            }
+            
+            .left-pane, .center-pane, .right-pane {
+                width: 100%;
+                border: none;
+            }
+            
+            #root {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Seafood Datasearch</h1>
+    </header>
+    
+    <div class="page-container">
+        <!-- Left Pane - Logo and Tagline -->
+        <div class="left-pane">
+            <img src="./public/logo192.png" alt="Seafood Datasearch Logo" class="logo">
+            <div class="tagline">
+                <h3>Market Analysis and Forecasts</h3>
+                <p>Providing expert insights into the seafood industry.</p>
+            </div>
+        </div>
+        
+        <!-- Center Pane - Chart Content -->
+        <div class="center-pane">
+            <h2>Lobster Inventory Analysis</h2>
+            <div class="chart-content">
+                <h3>Inventory Analysis</h3>
+                <p>This chart displays comprehensive inventory analysis for lobster across different seasons and markets.</p>
+                
+                <!-- React Chart Container - IMPORTANT: This is where your app mounts -->
+                <div id="chart-container-wrapper">
+                    <div id="root"></div>
+                </div>
+            </div>
+            
+            <div class="chart-content">
+                <h3>About This Data</h3>
+                <p>This visualization shows inventory data and seasonal patterns from 2006-2016, highlighting the relationship between inventory levels and trade flows.</p>
+                <p>Data source: Seafood Datasearch Inventory Management System</p>
+            </div>
+        </div>
+        
+        <!-- Right Pane - Navigation -->
+        <div class="right-pane">
+            <div class="nav-menu">
+                <h3>Navigation</h3>
+                <ul>
+                    <li><a href="./index.html">Home</a></li>
+                    <li><a href="crab_price_test.html">Crab Price Charts</a></li>
+                    <li><a href="lobster_inventory_test.html">Lobster Charts</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="species-icons">
+            <img src="./public/logo192.png" alt="Placeholder Icon" style="width: 50px;">
+            <img src="./public/logo192.png" alt="Placeholder Icon" style="width: 50px;">
+            <img src="./public/logo192.png" alt="Placeholder Icon" style="width: 50px;">
+            <img src="./public/logo192.png" alt="Placeholder Icon" style="width: 50px;">
+        </div>
+        <p>&copy; 2025 Seafood Datasearch. All rights reserved.</p>
+    </footer>
+    
+    <!-- Configure chart options -->
+    <script>
+        // Configure chart BEFORE loading React scripts
+        window.chartConfig = {
+            chart: 'lobsterInventory',
+            embed: true
+        };
+        
+        console.log('Chart configuration set:', window.chartConfig);
+    </script>
+    
+    <!-- Debug logging for fetch requests -->
+    <script>
+        // Monitor fetch requests to see if data is being loaded
+        const originalFetch = window.fetch;
+        window.fetch = function(input, init) {
+            console.log('Fetch request to:', input);
+            return originalFetch(input, init)
+                .then(response => {
+                    console.log('Fetch response from:', input, 'Status:', response.status);
+                    return response;
+                })
+                .catch(error => {
+                    console.error('Fetch error for:', input, error);
+                    throw error;
+                });
+        };
+    </script>
+    
+    <!-- Load your React app - Make sure the path is correct -->
+    <!-- React injects its scripts in index.html, so we include all possible script paths -->
+    <script src="./static/js/main.js"></script>
+    <script src="./static/js/bundle.js"></script>
+    <!-- If you're using Create React App, use this pattern: -->
+    <script src="./static/js/runtime-main.js"></script>
+    <script src="./static/js/2.chunk.js"></script>
+    <script src="./static/js/main.chunk.js"></script>
+</body>
+</html>

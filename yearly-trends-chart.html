@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canadian Frozen Lobster Export Production Year Trends</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .chart-container {
+            width: 100%;
+            height: 600px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+        .error {
+            color: red;
+            padding: 20px;
+            border: 1px solid red;
+            border-radius: 8px;
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+        .controls {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .controls label {
+            margin: 0 5px;
+        }
+        .controls button {
+            margin-left: 10px;
+            padding: 8px 15px;
+            background-color: #0088FE;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .summary {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .summary-card {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            background-color: #f0f0f0;
+            min-width: 180px;
+        }
+        .summary-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .summary-value {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .insights {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .insights ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        .legend-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Canadian Frozen Lobster Export Production Year Trends</h1>
+    <p style="text-align: center; margin-top: -10px; color: #666;">(Production Year: May to April)</p>
+    
+    <div id="loading" class="loading">Loading data...</div>
+    <div id="error" class="error" style="display: none;"></div>
+    
+    <div class="controls">
+        <label for="start-year">Start Production Year:</label>
+        <input type="number" id="start-year" min="2015" max="2024" value="2018">
+        <label for="end-year">End Production Year:</label>
+        <input type="number" id="end-year" min="2015" max="2024" value="2024">
+        <button id="update-chart">Update Chart</button>
+    </div>
+    
+    <div id="chart-container" class="chart-container" style="display: none;">
+        <canvas id="chart"></canvas>
+    </div>
+    
+    <div id="summary" class="summary" style="display: none;">
+        <!-- Summary metrics will be added here -->
+    </div>
+    
+    <div id="insights" class="insights" style="display: none;">
+        <h3>Key Yearly Trend Insights:</h3>
+        <ul id="insights-list">
+            <!-- Insights will be added here -->
+        </ul>
+    </div>
+    
+    <script>
+        // Register the datalabels plugin globally
+        Chart.register(ChartDataLabels);
+        
+        // Define product colors and names
+        const products = [
+            { id: 'meat', name: 'Meat (US)', color: '#0088FE' },
+            { id: 'tail', name: 'Tails (US)', color: '#FF8042' },
+            { id: 'chinaFzn', name: 'Whole Cook (China)', color: '#FFBB28' },
+            { id: 'euFzn', name: 'Frozen Whole Cook (EU)', color: '#00C49F' },
+            { id: 'euBrine', name: 'Brine (EU)', color: '#8884D8' }
+        ];
+        
+        // Format number with commas
+        function formatNumber(num) {
+            return num.toLocaleString(undefined, { maximumFractionDigits: 0 });
+        }
+        
+        // Format percentage
+        function formatPercent(num) {
+            return num.toFixed(1) + '%';
+        }
+        
+        // Process the data from Excel file
+        function processData(data, config) {
+            try {
+                console.log("Processing data with config:", config);
+                console.log("Sample row:", data[0]);
+                
+                // Debug log to see available fields in the data
+                const sampleRow = data[0] || {};
+                console.log("Available fields in data:", Object.keys(sampleRow));
+                
+                // Map years more directly - we need to be flexible with the data structure
+                data.forEach(row => {
+                    // Make sure we have valid Year and Month fields
+                    if (row.Year === undefined) {
+                        // If no Year field, try to use Date field
+                        if (row.Date) {
+                            try {
+                                row.Year = new Date(row.Date).getFullYear();
+                            } catch (e) {
+                                // Default to 2018 if we can't extract year
+                                row.Year = 2018;
+                                console.warn("Could not extract year from data:", row);
+                            }
+                        } else {
+                            // Default if no year info available
+                            row.Year = 2018;
+                            console.warn("No year info available in row:", row);
+                        }
+                    }
+                    
+                    // Make sure Year is a number
+                    row.Year = parseInt(row.Year);
+                    
+                    // Determine month - we need to handle various data formats
+                    let month = 1; // Default to January
+                    
+                    if (row.Month !== undefined) {
+                        // If we have a Month field, use it
+                        month = parseInt(row.Month);
+                    } else if (row.Date) {
+                        // Try to extract month from Date
+                        try {
+                            month = new Date(row.Date).getMonth() + 1; // JavaScript months are 0-indexed
+                        } catch (e) {
+                            console.warn("Could not extract month from date:", row.Date);
+                        }
+                    }
+                    
+                    // Force month to be 1-12
+                    month = Math.max(1, Math.min(12, month || 1));
+                    
+                    // Determine production year (May-Apr)
+                    // If month is May(5) or later, production year is the current calendar year
+                    // If month is January(1) to April(4), production year is previous calendar year
+                    row.ProductionYear = month >= 5 ? row.Year : row.Year - 1;
+                });
+                
+                // Filter data for the specified production years
+                console.log("Production year range:", config.startYear, "-", config.endYear);
+                console.log("Years before filtering:", Array.from(new Set(data.map(row => row.Year))).sort());
+                console.log("Production years before filtering:", Array.from(new Set(data.map(row => row.ProductionYear))).sort());
+                
+                const filteredData = data.filter(row => {
+                    // Make sure ProductionYear is a number and valid
+                    const validYear = typeof row.ProductionYear === 'number' && !isNaN(row.ProductionYear);
+                    // Check if it's in range
+                    const inRange = validYear && row.ProductionYear >= config.startYear && row.ProductionYear <= config.endYear;
+                    
+                    if (!validYear) {
+                        console.warn("Invalid production year:", row.ProductionYear, "in row:", row);
+                    }
+                    
+                    return inRange;
+                });
+                
+                console.log("Filtered data count:", filteredData.length);
+                
+                // If we have no data, adjust the year range and try to find some data
+                if (filteredData.length === 0) {
+                    console.warn("No data found in specified range. Expanding search to all available data.");
+                    
+                    // Get all available production years
+                    const availableYears = Array.from(new Set(data.map(row => row.ProductionYear)))
+                        .filter(year => typeof year === 'number' && !isNaN(year))
+                        .sort();
+                    
+                    if (availableYears.length > 0) {
+                        // Use all available years
+                        console.log("Available production years:", availableYears);
+                        const newStartYear = availableYears[0];
+                        const newEndYear = availableYears[availableYears.length - 1];
+                        
+                        // Filter with the new range
+                        const refilteredData = data.filter(row => 
+                            typeof row.ProductionYear === 'number' && 
+                            !isNaN(row.ProductionYear) &&
+                            row.ProductionYear >= newStartYear && 
+                            row.ProductionYear <= newEndYear
+                        );
+                        
+                        console.log("Refiltered data with expanded range:", refilteredData.length);
+                        
+                        // Update the displayed year range in the UI
+                        document.getElementById('start-year').value = newStartYear;
+                        document.getElementById('end-year').value = newEndYear;
+                        
+                        // Use the refiltered data if we found any
+                        if (refilteredData.length > 0) {
+                            return processDataHelper(refilteredData, { startYear: newStartYear, endYear: newEndYear });
+                        }
+                    }
+                }
+                
+                return processDataHelper(filteredData, config);
+            } catch (error) {
+                console.error("Error processing data:", error);
+                throw error;
+            }
+        }
+        
+        // Helper function to process the filtered data
+        function processDataHelper(filteredData, config) {
+            // Group by production year
+            const yearlyData = _.groupBy(filteredData, 'ProductionYear');
+            
+            // Process yearly export volumes and values
+            const yearlyExports = [];
+            
+            for (const year in yearlyData) {
+                const yearRows = yearlyData[year];
+                
+                // Debug logging
+                console.log(`Processing year ${year} with ${yearRows.length} rows`);
+                
+                // Calculate total values for each product form
+                const meatExports_Lbs = _.sumBy(yearRows, row => row.CA_Export_US_Meat_lbs || 0);
+                const tailExports_Lbs = _.sumBy(yearRows, row => row.CA_Export_US_Tail || 0);
+                const chinaFznExports_Lbs = _.sumBy(yearRows, row => row.CA_Export_China_Fzn_Lbs || 0);
+                const euFznExports_Lbs = _.sumBy(yearRows, row => row.CA_EU_Fzn_LB || 0);
+                const euBrineExports_Lbs = _.sumBy(yearRows, row => row.CA_Brine_UU || 0);
+                
+                // Calculate total frozen exports
+                const totalFrozenExports_Lbs = meatExports_Lbs + tailExports_Lbs + chinaFznExports_Lbs + euFznExports_Lbs + euBrineExports_Lbs;
+                
+                // Calculate percentages of total
+                const calculatePercentage = (value) => (totalFrozenExports_Lbs > 0 ? (value / totalFrozenExports_Lbs) * 100 : 0);
+                
+                yearlyExports.push({
+                    year: parseInt(year),
+                    productionYearLabel: `${year}-${parseInt(year) + 1}`, // Format as "2012-2013"
+                    meatExports_Lbs,
+                    meatPercent: calculatePercentage(meatExports_Lbs),
+                    tailExports_Lbs,
+                    tailPercent: calculatePercentage(tailExports_Lbs),
+                    chinaFznExports_Lbs,
+                    chinaFznPercent: calculatePercentage(chinaFznExports_Lbs),
+                    euFznExports_Lbs,
+                    euFznPercent: calculatePercentage(euFznExports_Lbs),
+                    euBrineExports_Lbs,
+                    euBrinePercent: calculatePercentage(euBrineExports_Lbs),
+                    totalFrozenExports_Lbs
+                });
+                
+                console.log(`Year ${year} processed with total ${totalFrozenExports_Lbs} lbs`);
+            }
+            
+            // Sort by year
+            yearlyExports.sort((a, b) => a.year - b.year);
+            
+            console.log("Processed yearly exports:", yearlyExports);
+            
+            // Calculate highest and lowest values for insights
+            let highestValue = { year: 0, value: 0 };
+            let lowestValue = { year: 0, value: Number.MAX_VALUE };
+            
+            // If no data was found after filtering, add dummy data
+            if (yearlyExports.length === 0) {
+                // Add a single year with zeros for all values to prevent errors
+                const startYear = config.startYear;
+                yearlyExports.push({
+                    year: startYear,
+                    productionYearLabel: `${startYear}-${startYear + 1}`,
+                    meatExports_Lbs: 0,
+                    meatPercent: 0,
+                    tailExports_Lbs: 0,
+                    tailPercent: 0,
+                    chinaFznExports_Lbs: 0,
+                    chinaFznPercent: 0,
+                    euFznExports_Lbs: 0,
+                    euFznPercent: 0,
+                    euBrineExports_Lbs: 0,
+                    euBrinePercent: 0,
+                    totalFrozenExports_Lbs: 0
+                });
+                console.warn("No data found for the selected years. Added dummy data to prevent errors.");
+            }
+            
+            // Calculate highest and lowest values from the data
+            yearlyExports.forEach(yearData => {
+                if (yearData.totalFrozenExports_Lbs > highestValue.value) {
+                    highestValue = { year: yearData.year, value: yearData.totalFrozenExports_Lbs };
+                }
+                
+                if (yearData.totalFrozenExports_Lbs < lowestValue.value) {
+                    lowestValue = { year: yearData.year, value: yearData.totalFrozenExports_Lbs };
+                }
+            });
+            
+            // Calculate total exports for trend analysis
+            const totalExports = _.sumBy(yearlyExports, 'totalFrozenExports_Lbs');
+            const avgAnnualExports = totalExports / yearlyExports.length;
+            
+            return {
+                yearlyExports,
+                totalExports,
+                avgAnnualExports,
+                highestValue,
+                lowestValue
+            };
+        }
+        
+        // Load Excel file
+        async function loadExcelFile(file, config) {
+            try {
+                console.log("Loading Excel file:", file);
+                const response = await fetch(file);
+                const arrayBuffer = await response.arrayBuffer();
+                const data = new Uint8Array(arrayBuffer);
+                
+                console.log("Parsing Excel file");
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                console.log("Excel data parsed, row count:", jsonData.length);
+                
+                return processData(jsonData, config);
+            } catch (error) {
+                console.error('Error loading or processing Excel file:', error);
+                throw error;
+            }
+        }
+        
+        // Create chart using Chart.js - MODIFIED to use stacked bar chart
+        function createChart(data) {
+            console.log("Creating stacked bar chart with data:", data);
+            
+            const ctx = document.getElementById('chart').getContext('2d');
+            
+            // Prepare data for Chart.js
+            const chartData = {
+                labels: data.yearlyExports.map(d => d.productionYearLabel),
+                datasets: []
+            };
+            
+            // Add datasets for stacked bar chart - using actual values instead of percentages
+            products.forEach(product => {
+                chartData.datasets.push({
+                    type: 'bar',
+                    label: product.name,
+                    data: data.yearlyExports.map(d => d[`${product.id}Exports_Lbs`]),
+                    backgroundColor: product.color,
+                    borderColor: product.color,
+                    borderWidth: 1,
+                    stack: 'Stack 0' // All products in same stack
+                });
+            });
+            
+            // Destroy previous chart if it exists
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+            
+            // Create new chart
+            window.myChart = new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Production Year (May-April)'
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'Export Volume (lbs)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return formatNumber(value);
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `Canadian Frozen Lobster Export Volumes by Product`,
+                            font: {
+                                size: 16
+                            }
+                        },
+                        subtitle: {
+                            display: true,
+                            text: data.yearlyExports.length > 0 ? 
+                                `Production Years: ${data.yearlyExports[0].productionYearLabel} to ${data.yearlyExports[data.yearlyExports.length-1].productionYearLabel}` : 
+                                'No data for selected years',
+                            font: {
+                                size: 14
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const totalForYear = data.yearlyExports[context.dataIndex].totalFrozenExports_Lbs;
+                                    const value = context.raw;
+                                    const percent = (value / totalForYear * 100).toFixed(1);
+                                    return `${context.dataset.label}: ${formatNumber(value)} lbs (${percent}%)`;
+                                }
+                            }
+                        },
+                        // Add datalabels plugin for showing percentages on bars
+                        datalabels: {
+                            display: function(context) {
+                                // Only show labels for segments that are large enough
+                                const index = context.dataIndex;
+                                const value = context.dataset.data[index];
+                                const totalForYear = data.yearlyExports[index].totalFrozenExports_Lbs;
+                                const percent = (value / totalForYear * 100);
+                                return percent >= 5; // Only show if 5% or more
+                            },
+                            formatter: function(value, context) {
+                                const totalForYear = data.yearlyExports[context.dataIndex].totalFrozenExports_Lbs;
+                                return (value / 1000000).toFixed(1) + 'M';
+    },
+                            color: 'white',
+                            font: {
+                                weight: 'bold'
+                            },
+                            align: 'center',
+                            anchor: 'center'
+                        }
+                    }
+                }
+            });
+            
+            console.log("Stacked bar chart creation complete");
+        }
+        
+        // Create summary metrics
+        function createSummary(data) {
+            const summaryContainer = document.getElementById('summary');
+            summaryContainer.innerHTML = '';
+            
+            // Find production year label for highest and lowest values
+            const highestYearData = data.yearlyExports.find(d => d.year === data.highestValue.year);
+            const lowestYearData = data.yearlyExports.find(d => d.year === data.lowestValue.year);
+            
+            // Safety check - make sure we have data before trying to use it
+            const highestYearLabel = highestYearData && highestYearData.productionYearLabel 
+                ? highestYearData.productionYearLabel 
+                : (data.highestValue.year + "-" + (data.highestValue.year + 1));
+                
+            const lowestYearLabel = lowestYearData && lowestYearData.productionYearLabel 
+                ? lowestYearData.productionYearLabel 
+                : (data.lowestValue.year + "-" + (data.lowestValue.year + 1));
+            
+            const metrics = [
+                {
+                    title: 'Total Export Volume',
+                    value: formatNumber(data.totalExports) + ' lbs'
+                },
+                {
+                    title: 'Average Annual Exports',
+                    value: formatNumber(data.avgAnnualExports) + ' lbs'
+                },
+                {
+                    title: 'Highest Volume Year',
+                    value: `${highestYearLabel} (${formatNumber(data.highestValue.value)} lbs)`
+                },
+                {
+                    title: 'Lowest Volume Year',
+                    value: `${lowestYearLabel} (${formatNumber(data.lowestValue.value)} lbs)`
+                }
+            ];
+            
+            metrics.forEach(metric => {
+                const card = document.createElement('div');
+                card.className = 'summary-card';
+                
+                const titleElement = document.createElement('div');
+                titleElement.className = 'summary-title';
+                titleElement.textContent = metric.title;
+                
+                const valueElement = document.createElement('div');
+                valueElement.className = 'summary-value';
+                valueElement.textContent = metric.value;
+                
+                card.appendChild(titleElement);
+                card.appendChild(valueElement);
+                
+                summaryContainer.appendChild(card);
+            });
+        }
+        
+        // Create insights
+        function createInsights(data) {
+            const insightsList = document.getElementById('insights-list');
+            insightsList.innerHTML = '';
+            
+            // Find production year label for highest and lowest values
+            const highestYearData = data.yearlyExports.find(d => d.year === data.highestValue.year);
+            const lowestYearData = data.yearlyExports.find(d => d.year === data.lowestValue.year);
+            
+            // Safety check - make sure we have data before trying to use it
+            const highestYearLabel = highestYearData && highestYearData.productionYearLabel 
+                ? highestYearData.productionYearLabel 
+                : (data.highestValue.year + "-" + (data.highestValue.year + 1));
+                
+            const lowestYearLabel = lowestYearData && lowestYearData.productionYearLabel 
+                ? lowestYearData.productionYearLabel 
+                : (data.lowestValue.year + "-" + (data.lowestValue.year + 1));
+            
+            // Basic insights
+            const insights = [
+                `Export volumes were highest in production year ${highestYearLabel} with ${formatNumber(data.highestValue.value)} pounds of frozen lobster exports`,
+                `The lowest export volume was in production year ${lowestYearLabel} with ${formatNumber(data.lowestValue.value)} pounds`,
+                `The yearly trends show how the market share of different product forms has changed over the ${data.yearlyExports.length} production years analyzed`
+            ];
+            
+            // Add product-specific trend insights
+            const firstYear = data.yearlyExports[0];
+            const lastYear = data.yearlyExports[data.yearlyExports.length - 1];
+            
+            products.forEach(product => {
+                const firstVolume = firstYear[`${product.id}Exports_Lbs`];
+                const lastVolume = lastYear[`${product.id}Exports_Lbs`];
+                const firstPercent = firstYear[`${product.id}Percent`];
+                const lastPercent = lastYear[`${product.id}Percent`];
+                
+                const volumeChange = ((lastVolume - firstVolume) / firstVolume * 100).toFixed(1);
+                
+                // Only mention significant changes
+                if (Math.abs(volumeChange) > 10) {
+                    if (volumeChange > 0) {
+                        insights.push(`${product.name} exports increased by ${volumeChange}% from production year ${firstYear.productionYearLabel} to ${lastYear.productionYearLabel}`);
+                    } else {
+                        insights.push(`${product.name} exports decreased by ${Math.abs(volumeChange)}% from production year ${firstYear.productionYearLabel} to ${lastYear.productionYearLabel}`);
+                    }
+                }
+                
+                // Mention market share changes
+                const marketShareChange = lastPercent - firstPercent;
+                if (Math.abs(marketShareChange) > 5) {
+                    if (marketShareChange > 0) {
+                        insights.push(`${product.name} market share increased from ${formatPercent(firstPercent)} to ${formatPercent(lastPercent)} between production years ${firstYear.productionYearLabel} and ${lastYear.productionYearLabel}`);
+                    } else {
+                        insights.push(`${product.name} market share decreased from ${formatPercent(firstPercent)} to ${formatPercent(lastPercent)} between production years ${firstYear.productionYearLabel} and ${lastYear.productionYearLabel}`);
+                    }
+                }
+            });
+            
+            insights.forEach(insight => {
+                const li = document.createElement('li');
+                li.textContent = insight;
+                insightsList.appendChild(li);
+            });
+        }
+        
+        // Update the chart with new data
+        async function updateChart() {
+            try {
+                document.getElementById('loading').style.display = 'flex';
+                document.getElementById('chart-container').style.display = 'none';
+                document.getElementById('summary').style.display = 'none';
+                document.getElementById('insights').style.display = 'none';
+                document.getElementById('error').style.display = 'none';
+                
+                const startYear = parseInt(document.getElementById('start-year').value);
+                const endYear = parseInt(document.getElementById('end-year').value);
+                
+                if (startYear > endYear) {
+                    throw new Error('Start year must be less than or equal to end year');
+                }
+                
+                const config = { startYear, endYear };
+                console.log("Config:", config);
+                
+                const data = await loadExcelFile('Lobster_Master_Cleaned.xlsx', config);
+                createChart(data);
+                createSummary(data);
+                createInsights(data);
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('chart-container').style.display = 'block';
+                document.getElementById('summary').style.display = 'flex';
+                document.getElementById('insights').style.display = 'block';
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = `Error: ${error.message}`;
+                console.error("Error updating chart:", error);
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('update-chart').addEventListener('click', updateChart);
+            updateChart();
+        });
+    </script>
+</body>
+</html>

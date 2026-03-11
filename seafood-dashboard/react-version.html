@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Version Check</title>
+</head>
+<body>
+    <h1>React Version Check</h1>
+    <div id="version-info"></div>
+    
+    <script src="./build/static/js/main.adc0cd5a.js"></script>
+    <script>
+        // This script will run after React is loaded
+        setTimeout(() => {
+            try {
+                // Check for React global
+                let versionInfo = "React global: " + (window.React ? "Found" : "Not found") + "<br>";
+                
+                // Check for ReactDOM
+                versionInfo += "ReactDOM global: " + (window.ReactDOM ? "Found" : "Not found") + "<br>";
+                
+                // Check for createRoot (React 18+)
+                versionInfo += "ReactDOM.createRoot: " + (window.ReactDOM && window.ReactDOM.createRoot ? "Found (React 18+)" : "Not found (React 17 or earlier)") + "<br>";
+                
+                // Display version if available
+                if (window.React && window.React.version) {
+                    versionInfo += "React version: " + window.React.version;
+                }
+                
+                document.getElementById('version-info').innerHTML = versionInfo;
+            } catch (error) {
+                document.getElementById('version-info').innerHTML = "Error: " + error.message;
+            }
+        }, 1000); // Wait a second for scripts to load
+    </script>
+</body>
+</html>

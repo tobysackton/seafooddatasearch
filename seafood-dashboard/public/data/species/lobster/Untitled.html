@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canadian Frozen Lobster Export Yearly Trends</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .chart-container {
+            width: 100%;
+            height: 600px;
+            margin-bottom: 20px;
+        }
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            width: 100%;
+        }
+        .error {
+            color: red;
+            padding: 20px;
+            border: 1px solid red;
+            border-radius: 8px;
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 10px;
+        }
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+            border-radius: 2px;
+        }
+        .year-range {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .year-range label {
+            margin: 0 5px;
+        }
+        .year-range button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #0088FE;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .tooltip {
+            position: absolute;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .insights {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .insights ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        .summary {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .summary-card {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            background-color: #f0f0f0;
+            min-width: 180px;
+        }
+        .summary-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .summary-value {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .axis-title {
+            font-size: 12px;
+            fill: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Canadian Frozen Lobster Export Yearly Trends</h1>
+    
+    <div class="container">
+        <div id="loading" class="loading">
+            <p>Loading data...</p>
+        </div>
+        <div id="error" class="error" style="display: none;"></div>
+        
+        <div id="chart-container" class="chart-container" style="display: none;"></div>
+        
+        <div id="year-range" class="year-range" style="display: none;">
+            <label for="start-year">Start Year:</label>
+            <input type="number" id="start-year" min="2015" max="2024" value="2018">
+            <label for="end-year">End Year:</label>
+            <input type="number" id="end-year" min="2015" max="2024" value="2024">
+            <button id="update-chart">Update Chart</button>
+        </div>
+        
+        <div id="summary" class="summary" style="display: none;">
+            <!-- Summary metrics will be added here -->
+        </div>
+        
+        <div id="insights" class="insights" style="display: none;">
+            <h3>Key Yearly Trend Insights:</h3>
+            <ul id="insights-list">
+                <!-- Insights will be added here -->
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        const productColors = {
+            meat: '#0088FE',
+            tail: '#FF8042',
+            chinaFzn: '#FFBB28',
+            euFzn: '#00C49F',
+            euBrine: '#8884D8'
+        };
+        
+        const productNames = {
+            meat: 'Meat (US)',
+            tail: 'Tails (US)',
+            chinaFzn: 'Whole Cook (China)',
+            euFzn: 'Frozen Whole Cook (EU)',
+            euBrine: 'Brine (EU)'
+        };
+        
+        // Format number with commas
+        function formatNumber(num) {
+            return num.toLocaleString(undefined, { maximumFractionDigits: 0 });
+        }
+        
+        // Format percentage
+        function formatPercent(num) {
+            return num.toFixed(1) + '%';
+        }
+        
+        // Process the data from Excel file
+        function processCanadianExports(data, config) {
+            // Filter data for the specified years
+            const filteredData = data.filter(row => 
+                row.Year >= config.startYear && 
+                row.Year <= config.endYear
+            );
+            
+            // Group by year
+            const yearlyData = _.groupBy(filteredData, 'Year');
+            
+            // Process yearly export volumes and values
+            const yearlyExports = _.map(yearlyData, (yearRows, year) => {
+                // Calculate total values for each product form
+                const meatExports_Lbs = _.sumBy(yearRows, row => row.CA_Export_US_Meat_lbs || 0);
+                const meatValue_USD = _.sumBy(yearRows, row => row.CA_Meat_Value_USD || 0);
+                
+                const tailExports_Lbs = _.sumBy(yearRows, row => row.CA_Export_US_Tail || 0);
+                const tailValue_USD = _.sumBy(yearRows, row => row.CA_Tail_Value_USD || 0);
+                
+                const chinaFznExports_Lbs = _.sumBy(yearRows, row => row.CA_Export_China_Fzn_Lbs || 0);
+                const chinaFznValue_USD = _.sumBy(yearRows, row => row.CA_Export_China_USD || 0);
+                
+                const euFznExports_Lbs = _.sumBy(yearRows, row => row.CA_EU_Fzn_LB || 0);
+                const euFznValue_USD = _.sumBy(yearRows, row => row.CA_FZ_EU_USD || 0);
+                
+                const euBrineExports_Lbs = _.sumBy(yearRows, row => row.CA_Brine_UU || 0);
+                const euBrineValue_USD = _.sumBy(yearRows, row => row.CA_Brine_EU_USD || 0);
+                
+                // Calculate total frozen exports
+                const totalFrozenExports_Lbs = meatExports_Lbs + tailExports_Lbs + chinaFznExports_Lbs + euFznExports_Lbs + euBrineExports_Lbs;
+                const totalFrozenValue_USD = meatValue_USD + tailValue_USD + chinaFznValue_USD + euFznValue_USD + euBrineValue_USD;
+                
+                // Calculate percentages of total
+                const calculatePercentage = (value) => (totalFrozenExports_Lbs > 0 ? (value / totalFrozenExports_Lbs) * 100 : 0);
+                
+                return {
+                    year: parseInt(year),
+                    meatExports_Lbs,
+                    meatValue_USD,
+                    meatUnitValue: meatExports_Lbs > 0 ? meatValue_USD / meatExports_Lbs : 0,
+                    meatPercent: calculatePercentage(meatExports_Lbs),
+                    
+                    tailExports_Lbs,
+                    tailValue_USD,
+                    tailUnitValue: tailExports_Lbs > 0 ? tailValue_USD / tailExports_Lbs : 0,
+                    tailPercent: calculatePercentage(tailExports_Lbs),
+                    
+                    chinaFznExports_Lbs,
+                    chinaFznValue_USD,
+                    chinaFznUnitValue: chinaFznExports_Lbs > 0 ? chinaFznValue_USD / chinaFznExports_Lbs : 0,
+                    chinaFznPercent: calculatePercentage(chinaFznExports_Lbs),
+                    
+                    euFznExports_Lbs,
+                    euFznValue_USD,
+                    euFznUnitValue: euFznExports_Lbs > 0 ? euFznValue_USD / euFznExports_Lbs : 0,
+                    euFznPercent: calculatePercentage(euFznExports_Lbs),
+                    
+                    euBrineExports_Lbs,
+                    euBrineValue_USD,
+                    euBrineUnitValue: euBrineExports_Lbs > 0 ? euBrineValue_USD / euBrineExports_Lbs : 0,
+                    euBrinePercent: calculatePercentage(euBrineExports_Lbs),
+                    
+                    totalFrozenExports_Lbs,
+                    totalFrozenValue_USD,
+                    averageUnitValue: totalFrozenExports_Lbs > 0 ? totalFrozenValue_USD / totalFrozenExports_Lbs : 0
+                };
+            }).sort((a, b) => a.year - b.year);
+            
+            // Calculate highest and lowest values for insights
+            let highestValue = { year: 0, value: 0 };
+            let lowestValue = { year: 0, value: Number.MAX_VALUE };
+            let largestGrowth = { year: 0, percentage: 0 };
+            let largestDecline = { year: 0, percentage: 0 };
+            
+            yearlyExports.forEach((yearData, index) => {
+                if (yearData.totalFrozenExports_Lbs > highestValue.value) {
+                    highestValue = { year: yearData.year, value: yearData.totalFrozenExports_Lbs };
+                }
+                
+                if (yearData.totalFrozenExports_Lbs < lowestValue.value) {
+                    lowestValue = { year: yearData.year, value: yearData.totalFrozenExports_Lbs };
+                }
+                
+                if (index > 0) {
+                    const prevYear = yearlyExports[index - 1];
+                    const growthPercent = ((yearData.totalFrozenExports_Lbs - prevYear.totalFrozenExports_Lbs) / prevYear.totalFrozenExports_Lbs) * 100;
+                    
+                    if (growthPercent > largestGrowth.percentage) {
+                        largestGrowth = { year: yearData.year, percentage: growthPercent };
+                    }
+                    
+                    if (growthPercent < largestDecline.percentage) {
+                        largestDecline = { year: yearData.year, percentage: growthPercent };
+                    }
+                }
+            });
+            
+            // Calculate total exports for trend analysis
+            const totalExports = _.sumBy(yearlyExports, 'totalFrozenExports_Lbs');
+            const avgAnnualExports = totalExports / yearlyExports.length;
+            
+            return {
+                yearlyExports,
+                totalExports,
+                avgAnnualExports,
+                highestValue,
+                lowestValue,
+                largestGrowth,
+                largestDecline
+            };
+        }
+        
+        // Read and process Excel file
+        async function loadExcelFile(file, config) {
+            try {
+                const response = await fetch(file);
+                const arrayBuffer = await response.arrayBuffer();
+                const data = new Uint8Array(arrayBuffer);
+                
+                const workbook = XLSX.read(data, { type: 'array', cellDates: true });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                
+                return processCanadianExports(jsonData, config);
+            } catch (error) {
+                console.error('Error loading or processing Excel file:', error);
+                throw error;
+            }
+        }
+        
+        // Create the line chart
+        function createLineChart(data) {
+            const width = document.getElementById('chart-container').clientWidth;
+            const height = 600;
+            const margin = { top: 50, right: 80, bottom: 80, left: 80 };
+            const innerWidth = width - margin.left - margin.right;
+            const innerHeight = height - margin.top - margin.bottom;
+            
+            // Clear any existing SVG
+            d3.select("#chart-container").selectAll("*").remove();
+            
+            // Create SVG element
+            const svg = d3.select("#chart-container")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            
+            const g = svg.append("g")
+                .attr("transform", `translate(${margin.left}, ${margin.top})`);
+            
+            // Create tooltip
+            const tooltip = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
+            
+            // Define product categories
+            const products = [
+                { id: 'meat', name: productNames.meat, color: productColors.meat },
+                { id: 'tail', name: productNames.tail, color: productColors.tail },
+                { id: 'chinaFzn', name: productNames.chinaFzn, color: productColors.chinaFzn },
+                { id: 'euFzn', name: productNames.euFzn, color: productColors.euFzn },
+                { id: 'euBrine', name: productNames.euBrine, color: productColors.euBrine }
+            ];
+            
+            // X scale
+            const xScale = d3.scaleBand()
+                .domain(data.yearlyExports.map(d => d.year))
+                .range([0, innerWidth])
+                .padding(0.2);
+            
+            // Y scale for percentages (left axis)
+            const yScalePercent = d3.scaleLinear()
+                .domain([0, 100])
+                .range([innerHeight, 0])
+                .nice();
+            
+            // Y scale for volume (right axis)
+            const maxVolume = d3.max(data.yearlyExports, d => d.totalFrozenExports_Lbs);
+            const yScaleVolume = d3.scaleLinear()
+                .domain([0, maxVolume * 1.1]) // Add 10% padding at the top
+                .range([innerHeight, 0])
+                .nice();
+            
+            // Create axes
+            const xAxis = d3.axisBottom(xScale);
+            const yAxisLeft = d3.axisLeft(yScalePercent)
+                .tickFormat(d => `${d}%`);
+            const yAxisRight = d3.axisRight(yScaleVolume)
+                .tickFormat(d => `${d3.format(".1s")(d)}`);
+            
+            // Add X axis
+            g.append("g")
+                .attr("class", "x-axis")
+                .attr("transform", `translate(0, ${innerHeight})`)
+                .call(xAxis)
+                .selectAll("text")
+                .style("text-anchor", "middle");
+            
+            // Add X axis label
+            g.append("text")
+                .attr("class", "axis-title")
+                .attr("text-anchor", "middle")
+                .attr("x", innerWidth / 2)
+                .attr("y", innerHeight + 50)
+                .text("Year");
+            
+            // Add Y axis (left - percentage)
+            g.append("g")
+                .attr("class", "y-axis-left")
+                .call(yAxisLeft);
+            
+            // Add Y axis label (left)
+            g.append("text")
+                .attr("class", "axis-title")
+                .attr("text-anchor", "middle")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -innerHeight / 2)
+                .attr("y", -60)
+                .text("Percentage of Total Exports (%)");
+            
+            // Add Y axis (right - volume)
+            g.append("g")
+                .attr("class", "y-axis-right")
+                .attr("transform", `translate(${innerWidth}, 0)`)
+                .call(yAxisRight);
+            
+            // Add Y axis label (right)
+            g.append("text")
+                .attr("class", "axis-title")
+                .attr("text-anchor", "middle")
+                .attr("transform", "rotate(90)")
+                .attr("x", innerHeight / 2)
+                .attr("y", -innerWidth - 60)
+                .text("Export Volume (lbs)");
+            
+            // Add title
+            svg.append("text")
+                .attr("class", "chart-title")
+                .attr("text-anchor", "middle")
+                .attr("x", width / 2)
+                .attr("y", 25)
+                .style("font-size", "16px")
+                .style("font-weight", "bold")
+                .text(`Canadian Frozen Lobster Export Trends (${data.yearlyExports[0].year}-${data.yearlyExports[data.yearlyExports.length-1].year})`);
+            
+            // Create line generator for percentages
+            const lineGenerator = d3.line()
+                .x(d => xScale(d.year) + xScale.bandwidth() / 2)
+                .y(d => yScalePercent(d.percent));
+            
+            // Add volume bars
+            const bars = g.selectAll(".volume-bar")
+                .data(data.yearlyExports)
+                .enter().append("rect")
+                .attr("class", "volume-bar")
+                .attr("x", d => xScale(d.year))
+                .attr("y", d => yScaleVolume(d.totalFrozenExports_Lbs))
+                .attr("width", xScale.bandwidth())
+                .attr("height", d => innerHeight - yScaleVolume(d.totalFrozenExports_Lbs))
+                .attr("fill", "#ccc")
+                .attr("opacity", 0.5)
+                .on("mouseover", function(event, d) {
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    tooltip.html(`<strong>Year:</strong> ${d.year}<br>
+                                <strong>Total Volume:</strong> ${formatNumber(d.totalFrozenExports_Lbs)} lbs`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mouseout", function() {
+                    tooltip.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                });
+            
+            // Add lines for each product
+            products.forEach(product => {
+                const productData = data.yearlyExports.map(d => ({
+                    year: d.year,
+                    percent: d[`${product.id}Percent`]
+                }));
+                
+                g.append("path")
+                    .datum(productData)
+                    .attr("fill", "none")
+                    .attr("stroke", product.color)
+                    .attr("stroke-width", 3)
+                    .attr("d", lineGenerator);
+                
+                // Add dots for each data point
+                g.selectAll(`.dot-${product.id}`)
+                    .data(productData)
+                    .enter().append("circle")
+                    .attr("class", `dot-${product.id}`)
+                    .attr("cx", d => xScale(d.year) + xScale.bandwidth() / 2)
+                    .attr("cy", d => yScalePercent(d.percent))
+                    .attr("r", 5)
+                    .attr("fill", product.color)
+                    .on("mouseover", function(event, d) {
+                        const yearData = data.yearlyExports.find(y => y.year === d.year);
+                        tooltip.transition()
+                            .duration(200)
+                            .style("opacity", .9);
+                        tooltip.html(`<strong>Year:</strong> ${d.year}<br>
+                                    <strong>${product.name}:</strong> ${formatPercent(d.percent)}<br>
+                                    <strong>Volume:</strong> ${formatNumber(yearData[`${product.id}Exports_Lbs`])} lbs`)
+                            .style("left", (event.pageX + 10) + "px")
+                            .style("top", (event.pageY - 28) + "px");
+                    })
+                    .on("mouseout", function() {
+                        tooltip.transition()
+                            .duration(500)
+                            .style("opacity", 0);
+                    });
+            });
+            
+            // Add legend
+            const legend = svg.append("g")
+                .attr("class", "legend")
+                .attr("transform", `translate(${width/2 - 250}, ${height - 20})`);
+            
+            products.forEach((product, i) => {
+                const legendItem = legend.append("g")
+                    .attr("transform", `translate(${i * 100}, 0)`);
+                
+                legendItem.append("rect")
+                    .attr("width", 12)
+                    .attr("height", 12)
+                    .attr("fill", product.color);
+                
+                legendItem.append("text")
+                    .attr("x", 20)
+                    .attr("y", 10)
+                    .text(product.name)
+                    .style("font-size", "12px");
+            });
+            
+            // Add volume legend item
+            const volumeLegend = legend.append("g")
+                .attr("transform", `translate(${products.length * 100}, 0)`);
+            
+            volumeLegend.append("rect")
+                .attr("width", 12)
+                .attr("height", 12)
+                .attr("fill", "#ccc")
+                .attr("opacity", 0.5);
+            
+            volumeLegend.append("text")
+                .attr("x", 20)
+                .attr("y", 10)
+                .text("Total Volume")
+                .style("font-size", "12px");
+        }
+        
+        // Create summary metrics
+        function createSummary(data) {
+            const summaryContainer = document.getElementById('summary');
+            summaryContainer.innerHTML = '';
+            
+            const metrics = [
+                {
+                    title: 'Total Export Volume',
+                    value: formatNumber(data.totalExports) + ' lbs'
+                },
+                {
+                    title: 'Average Annual Exports',
+                    value: formatNumber(data.avgAnnualExports) + ' lbs'
+                },
+                {
+                    title: 'Highest Volume Year',
+                    value: `${data.highestValue.year} (${formatNumber(data.highestValue.value)} lbs)`
+                },
+                {
+                    title: 'Lowest Volume Year',
+                    value: `${data.lowestValue.year} (${formatNumber(data.lowestValue.value)} lbs)`
+                }
+            ];
+            
+            if (data.largestGrowth.year) {
+                metrics.push({
+                    title: 'Largest Annual Growth',
+                    value: `${data.largestGrowth.year} (${formatPercent(data.largestGrowth.percentage)})`
+                });
+            }
+            
+            if (data.largestDecline.year) {
+                metrics.push({
+                    title: 'Largest Annual Decline',
+                    value: `${data.largestDecline.year} (${formatPercent(data.largestDecline.percentage)})`
+                });
+            }
+            
+            metrics.forEach(metric => {
+                const card = document.createElement('div');
+                card.className = 'summary-card';
+                
+                const titleElement = document.createElement('div');
+                titleElement.className = 'summary-title';
+                titleElement.textContent = metric.title;
+                
+                const valueElement = document.createElement('div');
+                valueElement.className = 'summary-value';
+                valueElement.textContent = metric.value;
+                
+                card.appendChild(titleElement);
+                card.appendChild(valueElement);
+                
+                summaryContainer.appendChild(card);
+            });
+        }
+        
+        // Create insights
+        function createInsights(data) {
+            const insightsList = document.getElementById('insights-list');
+            insightsList.innerHTML = '';
+            
+            // Basic insights
+            const insights = [
+                `Export volumes were highest in ${data.highestValue.year} with ${formatNumber(data.highestValue.value)} pounds of frozen lobster exports`,
+                `The yearly export trends show how the market share of different product forms has changed over the ${data.yearlyExports.length}-year period`
+            ];
+            
+            // Add product-specific trend insights
+            const products = ['meat', 'tail', 'chinaFzn', 'euFzn', 'euBrine'];
+            const productNames = {
+                meat: 'Meat (US)',
+                tail: 'Tails (US)',
+                chinaFzn: 'Whole Cook (China)',
+                euFzn: 'Frozen Whole Cook (EU)',
+                euBrine: 'Brine (EU)'
+            };
+            
+            products.forEach(product => {
+                // Find trend for this product
+                let trend = null;
+                const firstYear = data.yearlyExports[0];
+                const lastYear = data.yearlyExports[data.yearlyExports.length - 1];
+                const firstPercent = firstYear[`${product}Percent`];
+                const lastPercent = lastYear[`${product}Percent`];
+                
+                const changePct = lastPercent - firstPercent;
+                if (Math.abs(changePct) > 5) { // Only mention significant changes
+                    if (changePct > 0) {
+                        insights.push(`${productNames[product]} exports increased from ${formatPercent(firstPercent)} to ${formatPercent(lastPercent)} of total exports between ${firstYear.year} and ${lastYear.year}`);
+                    } else {
+                        insights.push(`${productNames[product]} exports decreased from ${formatPercent(firstPercent)} to ${formatPercent(lastPercent)} of total exports between ${firstYear.year} and ${lastYear.year}`);
+                    }
+                }
+            });
+            
+            insights.forEach(insight => {
+                const li = document.createElement('li');
+                li.textContent = insight;
+                insightsList.appendChild(li);
+            });
+        }
+        
+        // Update the chart with new data
+        async function updateChart() {
+            try {
+                document.getElementById('loading').style.display = 'flex';
+                document.getElementById('chart-container').style.display = 'none';
+                document.getElementById('summary').style.display = 'none';
+                document.getElementById('insights').style.display = 'none';
+                
+                const startYear = parseInt(document.getElementById('start-year').value);
+                const endYear = parseInt(document.getElementById('end-year').value);
+                
+                if (startYear > endYear) {
+                    throw new Error('Start year must be less than or equal to end year');
+                }
+                
+                const config = {
+                    startYear,
+                    endYear
+                };
+                
+                const data = await loadExcelFile('Lobster_Master_Cleaned.xlsx', config);
+                
+                createLineChart(data);
+                createSummary(data);
+                createInsights(data);
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('chart-container').style.display = 'block';
+                document.getElementById('summary').style.display = 'flex';
+                document.getElementById('insights').style.display = 'block';
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = `Error: ${error.message}`;
+            }
+        }
+        
+        // Initialize the chart
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('year-range').style.display = 'block';
+            document.getElementById('update-chart').addEventListener('click', updateChart);
+            updateChart();
+        });
+    </script>
+</body>
+</html>

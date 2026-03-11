@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canadian Frozen Lobster Average Price Trends</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .chart-container {
+            width: 100%;
+            height: 600px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+        .error {
+            color: red;
+            padding: 20px;
+            border: 1px solid red;
+            border-radius: 8px;
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+        .controls {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .controls label {
+            margin: 0 5px;
+        }
+        .controls button {
+            margin-left: 10px;
+            padding: 8px 15px;
+            background-color: #0088FE;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .summary {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .summary-card {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            background-color: #f0f0f0;
+            min-width: 180px;
+        }
+        .summary-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .summary-value {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .insights {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .insights ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Canadian Frozen Lobster Average Price Trends</h1>
+    <p style="text-align: center; margin-top: -10px; color: #666;">(Weighted Average USD/lb by Production Year: May to April)</p>
+    
+    <div id="loading" class="loading">Loading data...</div>
+    <div id="error" class="error" style="display: none;"></div>
+    
+    <div class="controls">
+        <label for="start-year">Start Production Year:</label>
+        <input type="number" id="start-year" min="2015" max="2024" value="2018">
+        <label for="end-year">End Production Year:</label>
+        <input type="number" id="end-year" min="2015" max="2024" value="2024">
+        <button id="update-chart">Update Chart</button>
+    </div>
+    
+    <div id="chart-container" class="chart-container" style="display: none;">
+        <canvas id="chart"></canvas>
+    </div>
+    
+    <div id="summary" class="summary" style="display: none;">
+        <!-- Summary metrics will be added here -->
+    </div>
+    
+    <div id="insights" class="insights" style="display: none;">
+        <h3>Key Price Trend Insights:</h3>
+        <ul id="insights-list">
+            <!-- Insights will be added here -->
+        </ul>
+    </div>
+    
+    <script>
+        // Register the datalabels plugin globally
+        Chart.register(ChartDataLabels);
+        
+        // Define product colors and names with volume and price field mappings
+        const products = [
+            { id: 'meat', name: 'Meat (US)', color: '#0088FE', 
+              volumeField: 'CA_Export_US_Meat_lbs', valueField: 'CA_Meat_Value_USD' },
+            { id: 'tail', name: 'Tails (US)', color: '#FF8042', 
+              volumeField: 'CA_Export_US_Tail', valueField: 'CA_Tail_Value_USD' },
+            { id: 'chinaFzn', name: 'Whole Cook (China)', color: '#FFBB28', 
+              volumeField: 'CA_Export_China_MT', valueField: 'CA_Export_China_Price' },
+            { id: 'euFzn', name: 'Frozen Whole Cook (EU)', color: '#00C49F', 
+              volumeField: 'CA_EU_Fzn_LB', valueField: 'CA_FZ_EU_USD' },
+            { id: 'euBrine', name: 'Brine (EU)', color: '#8884D8', 
+              volumeField: 'CA_Brine_UU', valueField: 'CA_Brine_EU_USD' }
+        ];
+        
+        // Format number with commas
+        function formatNumber(num) {
+            return num.toLocaleString(undefined, { maximumFractionDigits: 0 });
+        }
+        
+        // Format price
+        function formatPrice(num) {
+            return '$' + num.toFixed(2);
+        }
+        
+        // Process the data from Excel file
+        function processData(data, config) {
+            try {
+                console.log("Processing data with config:", config);
+                
+                // Map production years
+                data.forEach(row => {
+                    if (row.Year === undefined) {
+                        if (row.Date) {
+                            try {
+                                row.Year = new Date(row.Date).getFullYear();
+                            } catch (e) {
+                                row.Year = 2018;
+                            }
+                        } else {
+                            row.Year = 2018;
+                        }
+                    }
+                    
+                    row.Year = parseInt(row.Year);
+                    
+                    let month = 1;
+                    if (row.Month !== undefined) {
+                        month = parseInt(row.Month);
+                    } else if (row.Date) {
+                        try {
+                            month = new Date(row.Date).getMonth() + 1;
+                        } catch (e) {
+                            month = 1;
+                        }
+                    }
+                    
+                    month = Math.max(1, Math.min(12, month || 1));
+                    row.ProductionYear = month >= 5 ? row.Year : row.Year - 1;
+                });
+                
+                // Filter by production year
+                const filteredData = data.filter(row => {
+                    const validYear = typeof row.ProductionYear === 'number' && !isNaN(row.ProductionYear);
+                    const inRange = validYear && row.ProductionYear >= config.startYear && row.ProductionYear <= config.endYear;
+                    return inRange;
+                });
+                
+                console.log("Filtered data count:", filteredData.length);
+                
+                if (filteredData.length === 0) {
+                    const availableYears = Array.from(new Set(data.map(row => row.ProductionYear)))
+                        .filter(year => typeof year === 'number' && !isNaN(year))
+                        .sort();
+                    
+                    if (availableYears.length > 0) {
+                        const newStartYear = availableYears[0];
+                        const newEndYear = availableYears[availableYears.length - 1];
+                        
+                        const refilteredData = data.filter(row => 
+                            typeof row.ProductionYear === 'number' && 
+                            !isNaN(row.ProductionYear) &&
+                            row.ProductionYear >= newStartYear && 
+                            row.ProductionYear <= newEndYear
+                        );
+                        
+                        document.getElementById('start-year').value = newStartYear;
+                        document.getElementById('end-year').value = newEndYear;
+                        
+                        if (refilteredData.length > 0) {
+                            return calculatePrices(refilteredData, { startYear: newStartYear, endYear: newEndYear });
+                        }
+                    }
+                }
+                
+                return calculatePrices(filteredData, config);
+            } catch (error) {
+                console.error("Error processing data:", error);
+                throw error;
+            }
+        }
+        
+        // Calculate prices from the filtered data
+        function calculatePrices(filteredData, config) {
+            // Group by production year
+            const yearlyData = _.groupBy(filteredData, 'ProductionYear');
+            
+            // Process yearly average prices
+            const yearlyPrices = [];
+            
+            // Create a helper function to find fields case-insensitively
+            function getFieldValue(row, fieldName) {
+                // First try direct access
+                if (row[fieldName] !== undefined) {
+                    return parseFloat(row[fieldName]) || 0;
+                }
+                
+                // Try case-insensitive matching
+                const fieldNameLower = fieldName.toLowerCase();
+                const matchingKey = Object.keys(row).find(key => key.toLowerCase() === fieldNameLower);
+                
+                if (matchingKey) {
+                    return parseFloat(row[matchingKey]) || 0;
+                }
+                
+                // If no match found, log it once and return 0
+                if (!window.loggedMissingFields) {
+                    window.loggedMissingFields = {};
+                }
+                if (!window.loggedMissingFields[fieldName]) {
+                    console.warn(`Field not found: ${fieldName}`);
+                    window.loggedMissingFields[fieldName] = true;
+                }
+                
+                return 0;
+            }
+            
+            for (const year in yearlyData) {
+                const yearRows = yearlyData[year];
+                
+                // Create an object to store this year's data
+                const yearPrice = {
+                    year: parseInt(year),
+                    productionYearLabel: `${year}-${parseInt(year) + 1}`
+                };
+                
+                // Calculate weighted average price for each product
+                products.forEach(product => {
+                    // Calculate total volume and total value for this product
+                    let totalVolume = 0;
+                    let totalValue = 0;
+                    
+                    yearRows.forEach(row => {
+                        const volume = getFieldValue(row, product.volumeField);
+                        const value = getFieldValue(row, product.valueField);
+                        
+                        totalVolume += volume;
+                        totalValue += value;
+                    });
+                    
+                    // Calculate weighted average price
+                    const avgPrice = totalVolume > 0 ? totalValue / totalVolume : 0;
+                    
+                    // Store in year object
+                    yearPrice[`${product.id}AvgPrice`] = avgPrice;
+                    yearPrice[`${product.id}TotalVolume`] = totalVolume;
+                    yearPrice[`${product.id}TotalValue`] = totalValue;
+                    
+                    console.log(`${year} ${product.name}: Vol=${totalVolume}, Value=${totalValue}, Price=${avgPrice}`);
+                });
+                
+                yearlyPrices.push(yearPrice);
+            }
+            
+            // Sort by year
+            yearlyPrices.sort((a, b) => a.year - b.year);
+            
+            console.log("Processed yearly prices:", yearlyPrices);
+            
+            // Calculate price ranges for insights
+            const priceRanges = {};
+            products.forEach(product => {
+                priceRanges[product.id] = {
+                    highest: { year: 0, price: 0 },
+                    lowest: { year: 0, price: Number.MAX_VALUE }
+                };
+            });
+            
+            // If no data, add dummy data
+            if (yearlyPrices.length === 0) {
+                const startYear = config.startYear;
+                const dummyYear = {
+                    year: startYear,
+                    productionYearLabel: `${startYear}-${startYear + 1}`
+                };
+                
+                products.forEach(product => {
+                    dummyYear[`${product.id}AvgPrice`] = 0;
+                    dummyYear[`${product.id}TotalVolume`] = 0;
+                    dummyYear[`${product.id}TotalValue`] = 0;
+                });
+                
+                yearlyPrices.push(dummyYear);
+            }
+            
+            // Find highest and lowest prices
+            yearlyPrices.forEach(yearData => {
+                products.forEach(product => {
+                    const price = yearData[`${product.id}AvgPrice`];
+                    const volume = yearData[`${product.id}TotalVolume`];
+                    
+                    if (volume > 0) {
+                        if (price > priceRanges[product.id].highest.price) {
+                            priceRanges[product.id].highest = { year: yearData.year, price };
+                        }
+                        
+                        if (price < priceRanges[product.id].lowest.price) {
+                            priceRanges[product.id].lowest = { year: yearData.year, price };
+                        }
+                    }
+                });
+            });
+            
+            return {
+                yearlyPrices,
+                priceRanges
+            };
+        }
+        
+        // Load Excel file
+        async function loadExcelFile(file, config) {
+            try {
+                console.log("Loading Excel file:", file);
+                const response = await fetch(file);
+                const arrayBuffer = await response.arrayBuffer();
+                const data = new Uint8Array(arrayBuffer);
+                
+                console.log("Parsing Excel file");
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                console.log("Excel data parsed, row count:", jsonData.length);
+                
+                return processData(jsonData, config);
+            } catch (error) {
+                console.error('Error loading or processing Excel file:', error);
+                throw error;
+            }
+        }
+        
+        // Create chart
+        function createChart(data) {
+            console.log("Creating price line chart with data:", data);
+            
+            const ctx = document.getElementById('chart').getContext('2d');
+            
+            // Prepare data for Chart.js
+            const chartData = {
+                labels: data.yearlyPrices.map(d => d.productionYearLabel),
+                datasets: []
+            };
+            
+            // Add datasets for line chart
+            products.forEach(product => {
+                chartData.datasets.push({
+                    type: 'line',
+                    label: product.name,
+                    data: data.yearlyPrices.map(d => d[`${product.id}AvgPrice`]),
+                    backgroundColor: product.color,
+                    borderColor: product.color,
+                    borderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    fill: false,
+                    tension: 0.1
+                });
+            });
+            
+            // Destroy previous chart if it exists
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+            
+            // Create new chart
+            window.myChart = new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            display: true,
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Average Price (USD/lb)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toFixed(2);
+                                }
+                            }
+                        },
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Production Year (May-April)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Canadian Frozen Lobster Weighted Average Prices by Product',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        subtitle: {
+                            display: true,
+                            text: data.yearlyPrices.length > 0 ? 
+                                `Production Years: ${data.yearlyPrices[0].productionYearLabel} to ${data.yearlyPrices[data.yearlyPrices.length-1].productionYearLabel}` : 
+                                'No data for selected years',
+                            font: {
+                                size: 14
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const yearData = data.yearlyPrices[context.dataIndex];
+                                    const productId = products.find(p => p.name === context.dataset.label)?.id || '';
+                                    const volume = yearData[`${productId}TotalVolume`] || 0;
+                                    const price = context.raw || 0;
+                                    
+                                    return `${context.dataset.label}: ${formatPrice(price)} (Vol: ${formatNumber(volume)} lbs)`;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            display: true,
+                            color: function(context) {
+                                return context.dataset.borderColor;
+                            },
+                            backgroundColor: 'white',
+                            borderRadius: 3,
+                            borderWidth: 1,
+                            borderColor: function(context) {
+                                return context.dataset.borderColor;
+                            },
+                            font: {
+                                weight: 'bold',
+                                size: 10
+                            },
+                            padding: 4,
+                            formatter: function(value) {
+                                return '$' + value.toFixed(2);
+                            },
+                            align: 'bottom',
+                            offset: 10
+                        }
+                    }
+                }
+            });
+            
+            console.log("Price line chart creation complete");
+        }
+        
+        // Create summary metrics
+        function createSummary(data) {
+            const summaryContainer = document.getElementById('summary');
+            summaryContainer.innerHTML = '';
+            
+            // Calculate average price across all products and years
+            let totalValue = 0;
+            let totalVolume = 0;
+            
+            data.yearlyPrices.forEach(yearData => {
+                products.forEach(product => {
+                    const volume = yearData[`${product.id}TotalVolume`] || 0;
+                    const value = yearData[`${product.id}TotalValue`] || 0;
+                    
+                    totalVolume += volume;
+                    totalValue += value;
+                });
+            });
+            
+            const overallAvgPrice = totalVolume > 0 ? totalValue / totalVolume : 0;
+            
+            // Find highest and lowest price products
+            let highestPriceProduct = { name: 'None', price: 0 };
+            let lowestPriceProduct = { name: 'None', price: Number.MAX_VALUE };
+            
+            products.forEach(product => {
+                let productTotalValue = 0;
+                let productTotalVolume = 0;
+                
+                data.yearlyPrices.forEach(yearData => {
+                    productTotalVolume += yearData[`${product.id}TotalVolume`] || 0;
+                    productTotalValue += yearData[`${product.id}TotalValue`] || 0;
+                });
+                
+                if (productTotalVolume > 0) {
+                    const productAvgPrice = productTotalValue / productTotalVolume;
+                    
+                    if (productAvgPrice > highestPriceProduct.price) {
+                        highestPriceProduct = { name: product.name, price: productAvgPrice };
+                    }
+                    
+                    if (productAvgPrice < lowestPriceProduct.price) {
+                        lowestPriceProduct = { name: product.name, price: productAvgPrice };
+                    }
+                }
+            });
+            
+            // If no valid low price product found
+            if (lowestPriceProduct.price === Number.MAX_VALUE) {
+                lowestPriceProduct = { name: 'None', price: 0 };
+            }
+            
+            const metrics = [
+                {
+                    title: 'Overall Average Price',
+                    value: formatPrice(overallAvgPrice)
+                },
+                {
+                    title: 'Highest Priced Product',
+                    value: `${highestPriceProduct.name} (${formatPrice(highestPriceProduct.price)})`
+                },
+                {
+                    title: 'Lowest Priced Product',
+                    value: `${lowestPriceProduct.name} (${formatPrice(lowestPriceProduct.price)})`
+                },
+                {
+                    title: 'Analysis Period',
+                    value: `${data.yearlyPrices.length} Years`
+                }
+            ];
+            
+            metrics.forEach(metric => {
+                const card = document.createElement('div');
+                card.className = 'summary-card';
+                
+                const titleElement = document.createElement('div');
+                titleElement.className = 'summary-title';
+                titleElement.textContent = metric.title;
+                
+                const valueElement = document.createElement('div');
+                valueElement.className = 'summary-value';
+                valueElement.textContent = metric.value;
+                
+                card.appendChild(titleElement);
+                card.appendChild(valueElement);
+                summaryContainer.appendChild(card);
+            });
+        }
+        
+        // Create insights
+        function createInsights(data) {
+            const insightsList = document.getElementById('insights-list');
+            insightsList.innerHTML = '';
+            
+            // Basic insights
+            const insights = [
+                `This chart shows weighted average export prices (USD/lb) for different Canadian lobster product categories`,
+                `Prices are calculated as total export value divided by total export volume for each production year`,
+                `The analysis covers ${data.yearlyPrices.length} production years (May to April)`
+            ];
+            
+            // Add product-specific trend insights
+            if (data.yearlyPrices.length > 1) {
+                const firstYear = data.yearlyPrices[0];
+                const lastYear = data.yearlyPrices[data.yearlyPrices.length - 1];
+                
+                products.forEach(product => {
+                    const firstPrice = firstYear[`${product.id}AvgPrice`];
+                    const lastPrice = lastYear[`${product.id}AvgPrice`];
+                    
+                    if (firstPrice > 0 && lastPrice > 0) {
+                        const priceChange = ((lastPrice - firstPrice) / firstPrice * 100).toFixed(1);
+                        
+                        if (Math.abs(priceChange) > 5) {
+                            if (priceChange > 0) {
+                                insights.push(`${product.name} prices increased by ${priceChange}% from ${formatPrice(firstPrice)} to ${formatPrice(lastPrice)} between ${firstYear.productionYearLabel} and ${lastYear.productionYearLabel}`);
+                            } else {
+                                insights.push(`${product.name} prices decreased by ${Math.abs(priceChange)}% from ${formatPrice(firstPrice)} to ${formatPrice(lastPrice)} between ${firstYear.productionYearLabel} and ${lastYear.productionYearLabel}`);
+                            }
+                        }
+                    }
+                });
+            }
+            
+            insights.forEach(insight => {
+                const li = document.createElement('li');
+                li.textContent = insight;
+                insightsList.appendChild(li);
+            });
+        }
+        
+        // Update the chart
+        async function updateChart() {
+            try {
+                document.getElementById('loading').style.display = 'flex';
+                document.getElementById('chart-container').style.display = 'none';
+                document.getElementById('summary').style.display = 'none';
+                document.getElementById('insights').style.display = 'none';
+                document.getElementById('error').style.display = 'none';
+                
+                const startYear = parseInt(document.getElementById('start-year').value);
+                const endYear = parseInt(document.getElementById('end-year').value);
+                
+                if (startYear > endYear) {
+                    throw new Error('Start year must be less than or equal to end year');
+                }
+                
+                const config = { startYear, endYear };
+                console.log("Config:", config);
+                
+                const data = await loadExcelFile('Lobster_Master_Cleaned.xlsx', config);
+                createChart(data);
+                createSummary(data);
+                createInsights(data);
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('chart-container').style.display = 'block';
+                document.getElementById('summary').style.display = 'flex';
+                document.getElementById('insights').style.display = 'block';
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = `Error: ${error.message}`;
+                console.error("Error updating chart:", error);
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('update-chart').addEventListener('click', updateChart);
+            updateChart();
+        });
+    </script>
+</body>
+</html>
