@@ -1,322 +1,357 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6539VRG29E"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-6539VRG29E');
 </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seafood Datasearch</title>
-    <link rel="stylesheet" href="assets/style.css">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: "Arial", sans-serif;
-            background-color: #E0F2F1; /* Very light sea green */
-            margin: 0;
-            padding: 0;
+            background-color: #E0F2F1;
+            color: #333;
         }
-        
+
         header {
-            padding: 20px;
-            text-align: center;
-            background-color: #B2DFDB; /* Slightly darker sea green for header */
-        }
-        
-        .page-container {
+            background-color: #00796B;
+            color: white;
+            padding: 24px 40px;
             display: flex;
-            min-height: calc(100vh - 200px); /* Adjust based on header and footer height */
-        }
-        
-        .left-pane {
-            flex: 1;
-            padding: 20px;
-            background-color: #E0F2F1;
-            display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            border-right: 1px solid #B2DFDB;
         }
-        
-        .center-pane {
-            flex: 2;
-            padding: 20px;
-            background-color: #FFFFFF;
-            text-align: center;
+
+        header h1 { font-size: 1.5rem; font-weight: 700; }
+
+        header nav a {
+            color: white; text-decoration: none; margin-left: 24px;
+            font-size: 0.9rem; opacity: 0.85; transition: opacity 0.2s;
         }
-        
-        .right-pane {
-            flex: 1;
-            padding: 20px;
-            background-color: #E0F2F1;
-            border-left: 1px solid #B2DFDB;
-        }
-        
-        .logo {
-            width: 90%;
-            max-width: 300px;
-            height: auto;
-            margin-bottom: 20px;
-        }
-        
-        .tagline {
-            font-style: italic;
-            color: #00796B;
-            text-align: center;
-        }
-        
-        .project-data {
-            background-color: #F5F5F5;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .project-data ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        
-        .project-data li {
-            margin: 10px 0;
-        }
-        
-        .project-data a {
-            text-decoration: none;
-            color: #00796B;
-            font-weight: bold;
-            padding: 5px 10px;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-        
-        .project-data a:hover {
+        header nav a:hover { opacity: 1; }
+
+        .hero {
             background-color: #B2DFDB;
+            padding: 40px;
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            border-bottom: 1px solid #80CBC4;
         }
-        
-        .nav-menu {
+
+        .hero-logo {
+            flex-shrink: 0;
+        }
+
+        .hero-logo img {
+            width: 200px;
+            height: auto;
+        }
+
+        .hero-text {
+            max-width: 640px;
+        }
+
+        .hero-text h2 {
+            color: #004D40;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .hero-text p {
+            color: #00695C;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .content {
+            max-width: 960px;
+            margin: 36px auto;
+            padding: 0 24px;
+        }
+
+        .year-section {
+            margin-bottom: 40px;
+        }
+
+        .year-header {
+            font-size: 1.6rem;
+            color: #004D40;
+            font-weight: 700;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #00796B;
+        }
+
+        .report-card {
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            cursor: pointer;
+            transition: background-color 0.15s;
+        }
+
+        .report-header:hover {
             background-color: #F5F5F5;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
-        .nav-menu ul {
-            list-style-type: none;
-            padding: 0;
+
+        .report-header h3 {
+            font-size: 1.1rem;
+            color: #004D40;
         }
-        
-        .nav-menu li {
-            margin: 10px 0;
+
+        .report-header .report-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        
-        .nav-menu a {
-            text-decoration: none;
+
+        .badge {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .badge-public {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .badge-client {
+            background-color: #FFF3E0;
+            color: #E65100;
+        }
+
+        .toggle-arrow {
             color: #00796B;
-            font-weight: bold;
-            padding: 5px 10px;
-            border-radius: 4px;
-            transition: background-color 0.3s;
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+        }
+
+        .toggle-arrow.open {
+            transform: rotate(90deg);
+        }
+
+        .report-body {
+            display: none;
+            padding: 0 24px 20px 24px;
+            border-top: 1px solid #ECEFF1;
+        }
+
+        .report-body.open {
             display: block;
         }
-        
-        .nav-menu a:hover {
-            background-color: #B2DFDB;
+
+        .report-body p {
+            color: #607D8B;
+            font-size: 0.9rem;
+            margin: 12px 0;
+            line-height: 1.5;
         }
-        
-        .species-icons {
+
+        .report-body .view-report-btn {
+            display: inline-block;
+            background-color: #00796B;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            transition: background-color 0.2s;
+            margin-top: 8px;
+        }
+
+        .report-body .view-report-btn:hover {
+            background-color: #004D40;
+        }
+
+        .figure-list {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0;
+        }
+
+        .figure-list li {
+            padding: 8px 12px;
+            margin-bottom: 4px;
+            background-color: #F5F9F8;
+            border-radius: 4px;
+            font-size: 0.88rem;
+            color: #37474F;
+        }
+
+        .contact-bar {
+            background-color: #FFFFFF;
+            max-width: 960px;
+            margin: 0 auto 36px auto;
+            padding: 24px 32px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
             flex-wrap: wrap;
-            gap: 20px;
-            padding: 10px;
+            gap: 16px;
         }
-        
-        .species-icons img {
-            width: 80px;
-            height: auto;
+
+        .contact-bar p {
+            font-size: 0.9rem;
+            color: #37474F;
+            line-height: 1.5;
         }
-        
+
         footer {
-            padding: 20px;
             background-color: #B2DFDB;
             text-align: center;
+            padding: 20px;
+            font-size: 0.85rem;
+            color: #004D40;
         }
-        
-        .about-text {
-            text-align: left;
-            margin: 30px 0;
-            line-height: 1.6;
+
+        @media (max-width: 700px) {
+            header { flex-direction: column; text-align: center; gap: 12px; }
+            header nav a { margin: 0 10px; }
+            .hero { flex-direction: column; align-items: center; text-align: center; padding: 28px 20px; }
+            .contact-bar { flex-direction: column; text-align: center; }
         }
-        
-        .contact-info {
-            text-align: left;
-            margin-top: auto;
-            padding-top: 20px;
-            border-top: 1px solid #B2DFDB;
-            width: 100%;
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .page-container {
-                flex-direction: column;
-            }
-            
-            .left-pane, .center-pane, .right-pane {
-                width: 100%;
-                border: none;
-            }
-        }
-   
-    .search-container {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #F5F5F5;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.search-container h3 {
-    margin-top: 0;
-    color: #004D40;
-}
-
-.search-box {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #B2DFDB;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    font-size: 14px;
-}
-
-.search-button {
-    background-color: #00796B;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    width: 100%;
-    transition: background-color 0.3s;
-}
-
-.search-button:hover {
-    background-color: #004D40;
-}
- </style>
+    </style>
 </head>
 <body>
+
     <header>
         <h1>Seafood Datasearch</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="crab_charts.html">Crab Charts</a>
+            <a href="lobster_charts.html">Lobster Charts</a>
+        </nav>
     </header>
-    
-    <div class="page-container">
-        <!-- Left Pane - Logo and About Text -->
-        <div class="left-pane">
-            <img src="assets/images/SD_Logo.png" alt="Seafood Datasearch Logo" class="logo">
-            
-            <div class="about-text">
-                <p>Seafood Datasearch was founded by John Sackton in 1994 to provide market analysis to individual sectors of the seafood industry with market updates and price forecasts. Since then he has specialized in annual reviews of the lobster, crab, and other industries in Atlantic Canada with emphasis on the US market, but including Europe, China, and Japan. This new website is to provide data support for the industry in 2025 in the face of potential disruptive tariffs.</p>
-            </div>
-            
-            <div class="contact-info">
-                <p>Seafood Datasearch<br>
-                8 White Pine Ln<br>
-                Lexington, MA</p>
-                
-                <p>email: jsackton@seafoodlink.com</p>
-            </div>
+
+    <div class="hero">
+        <div class="hero-logo">
+            <img src="assets/images/SD_Logo.png" alt="Seafood Datasearch Logo">
         </div>
-        
-        <!-- Center Pane - Project Data and Links -->
-        <div class="center-pane">
-            <h2>Project Data</h2>
-            <h2>Note that this website is incomplete.
-            Not all Links are live or charts finished.</h2>
-            <div class="project-data">
-                <h3>Interactive Charts</h3>
-                <ul>
-                    <li><a href="crab_charts.html">Crab Charts</a></li>
-                    <li><a href="lobster_charts.html">Lobster Charts</a></li>
-                </ul>
-            </div>
-            
-            <div class="project-data">
-                <h3>Market Data</h3>
-            </div>
-            
-            <div class="project-data">
-                <h3>Economic Data</h3>
-                <ul>
-                    <li><a href="visualizations/market-trends/Food_Spending_and_Income_Trends.html">Food Spending and Income Trends</a></li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- Right Pane - Navigation -->
-        <div class="right-pane">
-            <div class="nav-menu">
-                <h3>Navigation</h3>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="crab_charts.html">Crab Charts</a></li>
-                    <li><a href="lobster_charts.html">Lobster Charts</a></li>
-                    <li><a href="economic_data.html">Economic Data</a></li>
-                </ul>
-            </div>
-            <div class="search-container">
-    <h3>Search</h3>
-    <input type="text" class="search-box" placeholder="Search by keywords..." id="searchInput">
-    <button class="search-button" id="searchButton">Search</button>
-    <div id="searchResults" style="margin-top: 15px;"></div>
-    
-    <script>
-        document.getElementById('searchButton').addEventListener('click', function() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const resultsDiv = document.getElementById('searchResults');
-            
-            if (searchTerm.trim() === '') {
-                resultsDiv.innerHTML = '<p>Please enter a search term</p>';
-                return;
-            }
-            
-            // This is a placeholder for server-side search functionality
-            // In a real implementation, this would make an AJAX call to a server endpoint
-            // that would search through HTML files only
-            
-            resultsDiv.innerHTML = '<p>Searching for: "' + searchTerm + '"...</p>';
-            
-            // Simulated search results
-            // In a real implementation, this would be populated by server response
-            setTimeout(function() {
-                resultsDiv.innerHTML = '<p>Search results will appear here when implemented.</p>';
-            }, 1000);
-        });
-    </script>
-</div>
+        <div class="hero-text">
+            <h2>Market Intelligence for the Seafood Industry</h2>
+            <p>Seafood Datasearch was founded by John Sackton in 1994 to provide market analysis to individual sectors of the seafood industry with market updates and price forecasts. Since then he has specialized in annual reviews of the lobster, crab, and other industries in Atlantic Canada with emphasis on the US market, but including Europe, China, and Japan. This website provides data support and interactive charts for the industry.</p>
         </div>
     </div>
-    
-    <footer>
-        <div class="species-icons">
-            <img src="assets/images/Lobster_icon.png" alt="Lobster">
-            <img src="assets/images/shrimp_icon.png" alt="Shrimp">
-            <img src="assets/images/crab_icon.png" alt="Crab">
-            <img src="assets/images/salmon_icon.png" alt="Salmon">
+
+    <div class="content">
+
+        <!-- 2026 -->
+        <div class="year-section">
+            <div class="year-header">2026</div>
+
+            <!-- Gulf Crab - Client Only -->
+            <div class="report-card">
+                <div class="report-header" onclick="toggleReport(this)">
+                    <h3>Gulf of St. Lawrence Snow Crab</h3>
+                    <div class="report-meta">
+                        <span class="badge badge-client">Client Access</span>
+                        <span class="toggle-arrow">&rarr;</span>
+                    </div>
+                </div>
+                <div class="report-body">
+                    <p>Market analysis and price forecasting for Gulf of St. Lawrence snow crab. Includes supply modeling, seasonal pricing, buyer behavior analysis, and scenario planning under current tariff conditions.</p>
+                    <ul class="figure-list">
+                        <li>Real Price &amp; Supply (25-Year History)</li>
+                        <li>Gulf Pricing Model</li>
+                        <li>Gulf &amp; NL Quota Share</li>
+                        <li>Buyer Behavior</li>
+                        <li>Seasonal Price Pattern</li>
+                        <li>Seasonal Price (Continuous)</li>
+                        <li>Macro Risk Dashboard</li>
+                        <li>Scenario Summary</li>
+                    </ul>
+                    <a class="view-report-btn" href="2026/gulf-crab/gate.html">Access Report &rarr;</a>
+                </div>
+            </div>
+
+            <!-- NL Crab - Public -->
+            <div class="report-card">
+                <div class="report-header" onclick="toggleReport(this)">
+                    <h3>Newfoundland &amp; Labrador Snow Crab</h3>
+                    <div class="report-meta">
+                        <span class="badge badge-public">Public</span>
+                        <span class="toggle-arrow">&rarr;</span>
+                    </div>
+                </div>
+                <div class="report-body">
+                    <p>Industry-wide market review of Newfoundland &amp; Labrador snow crab for the 2026 season. Charts and data will be added as the season progresses.</p>
+                    <a class="view-report-btn" href="2026/nl-crab/index.html">View Report &rarr;</a>
+                </div>
+            </div>
         </div>
-        <p>&copy; 2025 Seafood Datasearch. All rights reserved.</p>
+
+        <!-- 2025 -->
+        <div class="year-section">
+            <div class="year-header">2025</div>
+
+            <div class="report-card">
+                <div class="report-header" onclick="toggleReport(this)">
+                    <h3>Newfoundland Snow Crab</h3>
+                    <div class="report-meta">
+                        <span class="badge badge-public">Public</span>
+                        <span class="toggle-arrow">&rarr;</span>
+                    </div>
+                </div>
+                <div class="report-body">
+                    <p>Market data and interactive charts from the 2025 Newfoundland snow crab season, including trade flows, pricing, retail data, and price modeling.</p>
+                    <ul class="figure-list">
+                        <li>Seasonality of Snow Crab Exports to US</li>
+                        <li>Canada Snow Crab Exports (2012&ndash;2024)</li>
+                        <li>US Snow Crab Supply With Market Share</li>
+                        <li>Retail Crab Volume &amp; Price Trends</li>
+                        <li>Price Elasticity Analysis</li>
+                        <li>Snow Crab Price Model &amp; Forecasts</li>
+                    </ul>
+                    <a class="view-report-btn" href="crab_charts.html">View Charts &rarr;</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="contact-bar">
+        <p><strong>Seafood Datasearch</strong><br>8 White Pine Ln, Lexington, MA</p>
+        <p>email: jsackton@seafoodlink.com</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Seafood Datasearch. All rights reserved.</p>
     </footer>
+
+    <script>
+    function toggleReport(header) {
+        const body = header.nextElementSibling;
+        const arrow = header.querySelector('.toggle-arrow');
+        body.classList.toggle('open');
+        arrow.classList.toggle('open');
+    }
+    </script>
 </body>
 </html>

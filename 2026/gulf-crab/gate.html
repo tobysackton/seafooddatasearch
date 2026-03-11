@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Access - Seafood Datasearch</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: "Arial", sans-serif;
+        background-color: #E0F2F1;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    header {
+        background-color: #00796B;
+        color: white;
+        padding: 24px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    header h1 { font-size: 1.5rem; font-weight: 700; }
+    header nav a {
+        color: white; text-decoration: none; margin-left: 24px;
+        font-size: 0.9rem; opacity: 0.85; transition: opacity 0.2s;
+    }
+    header nav a:hover { opacity: 1; }
+    .gate-container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 24px;
+    }
+    .gate-box {
+        background: white;
+        border-radius: 12px;
+        padding: 48px 40px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        max-width: 420px;
+        width: 100%;
+        text-align: center;
+    }
+    .gate-box .lock-icon {
+        font-size: 2.5rem;
+        margin-bottom: 16px;
+    }
+    .gate-box h2 {
+        color: #004D40;
+        font-size: 1.4rem;
+        margin-bottom: 8px;
+    }
+    .gate-box p {
+        color: #607D8B;
+        font-size: 0.9rem;
+        margin-bottom: 28px;
+        line-height: 1.5;
+    }
+    .gate-box input[type="password"] {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #B2DFDB;
+        border-radius: 6px;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.2s;
+        margin-bottom: 16px;
+    }
+    .gate-box input[type="password"]:focus {
+        border-color: #00796B;
+    }
+    .gate-box button {
+        width: 100%;
+        padding: 14px;
+        background-color: #00796B;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    .gate-box button:hover { background-color: #004D40; }
+    .error-msg {
+        color: #D32F2F;
+        font-size: 0.85rem;
+        margin-top: 12px;
+        display: none;
+    }
+    footer {
+        background-color: #B2DFDB;
+        text-align: center;
+        padding: 20px;
+        font-size: 0.85rem;
+        color: #004D40;
+    }
+</style>
+</head>
+<body>
+    <header>
+        <h1>Seafood Datasearch</h1>
+        <nav>
+            <a href="../../index.html">Home</a>
+        </nav>
+    </header>
+
+    <div class="gate-container">
+        <div class="gate-box">
+            <div class="lock-icon">&#128274;</div>
+            <h2>Client Access Required</h2>
+            <p>This report is available to authorized clients only.<br>Enter your access code to continue.</p>
+            <form id="gateForm" onsubmit="return checkPassword()">
+                <input type="password" id="accessCode" placeholder="Enter access code" autocomplete="off">
+                <button type="submit">Access Report</button>
+            </form>
+            <p class="error-msg" id="errorMsg">Incorrect access code. Please try again.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Seafood Datasearch. All rights reserved.</p>
+    </footer>
+
+    <script>
+    // SHA-256 hash function
+    async function sha256(message) {
+        const msgBuffer = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Check if already authenticated
+    (function() {
+        if (localStorage.getItem('sds_gulf_crab_2026') === 'authorized') {
+            window.location.replace('index.html');
+        }
+    })();
+
+    async function checkPassword() {
+        const input = document.getElementById('accessCode').value;
+        const hash = await sha256(input);
+
+        // CHANGE THIS HASH to match your chosen password
+        // Current password: "gulfcrab2026"
+        // To generate a new hash, open browser console and run:
+        //   crypto.subtle.digest('SHA-256', new TextEncoder().encode('yourpassword')).then(b => console.log(Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2,'0')).join('')))
+        const correctHash = 'e7a0d1b118b1ef2ff864ebfb018327ce7290223e2fedfc75648d2476c23721e7';
+
+        if (hash === correctHash) {
+            localStorage.setItem('sds_gulf_crab_2026', 'authorized');
+            window.location.replace('index.html');
+        } else {
+            document.getElementById('errorMsg').style.display = 'block';
+        }
+        return false;
+    }
+    </script>
+</body>
+</html>
