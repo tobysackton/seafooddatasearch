@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure R-1: Gulf vs. NL Snow Crab Pricing Model</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+    background: #fff;
+    color: #333;
+    padding: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .title-block { text-align: center; margin-bottom: 18px; }
+  .figure-number { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+  .title { font-size: 21px; font-weight: 700; color: #222; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #777; }
+
+  .chart-container { position: relative; width: 100%; height: 440px; margin-bottom: 8px; }
+
+  .legend-row { display: flex; justify-content: center; gap: 22px; flex-wrap: wrap; margin-bottom: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; }
+  .legend-line { width: 22px; height: 3px; border-radius: 1px; }
+  .legend-line-dashed { width: 22px; height: 0; border-top: 2.5px dashed; }
+  .legend-box { width: 14px; height: 14px; border-radius: 2px; border: 1px solid #ccc; }
+
+  .premium-section { max-width: 620px; margin: 14px auto 0; text-align: center; }
+  .premium-title { font-size: 13px; font-weight: 600; color: #444; margin-bottom: 8px; }
+  .premium-bars { display: flex; gap: 2px; height: 50px; align-items: flex-end; justify-content: center; }
+  .premium-col { display: flex; flex-direction: column; align-items: center; width: 80px; }
+  .premium-val { font-size: 11px; margin-bottom: 2px; }
+  .premium-bar { width: 52px; border-radius: 3px 3px 0 0; }
+  .premium-era { font-size: 10px; color: #888; margin-top: 2px; }
+
+  .summary-box {
+    background: #f5f7fa; border: 1px solid #dde2e8; border-left: 4px solid #2a5c8f;
+    border-radius: 0 5px 5px 0; padding: 14px 18px; margin: 16px 0;
+    font-size: 13.5px; line-height: 1.55; color: #333;
+  }
+
+  .source-line {
+    border-top: 1px solid #ddd; margin-top: 14px; padding-top: 8px;
+    font-size: 12px; color: #999;
+  }
+
+  .custom-tooltip {
+    position: absolute; pointer-events: none; opacity: 0; transition: opacity 0.15s;
+    background: #fff; border: 1px solid #ccc; border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.14); padding: 12px 16px;
+    min-width: 220px; font-size: 13px; z-index: 100;
+  }
+  .tooltip-header { font-size: 16px; font-weight: 700; color: #222; padding-bottom: 6px; margin-bottom: 8px; border-bottom: 2px solid #2a5c8f; }
+  .tooltip-tag { font-size: 11px; font-weight: 400; color: #999; margin-left: 8px; }
+  .tooltip-row { display: flex; justify-content: space-between; padding: 2px 0; }
+  .tooltip-label { font-weight: 600; }
+  .tooltip-value { font-weight: 700; font-variant-numeric: tabular-nums; color: #222; }
+  .tooltip-ci { font-size: 11px; color: #999; text-align: right; margin-bottom: 4px; }
+  .tooltip-sep { border-top: 1px solid #eee; margin: 4px 0 4px; padding-top: 6px; }
+</style>
+</head>
+<body>
+
+<div class="title-block">
+  <div class="figure-number">Figure R-1</div>
+  <div class="title">Gulf vs. Newfoundland Snow Crab Wholesale Pricing Model</div>
+  <div class="subtitle">UB 5-8 oz Cluster, Low USD/lb &mdash; Actual through March 2026, Projected April&ndash;December 2026</div>
+</div>
+
+<div class="legend-row">
+  <div class="legend-item"><div class="legend-line" style="background:#2a5c8f;"></div> Gulf 5-8 (actual)</div>
+  <div class="legend-item"><div class="legend-line" style="background:#5b9bd5;"></div> NL 5-8 (actual)</div>
+  <div class="legend-item"><div class="legend-line-dashed" style="border-color:#2a5c8f;"></div> Gulf projected</div>
+  <div class="legend-item"><div class="legend-line-dashed" style="border-color:#5b9bd5;"></div> NL projected</div>
+  <div class="legend-item"><div class="legend-line-dashed" style="border-color:#22c55e;"></div> $10.25</div>
+  <div class="legend-item"><div class="legend-box" style="background:rgba(42,92,143,0.12);"></div> 95% CI</div>
+</div>
+
+<div class="chart-container">
+  <canvas id="mainChart"></canvas>
+  <div class="custom-tooltip" id="tooltip"></div>
+</div>
+
+<div class="premium-section">
+  <div class="premium-title">Production Season Gulf Premium (Apr&ndash;Sep avg)</div>
+  <div class="premium-bars" id="premiumBars"></div>
+</div>
+
+<div class="summary-box">
+  The NL commodity price model (R&sup2; = 0.86) provides the base wholesale level, driven by import volume,
+  border cost, and exchange rate. The Gulf premium &mdash; $0.09 in 2015&ndash;19, $0.47 in 2024, $0.93 in 2025 &mdash;
+  reflects the scarcity factor as Gulf supply share fell from 55% to 22% of Canadian production.
+  Using $1.25 as a starting point for the 2026 production-season premium, peak-season Gulf 5-8 pricing
+  centers near $10.31&ndash;10.52/lb. Premium sensitivity: at $1.00 the central estimate is ~$10.06; at $1.25 &rarr; ~$10.31;
+  at $1.50 &rarr; ~$10.56. The $10.25 level falls within the model range at the $1.25 starting premium.
+</div>
+
+<div class="source-line">
+  Source: Seafood Datasearch from Urner Barry, Global Trade Tracker, OLS pricing model
+</div>
+
+<script>
+// === DATA ===
+const HIST = [
+  { d:"2023-01", nl:7.27, gulf:7.40 }, { d:"2023-02", nl:6.91, gulf:7.10 },
+  { d:"2023-03", nl:6.07, gulf:6.21 }, { d:"2023-04", nl:5.17, gulf:5.24 },
+  { d:"2023-05", nl:4.65, gulf:4.85 }, { d:"2023-06", nl:4.97, gulf:5.05 },
+  { d:"2023-07", nl:5.29, gulf:5.42 }, { d:"2023-08", nl:5.74, gulf:5.84 },
+  { d:"2023-09", nl:5.75, gulf:5.85 }, { d:"2023-10", nl:5.75, gulf:5.85 },
+  { d:"2023-11", nl:5.63, gulf:5.85 }, { d:"2023-12", nl:5.32, gulf:5.85 },
+  { d:"2024-01", nl:5.40, gulf:5.94 }, { d:"2024-02", nl:5.45, gulf:6.00 },
+  { d:"2024-03", nl:5.45, gulf:6.00 }, { d:"2024-04", nl:5.64, gulf:6.31 },
+  { d:"2024-05", nl:6.19, gulf:6.54 }, { d:"2024-06", nl:6.06, gulf:6.60 },
+  { d:"2024-07", nl:6.05, gulf:6.60 }, { d:"2024-08", nl:6.09, gulf:6.60 },
+  { d:"2024-09", nl:6.67, gulf:6.85 }, { d:"2024-10", nl:7.46, gulf:7.56 },
+  { d:"2024-11", nl:8.21, gulf:8.33 }, { d:"2024-12", nl:8.38, gulf:8.62 },
+  { d:"2025-01", nl:8.62, gulf:8.82 }, { d:"2025-02", nl:9.11, gulf:9.23 },
+  { d:"2025-03", nl:9.25, gulf:9.50 }, { d:"2025-04", nl:8.03, gulf:9.50 },
+  { d:"2025-05", nl:8.07, gulf:9.46 }, { d:"2025-06", nl:8.10, gulf:9.21 },
+  { d:"2025-07", nl:8.79, gulf:9.43 }, { d:"2025-08", nl:9.48, gulf:9.90 },
+  { d:"2025-09", nl:9.50, gulf:10.05 }, { d:"2025-10", nl:9.50, gulf:10.04 },
+  { d:"2025-11", nl:9.50, gulf:9.95 }, { d:"2025-12", nl:9.66, gulf:9.95 },
+  { d:"2026-01", nl:10.11, gulf:10.21 }, { d:"2026-02", nl:10.44, gulf:10.58 },
+  { d:"2026-03", nl:10.50, gulf:11.00 },
+];
+
+const PROJ = [
+  { d:"2026-04", nl_c:9.12, nl_lo:8.52, nl_hi:9.76, prem:1.40, gulf_c:10.52, gulf_lo:9.50, gulf_hi:11.58 },
+  { d:"2026-05", nl_c:9.06, nl_lo:8.46, nl_hi:9.71, prem:1.40, gulf_c:10.46, gulf_lo:9.44, gulf_hi:11.53 },
+  { d:"2026-06", nl_c:9.06, nl_lo:8.46, nl_hi:9.71, prem:1.25, gulf_c:10.31, gulf_lo:9.34, gulf_hi:11.33 },
+  { d:"2026-07", nl_c:9.06, nl_lo:8.46, nl_hi:9.71, prem:1.25, gulf_c:10.31, gulf_lo:9.34, gulf_hi:11.33 },
+  { d:"2026-08", nl_c:9.06, nl_lo:8.46, nl_hi:9.71, prem:1.25, gulf_c:10.31, gulf_lo:9.34, gulf_hi:11.33 },
+  { d:"2026-09", nl_c:9.30, nl_lo:8.71, nl_hi:9.94, prem:1.00, gulf_c:10.30, gulf_lo:9.41, gulf_hi:11.24 },
+  { d:"2026-10", nl_c:9.63, nl_lo:9.03, nl_hi:10.27, prem:1.00, gulf_c:10.63, gulf_lo:9.73, gulf_hi:11.57 },
+  { d:"2026-11", nl_c:9.89, nl_lo:9.27, nl_hi:10.54, prem:0.50, gulf_c:10.39, gulf_lo:9.62, gulf_hi:11.19 },
+  { d:"2026-12", nl_c:9.89, nl_lo:9.27, nl_hi:10.54, prem:0.50, gulf_c:10.39, gulf_lo:9.62, gulf_hi:11.19 },
+];
+
+const PREM_HIST = [
+  { era:"2015\u201319", val:0.09 },
+  { era:"2020\u201322", val:0.10 },
+  { era:"2023", val:0.17 },
+  { era:"2024", val:0.47 },
+  { era:"2025", val:0.93 },
+  { era:"2026E", val:1.25 },
+];
+
+// Build labels & datasets
+const histLen = HIST.length;
+const projLen = PROJ.length;
+const totalLen = histLen + projLen;
+const labels = [...HIST.map(h => h.d), ...PROJ.map(p => p.d)];
+
+// Historical lines (null for projected region)
+const gulfActual = HIST.map(h => h.gulf).concat(PROJ.map(() => null));
+const nlActual = HIST.map(h => h.nl).concat(PROJ.map(() => null));
+
+// Projected lines (null for historical, with bridge from last actual point)
+const gulfCentral = HIST.map((h, i) => i === histLen - 1 ? h.gulf : null).concat(PROJ.map(p => p.gulf_c));
+const nlCentral = HIST.map((h, i) => i === histLen - 1 ? h.nl : null).concat(PROJ.map(p => p.nl_c));
+
+// CI bands
+const gulfHi = HIST.map(() => null).concat(PROJ.map(p => p.gulf_hi));
+const gulfLo = HIST.map(() => null).concat(PROJ.map(p => p.gulf_lo));
+const nlHi = HIST.map(() => null).concat(PROJ.map(p => p.nl_hi));
+const nlLo = HIST.map(() => null).concat(PROJ.map(p => p.nl_lo));
+
+// $10.25 reference line
+const refLine = labels.map(() => 10.25);
+
+// Format label for x-axis
+function fmtLabel(d) {
+  const [y, m] = d.split("-");
+  const months = ["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  return months[+m] + " '" + y.slice(2);
+}
+
+// === PREMIUM BARS ===
+(function buildPremiumBars() {
+  const container = document.getElementById("premiumBars");
+  const maxVal = 1.35;
+  const maxH = 34;
+  PREM_HIST.forEach((p, i) => {
+    const isCurrent = i === PREM_HIST.length - 1;
+    const h = Math.max(4, (p.val / maxVal) * maxH);
+    const col = document.createElement("div");
+    col.className = "premium-col";
+
+    const valEl = document.createElement("div");
+    valEl.className = "premium-val";
+    valEl.style.fontWeight = isCurrent ? "700" : "500";
+    valEl.style.color = isCurrent ? "#e07070" : "#666";
+    valEl.textContent = "$" + p.val.toFixed(2);
+
+    const bar = document.createElement("div");
+    bar.className = "premium-bar";
+    bar.style.height = h + "px";
+    bar.style.background = isCurrent
+      ? "linear-gradient(to top, #e07070, #e8a0a0)"
+      : "linear-gradient(to top, #5b9bd5, #a8cce8)";
+
+    const era = document.createElement("div");
+    era.className = "premium-era";
+    era.textContent = p.era;
+
+    col.appendChild(valEl);
+    col.appendChild(bar);
+    col.appendChild(era);
+    container.appendChild(col);
+  });
+})();
+
+// === CHART ===
+const ctx = document.getElementById("mainChart").getContext("2d");
+
+// Background shading plugin for projected region
+const projShadingPlugin = {
+  id: "projShading",
+  beforeDraw(chart) {
+    const { ctx: c, chartArea, scales } = chart;
+    const xScale = scales.x;
+    const projStart = histLen - 1; // start shading from last actual point
+    const x0 = xScale.getPixelForValue(projStart);
+    const x1 = chartArea.right;
+    c.save();
+    c.fillStyle = "#f8f9fb";
+    c.fillRect(x0, chartArea.top, x1 - x0, chartArea.bottom - chartArea.top);
+    c.restore();
+  }
+};
+
+const chart = new Chart(ctx, {
+  type: "line",
+  plugins: [projShadingPlugin],
+  data: {
+    labels: labels,
+    datasets: [
+      // Gulf CI upper (filled to lower)
+      {
+        label: "_gulf_hi",
+        data: gulfHi,
+        borderColor: "transparent",
+        backgroundColor: "rgba(42, 92, 143, 0.12)",
+        fill: "+1",
+        pointRadius: 0,
+        tension: 0.1,
+        spanGaps: false,
+      },
+      // Gulf CI lower
+      {
+        label: "_gulf_lo",
+        data: gulfLo,
+        borderColor: "transparent",
+        backgroundColor: "transparent",
+        fill: false,
+        pointRadius: 0,
+        tension: 0.1,
+        spanGaps: false,
+      },
+      // NL CI upper (filled to lower)
+      {
+        label: "_nl_hi",
+        data: nlHi,
+        borderColor: "transparent",
+        backgroundColor: "rgba(91, 155, 213, 0.12)",
+        fill: "+1",
+        pointRadius: 0,
+        tension: 0.1,
+        spanGaps: false,
+      },
+      // NL CI lower
+      {
+        label: "_nl_lo",
+        data: nlLo,
+        borderColor: "transparent",
+        backgroundColor: "transparent",
+        fill: false,
+        pointRadius: 0,
+        tension: 0.1,
+        spanGaps: false,
+      },
+      // Gulf actual
+      {
+        label: "Gulf 5-8 (actual)",
+        data: gulfActual,
+        borderColor: "#2a5c8f",
+        borderWidth: 2.5,
+        pointRadius: 0,
+        tension: 0.1,
+        spanGaps: false,
+        fill: false,
+      },
+      // NL actual
+      {
+        label: "NL 5-8 (actual)",
+        data: nlActual,
+        borderColor: "#5b9bd5",
+        borderWidth: 2.5,
+        pointRadius: 0,
+        tension: 0.1,
+        spanGaps: false,
+        fill: false,
+      },
+      // Gulf projected
+      {
+        label: "Gulf projected",
+        data: gulfCentral,
+        borderColor: "#2a5c8f",
+        borderWidth: 2.5,
+        borderDash: [6, 3],
+        pointRadius: 0,
+        tension: 0.1,
+        spanGaps: true,
+        fill: false,
+      },
+      // NL projected
+      {
+        label: "NL projected",
+        data: nlCentral,
+        borderColor: "#5b9bd5",
+        borderWidth: 2.5,
+        borderDash: [6, 3],
+        pointRadius: 0,
+        tension: 0.1,
+        spanGaps: true,
+        fill: false,
+      },
+      // $10.25 reference line
+      {
+        label: "$10.25",
+        data: refLine,
+        borderColor: "#22c55e",
+        borderWidth: 1.5,
+        borderDash: [8, 4],
+        pointRadius: 0,
+        fill: false,
+        tension: 0,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: "index",
+      intersect: false,
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        enabled: false,
+        external: function(context) {
+          const tooltipEl = document.getElementById("tooltip");
+          const tooltipModel = context.tooltip;
+          if (tooltipModel.opacity === 0) {
+            tooltipEl.style.opacity = 0;
+            return;
+          }
+          const idx = tooltipModel.dataPoints?.[0]?.dataIndex;
+          if (idx === undefined) return;
+
+          const isProj = idx >= histLen;
+          const date = labels[idx];
+
+          let html = '<div class="tooltip-header">' + date;
+          if (isProj) html += '<span class="tooltip-tag">PROJECTED</span>';
+          html += '</div>';
+
+          if (isProj) {
+            const p = PROJ[idx - histLen];
+            html += '<div class="tooltip-row"><span class="tooltip-label" style="color:#2a5c8f">Gulf 5-8</span><span class="tooltip-value">$' + p.gulf_c.toFixed(2) + '</span></div>';
+            html += '<div class="tooltip-ci">[' + p.gulf_lo.toFixed(2) + ' \u2013 ' + p.gulf_hi.toFixed(2) + ']</div>';
+            html += '<div class="tooltip-row"><span class="tooltip-label" style="color:#5b9bd5">NL 5-8</span><span class="tooltip-value">$' + p.nl_c.toFixed(2) + '</span></div>';
+            html += '<div class="tooltip-ci">[' + p.nl_lo.toFixed(2) + ' \u2013 ' + p.nl_hi.toFixed(2) + ']</div>';
+            html += '<div class="tooltip-sep"><div class="tooltip-row"><span class="tooltip-label" style="color:#e07070">Gulf Premium</span><span class="tooltip-value">$' + p.prem.toFixed(2) + '</span></div></div>';
+          } else {
+            const h = HIST[idx];
+            html += '<div class="tooltip-row"><span class="tooltip-label" style="color:#2a5c8f">Gulf 5-8</span><span class="tooltip-value">$' + h.gulf.toFixed(2) + '</span></div>';
+            html += '<div class="tooltip-row"><span class="tooltip-label" style="color:#5b9bd5">NL 5-8</span><span class="tooltip-value">$' + h.nl.toFixed(2) + '</span></div>';
+            const diff = (h.gulf - h.nl).toFixed(2);
+            html += '<div class="tooltip-sep"><div class="tooltip-row"><span class="tooltip-label" style="color:#e07070">Differential</span><span class="tooltip-value">$' + diff + '</span></div></div>';
+          }
+
+          tooltipEl.innerHTML = html;
+          tooltipEl.style.opacity = 1;
+
+          const chartArea = context.chart.chartArea;
+          let left = tooltipModel.caretX + 12;
+          if (left + 240 > chartArea.right + 60) left = tooltipModel.caretX - 250;
+          tooltipEl.style.left = left + "px";
+          tooltipEl.style.top = Math.max(chartArea.top, tooltipModel.caretY - 60) + "px";
+        }
+      },
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        border: { color: "#ccc" },
+        ticks: {
+          font: { size: 11 },
+          color: "#444",
+          maxRotation: 0,
+          autoSkip: false,
+          callback: function(value, index) {
+            if (index % 3 === 0) return fmtLabel(labels[index]);
+            return "";
+          },
+        },
+      },
+      y: {
+        min: 4,
+        max: 12,
+        grid: { color: "#e8e8e8", drawBorder: false },
+        border: { display: false },
+        ticks: {
+          stepSize: 1,
+          font: { size: 13 },
+          color: "#777",
+          callback: function(v) { return "$" + v; },
+        },
+      },
+    },
+  },
+});
+</script>
+</body>
+</html>

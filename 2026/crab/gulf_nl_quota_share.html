@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figure R-2: Gulf vs NL Share of Canadian Snow Crab Production</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #fff;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 24px;
+        }
+        .figure-number {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 4px;
+        }
+        .title {
+            text-align: center;
+            font-size: 21px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 4px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 420px;
+            margin-bottom: 20px;
+        }
+        .summary-box {
+            background: #f5f7fa;
+            border: 1px solid #dde2e8;
+            border-left: 4px solid #2a5c8f;
+            border-radius: 0 5px 5px 0;
+            padding: 14px 18px;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: #333;
+            margin-bottom: 14px;
+        }
+        .source-line {
+            border-top: 1px solid #ddd;
+            margin-top: 14px;
+            padding-top: 8px;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="figure-number">Figure R-2</div>
+    <div class="title">Gulf vs Newfoundland Share of Canadian Snow Crab Production</div>
+    <div class="subtitle">Total allowable catch (tonnes) and Gulf share %, 2016–2026E</div>
+    <div class="chart-container">
+        <canvas id="quotaChart"></canvas>
+    </div>
+    <div class="summary-box">
+        Gulf quota peaked at ~43,500 tonnes in 2017 and will fall to ~16,300 tonnes in 2026 — a 63% decline.
+        Since the 2023 high of ~35,800 tonnes, the drop has been sharp: down 55% in three years.
+        Gulf's share of total Canadian production fell from 46% in 2017 to under 19% in 2025-26.
+        The buyers who need Gulf-origin crab now compete for a scarcer fraction of a shrinking total, which is
+        the structural driver of the expanding Gulf premium.
+    </div>
+    <div class="source-line">Source: Seafood Datasearch from DFO quota announcements and industry estimates</div>
+</div>
+
+<script>
+const years = ['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026E'];
+const gulfQuota = [21611, 43475, 24439, 32215, 31152, 24124, 33160, 35775, 25261, 17885, 16268];
+const nlQuota =   [45305, 34530, 28930, 26494, 29151, 37786, 50021, 54277, 57120, 62432, 56000];
+const totalQuota = gulfQuota.map((g,i) => g + nlQuota[i]);
+const gulfPct = gulfQuota.map((g,i) => (g / totalQuota[i] * 100));
+
+const ctx = document.getElementById('quotaChart').getContext('2d');
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: years,
+        datasets: [
+            {
+                label: 'Gulf Quota',
+                data: gulfQuota,
+                backgroundColor: '#e07070',
+                borderColor: '#c55050',
+                borderWidth: 1,
+                order: 2,
+                yAxisID: 'y'
+            },
+            {
+                label: 'Newfoundland Quota',
+                data: nlQuota,
+                backgroundColor: '#5b9bd5',
+                borderColor: '#4080b8',
+                borderWidth: 1,
+                order: 2,
+                yAxisID: 'y'
+            },
+            {
+                label: 'Gulf Share %',
+                data: gulfPct,
+                type: 'line',
+                borderColor: '#2a5c8f',
+                backgroundColor: 'rgba(42,92,143,0.1)',
+                borderWidth: 3,
+                pointRadius: 5,
+                pointBackgroundColor: '#2a5c8f',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2.5,
+                pointHoverRadius: 7,
+                fill: false,
+                order: 1,
+                yAxisID: 'y1'
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    font: { family: "'Calibri', 'Segoe UI', sans-serif", size: 13 },
+                    color: '#555',
+                    padding: 18,
+                    usePointStyle: true,
+                    pointStyleWidth: 18,
+                }
+            },
+            tooltip: {
+                backgroundColor: '#fff',
+                titleColor: '#222',
+                bodyColor: '#555',
+                borderColor: '#ccc',
+                borderWidth: 1,
+                titleFont: { size: 14, weight: 'bold', family: "'Calibri', sans-serif" },
+                bodyFont: { size: 13, family: "'Calibri', sans-serif" },
+                padding: 14,
+                boxPadding: 6,
+                callbacks: {
+                    label: function(ctx) {
+                        if (ctx.dataset.yAxisID === 'y1') {
+                            return 'Gulf Share: ' + ctx.raw.toFixed(1) + '%';
+                        }
+                        return ctx.dataset.label + ': ' + ctx.raw.toLocaleString() + ' t';
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                stacked: true,
+                grid: { display: false },
+                ticks: {
+                    font: { size: 14, family: "'Calibri', sans-serif" },
+                    color: '#444'
+                }
+            },
+            y: {
+                stacked: true,
+                position: 'left',
+                title: {
+                    display: true,
+                    text: 'Quota (tonnes)',
+                    font: { size: 13, family: "'Calibri', sans-serif" },
+                    color: '#777'
+                },
+                grid: {
+                    color: '#e8e8e8',
+                    borderDash: [3, 3]
+                },
+                ticks: {
+                    font: { size: 13, family: "'Calibri', sans-serif" },
+                    color: '#777',
+                    callback: function(v) { return (v/1000).toFixed(0) + 'k'; }
+                },
+                max: 100000
+            },
+            y1: {
+                position: 'right',
+                title: {
+                    display: true,
+                    text: 'Gulf Share of Total (%)',
+                    font: { size: 13, weight: '600', family: "'Calibri', sans-serif" },
+                    color: '#2a5c8f'
+                },
+                grid: { drawOnChartArea: false },
+                ticks: {
+                    font: { size: 13, weight: '600', family: "'Calibri', sans-serif" },
+                    color: '#2a5c8f',
+                    callback: function(v) { return v + '%'; }
+                },
+                min: 0,
+                max: 60,
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+</body>
+</html>

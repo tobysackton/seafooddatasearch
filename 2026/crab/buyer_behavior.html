@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figure R-4: Gulf Crab Buyer Behavior Classifications</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #fff; padding: 20px; color: #333;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 24px; }
+        .figure-number {
+            text-align: center; font-size: 12px; color: #999;
+            text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;
+        }
+        .title { text-align: center; font-size: 21px; font-weight: 700; color: #222; margin-bottom: 4px; }
+        .subtitle { text-align: center; font-size: 14px; color: #777; margin-bottom: 20px; }
+        .chart-container { position: relative; height: 380px; margin-bottom: 20px; }
+        .behavior-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .behavior-card {
+            padding: 12px 14px;
+            border-radius: 5px;
+            border: 1px solid #dde2e8;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .behavior-card .label {
+            font-weight: 700;
+            font-size: 13.5px;
+            margin-bottom: 3px;
+        }
+        .card-supply { background: #eff6ff; border-left: 4px solid #5b9bd5; }
+        .card-supply .label { color: #2a5c8f; }
+        .card-loyal { background: #f0fdf4; border-left: 4px solid #22c55e; }
+        .card-loyal .label { color: #16a34a; }
+        .card-exited { background: #fef2f2; border-left: 4px solid #ef4444; }
+        .card-exited .label { color: #dc2626; }
+        .card-opp { background: #fffbeb; border-left: 4px solid #f59e0b; }
+        .card-opp .label { color: #d97706; }
+        .card-asian { background: #f5f3ff; border-left: 4px solid #9e8fce; }
+        .card-asian .label { color: #6d5dac; }
+        .summary-box {
+            background: #f5f7fa; border: 1px solid #dde2e8;
+            border-left: 4px solid #2a5c8f; border-radius: 0 5px 5px 0;
+            padding: 14px 18px; font-size: 13.5px; line-height: 1.55; color: #333;
+            margin-bottom: 14px;
+        }
+        .source-line {
+            border-top: 1px solid #ddd; margin-top: 14px; padding-top: 8px;
+            font-size: 12px; color: #999;
+        }
+        .full-width { grid-column: 1 / -1; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="figure-number">Figure R-4</div>
+    <div class="title">Gulf Crab Buyer Behavior: Five Response Patterns</div>
+    <div class="subtitle">Gulf-origin share of crab purchases (%) by representative retailer, 2020–2025</div>
+    <div class="chart-container">
+        <canvas id="buyerChart"></canvas>
+    </div>
+    <div class="behavior-grid">
+        <div class="behavior-card card-supply">
+            <div class="label">Supply-Tracking (Kroger IN)</div>
+            Gulf share dropped from 22% → 2% as premium widened. Price-sensitive, origin-indifferent — these buyers do not support the Gulf premium.
+        </div>
+        <div class="behavior-card card-loyal">
+            <div class="label">Loyal / Counter-Cyclical (C&S/Market Basket NH)</div>
+            Held Gulf share at 44–50% despite rising premium. Customers expect Gulf product; absorbs cost rather than switching.
+        </div>
+        <div class="behavior-card card-exited">
+            <div class="label">Exited Market (Jewel-Osco IL)</div>
+            Went from 85% Gulf → 0% by 2023. Product disappeared from shelves entirely rather than being replaced by NL.
+        </div>
+        <div class="behavior-card card-opp">
+            <div class="label">Opportunistic (Publix FL)</div>
+            Gulf share swung 13% → 59% → 23% in three years. Takes Gulf when price aligns but not committed to either origin.
+        </div>
+        <div class="behavior-card card-asian full-width">
+            <div class="label">Asian Wholesale Distributors</div>
+            Not tracked in retail data but a critical price-setting channel. These buyers serve restaurants with specific Gulf requirements and compete with foodservice chains for limited supply. Would be classified as Gulf-loyal buyers whose volume adjusts slowly to price.
+        </div>
+    </div>
+    <div class="summary-box">
+        As Gulf quota contracted, price-sensitive and indifferent buyers exited. The remaining buyer base is concentrated among
+        foodservice chains, committed retail accounts, and Asian wholesale — all of whom need Gulf product specifically.
+        This demand concentration is the structural foundation of the Gulf premium.
+    </div>
+    <div class="source-line">Source: Seafood Datasearch from Circana retail tracking data. Representative examples selected for data signal clarity.</div>
+</div>
+
+<script>
+const years = ['2020','2021','2022','2023','2024','2025'];
+const kroger =      [21.9, 8.9, 5.1, 7.9, 2.0, 1.8];
+const marketBasket = [31.2, 45.6, 61.9, 51.9, 49.7, 44.5];
+const jewelOsco =   [59.7, 85.0, 40.9, 0, 0, 0];
+const publix =      [26.6, 12.5, 58.9, 19.2, 26.9, 23.0];
+const hub =         [32.0, 24.2, 24.7, 27.7, 26.8, 35.6];
+
+const ctx = document.getElementById('buyerChart').getContext('2d');
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: years,
+        datasets: [
+            {
+                label: 'Kroger (IN) — Supply-Tracking',
+                data: kroger,
+                borderColor: '#5b9bd5',
+                backgroundColor: '#5b9bd5',
+                borderWidth: 3,
+                pointRadius: 5,
+                pointBackgroundColor: '#5b9bd5',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2.5,
+                tension: 0.3
+            },
+            {
+                label: 'C&S/Market Basket (NH) — Loyal',
+                data: marketBasket,
+                borderColor: '#22c55e',
+                backgroundColor: '#22c55e',
+                borderWidth: 3,
+                pointRadius: 5,
+                pointBackgroundColor: '#22c55e',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2.5,
+                tension: 0.3
+            },
+            {
+                label: 'Jewel-Osco (IL) — Exited',
+                data: jewelOsco,
+                borderColor: '#ef4444',
+                backgroundColor: '#ef4444',
+                borderWidth: 3,
+                pointRadius: 5,
+                pointBackgroundColor: '#ef4444',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2.5,
+                tension: 0.3
+            },
+            {
+                label: 'Publix (FL) — Opportunistic',
+                data: publix,
+                borderColor: '#f59e0b',
+                backgroundColor: '#f59e0b',
+                borderWidth: 3,
+                pointRadius: 5,
+                pointBackgroundColor: '#f59e0b',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2.5,
+                tension: 0.3
+            },
+            {
+                label: 'Hub Redistribution (MA)',
+                data: hub,
+                borderColor: '#9e8fce',
+                backgroundColor: '#9e8fce',
+                borderWidth: 2,
+                borderDash: [6, 4],
+                pointRadius: 4,
+                pointBackgroundColor: '#9e8fce',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                tension: 0.3
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    font: { family: "'Calibri', 'Segoe UI', sans-serif", size: 12 },
+                    color: '#555',
+                    padding: 12,
+                    usePointStyle: true,
+                    pointStyleWidth: 18,
+                }
+            },
+            tooltip: {
+                backgroundColor: '#fff',
+                titleColor: '#222',
+                bodyColor: '#555',
+                borderColor: '#ccc',
+                borderWidth: 1,
+                titleFont: { size: 14, weight: 'bold', family: "'Calibri', sans-serif" },
+                bodyFont: { size: 13, family: "'Calibri', sans-serif" },
+                padding: 14,
+                boxPadding: 6,
+                callbacks: {
+                    label: function(ctx) {
+                        return ctx.dataset.label.split(' — ')[0] + ': ' + ctx.raw.toFixed(1) + '% Gulf';
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                grid: { display: false },
+                ticks: {
+                    font: { size: 14, family: "'Calibri', sans-serif" },
+                    color: '#444'
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Gulf-Origin Share of Crab Purchases (%)',
+                    font: { size: 13, family: "'Calibri', sans-serif" },
+                    color: '#777'
+                },
+                grid: { color: '#e8e8e8', borderDash: [3, 3] },
+                ticks: {
+                    font: { size: 13, family: "'Calibri', sans-serif" },
+                    color: '#777',
+                    callback: function(v) { return v + '%'; }
+                },
+                min: 0,
+                max: 100
+            }
+        }
+    }
+});
+</script>
+</body>
+</html>

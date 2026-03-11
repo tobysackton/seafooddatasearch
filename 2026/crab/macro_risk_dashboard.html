@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figure R-5: Macro Risk Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #fff; padding: 20px; color: #333;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 24px; }
+        .figure-number {
+            text-align: center; font-size: 12px; color: #999;
+            text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;
+        }
+        .title { text-align: center; font-size: 21px; font-weight: 700; color: #222; margin-bottom: 4px; }
+        .subtitle { text-align: center; font-size: 14px; color: #777; margin-bottom: 20px; }
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .mini-chart {
+            border: 1px solid #dde2e8;
+            border-radius: 5px;
+            padding: 14px;
+            background: #fafbfc;
+        }
+        .mini-chart.alert-border {
+            border: 2px solid #ef4444;
+            background: #fefafa;
+        }
+        .mini-chart-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #2a5c8f;
+            margin-bottom: 2px;
+        }
+        .mini-chart.alert-border .mini-chart-title { color: #dc2626; }
+        .mini-chart-subtitle {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+        .mini-chart-container {
+            position: relative;
+            height: 160px;
+        }
+        .metric-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            margin-bottom: 6px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .metric-bar .label { flex: 1; }
+        .metric-bar .value { font-weight: 700; font-size: 15px; font-variant-numeric: tabular-nums; }
+        .metric-bar .change { font-size: 12px; }
+        .bar-warn { background: #fef3c7; border: 1px solid #f59e0b; }
+        .bar-warn .value { color: #d97706; }
+        .bar-alert { background: #fee2e2; border: 1px solid #ef4444; }
+        .bar-alert .value { color: #dc2626; }
+        .bar-neutral { background: #f0f9ff; border: 1px solid #7dd3fc; }
+        .bar-neutral .value { color: #0284c7; }
+        .bar-ok { background: #f0fdf4; border: 1px solid #86efac; }
+        .bar-ok .value { color: #16a34a; }
+        .bar-mixed { background: #f5f0ff; border: 1px solid #c4b5fd; }
+        .bar-mixed .value { color: #7c3aed; }
+        .summary-box {
+            background: #f5f7fa; border: 1px solid #dde2e8;
+            border-left: 4px solid #2a5c8f; border-radius: 0 5px 5px 0;
+            padding: 14px 18px; font-size: 13.5px; line-height: 1.55; color: #333;
+            margin-bottom: 14px;
+        }
+        .alert-callout {
+            background: #fef2f2; border: 1px solid #fecaca;
+            border-left: 4px solid #ef4444; border-radius: 0 5px 5px 0;
+            padding: 12px 16px; font-size: 13px; line-height: 1.5; color: #991b1b;
+            margin-bottom: 14px;
+        }
+        .alert-callout strong { color: #7f1d1d; }
+        .source-line {
+            border-top: 1px solid #ddd; margin-top: 14px; padding-top: 8px;
+            font-size: 12px; color: #999;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="figure-number">Figure R-5</div>
+    <div class="title">Macro Risk Dashboard: Key Indicators for Crab Demand</div>
+    <div class="subtitle">Consumer sentiment, food costs, exchange rates, and energy — through March 2026</div>
+
+    <div class="chart-grid">
+        <div class="mini-chart">
+            <div class="mini-chart-title">Consumer Sentiment (UMCSENT)</div>
+            <div class="mini-chart-subtitle">University of Michigan Index</div>
+            <div class="mini-chart-container">
+                <canvas id="sentimentChart"></canvas>
+            </div>
+        </div>
+        <div class="mini-chart">
+            <div class="mini-chart-title">Food at Home CPI</div>
+            <div class="mini-chart-subtitle">BLS Index (CUSR0000SAF11)</div>
+            <div class="mini-chart-container">
+                <canvas id="cpiChart"></canvas>
+            </div>
+        </div>
+        <div class="mini-chart alert-border">
+            <div class="mini-chart-title">CAD/USD Exchange Rate</div>
+            <div class="mini-chart-subtitle">FRED DEXCAUS — note March strengthening</div>
+            <div class="mini-chart-container">
+                <canvas id="fxChart"></canvas>
+            </div>
+        </div>
+        <div class="mini-chart alert-border">
+            <div class="mini-chart-title">Diesel Price — Iran War Spike</div>
+            <div class="mini-chart-subtitle">USD/gal (EIA weekly) — sharp break in March</div>
+            <div class="mini-chart-container">
+                <canvas id="dieselChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert-callout">
+        <strong>Iran war disruption (Feb 28 –):</strong> US-Israel strikes on Iran have choked oil shipments through the Strait of Hormuz.
+        Oil prices surged 25%+, driving diesel from $3.90 to $4.86/gal in one week. This directly raises transportation costs
+        for seafood distribution. Diesel is now at the highest level since the 2022 post-Ukraine spike.
+    </div>
+
+    <div style="margin-bottom: 16px;">
+        <div class="metric-bar bar-warn">
+            <span class="label">Consumer Sentiment</span>
+            <span class="value">56.4</span>
+            <span class="change">(Jan 2026) — well below pre-pandemic avg of ~96. Will likely fall further on gas price shock.</span>
+        </div>
+        <div class="metric-bar bar-warn">
+            <span class="label">Food at Home CPI</span>
+            <span class="value">324.1</span>
+            <span class="change">(Jan 2026) — up 33% from Jan 2020. Energy costs will feed through to food prices.</span>
+        </div>
+        <div class="metric-bar bar-mixed">
+            <span class="label">CAD/USD Exchange</span>
+            <span class="value">1.356</span>
+            <span class="change">(Mar 11) — CAD strengthening sharply from 1.44 in Feb. Petrocurrency effect: oil surge benefits Canada as a secure energy supplier. CAD outperforming EUR, GBP. Stronger CAD squeezes processor margins in USD terms.</span>
+        </div>
+        <div class="metric-bar bar-alert">
+            <span class="label">Diesel</span>
+            <span class="value">$4.86/gal</span>
+            <span class="change">(Mar 9) — up $0.96 in one week. Iran war / Strait of Hormuz closure. Highest since 2022.</span>
+        </div>
+    </div>
+
+    <div class="summary-box">
+        The macro picture has shifted significantly in the past two weeks. The Iran war introduces two competing pressures
+        on Canadian crab pricing. <strong>Negative for processors:</strong> diesel costs raise transportation expense across the supply chain,
+        and a strengthening CAD (from 1.44 to 1.36) compresses processor margins — they receive USD for crab but pay
+        costs in an appreciating Canadian dollar. <strong>Negative for demand:</strong> rising fuel prices will further erode consumer
+        sentiment, which was already weak at 56.4. Gas prices above $4 historically correlate with reduced restaurant traffic
+        and discretionary grocery spending — both direct channels for crab. <strong>Partially offsetting:</strong> Canada's petrocurrency
+        status means it is outperforming other G7 currencies (EUR, GBP) against the USD, reflecting Canada's position as a
+        secure energy supplier. This dynamic is new as of early March and bears watching through the production season.
+    </div>
+    <div class="source-line">Source: Seafood Datasearch from FRED, EIA, Bank of Canada. Diesel and CAD/USD updated through March 9-11, 2026.</div>
+</div>
+
+<script>
+function miniLineChart(canvasId, labels, data, color, yPrefix, ySuffix, decimals, alertIdx) {
+    decimals = decimals || 0;
+    const ctx = document.getElementById(canvasId).getContext('2d');
+
+    // If alertIdx provided, color the last N points red
+    let pointColors = data.map(() => color);
+    let pointRadii = data.map(() => 0);
+    if (alertIdx !== undefined) {
+        for (let i = alertIdx; i < data.length; i++) {
+            pointColors[i] = '#ef4444';
+            pointRadii[i] = 5;
+        }
+    }
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                borderColor: color,
+                backgroundColor: color + '18',
+                borderWidth: 2,
+                pointRadius: pointRadii,
+                pointBackgroundColor: pointColors,
+                pointBorderColor: '#fff',
+                pointBorderWidth: 1.5,
+                pointHoverRadius: 4,
+                fill: true,
+                tension: 0.3,
+                segment: alertIdx !== undefined ? {
+                    borderColor: function(ctx) {
+                        return ctx.p0DataIndex >= alertIdx - 1 ? '#ef4444' : color;
+                    }
+                } : undefined
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#fff', titleColor: '#222', bodyColor: '#555',
+                    borderColor: '#ccc', borderWidth: 1,
+                    titleFont: { size: 12, family: "'Calibri', sans-serif" },
+                    bodyFont: { size: 12, family: "'Calibri', sans-serif" },
+                    padding: 8,
+                    callbacks: {
+                        label: function(ctx) { return (yPrefix||'') + ctx.raw.toFixed(decimals || 1) + (ySuffix||''); }
+                    }
+                }
+            },
+            scales: {
+                x: { display: true, grid: { display: false },
+                    ticks: { font: { size: 10, family: "'Calibri', sans-serif" }, color: '#999', maxTicksLimit: 6 } },
+                y: { display: true,
+                    grid: { color: '#e8e8e8', borderDash: [2, 2] },
+                    ticks: { font: { size: 10, family: "'Calibri', sans-serif" }, color: '#999', maxTicksLimit: 5,
+                        callback: function(v) { return (yPrefix||'') + (decimals ? v.toFixed(decimals) : v) + (ySuffix||''); } } }
+            }
+        }
+    });
+}
+
+// Consumer Sentiment - monthly 2020-2026
+const sentLabels = ['Jan20','Apr20','Jul20','Oct20','Jan21','Apr21','Jul21','Oct21','Jan22','Apr22','Jul22','Oct22','Jan23','Apr23','Jul23','Oct23','Jan24','Apr24','Jul24','Oct24','Jan25','Apr25','Jul25','Oct25','Jan26'];
+const sentData = [99.8,71.8,72.5,81.8,79.0,88.3,81.2,71.7,67.2,65.2,51.5,59.9,64.9,63.5,71.6,63.8,79.0,77.2,66.4,70.5,64.7,52.2,64.0,53.6,56.4];
+
+// Food at Home CPI - monthly 2020-2026
+const cpiLabels = ['Jan20','Apr20','Jul20','Oct20','Jan21','Apr21','Jul21','Oct21','Jan22','Apr22','Jul22','Oct22','Jan23','Apr23','Jul23','Oct23','Jan24','Apr24','Jul24','Oct24','Jan25','Apr25','Jul25','Oct25','Jan26'];
+const cpiData = [243.5,247.4,249.4,249.3,249.5,253.2,255.8,259.8,267.1,278.8,286.6,290.2,292.5,294.3,295.2,296.3,298.3,300.2,301.3,303.3,309.6,313.4,316.8,320.7,324.1];
+
+// CAD/USD — add Feb and early Mar 2026 showing the strengthening
+const fxLabels = ['Jan20','Apr20','Jul20','Oct20','Jan21','Apr21','Jul21','Oct21','Jan22','Apr22','Jul22','Oct22','Jan23','Apr23','Jul23','Oct23','Jan24','Apr24','Jul24','Oct24','Jan25','Apr25','Jul25','Oct25','Jan26','Feb26','Mar26'];
+const fxData = [1.31,1.41,1.35,1.33,1.27,1.25,1.25,1.24,1.27,1.27,1.29,1.37,1.34,1.35,1.32,1.37,1.34,1.37,1.37,1.39,1.44,1.39,1.38,1.39,1.44,1.44,1.356];
+
+// Diesel — add Feb and Mar 2026 with the spike
+const dieselLabels = ['Jan20','Apr20','Jul20','Oct20','Jan21','Apr21','Jul21','Oct21','Jan22','Apr22','Jul22','Oct22','Jan23','Apr23','Jul23','Oct23','Jan24','Apr24','Jul24','Oct24','Jan25','Apr25','Jul25','Oct25','Jan26','Feb26','Mar 9'];
+const dieselData = [3.07,2.45,2.54,2.41,2.72,3.18,3.35,3.56,4.03,5.34,5.57,4.95,4.63,4.12,3.96,4.52,3.99,3.98,3.74,3.61,3.56,3.48,3.55,3.52,3.60,3.81,4.86];
+
+miniLineChart('sentimentChart', sentLabels, sentData, '#d97706', '', '', 0);
+miniLineChart('cpiChart', cpiLabels, cpiData, '#dc2626', '', '', 0);
+// CAD: alert the last point (Mar strengthening) — highlight in red as a notable shift
+miniLineChart('fxChart', fxLabels, fxData, '#2a5c8f', '', '', 2, fxData.length - 1);
+// Diesel: alert from the Feb/Mar spike
+miniLineChart('dieselChart', dieselLabels, dieselData, '#16a34a', '$', '', 2, dieselData.length - 2);
+</script>
+</body>
+</html>
