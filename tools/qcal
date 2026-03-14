@@ -1,0 +1,486 @@
+#!/usr/bin/env python3
+"""
+qcal - Quick Calendar Entry from Terminal
+
+Add events to Apple Calendar with a single command, from any directory.
+Events are immediately available to `daynote add` for daily note integration.
+
+Usage:
+    qcal "Toby talk / march 22 7pm / Wayland Unitarian Church"
+    qcal "Dentist / tuesday 2pm"
+    qcal "Zoom call with Marc / tomorrow 10am"
+    qcal "Board meeting / march 15 4pm-6pm"
+    qcal "Dinner with Sarah / friday 7pm / Seasons 52" --cal social
+    qcal --list          # show upcoming 7 days
+    qcal --today         # show today's events
+
+Format:
+    qcal "title / date-time / location"
+    - Title is required
+    - Date-time is required (natural language: "march 22 7pm", "next tuesday 3pm", "tomorrow 10am")
+    - Location is optional (anything after the second slash)
+    - Duration defaults to 1 hour unless specified with "2hrs", "90min", or "4pm-6pm"
+
+Calendar inference:
+    - "meeting", "call", "zoom", "1:1", "sync", "standup" -> Meetings
+    - "dinner", "party", "birthday", "brunch", "drinks", "concert", "show" -> Social Events
+    - Everything else -> Personal
+    - Override with --cal personal|meetings|social
+"""
+
+import subprocess
+import sys
+import re
+from datetime import datetime, timedelta
+from pathlib import Path
+
+CALENDAR_MAP = {
+    "personal": "Personal",
+    "meetings": "Meetings",
+    "social": "Social Events",
+}
+
+MEETINGS_KEYWORDS = [
+    "meeting", "call", "zoom", "1:1", "one-on-one", "sync", "standup",
+    "stand-up", "check-in", "checkin", "review meeting", "planning",
+    "interview", "presentation", "webinar", "conference call",
+]
+SOCIAL_KEYWORDS = [
+    "dinner", "lunch with", "party", "birthday", "brunch", "drinks",
+    "concert", "show", "movie", "game", "bbq", "cookout", "potluck",
+    "celebration", "anniversary", "date night", "happy hour",
+]
+
+DEFAULT_DURATION = 60
+
+MONTH_NAMES = {
+    "january": 1, "february": 2, "march": 3, "april": 4,
+    "may": 5, "june": 6, "july": 7, "august": 8,
+    "september": 9, "october": 10, "november": 11, "december": 12,
+    "jan": 1, "feb": 2, "mar": 3, "apr": 4,
+    "jun": 6, "jul": 7, "aug": 8, "sep": 9, "sept": 9,
+    "oct": 10, "nov": 11, "dec": 12,
+}
+
+DAY_NAMES = {
+    "monday": 0, "tuesday": 1, "wednesday": 2, "thursday": 3,
+    "friday": 4, "saturday": 5, "sunday": 6,
+    "mon": 0, "tue": 1, "tues": 1, "wed": 2, "weds": 2,
+    "thu": 3, "thur": 3, "thurs": 3, "fri": 4, "sat": 5, "sun": 6,
+}
+
+
+def parse_time(text):
+    text = text.strip().lower().replace(" ", "")
+    m = re.match(r'^(\d{1,2})(?::(\d{2}))?\s*(am|pm)?$', text)
+    if m:
+        hour = int(m.group(1))
+        minute = int(m.group(2)) if m.group(2) else 0
+        ampm = m.group(3)
+        if ampm == "pm" and hour < 12:
+            hour += 12
+        elif ampm == "am" and hour == 12:
+            hour = 0
+        return hour, minute
+    return None
+
+
+def parse_date_time(text):
+    text = text.strip().lower()
+    now = datetime.now()
+    target_date = None
+    start_time = None
+    end_time = None
+
+    range_match = re.search(
+        r'(\d{1,2}(?::\d{2})?\s*(?:am|pm)?)\s*[-\u2013to]+\s*(\d{1,2}(?::\d{2})?\s*(?:am|pm)?)',
+        text
+    )
+    if range_match:
+        start_time = parse_time(range_match.group(1))
+        end_time = parse_time(range_match.group(2))
+        text = text[:range_match.start()] + text[range_match.end():]
+        text = text.strip()
+    else:
+        time_match = re.search(r'(\d{1,2}(?::\d{2})?\s*(?:am|pm))', text)
+        if time_match:
+            start_time = parse_time(time_match.group(1))
+            text = text[:time_match.start()] + text[time_match.end():]
+            text = text.strip()
+        else:
+            bare_time = re.search(r'\bat\s+(\d{1,2})(?::(\d{2}))?\b', text)
+            if bare_time:
+                hour = int(bare_time.group(1))
+                minute = int(bare_time.group(2)) if bare_time.group(2) else 0
+                if 1 <= hour <= 6:
+                    hour += 12
+                start_time = (hour, minute)
+                text = text[:bare_time.start()] + text[bare_time.end():]
+                text = text.strip()
+
+    text = re.sub(r'\b(next|this|on|at)\b', ' ', text).strip()
+    text = re.sub(r'\s+', ' ', text)
+
+    if "today" in text:
+        target_date = now.date()
+    elif "tomorrow" in text:
+        target_date = (now + timedelta(days=1)).date()
+    else:
+        for name, weekday in DAY_NAMES.items():
+            if name in text:
+                days_ahead = weekday - now.weekday()
+                if days_ahead <= 0:
+                    days_ahead += 7
+                target_date = (now + timedelta(days=days_ahead)).date()
+                break
+
+    if target_date is None:
+        for name, month_num in MONTH_NAMES.items():
+            pattern = rf'\b{name}\s+(\d{{1,2}})\b'
+            m = re.search(pattern, text)
+            if m:
+                day = int(m.group(1))
+                year = now.year
+                try:
+                    candidate = datetime(year, month_num, day).date()
+                    if candidate < now.date():
+                        candidate = datetime(year + 1, month_num, day).date()
+                    target_date = candidate
+                except ValueError:
+                    pass
+                break
+
+    if target_date is None:
+        m = re.search(r'\b(\d{1,2})/(\d{1,2})(?:/(\d{2,4}))?\b', text)
+        if m:
+            month = int(m.group(1))
+            day = int(m.group(2))
+            if m.group(3):
+                year = int(m.group(3))
+                if year < 100:
+                    year += 2000
+            else:
+                year = now.year
+            try:
+                candidate = datetime(year, month, day).date()
+                if candidate < now.date() and not m.group(3):
+                    candidate = datetime(year + 1, month, day).date()
+                target_date = candidate
+            except ValueError:
+                pass
+
+    if target_date is None or start_time is None:
+        return None, None
+
+    start_dt = datetime(
+        target_date.year, target_date.month, target_date.day,
+        start_time[0], start_time[1]
+    )
+
+    if end_time:
+        end_dt = datetime(
+            target_date.year, target_date.month, target_date.day,
+            end_time[0], end_time[1]
+        )
+        if end_dt <= start_dt:
+            end_dt += timedelta(days=1)
+    else:
+        end_dt = None
+
+    return start_dt, end_dt
+
+
+def parse_duration(text):
+    text = text.lower()
+    m = re.search(r'(\d+)\s*(?:hrs?|hours?)', text)
+    if m:
+        return int(m.group(1)) * 60
+    m = re.search(r'(\d+)\s*(?:mins?|minutes?)', text)
+    if m:
+        return int(m.group(1))
+    return None
+
+
+def infer_calendar(title):
+    title_lower = title.lower()
+    for keyword in MEETINGS_KEYWORDS:
+        if keyword in title_lower:
+            return "Meetings"
+    for keyword in SOCIAL_KEYWORDS:
+        if keyword in title_lower:
+            return "Social Events"
+    return "Personal"
+
+
+def create_event_applescript(title, start_dt, end_dt, location, calendar_name):
+    start_str = start_dt.strftime("%B %d, %Y at %I:%M:%S %p")
+    end_str = end_dt.strftime("%B %d, %Y at %I:%M:%S %p")
+    title_esc = title.replace('"', '\\"')
+    location_esc = location.replace('"', '\\"') if location else ""
+    calendar_esc = calendar_name.replace('"', '\\"')
+    location_line = ""
+    if location:
+        location_line = f'\n            set location of newEvent to "{location_esc}"'
+    script = f'''
+tell application "Calendar" to launch
+delay 1
+tell application "Calendar"
+    tell calendar "{calendar_esc}"
+        set newEvent to make new event with properties {{summary:"{title_esc}", start date:date "{start_str}", end date:date "{end_str}"}}
+        {location_line}
+    end tell
+end tell
+'''
+    return script.strip()
+
+
+def run_applescript(script):
+    try:
+        result = subprocess.run(
+            ["osascript", "-e", script],
+            capture_output=True, text=True, timeout=30
+        )
+        if result.returncode == 0:
+            return True, result.stdout.strip()
+        else:
+            return False, result.stderr.strip()
+    except FileNotFoundError:
+        return False, "osascript not found - this tool requires macOS"
+    except subprocess.TimeoutExpired:
+        return False, "AppleScript timed out - is Calendar app responding?"
+
+
+def list_events_icalbuddy(days=7):
+    try:
+        result = subprocess.run(
+            [
+                "icalBuddy",
+                "-ic", "personal,Meetings,Social Events",
+                "-nf", "-ea", "-b", "", "-nc",
+                "-df", "%a %b %d",
+                "-tf", "%I:%M %p",
+                "-iep", "title,datetime,location",
+                "-po", "datetime,title,location",
+                "-ps", " | ",
+                f"eventsFrom:today to:today+{days}",
+            ],
+            capture_output=True, text=True, timeout=15
+        )
+        if result.returncode == 0:
+            return True, result.stdout.strip()
+        else:
+            return False, result.stderr.strip()
+    except FileNotFoundError:
+        return False, "icalBuddy not found - install with: brew install ical-buddy"
+    except subprocess.TimeoutExpired:
+        return False, "icalBuddy timed out"
+
+
+def parse_input(raw_input):
+    parts = [p.strip() for p in raw_input.split(" / ")]
+    if len(parts) < 2:
+        return None, None, None
+    title = parts[0]
+    date_time_str = parts[1]
+    location = parts[2] if len(parts) >= 3 else None
+    return title, date_time_str, location
+
+
+def print_help():
+    print("""
+qcal - Quick Calendar Entry from Terminal
+
+USAGE:
+    qcal "title / date-time / location"
+    qcal "title / date-time"
+    qcal --list              Show next 7 days of events
+    qcal --today             Show today's events
+    qcal --help              Show this help
+
+EXAMPLES:
+    qcal "Toby talk / march 22 7pm / Wayland Unitarian Church"
+    qcal "Dentist / tuesday 2pm"
+    qcal "Zoom call with Marc / tomorrow 10am"
+    qcal "Board meeting / march 15 4pm-6pm"
+    qcal "Dinner with Sarah / friday 7pm / Seasons 52" --cal social
+
+CALENDAR SELECTION:
+    Auto-inferred from title keywords:
+      "meeting", "call", "zoom", "sync"  ->  Meetings
+      "dinner", "party", "birthday"      ->  Social Events
+      everything else                    ->  Personal
+    Override: --cal personal | meetings | social
+
+DURATION:
+    Default: 1 hour
+    Specify: "march 22 4pm-6pm" or "tuesday 2pm 90min"
+""")
+
+
+def main():
+    args = sys.argv[1:]
+
+    if "--help" in args or "-h" in args:
+        print_help()
+        sys.exit(0)
+
+    cal_override = None
+    if "--cal" in args:
+        idx = args.index("--cal")
+        if idx + 1 < len(args):
+            cal_key = args[idx + 1].lower()
+            if cal_key in CALENDAR_MAP:
+                cal_override = CALENDAR_MAP[cal_key]
+            else:
+                print(f"Unknown calendar: {cal_key}")
+                print(f"Options: {', '.join(CALENDAR_MAP.keys())}")
+                sys.exit(1)
+            args = args[:idx] + args[idx + 2:]
+
+    if not args:
+        try:
+            print()
+            title = input("  Title: ").strip()
+            if not title:
+                print("Cancelled.")
+                sys.exit(0)
+            date_time_str = input("  Date/time: ").strip()
+            if not date_time_str:
+                print("Date/time is required.")
+                sys.exit(1)
+            location = input("  Location (optional): ").strip() or None
+
+            start_dt, end_dt = parse_date_time(date_time_str)
+            if start_dt is None:
+                print(f'Could not parse date/time from: "{date_time_str}"')
+                sys.exit(1)
+
+            if end_dt is None:
+                duration = parse_duration(date_time_str) or DEFAULT_DURATION
+                end_dt = start_dt + timedelta(minutes=duration)
+
+            calendar_name = cal_override if cal_override else infer_calendar(title)
+
+            print()
+            print(f"  {title}")
+            print(f"  {start_dt.strftime('%A, %B %d, %Y')}")
+            print(f"  {start_dt.strftime('%-I:%M %p')} - {end_dt.strftime('%-I:%M %p')}")
+            if location:
+                print(f"  {location}")
+            print(f"  Calendar: {calendar_name}")
+            print()
+
+            confirm = input("  Create this event? [Y/n] ").strip().lower()
+            if confirm in ("n", "no"):
+                print("Cancelled.")
+                sys.exit(0)
+
+            script = create_event_applescript(title, start_dt, end_dt, location, calendar_name)
+            success, output = run_applescript(script)
+
+            if success:
+                print(f"\nEvent created in {calendar_name}")
+                if start_dt.date() == datetime.now().date():
+                    print(f"   Run 'daynote add today' to add to your daily note.\n")
+                else:
+                    date_str = start_dt.strftime('%-m/%-d')
+                    print(f"   On {start_dt.strftime('%b %d')}, run 'daynote add {date_str}' to add to that day's note.\n")
+            else:
+                print(f"\nFailed to create event: {output}")
+                sys.exit(1)
+
+        except KeyboardInterrupt:
+            print("\nCancelled.")
+            sys.exit(0)
+        sys.exit(0)
+
+    if "--list" in args:
+        success, output = list_events_icalbuddy(7)
+        if success:
+            if output.strip():
+                print("\nNext 7 Days:\n")
+                for line in output.strip().split("\n"):
+                    print(f"  {line}")
+                print()
+            else:
+                print("\nNo events in the next 7 days.\n")
+        else:
+            print(f"Error: {output}")
+        sys.exit(0)
+
+    if "--today" in args:
+        success, output = list_events_icalbuddy(0)
+        if success:
+            if output.strip():
+                print("\nToday:\n")
+                for line in output.strip().split("\n"):
+                    print(f"  {line}")
+                print()
+            else:
+                print("\nNo events today.\n")
+        else:
+            print(f"Error: {output}")
+        sys.exit(0)
+
+    raw_input = None
+    for arg in args:
+        if not arg.startswith("--"):
+            raw_input = arg
+            break
+
+    if not raw_input:
+        print("No event description provided.")
+        print('Usage: qcal "title / date-time / location"')
+        sys.exit(1)
+
+    title, date_time_str, location = parse_input(raw_input)
+
+    if not title or not date_time_str:
+        print("Could not parse input. Use format: title / date-time / location")
+        sys.exit(1)
+
+    start_dt, end_dt = parse_date_time(date_time_str)
+
+    if start_dt is None:
+        print(f'Could not parse date/time from: "{date_time_str}"')
+        print("Try formats like: march 22 7pm, tuesday 2pm, tomorrow 10am, 3/22 7pm")
+        sys.exit(1)
+
+    if end_dt is None:
+        duration = parse_duration(date_time_str) or DEFAULT_DURATION
+        end_dt = start_dt + timedelta(minutes=duration)
+
+    calendar_name = cal_override if cal_override else infer_calendar(title)
+
+    print()
+    print(f"  {title}")
+    print(f"  {start_dt.strftime('%A, %B %d, %Y')}")
+    print(f"  {start_dt.strftime('%-I:%M %p')} - {end_dt.strftime('%-I:%M %p')}")
+    if location:
+        print(f"  {location}")
+    print(f"  Calendar: {calendar_name}")
+    print()
+
+    confirm = input("Create this event? [Y/n] ").strip().lower()
+    if confirm in ("n", "no"):
+        print("Cancelled.")
+        sys.exit(0)
+
+    script = create_event_applescript(title, start_dt, end_dt, location, calendar_name)
+    success, output = run_applescript(script)
+
+    if success:
+        print(f"\nEvent created in {calendar_name}")
+        if start_dt.date() == datetime.now().date():
+            print(f"   Run 'daynote add today' to add to your daily note.\n")
+        else:
+            date_str = start_dt.strftime('%-m/%-d')
+            print(f"   On {start_dt.strftime('%b %d')}, run 'daynote add {date_str}' to add to that day's note.\n")
+    else:
+        print(f"\nFailed to create event: {output}")
+        print("Check that the calendar name matches exactly in Apple Calendar.\n")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
