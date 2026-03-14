@@ -1,0 +1,3 @@
+[console_scripts]
+daynote = daynote.cli:main
+dn = daynote.cli:main

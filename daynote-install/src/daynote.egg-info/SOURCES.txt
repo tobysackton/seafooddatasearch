@@ -1,0 +1,16 @@
+README.md
+pyproject.toml
+src/daynote/__init__.py
+src/daynote/calendar.py
+src/daynote/cli.py
+src/daynote/config.py
+src/daynote/gcalendar.py
+src/daynote/gmail.py
+src/daynote/obsidian.py
+src/daynote/reconcile.py
+src/daynote.egg-info/PKG-INFO
+src/daynote.egg-info/SOURCES.txt
+src/daynote.egg-info/dependency_links.txt
+src/daynote.egg-info/entry_points.txt
+src/daynote.egg-info/requires.txt
+src/daynote.egg-info/top_level.txt

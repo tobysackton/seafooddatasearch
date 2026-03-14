@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "daynote"
+version = "0.2.0"
+description = "Daily productivity dashboard for Obsidian, Gmail, and Calendar"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+
+dependencies = [
+    "click>=8.0",
+    "pyyaml>=6.0",
+    "google-auth>=2.0",
+    "google-auth-oauthlib>=1.0",
+    "google-auth-httplib2>=0.1",
+    "google-api-python-client>=2.0",
+]
+
+[project.scripts]
+daynote = "daynote.cli:main"
+dn = "daynote.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
