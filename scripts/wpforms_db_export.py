@@ -41,8 +41,8 @@ MASSPORT_FORMS = [
     {'id': 1401, 'name': 'massport-board-letters'},
 ]
 
-# Output folder (Proton Drive)
-OUTPUT_FOLDER = '/Users/jtsackton/Library/CloudStorage/ProtonDrive-info@lexingtonalarm.org-folder/LexingtonAlarm Executive/WP_Form_Data_Files'
+# Output folder (Proton Drive) — uses home directory so works on both Gadus and Sardinia
+OUTPUT_FOLDER = str(Path.home() / 'Library/CloudStorage/ProtonDrive-info@lexingtonalarm.org-folder/LexingtonAlarm Executive/WP_Form_Data_Files')
 
 # ============================================================
 # MAIN SCRIPT - No need to edit below this line
