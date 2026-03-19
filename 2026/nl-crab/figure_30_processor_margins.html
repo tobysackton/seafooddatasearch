@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 31: Raw Material Cost vs Wholesale &mdash; The Processor Squeeze</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+    background: #fff; color: #333; padding: 24px; max-width: 1100px; margin: 0 auto;
+  }
+  .title-block { text-align: center; margin-bottom: 18px; }
+  .figure-number { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+  .title { font-size: 21px; font-weight: 700; color: #222; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #777; line-height: 1.4; }
+  .chart-container { position: relative; width: 100%; height: 500px; margin-bottom: 16px; }
+  .legend-row { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; margin-bottom: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; }
+  .legend-line { width: 24px; height: 3px; border-radius: 1px; }
+  .legend-line-dashed { width: 24px; height: 0; border-top: 2.5px dashed; }
+  .legend-fill { width: 14px; height: 14px; border-radius: 2px; background: rgba(91,155,213,0.12); border: 1px solid #5b9bd5; }
+  .summary-box {
+    background: #f5f7fa; border: 1px solid #dde2e8; border-left: 4px solid #2a5c8f;
+    border-radius: 0 5px 5px 0; padding: 14px 18px; margin: 16px 0;
+    font-size: 13.5px; line-height: 1.55; color: #333;
+  }
+  .source-line {
+    border-top: 1px solid #ddd; margin-top: 14px; padding-top: 8px;
+    font-size: 12px; color: #999; line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="title-block">
+  <div class="figure-number">Figure 31</div>
+  <div class="title">Raw Material Cost vs. Wholesale: The Processor Squeeze</div>
+  <div class="subtitle">Monthly UB NL 5-8 oz Low Quotation vs. Dock Cost in USD (68% yield) &bull; April 2012 through March 2026</div>
+</div>
+
+<div class="legend-row">
+  <div class="legend-item"><div class="legend-line" style="background:#2a5c8f;"></div> UB Wholesale ($/lb)</div>
+  <div class="legend-item"><div class="legend-line" style="background:#e07070;"></div> Raw Material Cost USD ($/lb sections)</div>
+  <div class="legend-item"><div class="legend-line-dashed" style="border-color:#ef4444;"></div> Incl. after-season premium (2025&ndash;26)</div>
+  <div class="legend-item"><div class="legend-fill"></div> Gross Margin</div>
+</div>
+
+<div class="chart-container">
+  <canvas id="marginChart"></canvas>
+</div>
+
+<div class="summary-box">
+  <strong>The monthly view shows the full seasonal rhythm of the processor margin.</strong> Raw material cost is fixed at season open while wholesale prices fluctuate with market conditions, creating a margin that expands mid-season as wholesale rises and compresses when wholesale softens. The 2025&ndash;26 season opened with a dock price of $4.97 CAD &mdash; the highest since 2021 &mdash; but strong wholesale prices through the year kept margins positive. The dashed line shows the additional cost of the $0.28 CAD/lb after-season premium paid to harvesters, which narrows the margin by approximately $0.30/lb on a sections basis.
+</div>
+
+<div class="source-line">
+  Source: Seafood Datasearch from Urner Barry NL 5-8 oz Low Quotation and FFAW/DFO landed price data &bull; Raw material cost = FFAW dock price (CAD/lb raw) &times; 1.4706 yield factor (68% recovery: 1 lb sections requires 1.4706 lbs raw) &divide; monthly CAD/USD exchange rate (FRED DEXCAUS) &bull; 2025&ndash;26 after-season premium: $0.28 CAD/lb raw = $0.41 CAD/lb sections
+</div>
+
+<script>
+const RAW = [{"date": "2012-04-01", "wholesale": 5.4, "rawmatUsd": 2.89, "rawmatUsdWithPrem": null}, {"date": "2012-05-01", "wholesale": 4.72, "rawmatUsd": 2.84, "rawmatUsdWithPrem": null}, {"date": "2012-06-01", "wholesale": 4.75, "rawmatUsd": 2.79, "rawmatUsdWithPrem": null}, {"date": "2012-07-01", "wholesale": 4.72, "rawmatUsd": 2.83, "rawmatUsdWithPrem": null}, {"date": "2012-08-01", "wholesale": 4.65, "rawmatUsd": 2.89, "rawmatUsdWithPrem": null}, {"date": "2012-09-01", "wholesale": 4.74, "rawmatUsd": 2.93, "rawmatUsdWithPrem": null}, {"date": "2012-10-01", "wholesale": 4.93, "rawmatUsd": 2.91, "rawmatUsdWithPrem": null}, {"date": "2012-11-01", "wholesale": 5.04, "rawmatUsd": 2.88, "rawmatUsdWithPrem": null}, {"date": "2012-12-01", "wholesale": 5.01, "rawmatUsd": 2.9, "rawmatUsdWithPrem": null}, {"date": "2013-01-01", "wholesale": 5.04, "rawmatUsd": 2.89, "rawmatUsdWithPrem": null}, {"date": "2013-02-01", "wholesale": 5.26, "rawmatUsd": 2.84, "rawmatUsdWithPrem": null}, {"date": "2013-03-01", "wholesale": 5.3, "rawmatUsd": 2.8, "rawmatUsdWithPrem": null}, {"date": "2013-04-01", "wholesale": 5.3, "rawmatUsd": 2.89, "rawmatUsdWithPrem": null}, {"date": "2013-05-01", "wholesale": 4.61, "rawmatUsd": 2.64, "rawmatUsdWithPrem": null}, {"date": "2013-06-01", "wholesale": 4.69, "rawmatUsd": 2.61, "rawmatUsdWithPrem": null}, {"date": "2013-07-01", "wholesale": 4.91, "rawmatUsd": 2.59, "rawmatUsdWithPrem": null}, {"date": "2013-08-01", "wholesale": 5.16, "rawmatUsd": 2.59, "rawmatUsdWithPrem": null}, {"date": "2013-09-01", "wholesale": 5.2, "rawmatUsd": 2.6, "rawmatUsdWithPrem": null}, {"date": "2013-10-01", "wholesale": 5.2, "rawmatUsd": 2.6, "rawmatUsdWithPrem": null}, {"date": "2013-11-01", "wholesale": 5.24, "rawmatUsd": 2.57, "rawmatUsdWithPrem": null}, {"date": "2013-12-01", "wholesale": 5.25, "rawmatUsd": 2.53, "rawmatUsdWithPrem": null}, {"date": "2014-01-01", "wholesale": 5.36, "rawmatUsd": 2.46, "rawmatUsdWithPrem": null}, {"date": "2014-02-01", "wholesale": 5.4, "rawmatUsd": 2.44, "rawmatUsdWithPrem": null}, {"date": "2014-03-01", "wholesale": 5.4, "rawmatUsd": 2.42, "rawmatUsdWithPrem": null}, {"date": "2014-04-01", "wholesale": 5.4, "rawmatUsd": 3.08, "rawmatUsdWithPrem": null}, {"date": "2014-05-01", "wholesale": 5.1, "rawmatUsd": 3.11, "rawmatUsdWithPrem": null}, {"date": "2014-06-01", "wholesale": 5.11, "rawmatUsd": 3.12, "rawmatUsdWithPrem": null}, {"date": "2014-07-01", "wholesale": 5.22, "rawmatUsd": 3.15, "rawmatUsdWithPrem": null}, {"date": "2014-08-01", "wholesale": 5.25, "rawmatUsd": 3.1, "rawmatUsdWithPrem": null}, {"date": "2014-09-01", "wholesale": 5.25, "rawmatUsd": 3.07, "rawmatUsdWithPrem": null}, {"date": "2014-10-01", "wholesale": 5.25, "rawmatUsd": 3.02, "rawmatUsdWithPrem": null}, {"date": "2014-11-01", "wholesale": 5.25, "rawmatUsd": 2.99, "rawmatUsdWithPrem": null}, {"date": "2014-12-01", "wholesale": 5.25, "rawmatUsd": 2.93, "rawmatUsdWithPrem": null}, {"date": "2015-01-01", "wholesale": 5.25, "rawmatUsd": 2.79, "rawmatUsdWithPrem": null}, {"date": "2015-02-01", "wholesale": 5.21, "rawmatUsd": 2.71, "rawmatUsdWithPrem": null}, {"date": "2015-03-01", "wholesale": 5.14, "rawmatUsd": 2.68, "rawmatUsdWithPrem": null}, {"date": "2015-04-01", "wholesale": 4.98, "rawmatUsd": 2.92, "rawmatUsdWithPrem": null}, {"date": "2015-05-01", "wholesale": 4.78, "rawmatUsd": 2.96, "rawmatUsdWithPrem": null}, {"date": "2015-06-01", "wholesale": 4.89, "rawmatUsd": 2.92, "rawmatUsdWithPrem": null}, {"date": "2015-07-01", "wholesale": 4.95, "rawmatUsd": 2.8, "rawmatUsdWithPrem": null}, {"date": "2015-08-01", "wholesale": 4.92, "rawmatUsd": 2.74, "rawmatUsdWithPrem": null}, {"date": "2015-09-01", "wholesale": 4.9, "rawmatUsd": 2.72, "rawmatUsdWithPrem": null}, {"date": "2015-10-01", "wholesale": 4.95, "rawmatUsd": 2.76, "rawmatUsdWithPrem": null}, {"date": "2015-11-01", "wholesale": 5.06, "rawmatUsd": 2.71, "rawmatUsdWithPrem": null}, {"date": "2015-12-01", "wholesale": 5.17, "rawmatUsd": 2.63, "rawmatUsdWithPrem": null}, {"date": "2016-01-01", "wholesale": 5.34, "rawmatUsd": 2.53, "rawmatUsdWithPrem": null}, {"date": "2016-02-01", "wholesale": 5.62, "rawmatUsd": 2.61, "rawmatUsdWithPrem": null}, {"date": "2016-03-01", "wholesale": 5.62, "rawmatUsd": 2.73, "rawmatUsdWithPrem": null}, {"date": "2016-04-01", "wholesale": 5.8, "rawmatUsd": 3.44, "rawmatUsdWithPrem": null}, {"date": "2016-05-01", "wholesale": 5.89, "rawmatUsd": 3.41, "rawmatUsdWithPrem": null}, {"date": "2016-06-01", "wholesale": 6.47, "rawmatUsd": 3.42, "rawmatUsdWithPrem": null}, {"date": "2016-07-01", "wholesale": 6.66, "rawmatUsd": 3.38, "rawmatUsdWithPrem": null}, {"date": "2016-08-01", "wholesale": 6.85, "rawmatUsd": 3.39, "rawmatUsdWithPrem": null}, {"date": "2016-09-01", "wholesale": 7.12, "rawmatUsd": 3.37, "rawmatUsdWithPrem": null}, {"date": "2016-10-01", "wholesale": 7.54, "rawmatUsd": 3.33, "rawmatUsdWithPrem": null}, {"date": "2016-11-01", "wholesale": 7.93, "rawmatUsd": 3.28, "rawmatUsdWithPrem": null}, {"date": "2016-12-01", "wholesale": 7.95, "rawmatUsd": 3.31, "rawmatUsdWithPrem": null}, {"date": "2017-01-01", "wholesale": 7.95, "rawmatUsd": 3.34, "rawmatUsdWithPrem": null}, {"date": "2017-02-01", "wholesale": 7.95, "rawmatUsd": 3.37, "rawmatUsdWithPrem": null}, {"date": "2017-03-01", "wholesale": 7.95, "rawmatUsd": 3.3, "rawmatUsdWithPrem": null}, {"date": "2017-04-01", "wholesale": 7.95, "rawmatUsd": 4.8, "rawmatUsdWithPrem": null}, {"date": "2017-05-01", "wholesale": 7.18, "rawmatUsd": 4.74, "rawmatUsdWithPrem": null}, {"date": "2017-06-01", "wholesale": 7.41, "rawmatUsd": 4.86, "rawmatUsdWithPrem": null}, {"date": "2017-07-01", "wholesale": 7.88, "rawmatUsd": 5.09, "rawmatUsdWithPrem": null}, {"date": "2017-08-01", "wholesale": 8.1, "rawmatUsd": 5.12, "rawmatUsdWithPrem": null}, {"date": "2017-09-01", "wholesale": 8.1, "rawmatUsd": 5.25, "rawmatUsdWithPrem": null}, {"date": "2017-10-01", "wholesale": 8.1, "rawmatUsd": 5.12, "rawmatUsdWithPrem": null}, {"date": "2017-11-01", "wholesale": 8.1, "rawmatUsd": 5.06, "rawmatUsdWithPrem": null}, {"date": "2017-12-01", "wholesale": 8.1, "rawmatUsd": 5.06, "rawmatUsdWithPrem": null}, {"date": "2018-01-01", "wholesale": 8.1, "rawmatUsd": 5.2, "rawmatUsdWithPrem": null}, {"date": "2018-02-01", "wholesale": 8.1, "rawmatUsd": 5.13, "rawmatUsdWithPrem": null}, {"date": "2018-03-01", "wholesale": 7.97, "rawmatUsd": 4.99, "rawmatUsdWithPrem": null}, {"date": "2018-04-01", "wholesale": 7.95, "rawmatUsd": 5.54, "rawmatUsdWithPrem": null}, {"date": "2018-05-01", "wholesale": 8.84, "rawmatUsd": 5.49, "rawmatUsdWithPrem": null}, {"date": "2018-06-01", "wholesale": 9.1, "rawmatUsd": 5.38, "rawmatUsdWithPrem": null}, {"date": "2018-07-01", "wholesale": 9.07, "rawmatUsd": 5.38, "rawmatUsdWithPrem": null}, {"date": "2018-08-01", "wholesale": 8.81, "rawmatUsd": 5.41, "rawmatUsdWithPrem": null}, {"date": "2018-09-01", "wholesale": 8.75, "rawmatUsd": 5.41, "rawmatUsdWithPrem": null}, {"date": "2018-10-01", "wholesale": 8.75, "rawmatUsd": 5.43, "rawmatUsdWithPrem": null}, {"date": "2018-11-01", "wholesale": 8.75, "rawmatUsd": 5.35, "rawmatUsdWithPrem": null}, {"date": "2018-12-01", "wholesale": 8.75, "rawmatUsd": 5.25, "rawmatUsdWithPrem": null}, {"date": "2019-01-01", "wholesale": 8.56, "rawmatUsd": 5.31, "rawmatUsdWithPrem": null}, {"date": "2019-02-01", "wholesale": 8.63, "rawmatUsd": 5.34, "rawmatUsdWithPrem": null}, {"date": "2019-03-01", "wholesale": 8.74, "rawmatUsd": 5.28, "rawmatUsdWithPrem": null}, {"date": "2019-04-01", "wholesale": 8.64, "rawmatUsd": 5.57, "rawmatUsdWithPrem": null}, {"date": "2019-05-01", "wholesale": 8.04, "rawmatUsd": 5.54, "rawmatUsdWithPrem": null}, {"date": "2019-06-01", "wholesale": 8.28, "rawmatUsd": 5.61, "rawmatUsdWithPrem": null}, {"date": "2019-07-01", "wholesale": 8.4, "rawmatUsd": 5.69, "rawmatUsdWithPrem": null}, {"date": "2019-08-01", "wholesale": 8.43, "rawmatUsd": 5.62, "rawmatUsdWithPrem": null}, {"date": "2019-09-01", "wholesale": 8.56, "rawmatUsd": 5.63, "rawmatUsdWithPrem": null}, {"date": "2019-10-01", "wholesale": 8.8, "rawmatUsd": 5.65, "rawmatUsdWithPrem": null}, {"date": "2019-11-01", "wholesale": 8.97, "rawmatUsd": 5.63, "rawmatUsdWithPrem": null}, {"date": "2019-12-01", "wholesale": 9.18, "rawmatUsd": 5.66, "rawmatUsdWithPrem": null}, {"date": "2020-01-01", "wholesale": 9.26, "rawmatUsd": 5.7, "rawmatUsdWithPrem": null}, {"date": "2020-02-01", "wholesale": 9.3, "rawmatUsd": 5.61, "rawmatUsdWithPrem": null}, {"date": "2020-03-01", "wholesale": 9.3, "rawmatUsd": 5.35, "rawmatUsdWithPrem": null}, {"date": "2020-04-01", "wholesale": 9.3, "rawmatUsd": 3.61, "rawmatUsdWithPrem": null}, {"date": "2020-05-01", "wholesale": 6.9, "rawmatUsd": 3.63, "rawmatUsdWithPrem": null}, {"date": "2020-06-01", "wholesale": 7.82, "rawmatUsd": 3.74, "rawmatUsdWithPrem": null}, {"date": "2020-07-01", "wholesale": 9.22, "rawmatUsd": 3.76, "rawmatUsdWithPrem": null}, {"date": "2020-08-01", "wholesale": 9.28, "rawmatUsd": 3.83, "rawmatUsdWithPrem": null}, {"date": "2020-09-01", "wholesale": 9.58, "rawmatUsd": 3.84, "rawmatUsdWithPrem": null}, {"date": "2020-10-01", "wholesale": 9.77, "rawmatUsd": 3.84, "rawmatUsdWithPrem": null}, {"date": "2020-11-01", "wholesale": 9.9, "rawmatUsd": 3.88, "rawmatUsdWithPrem": null}, {"date": "2020-12-01", "wholesale": 9.9, "rawmatUsd": 3.96, "rawmatUsdWithPrem": null}, {"date": "2021-01-01", "wholesale": 9.9, "rawmatUsd": 3.99, "rawmatUsdWithPrem": null}, {"date": "2021-02-01", "wholesale": 9.9, "rawmatUsd": 3.99, "rawmatUsdWithPrem": null}, {"date": "2021-03-01", "wholesale": 9.9, "rawmatUsd": 4.03, "rawmatUsdWithPrem": null}, {"date": "2021-04-01", "wholesale": 9.9, "rawmatUsd": 8.88, "rawmatUsdWithPrem": null}, {"date": "2021-05-01", "wholesale": 13.11, "rawmatUsd": 9.15, "rawmatUsdWithPrem": null}, {"date": "2021-06-01", "wholesale": 14.88, "rawmatUsd": 9.09, "rawmatUsdWithPrem": null}, {"date": "2021-07-01", "wholesale": 16.24, "rawmatUsd": 8.86, "rawmatUsdWithPrem": null}, {"date": "2021-08-01", "wholesale": 16.4, "rawmatUsd": 8.81, "rawmatUsdWithPrem": null}, {"date": "2021-09-01", "wholesale": 16.4, "rawmatUsd": 8.76, "rawmatUsdWithPrem": null}, {"date": "2021-10-01", "wholesale": 16.56, "rawmatUsd": 8.92, "rawmatUsdWithPrem": null}, {"date": "2021-11-01", "wholesale": 16.79, "rawmatUsd": 8.84, "rawmatUsdWithPrem": null}, {"date": "2021-12-01", "wholesale": 16.8, "rawmatUsd": 8.68, "rawmatUsdWithPrem": null}, {"date": "2022-01-01", "wholesale": 16.8, "rawmatUsd": 8.8, "rawmatUsdWithPrem": null}, {"date": "2022-02-01", "wholesale": 16.42, "rawmatUsd": 8.73, "rawmatUsdWithPrem": null}, {"date": "2022-03-01", "wholesale": 15.41, "rawmatUsd": 8.77, "rawmatUsdWithPrem": null}, {"date": "2022-04-01", "wholesale": 12.07, "rawmatUsd": 7.4, "rawmatUsdWithPrem": null}, {"date": "2022-05-01", "wholesale": 10.41, "rawmatUsd": 7.26, "rawmatUsdWithPrem": null}, {"date": "2022-06-01", "wholesale": 8.48, "rawmatUsd": 7.29, "rawmatUsdWithPrem": null}, {"date": "2022-07-01", "wholesale": 7.53, "rawmatUsd": 7.21, "rawmatUsdWithPrem": null}, {"date": "2022-08-01", "wholesale": 7.05, "rawmatUsd": 7.23, "rawmatUsdWithPrem": null}, {"date": "2022-09-01", "wholesale": 7.26, "rawmatUsd": 7.0, "rawmatUsdWithPrem": null}, {"date": "2022-10-01", "wholesale": 7.84, "rawmatUsd": 6.81, "rawmatUsdWithPrem": null}, {"date": "2022-11-01", "wholesale": 7.9, "rawmatUsd": 6.94, "rawmatUsdWithPrem": null}, {"date": "2022-12-01", "wholesale": 7.77, "rawmatUsd": 6.88, "rawmatUsdWithPrem": null}, {"date": "2023-01-01", "wholesale": 7.27, "rawmatUsd": 6.95, "rawmatUsdWithPrem": null}, {"date": "2023-02-01", "wholesale": 6.91, "rawmatUsd": 6.95, "rawmatUsdWithPrem": null}, {"date": "2023-03-01", "wholesale": 6.07, "rawmatUsd": 6.82, "rawmatUsdWithPrem": null}, {"date": "2023-04-01", "wholesale": 5.17, "rawmatUsd": 2.45, "rawmatUsdWithPrem": null}, {"date": "2023-05-01", "wholesale": 4.65, "rawmatUsd": 2.45, "rawmatUsdWithPrem": null}, {"date": "2023-06-01", "wholesale": 4.97, "rawmatUsd": 2.49, "rawmatUsdWithPrem": null}, {"date": "2023-07-01", "wholesale": 5.29, "rawmatUsd": 2.5, "rawmatUsdWithPrem": null}, {"date": "2023-08-01", "wholesale": 5.74, "rawmatUsd": 2.46, "rawmatUsdWithPrem": null}, {"date": "2023-09-01", "wholesale": 5.75, "rawmatUsd": 2.45, "rawmatUsdWithPrem": null}, {"date": "2023-10-01", "wholesale": 5.75, "rawmatUsd": 2.41, "rawmatUsdWithPrem": null}, {"date": "2023-11-01", "wholesale": 5.63, "rawmatUsd": 2.41, "rawmatUsdWithPrem": null}, {"date": "2023-12-01", "wholesale": 5.32, "rawmatUsd": 2.46, "rawmatUsdWithPrem": null}, {"date": "2024-01-01", "wholesale": 5.4, "rawmatUsd": 2.47, "rawmatUsdWithPrem": null}, {"date": "2024-02-01", "wholesale": 5.45, "rawmatUsd": 2.45, "rawmatUsdWithPrem": null}, {"date": "2024-03-01", "wholesale": 5.45, "rawmatUsd": 2.44, "rawmatUsdWithPrem": null}, {"date": "2024-04-01", "wholesale": 5.64, "rawmatUsd": 3.23, "rawmatUsdWithPrem": null}, {"date": "2024-05-01", "wholesale": 6.19, "rawmatUsd": 3.23, "rawmatUsdWithPrem": null}, {"date": "2024-06-01", "wholesale": 6.06, "rawmatUsd": 3.22, "rawmatUsdWithPrem": null}, {"date": "2024-07-01", "wholesale": 6.05, "rawmatUsd": 3.22, "rawmatUsdWithPrem": null}, {"date": "2024-08-01", "wholesale": 6.09, "rawmatUsd": 3.23, "rawmatUsdWithPrem": null}, {"date": "2024-09-01", "wholesale": 6.67, "rawmatUsd": 3.26, "rawmatUsdWithPrem": null}, {"date": "2024-10-01", "wholesale": 7.46, "rawmatUsd": 3.21, "rawmatUsdWithPrem": null}, {"date": "2024-11-01", "wholesale": 8.21, "rawmatUsd": 3.16, "rawmatUsdWithPrem": null}, {"date": "2024-12-01", "wholesale": 8.38, "rawmatUsd": 3.1, "rawmatUsdWithPrem": null}, {"date": "2025-01-01", "wholesale": 8.62, "rawmatUsd": 3.07, "rawmatUsdWithPrem": null}, {"date": "2025-02-01", "wholesale": 8.8, "rawmatUsd": 3.08, "rawmatUsdWithPrem": null}, {"date": "2025-03-01", "wholesale": 8.8, "rawmatUsd": 3.08, "rawmatUsdWithPrem": null}, {"date": "2025-04-01", "wholesale": 8.05, "rawmatUsd": 5.23, "rawmatUsdWithPrem": 5.52}, {"date": "2025-05-01", "wholesale": 8.06, "rawmatUsd": 5.27, "rawmatUsdWithPrem": 5.57}, {"date": "2025-06-01", "wholesale": 8.16, "rawmatUsd": 5.35, "rawmatUsdWithPrem": 5.65}, {"date": "2025-07-01", "wholesale": 8.89, "rawmatUsd": 5.34, "rawmatUsdWithPrem": 5.64}, {"date": "2025-08-01", "wholesale": 9.48, "rawmatUsd": 5.3, "rawmatUsdWithPrem": 5.6}, {"date": "2025-09-01", "wholesale": 9.5, "rawmatUsd": 5.28, "rawmatUsdWithPrem": 5.58}, {"date": "2025-10-01", "wholesale": 9.5, "rawmatUsd": 5.23, "rawmatUsdWithPrem": 5.52}, {"date": "2025-11-01", "wholesale": 9.5, "rawmatUsd": 5.2, "rawmatUsdWithPrem": 5.49}, {"date": "2025-12-01", "wholesale": 9.66, "rawmatUsd": 5.3, "rawmatUsdWithPrem": 5.6}, {"date": "2026-01-01", "wholesale": 10.11, "rawmatUsd": 5.31, "rawmatUsdWithPrem": 5.61}, {"date": "2026-02-01", "wholesale": 10.44, "rawmatUsd": 5.36, "rawmatUsdWithPrem": 5.66}, {"date": "2026-03-01", "wholesale": 10.68, "rawmatUsd": 5.36, "rawmatUsdWithPrem": 5.66}];
+const EXT_START = 156;
+
+const labels = RAW.map(d => d.date);
+const wholesale = RAW.map(d => d.wholesale);
+const rawmat = RAW.map(d => d.rawmatUsd);
+const rawmatPrem = RAW.map(d => d.rawmatUsdWithPrem);
+
+const ctx = document.getElementById('marginChart').getContext('2d');
+
+const fillBetweenPlugin = {
+  id: 'fillBetween',
+  beforeDatasetsDraw(chart) {
+    const { ctx } = chart;
+    const ds0 = chart.getDatasetMeta(0);
+    const ds1 = chart.getDatasetMeta(1);
+    if (!ds0.data.length || !ds1.data.length) return;
+    ctx.save();
+    ctx.beginPath();
+    for (let i = 0; i < ds0.data.length; i++) {
+      const pt = ds0.data[i];
+      if (i === 0) ctx.moveTo(pt.x, pt.y);
+      else ctx.lineTo(pt.x, pt.y);
+    }
+    for (let i = ds1.data.length - 1; i >= 0; i--) {
+      const pt = ds1.data[i];
+      ctx.lineTo(pt.x, pt.y);
+    }
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(91,155,213,0.10)';
+    ctx.fill();
+    ctx.restore();
+  }
+};
+
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: 'UB Wholesale',
+        data: wholesale,
+        borderColor: '#2a5c8f',
+        backgroundColor: '#2a5c8f',
+        borderWidth: 3,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        tension: 0.15,
+        order: 1
+      },
+      {
+        label: 'Raw Material Cost USD',
+        data: rawmat,
+        borderColor: '#e07070',
+        backgroundColor: '#e07070',
+        borderWidth: 2.5,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        tension: 0.15,
+        order: 2
+      },
+      {
+        label: 'Incl. After-Season Premium',
+        data: rawmatPrem,
+        borderColor: '#ef4444',
+        backgroundColor: '#ef4444',
+        borderWidth: 2,
+        borderDash: [6, 3],
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        tension: 0.15,
+        order: 3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 0 },
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      annotation: {
+        annotations: {
+          py2526shade: {
+            type: 'box',
+            xMin: '2025-04-01',
+            xMax: '2026-03-01',
+            backgroundColor: 'rgba(245,158,11,0.06)',
+            borderWidth: 0,
+            label: {
+              display: true,
+              content: '2025–26 season',
+              position: { x: 'center', y: 'start' },
+              font: { size: 11, weight: '600', family: "'Calibri','Segoe UI',sans-serif" },
+              color: '#f59e0b',
+              backgroundColor: 'transparent',
+              padding: 3
+            }
+          }
+        }
+      },
+      tooltip: {
+        backgroundColor: '#fff',
+        titleColor: '#222',
+        bodyColor: '#555',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        cornerRadius: 6,
+        padding: 12,
+        titleFont: { size: 14, weight: 'bold', family: "'Calibri','Segoe UI',sans-serif" },
+        bodyFont: { size: 13, family: "'Calibri','Segoe UI',sans-serif" },
+        callbacks: {
+          title: function(items) {
+            const d = new Date(items[0].label);
+            return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+          },
+          label: function(ctx) {
+            if (ctx.parsed.y == null) return null;
+            return ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(2) + '/lb';
+          },
+          afterBody: function(items) {
+            const w = items[0] ? items[0].parsed.y : null;
+            const r = items[1] ? items[1].parsed.y : null;
+            const rp = items[2] ? items[2].parsed.y : null;
+            const lines = [];
+            if (w != null && r != null) {
+              lines.push('Margin: $' + (w - r).toFixed(2) + '/lb');
+              if (rp != null) lines.push('After premium: $' + (w - rp).toFixed(2) + '/lb');
+            }
+            return lines;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: {
+          font: { size: 11, family: "'Calibri','Segoe UI',sans-serif" },
+          color: '#444',
+          maxRotation: 0,
+          callback: function(val, idx) {
+            const dateStr = this.getLabelForValue(val);
+            const d = new Date(dateStr);
+            if (d.getMonth() === 0) return d.getFullYear().toString();
+            return '';
+          },
+          autoSkip: true,
+          maxTicksLimit: 15
+        }
+      },
+      y: {
+        beginAtZero: true, max: 18,
+        grid: { color: '#e8e8e8', drawBorder: false },
+        ticks: {
+          font: { size: 13, family: "'Calibri','Segoe UI',sans-serif" },
+          color: '#777',
+          callback: v => '$' + v
+        },
+        title: {
+          display: true, text: 'Price ($/lb USD)',
+          font: { size: 13, family: "'Calibri','Segoe UI',sans-serif" }, color: '#777'
+        }
+      }
+    }
+  },
+  plugins: [fillBetweenPlugin]
+});
+</script>
+</body>
+</html>

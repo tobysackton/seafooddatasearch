@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 22: US Retail Usage Falling Faster than Overall Imports</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Calibri, 'Segoe UI', 'Helvetica Neue', sans-serif; background: #fff; color: #333; padding: 30px 40px; max-width: 960px; margin: 0 auto; }
+
+  /* Title block per spec */
+  .title-block { text-align: center; margin-bottom: 24px; }
+  .title-block .fig-num { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .title-block .title { font-size: 21px; font-weight: 700; color: #222; margin-bottom: 4px; }
+  .title-block .subtitle { font-size: 14px; color: #777; }
+
+  /* Stat cards */
+  .stat-row { display: flex; gap: 14px; margin-bottom: 22px; flex-wrap: wrap; }
+  .stat-card { flex: 1; min-width: 140px; border-radius: 6px; padding: 14px 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06); text-align: center; }
+  .stat-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 3px; }
+  .stat-card .value { font-size: 24px; font-weight: 700; margin: 2px 0; }
+  .stat-card .detail { font-size: 12px; line-height: 1.4; }
+
+  .stat-card.negative { background: #fef2f2; }
+  .stat-card.negative .label { color: #991b1b; }
+  .stat-card.negative .value { color: #ef4444; }
+  .stat-card.negative .detail { color: #7f1d1d; }
+
+  .stat-card.neutral { background: #f0f5ff; }
+  .stat-card.neutral .label { color: #1a3a5c; }
+  .stat-card.neutral .value { color: #2a5c8f; }
+  .stat-card.neutral .detail { color: #1a3a5c; }
+
+  .stat-card.caution { background: #fffbeb; }
+  .stat-card.caution .label { color: #92400e; }
+  .stat-card.caution .value { color: #f59e0b; }
+  .stat-card.caution .detail { color: #78350f; }
+
+  /* Chart panel */
+  .chart-panel { background: white; border-radius: 8px; padding: 10px 0 0 0; }
+
+  /* Custom legend per spec */
+  .legend { display: flex; justify-content: center; flex-wrap: wrap; gap: 18px; margin-bottom: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; }
+  .legend-swatch { width: 12px; height: 12px; border-radius: 2px; }
+  .legend-line { width: 18px; height: 3px; border-radius: 1px; }
+
+  /* Summary box per spec */
+  .summary-box { background: #f5f7fa; border: 1px solid #dde2e8; border-left: 4px solid #2a5c8f;
+    border-radius: 0 5px 5px 0; padding: 14px 18px; margin-top: 18px;
+    font-size: 13.5px; color: #333; line-height: 1.55; }
+
+  /* Source line per spec */
+  .source { border-top: 1px solid #ddd; margin-top: 14px; padding-top: 8px;
+    font-size: 12px; color: #999; }
+
+  /* Q1 inset */
+  .q1-inset { margin-top: 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 16px 20px; }
+  .q1-inset h3 { font-size: 14px; color: #1a3a5c; font-weight: 700; margin-bottom: 10px; }
+  .q1-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .q1-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px;
+    color: #777; padding: 4px 8px; border-bottom: 2px solid #ddd; }
+  .q1-table td { padding: 5px 8px; border-bottom: 1px solid #eee; }
+  .q1-table tr:last-child td { border-bottom: none; font-weight: 700; }
+  .q1-table .neg { color: #ef4444; }
+  .q1-table .est { font-style: italic; color: #666; }
+</style>
+</head>
+<body>
+
+  <!-- Title block -->
+  <div class="title-block">
+    <div class="fig-num">Figure 22</div>
+    <div class="title">US Retail Usage Falling Faster than Overall Imports</div>
+    <div class="subtitle">Annual US frozen snow crab imports (Census) vs Circana retail volume (Food Channel), 2021-2025. Q1 2026 estimated from 10 weeks through March 8.</div>
+  </div>
+
+  <!-- Stat cards -->
+  <div class="stat-row">
+    <div class="stat-card negative">
+      <div class="label">2025 Retail Volume</div>
+      <div class="value">63.5M</div>
+      <div class="detail">lbs — lowest since 2022, down 34.7% from 2023 peak</div>
+    </div>
+    <div class="stat-card neutral">
+      <div class="label">2025 Imports</div>
+      <div class="value">134.1M</div>
+      <div class="detail">lbs — stable, near 5-year average</div>
+    </div>
+    <div class="stat-card negative">
+      <div class="label">Retail Share of Imports</div>
+      <div class="value">47%</div>
+      <div class="detail">2025 — down from 76% in 2023</div>
+    </div>
+    <div class="stat-card caution">
+      <div class="label">Q1 2026 Retail Est.</div>
+      <div class="value">14.2M</div>
+      <div class="detail">lbs — 17% below Q1 2025</div>
+    </div>
+  </div>
+
+  <!-- Chart -->
+  <div class="chart-panel">
+    <div class="legend">
+      <div class="legend-item"><div class="legend-swatch" style="background:#1a3a5c;"></div>Total US Imports (M lbs)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#5b9bd5;"></div>Retail Volume (M lbs)</div>
+      <div class="legend-item"><div class="legend-line" style="background:#2a5c8f;"></div>Retail as % of Imports</div>
+    </div>
+    <canvas id="chart" style="max-height: 480px;"></canvas>
+  </div>
+
+  <!-- Summary box -->
+  <div class="summary-box">
+    Imports held near their 5-year average in 2025 while retail volume fell to its lowest level since tracking began in 2021. The retail share of total imports dropped from 76% in 2023 to 47% in 2025. The contraction is demand-side — driven by price increases that pushed average retail from $9.35/lb (2023) to $10.24/lb (2025) — not supply-side. Q1 2026 retail volume, estimated at 14.2M lbs, runs 17% below Q1 2025 at an average price of $11.48/lb.
+  </div>
+
+  <!-- Q1 2026 detail inset -->
+  <div class="q1-inset">
+    <h3>Q1 2026 Estimate Detail</h3>
+    <table class="q1-table">
+      <tr><th>Metric</th><th>Actual (10 wks thru Mar 8)</th><th>Estimated Full Q1 (13 wks)</th></tr>
+      <tr><td>Volume</td><td>10.90M lbs</td><td class="est">14.17M lbs</td></tr>
+      <tr><td>Avg Price</td><td>$11.48/lb</td><td class="est">$11.48/lb</td></tr>
+      <tr><td>Total Sales</td><td>$125.1M</td><td class="est">$162.6M</td></tr>
+      <tr><td>vs Q1 2025 (17.1M lbs)</td><td class="neg">-36.4%</td><td class="neg">-17.2%</td></tr>
+    </table>
+  </div>
+
+  <!-- Source -->
+  <div class="source">Source: Seafood Datasearch analysis of U.S. Census Bureau import data and Circana retail scan data (Food Channel, Total US)</div>
+
+<script>
+Chart.register(ChartDataLabels);
+
+const years = ['2021', '2022', '2023', '2024', '2025'];
+
+// US Census frozen snow crab imports — annual totals (lbs)
+const importVol = [140.0, 96.9, 128.6, 123.9, 134.1];
+
+// Circana retail volume — annual totals, Food Channel, Total US (lbs)
+const retailVol = [91.0, 71.2, 97.2, 86.1, 63.5];
+
+// Retail as % of imports
+const retailPct = retailVol.map((r, i) => Math.round(r / importVol[i] * 100));
+
+const ctx = document.getElementById('chart').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [
+      {
+        label: 'Total US Imports (M lbs)',
+        data: importVol,
+        backgroundColor: 'rgba(26,58,92,0.78)',
+        borderColor: '#1a3a5c',
+        borderWidth: 1,
+        borderRadius: 4,
+        order: 3,
+        barPercentage: 0.85,
+        categoryPercentage: 0.7,
+        datalabels: {
+          display: true,
+          anchor: 'end',
+          align: 'end',
+          color: '#1a3a5c',
+          font: { size: 12, weight: 'bold' },
+          formatter: v => v.toFixed(1)
+        }
+      },
+      {
+        label: 'Retail Volume (M lbs)',
+        data: retailVol,
+        backgroundColor: retailVol.map((v, i) => i === 4 ? 'rgba(239,68,68,0.75)' : 'rgba(91,155,213,0.80)'),
+        borderColor: retailVol.map((v, i) => i === 4 ? '#ef4444' : '#5b9bd5'),
+        borderWidth: 1,
+        borderRadius: 4,
+        order: 3,
+        barPercentage: 0.85,
+        categoryPercentage: 0.7,
+        datalabels: {
+          display: true,
+          anchor: 'end',
+          align: 'end',
+          color: retailVol.map((v, i) => i === 4 ? '#ef4444' : '#5b9bd5'),
+          font: { size: 12, weight: 'bold' },
+          formatter: v => v.toFixed(1)
+        }
+      },
+      {
+        label: 'Retail as % of Imports',
+        data: retailPct,
+        type: 'line',
+        borderColor: '#2a5c8f',
+        backgroundColor: '#2a5c8f',
+        pointRadius: 5,
+        pointBackgroundColor: '#2a5c8f',
+        pointBorderColor: 'white',
+        pointBorderWidth: 2.5,
+        yAxisID: 'y1',
+        tension: 0.3,
+        borderWidth: 3,
+        order: 1,
+        datalabels: {
+          display: true,
+          anchor: 'end',
+          align: 'top',
+          offset: 6,
+          color: '#2a5c8f',
+          font: { size: 13, weight: '700' },
+          formatter: v => v + '%'
+        }
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    layout: { padding: { top: 40, right: 20, bottom: 10, left: 10 } },
+    plugins: {
+      legend: { display: false },
+      annotation: {
+        clip: false,
+        annotations: {
+          gapArrow2025: {
+            type: 'line',
+            xMin: 4.28, xMax: 4.28,
+            yMin: 63.5, yMax: 134.1,
+            borderColor: 'rgba(239,68,68,0.5)',
+            borderWidth: 2,
+            borderDash: [4, 3],
+          },
+          gapLabel: {
+            type: 'label',
+            xValue: 4.42, yValue: 99,
+            content: ['70.6M lb gap'],
+            backgroundColor: 'rgba(239,68,68,0.08)',
+            color: '#ef4444',
+            font: { size: 11, weight: '600' },
+            padding: { x: 6, y: 4 },
+            borderRadius: 3,
+            borderColor: 'rgba(239,68,68,0.3)',
+            borderWidth: 1
+          },
+          collapseNote: {
+            type: 'label',
+            xValue: 2, yValue: 155,
+            content: ['Supply held steady — the contraction is on the demand side'],
+            backgroundColor: 'rgba(26,58,92,0.06)',
+            color: '#1a3a5c',
+            font: { size: 12, style: 'italic' },
+            padding: { x: 12, y: 6 },
+            borderRadius: 4
+          }
+        }
+      },
+      tooltip: {
+        backgroundColor: 'white',
+        titleColor: '#222',
+        bodyColor: '#555',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        cornerRadius: 6,
+        padding: 14,
+        boxShadow: '0 4px 16px rgba(0,0,0,0.14)',
+        callbacks: {
+          label: function(ctx) {
+            if (ctx.dataset.yAxisID === 'y1') return ctx.dataset.label + ': ' + ctx.parsed.y + '%';
+            return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + 'M lbs';
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { font: { size: 14, family: "Calibri, 'Segoe UI', sans-serif" }, color: '#444' },
+        grid: { display: false }
+      },
+      y: {
+        title: { display: true, text: 'Volume (Million lbs)', font: { size: 13 }, color: '#777' },
+        beginAtZero: true,
+        max: 170,
+        ticks: {
+          font: { size: 13 }, color: '#777',
+          callback: v => v + 'M'
+        },
+        grid: { color: '#e8e8e8', drawBorder: false, lineWidth: 1 }
+      },
+      y1: {
+        position: 'right',
+        title: { display: true, text: 'Retail as % of Imports', font: { size: 13, weight: '600' }, color: '#2a5c8f' },
+        min: 30,
+        max: 90,
+        ticks: {
+          font: { size: 13, weight: '600' }, color: '#2a5c8f',
+          callback: v => v + '%'
+        },
+        grid: { drawOnChartArea: false }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

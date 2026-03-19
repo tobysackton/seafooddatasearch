@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Figure 35: Japan Frozen Snow Crab Imports by Origin</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  body { font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif; background: #fff; margin: 20px; }
+  .chart-container { width: 900px; margin: 0 auto; }
+  h2 { font-size: 15px; font-weight: 600; color: #1a1a1a; text-align: center; margin-bottom: 4px; }
+  .subtitle { font-size: 12px; color: #555; text-align: center; margin-bottom: 16px; }
+  .source-box { width: 876px; margin: 16px auto 0 auto; padding: 8px 12px; background: #f5f7fa; border-left: 4px solid #2a5c8f; font-size: 11px; color: #444; }
+</style>
+</head>
+<body>
+<div class="chart-container">
+  <h2>Figure 35: Japan Frozen Snow Crab Imports by Origin, 2015&ndash;2025</h2>
+  <p class="subtitle">Annual import volume (million lbs, HS 030614020); Canada market share (right axis)</p>
+  <canvas id="fig35" width="900" height="480"></canvas>
+</div>
+<div class="source-box">
+  <strong>Source:</strong> Global Trade Tracker, HS 030614020, Japan as reporter, import flow, 2015&ndash;2025.
+</div>
+<script>
+const years = [2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025];
+
+const data = {
+  Canada: [17.4, 12.8, 16.6,  9.9, 11.9,  7.7,  9.4,  8.4,  9.0, 11.1,  5.9],
+  Russia: [22.0, 26.8, 24.4, 25.2, 25.2, 17.0, 15.3, 24.4, 28.8, 29.7, 26.6],
+  Norway: [ 1.8,  4.3,  2.1,  0.6,  1.6,  0.8,  1.8,  1.6,  0.8,  3.1,  1.8],
+  US:     [11.1,  7.1,  1.8,  3.1,  4.1,  3.3,  6.9,  1.9,  2.0,  1.4,  0.5],
+  Other:  [ 3.8,  5.6,  1.6,  1.3,  1.1,  0.9,  0.9,  0.8,  1.0,  0.9,  0.9],
+};
+const canadaShare = [31, 23, 36, 25, 27, 26, 27, 23, 22, 24, 17];
+
+const ctx = document.getElementById('fig35').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [
+      { label: 'Canada',        data: data.Canada, backgroundColor: '#e07070', stack: 'a', order: 2 },
+      { label: 'Russia',        data: data.Russia, backgroundColor: '#9e8fce', stack: 'a', order: 2 },
+      { label: 'Norway',        data: data.Norway, backgroundColor: '#6bb86b', stack: 'a', order: 2 },
+      { label: 'United States', data: data.US,     backgroundColor: '#5b9bd5', stack: 'a', order: 2 },
+      { label: 'Other',         data: data.Other,  backgroundColor: '#bfbfbf', stack: 'a', order: 2 },
+      {
+        label: 'Canada share (%)',
+        data: canadaShare,
+        type: 'line',
+        yAxisID: 'y2',
+        borderColor: '#c0392b',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderDash: [5, 3],
+        pointRadius: 3,
+        pointBackgroundColor: '#c0392b',
+        tension: 0.2,
+        order: 1
+      }
+    ]
+  },
+  options: {
+    responsive: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { font: { family: "'Calibri','Segoe UI','Helvetica Neue',sans-serif", size: 12 }, boxWidth: 14, padding: 12 }
+      },
+      tooltip: {
+        callbacks: {
+          label: ctx => ctx.dataset.yAxisID === 'y2'
+            ? ' Canada share: ' + ctx.parsed.y + '%'
+            : ' ' + ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + 'M lbs'
+        }
+      }
+    },
+    scales: {
+      x: {
+        stacked: true,
+        ticks: { font: { family: "'Calibri','Segoe UI','Helvetica Neue',sans-serif", size: 12 } },
+        grid: { display: false }
+      },
+      y: {
+        stacked: true,
+        title: { display: true, text: 'Million lbs', font: { family: "'Calibri','Segoe UI','Helvetica Neue',sans-serif", size: 12 } },
+        ticks: { font: { family: "'Calibri','Segoe UI','Helvetica Neue',sans-serif", size: 11 } },
+        grid: { color: '#e8e8e8' }
+      },
+      y2: {
+        position: 'right',
+        min: 0, max: 50,
+        title: { display: true, text: 'Canada Share (%)', font: { family: "'Calibri','Segoe UI','Helvetica Neue',sans-serif", size: 12 } },
+        ticks: {
+          callback: v => v + '%',
+          font: { family: "'Calibri','Segoe UI','Helvetica Neue',sans-serif", size: 11 }
+        },
+        grid: { display: false }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 4 — US Snow Crab Imports by Source, 2020–2025</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.12.7/Recharts.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #fff; display: flex; justify-content: center; padding: 24px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = Recharts;
+const FONT = "'Calibri','Segoe UI','Helvetica Neue',sans-serif";
+
+const fig4Data = [
+  { year: 2020, canada: 90.40, russia: 67.90, norway: 3.07, greenland: 2.76, chile: 0.82 },
+  { year: 2021, canada: 102.33, russia: 69.97, norway: 7.58, greenland: 2.79, chile: 1.15 },
+  { year: 2022, canada: 100.51, russia: 26.17, norway: 3.56, greenland: 2.12, chile: 1.51 },
+  { year: 2023, canada: 135.34, russia: 0,     norway: 8.12, greenland: 3.19, chile: 0.41 },
+  { year: 2024, canada: 123.86, russia: 0,     norway: 8.69, greenland: 2.11, chile: 0.51 },
+  { year: 2025, canada: 127.64, russia: 0,     norway: 13.46, greenland: 1.46, chile: 0.51 },
+];
+
+const SERIES = [
+  { key: "canada",    label: "Canada",    color: "#5b9bd5" },
+  { key: "russia",    label: "Russia",    color: "#c87070" },
+  { key: "norway",    label: "Norway",    color: "#6bb86b" },
+  { key: "greenland", label: "Greenland", color: "#9e8fce" },
+  { key: "chile",     label: "Chile",     color: "#bfbfbf" },
+];
+
+function CustomTooltip({ active, payload, label }) {
+  if (!active || !payload || !payload.length) return null;
+  const vals = {};
+  SERIES.forEach(s => { const p = payload.find(p => p.dataKey === s.key); vals[s.key] = p ? p.value : 0; });
+  const total = Object.values(vals).reduce((a, b) => a + b, 0);
+  const nonCa = total - vals.canada;
+  const norwPct = nonCa > 0 ? (vals.norway / nonCa * 100).toFixed(0) : 0;
+
+  return React.createElement("div", {
+    style: { background: "#fff", border: "1px solid #ccc", borderRadius: 6,
+      boxShadow: "0 4px 16px rgba(0,0,0,0.14)", padding: "14px 18px", minWidth: 248, fontFamily: FONT }
+  },
+    React.createElement("div", { style: { fontSize: 18, fontWeight: 700, color: "#222",
+      borderBottom: "2px solid #5b9bd5", paddingBottom: 6, marginBottom: 10 } }, label),
+    React.createElement("div", { style: { display: "grid", gridTemplateColumns: "12px 1fr 72px", gap: "5px 8px", alignItems: "center" } },
+      ...SERIES.flatMap(ser => {
+        const v = vals[ser.key]; if (v === 0) return [];
+        const isN = ser.key === "norway";
+        return [
+          React.createElement("div", { key: ser.key+"d", style: { width: 12, height: 12, background: ser.color, borderRadius: 2 } }),
+          React.createElement("span", { key: ser.key+"l", style: { fontSize: 13, color: isN ? "#1a6b1a" : "#555", fontWeight: isN ? 700 : 400 } }, ser.label),
+          React.createElement("span", { key: ser.key+"v", style: { fontSize: 13, fontWeight: (ser.key==="canada"||isN)?700:400, color: isN?"#1a6b1a":"#222", textAlign: "right" } }, v.toFixed(1)+"M"),
+        ];
+      })
+    ),
+    React.createElement("div", { style: { borderTop: "1px solid #eee", marginTop: 7, paddingTop: 7, display: "grid", gridTemplateColumns: "1fr 72px" } },
+      React.createElement("span", { style: { fontSize: 13, color: "#555" } }, "Total"),
+      React.createElement("span", { style: { fontSize: 13, fontWeight: 700, color: "#222", textAlign: "right" } }, total.toFixed(1)+"M lbs")
+    ),
+    nonCa > 0 && React.createElement("div", {
+      style: { marginTop: 8, background: "#f0f8f0", border: "1px solid #b8ddb8", borderRadius: 4, padding: "7px 12px", textAlign: "center" }
+    },
+      React.createElement("div", { style: { fontSize: 11, color: "#666", textTransform: "uppercase", letterSpacing: "0.05em" } }, "Norway share of non-Canadian supply"),
+      React.createElement("div", { style: { fontSize: 20, fontWeight: 700, color: "#1a6b1a" } }, norwPct+"%")
+    )
+  );
+}
+
+function Figure4() {
+  const active = SERIES.filter(s => fig4Data.some(d => d[s.key] > 0));
+  return React.createElement("div", {
+    style: { background: "#fff", padding: "28px 32px 20px", fontFamily: FONT, maxWidth: 760, width: "100%" }
+  },
+    React.createElement("div", { style: { textAlign: "center", marginBottom: 20 } },
+      React.createElement("div", { style: { fontSize: 12, color: "#999", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4 } }, "Figure 4"),
+      React.createElement("div", { style: { fontSize: 21, fontWeight: 700, color: "#222", lineHeight: 1.2, marginBottom: 5 } }, "US Snow Crab Imports by Source, 2020\u20132025"),
+      React.createElement("div", { style: { fontSize: 14, color: "#777" } }, "Annual volume by origin (M lbs) \u00b7 HS 030614, snow crab origins")
+    ),
+    React.createElement("div", { style: { height: 340 } },
+      React.createElement(ResponsiveContainer, { width: "100%", height: "100%" },
+        React.createElement(BarChart, { data: fig4Data, margin: { top: 8, right: 20, left: 8, bottom: 4 } },
+          React.createElement(CartesianGrid, { vertical: false, stroke: "#e8e8e8", strokeDasharray: "3 3" }),
+          React.createElement(XAxis, { dataKey: "year", tick: { fontSize: 13, fill: "#444", fontFamily: FONT }, tickLine: false, axisLine: { stroke: "#ccc" } }),
+          React.createElement(YAxis, { domain: [0, 220], ticks: [0,50,100,150,200],
+            tick: { fontSize: 12, fill: "#777", fontFamily: FONT }, tickLine: false, axisLine: false,
+            tickFormatter: function(v) { return v===0?"":v+"M"; } }),
+          React.createElement(Tooltip, { content: React.createElement(CustomTooltip), cursor: { fill: "rgba(0,0,0,0.04)" } }),
+          ...SERIES.map(ser => React.createElement(Bar, {
+            key: ser.key, dataKey: ser.key, stackId: "a",
+            fill: ser.color, fillOpacity: ser.key==="norway"?1.0:0.88,
+            radius: ser.key==="chile"?[2,2,0,0]:[0,0,0,0]
+          }))
+        )
+      )
+    ),
+    React.createElement("div", { style: { display: "flex", justifyContent: "center", gap: 20, marginTop: 6, marginBottom: 14, flexWrap: "wrap" } },
+      ...active.map(ser => React.createElement("div", { key: ser.key, style: { display: "flex", alignItems: "center", gap: 6 } },
+        React.createElement("div", { style: { width: 12, height: 12, background: ser.color, borderRadius: 2,
+          outline: ser.key==="norway"?"2px solid #1a6b1a":"none", outlineOffset: 1 } }),
+        React.createElement("span", { style: { fontSize: 13, color: ser.key==="norway"?"#1a6b1a":"#555",
+          fontWeight: ser.key==="norway"?700:400 } }, ser.label)
+      ))
+    ),
+    React.createElement("div", {
+      style: { background: "#f5f7fa", border: "1px solid #dde2e8",
+        borderLeft: "4px solid #2a5c8f", borderRadius: "0 5px 5px 0",
+        padding: "12px 16px", marginBottom: 14, fontSize: 13.5, color: "#333", lineHeight: 1.55 }
+    }, "Canada and Norway have only partially made up for the loss of Russian snow crab. US supply increased in 2025 based on increased production from both countries. In 2026, Norway will be stable but Canada is forecast to decrease, leading to a decrease in overall US supply."),
+    React.createElement("div", { style: { borderTop: "1px solid #ddd", paddingTop: 8, fontSize: 12, color: "#999" } },
+      "Source: Seafood Datasearch from Global Trade Tracker (HS 030614, filtered to snow crab origins)"
+    )
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(React.createElement(Figure4));
+</script>
+</body>
+</html>

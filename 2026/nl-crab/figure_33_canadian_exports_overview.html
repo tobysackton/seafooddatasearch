@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Figure 34: Canadian Snow Crab Export Markets</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  body { font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif; background: #fff; margin: 20px; }
+  .chart-container { width: 900px; margin: 0 auto; }
+  h2 { font-size: 15px; font-weight: 600; color: #1a1a1a; text-align: center; margin-bottom: 4px; }
+  .subtitle { font-size: 12px; color: #555; text-align: center; margin-bottom: 16px; }
+  .source-box { width: 876px; margin: 16px auto 0 auto; padding: 8px 12px; background: #f5f7fa; border-left: 4px solid #2a5c8f; font-size: 11px; color: #444; }
+</style>
+</head>
+<body>
+<div class="chart-container">
+  <h2>Figure 34: Canadian Snow Crab Export Markets, 2015&ndash;2025</h2>
+  <p class="subtitle">Annual exports by destination (million lbs); US share of total (right axis)</p>
+  <canvas id="fig34" width="900" height="480"></canvas>
+</div>
+<div class="source-box">
+  <strong>Source:</strong> Global Trade Tracker, HS 030614, Canada as reporter, export flow, 2015&ndash;2025. Quantities converted from kg to lbs (1 kg = 2.20462 lbs). 2026 partial year excluded.
+</div>
+<script>
+const years = [2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025];
+
+const data = {
+  US:      [87.4, 83.1, 81.0, 63.3, 72.6, 78.6, 88.2, 85.9, 117.7, 112.6, 120.0],
+  Japan:   [10.2,  6.5,  9.5,  4.9,  5.5,  4.1,  5.3,  3.4,   3.8,   4.2,   2.2],
+  China:   [11.7,  9.4,  9.6,  9.1,  5.5,  6.0,  5.9,  7.7,   7.0,   6.5,   2.9],
+  SEAsia:  [ 4.8,  3.2,  4.6,  4.1,  4.8,  3.1,  2.2,  8.2,   5.1,   6.4,   5.5],
+  Other:   [ 0.6,  1.1,  1.0,  0.8,  0.9,  0.9,  1.0,  1.1,   1.5,   0.7,   0.5],
+};
+const usShare = [76.3, 80.4, 76.6, 77.1, 81.3, 84.7, 86.0, 80.7, 87.1, 86.3, 91.5];
+
+const ctx = document.getElementById('fig34').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [
+      { label: 'United States',          data: data.US,     backgroundColor: '#5b9bd5', stack: 'a', order: 2 },
+      { label: 'Japan',                  data: data.Japan,  backgroundColor: '#e07070', stack: 'a', order: 2 },
+      { label: 'China',                  data: data.China,  backgroundColor: '#e8c44a', stack: 'a', order: 2 },
+      { label: 'SE Asia (reprocessing)', data: data.SEAsia, backgroundColor: '#6bb86b', stack: 'a', order: 2 },
+      { label: 'Other',                  data: data.Other,  backgroundColor: '#bfbfbf', stack: 'a', order: 2 },
+      {
+        label: 'US share (%)',
+        data: usShare,
+        type: 'line',
+        yAxisID: 'y2',
+        borderColor: '#2a5c8f',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: '#2a5c8f',
+        tension: 0.2,
+        order: 1
+      }
+    ]
+  },
+  options: {
+    responsive: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { font: { family: "'Calibri','Segoe UI','Helvetica Neue',sans-serif", size: 12 }, boxWidth: 14, padding: 12 }
+      },
+      tooltip: {
+        callbacks: {
+          label: ctx => ctx.dataset.yAxisID === 'y2'
+            ? ' US share: ' + ctx.parsed.y.toFixed(1) + '%'
+            : ' ' + ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + 'M lbs'
+        }
+      }
+    },
+    scales: {
+      x: {
+        stacked: true,
+        ticks: { font: { family: "'Calibri','Segoe UI','Helvetica Neue',sans-serif", size: 12 } },
+        grid: { display: false }
+      },
+      y: {
+        stacked: true,
+        title: { display: true, text: 'Million lbs', font: { family: "'Calibri','Segoe UI','Helvetica Neue',sans-serif", size: 12 } },
+        ticks: { font: { family: "'Calibri','Segoe UI','Helvetica Neue',sans-serif", size: 11 } },
+        grid: { color: '#e8e8e8' }
+      },
+      y2: {
+        position: 'right',
+        min: 50, max: 100,
+        title: { display: true, text: 'US Share (%)', font: { family: "'Calibri','Segoe UI','Helvetica Neue',sans-serif", size: 12 } },
+        ticks: {
+          callback: v => v + '%',
+          font: { family: "'Calibri','Segoe UI','Helvetica Neue',sans-serif", size: 11 }
+        },
+        grid: { display: false }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

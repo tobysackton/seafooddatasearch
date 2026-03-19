@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NL Crab Report 2026 — Interactive Figures</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif; background: #f8f9fa; color: #333; }
+        .auth-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.97); z-index: 1000;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .auth-box {
+            text-align: center; padding: 40px 50px;
+            border: 1px solid #dde2e8; border-radius: 8px;
+            background: white; box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            max-width: 440px;
+        }
+        .auth-box h1 { font-size: 22px; color: #222; margin-bottom: 8px; }
+        .auth-box p { font-size: 14px; color: #777; margin-bottom: 20px; }
+        .auth-box input {
+            width: 100%; padding: 12px 16px; font-size: 16px;
+            border: 2px solid #dde2e8; border-radius: 5px;
+            text-align: center; margin-bottom: 12px;
+        }
+        .auth-box input:focus { outline: none; border-color: #2a5c8f; }
+        .auth-box button {
+            padding: 10px 32px; font-size: 15px; font-weight: 600;
+            background: #2a5c8f; color: white; border: none; border-radius: 5px;
+            cursor: pointer;
+        }
+        .auth-box button:hover { background: #1e4a73; }
+        .auth-error { color: #ef4444; font-size: 13px; margin-top: 8px; display: none; }
+        .hidden { display: none; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 28px; color: #222; margin-bottom: 6px; }
+        .header p { font-size: 15px; color: #777; }
+        .header .brand { font-size: 13px; color: #999; margin-top: 8px; }
+
+        .section-group { margin-bottom: 32px; }
+        .section-title {
+            font-size: 14px; font-weight: 700; color: #2a5c8f;
+            text-transform: uppercase; letter-spacing: 0.06em;
+            padding-bottom: 8px; border-bottom: 2px solid #2a5c8f;
+            margin-bottom: 12px;
+        }
+        .figure-link {
+            display: flex; align-items: center; padding: 10px 14px;
+            border: 1px solid #eee; border-radius: 5px; margin-bottom: 6px;
+            background: white; text-decoration: none; color: #333;
+            transition: all 0.15s;
+        }
+        .figure-link:hover { border-color: #2a5c8f; background: #f5f7fa; }
+        .figure-num {
+            font-size: 12px; font-weight: 700; color: #999;
+            width: 60px; flex-shrink: 0;
+        }
+        .figure-name { font-size: 14px; flex: 1; }
+        .figure-arrow { color: #ccc; font-size: 18px; }
+        .figure-link:hover .figure-arrow { color: #2a5c8f; }
+
+        .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 12px; color: #999; }
+    </style>
+</head>
+<body>
+
+<div class="auth-overlay" id="authOverlay">
+    <div class="auth-box">
+        <h1>Figures in the 2026 NL Crab Report</h1>
+        <p>Enter the access code to view interactive figures.</p>
+        <input type="password" id="passInput" placeholder="Access code" onkeydown="if(event.key==='Enter')checkPass()">
+        <br>
+        <button onclick="checkPass()">Enter</button>
+        <div class="auth-error" id="authError">Incorrect access code. Please try again.</div>
+    </div>
+</div>
+
+<div class="container hidden" id="mainContent">
+    <div class="header">
+        <h1>Figures in the 2026 NL Crab Report</h1>
+        <p>Interactive charts from the Crab Market Review, March 2026</p>
+        <div class="brand">Seafood Datasearch &bull; seafooddatasearch.com</div>
+    </div>
+
+    <div class="section-group">
+        <div class="section-title">Introduction & Section 1: What Determines Price</div>
+        <a class="figure-link" href="figure_01_tariff_timeline.html"><span class="figure-num">Fig. 1</span><span class="figure-name">Snow Crab Tariff Threat Timeline</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_02_us_share_exports.html"><span class="figure-num">Fig. 2</span><span class="figure-name">US Share of Canadian Snow Crab Exports, 2012-2025</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_03_us_supply_price_25yr.html"><span class="figure-num">Fig. 3</span><span class="figure-name">US Snow Crab Supply and Price (25 years)</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_04_four_price_regimes.html"><span class="figure-num">Fig. 4</span><span class="figure-name">Four Price Regimes Since 2009</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_05_us_imports_by_source.html"><span class="figure-num">Fig. 5</span><span class="figure-name">US Snow Crab Imports by Source</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_06_nl_market_share.html"><span class="figure-num">Fig. 6</span><span class="figure-name">Newfoundland's Dominant Market Share</span><span class="figure-arrow">›</span></a>
+    </div>
+
+    <div class="section-group">
+        <div class="section-title">Section 2: Supply Situation for 2026</div>
+        <a class="figure-link" href="figure_07_preseason_price_signal.html"><span class="figure-num">Fig. 7</span><span class="figure-name">Pre-Season Price Signal</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_08_inventory_exhaustion.html"><span class="figure-num">Fig. 8</span><span class="figure-name">Inventory Exhaustion Calendar</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_10_nl_gulf_quota_history.html"><span class="figure-num">Fig. 10</span><span class="figure-name">NL and Gulf Quota History</span><span class="figure-arrow">›</span></a>
+    </div>
+
+    <div class="section-group">
+        <div class="section-title">Section 3: Consumer & Economic Environment</div>
+        <a class="figure-link" href="figure_11_consumer_sentiment.html"><span class="figure-num">Fig. 11</span><span class="figure-name">Consumer Sentiment 2024-2026</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_13_retail_price_volume.html"><span class="figure-num">Fig. 13</span><span class="figure-name">Retail Crab Market: Price vs Volume</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_14_k_shaped_consumer.html"><span class="figure-num">Fig. 14</span><span class="figure-name">The K-Shaped Consumer Economy</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_15_economic_headwinds.html"><span class="figure-num">Fig. 15</span><span class="figure-name">Economic Headwinds Getting Worse</span><span class="figure-arrow">›</span></a>
+    </div>
+
+    <div class="section-group">
+        <div class="section-title">Section 4: US Retail Demand</div>
+        <a class="figure-link" href="figure_16_retail_vs_imports.html"><span class="figure-num">Fig. 16</span><span class="figure-name">Retail Usage vs Overall Imports</span><span class="figure-arrow">›</span></a>
+    </div>
+
+    <div class="section-group">
+        <div class="section-title">Section 5: Foodservice</div>
+        <a class="figure-link" href="figure_23_foodservice_vs_grocery.html"><span class="figure-num">Fig. 23</span><span class="figure-name">Foodservice Sales vs Grocery</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_24_foodservice_growth_trend.html"><span class="figure-num">Fig. 24</span><span class="figure-name">Foodservice Growth Trend</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_25_foodservice_spending_income.html"><span class="figure-num">Fig. 25</span><span class="figure-name">Foodservice Spending by Income Quartile</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_26_size_grade_collapse.html"><span class="figure-num">Fig. 26</span><span class="figure-name">5-8 vs 8-Up Price Convergence</span><span class="figure-arrow">›</span></a>
+    </div>
+
+    <div class="section-group">
+        <div class="section-title">Section 6: Historical Pricing</div>
+        <a class="figure-link" href="figure_28_real_nominal_price.html"><span class="figure-num">Fig. 28</span><span class="figure-name">Real vs Nominal Snow Crab Price Since 2000</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_29_gulf_nl_differential.html"><span class="figure-num">Fig. 29</span><span class="figure-name">Gulf / Newfoundland 5-8 Price Differential</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_30_processor_margins.html"><span class="figure-num">Fig. 30</span><span class="figure-name">Processor Gross Margins and Harvester Share</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_31_gross_margins_over_time.html"><span class="figure-num">Fig. 31</span><span class="figure-name">Volume-Weighted Gross Margins Over Time</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_32_cad_usd_exchange.html"><span class="figure-num">Fig. 32</span><span class="figure-name">CAD/USD Exchange Rate</span><span class="figure-arrow">›</span></a>
+    </div>
+
+    <div class="section-group">
+        <div class="section-title">Section 7: International Markets</div>
+        <a class="figure-link" href="figure_33_canadian_exports_overview.html"><span class="figure-num">Fig. 33</span><span class="figure-name">Canadian Exports Overview</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_34_japan_frozen_imports.html"><span class="figure-num">Fig. 34</span><span class="figure-name">Japan Frozen Snow Crab Imports</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_35_crabmeat_triangle.html"><span class="figure-num">Fig. 35</span><span class="figure-name">Japanese Crabmeat from Canadian Processed Crab</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_36_japan_crabmeat_all.html"><span class="figure-num">Fig. 36</span><span class="figure-name">Japanese Imports of Crabmeat (All Types)</span><span class="figure-arrow">›</span></a>
+    </div>
+
+    <div class="section-group">
+        <div class="section-title">Section 9: The Pricing Model</div>
+        <a class="figure-link" href="figure_38_season_opener_model.html"><span class="figure-num">Fig. 38</span><span class="figure-name">Season Opener Model: Historical Fit with 2026 Forecast</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_39_buyer_reference_weighted.html"><span class="figure-num">Fig. 39</span><span class="figure-name">What Buyers Actually Paid: Volume-Weighted Prices</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_40_buyer_ub_vs_customs.html"><span class="figure-num">Fig. 40</span><span class="figure-name">2026 Scenario Price Bands</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_41_frontloading_heatmap.html"><span class="figure-num">Fig. 41</span><span class="figure-name">Front-Loading as a Demand Signal</span><span class="figure-arrow">›</span></a>
+    </div>
+
+    <div class="section-group">
+        <div class="section-title">Section 10: 2026 Market Outlook</div>
+        <a class="figure-link" href="figure_42_quota_2026.html"><span class="figure-num">Fig. 42</span><span class="figure-name">NL/Gulf Quota Estimate for 2026-27</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_43_three_season_comparison.html"><span class="figure-num">Fig. 43</span><span class="figure-name">Last Three Season Price Patterns</span><span class="figure-arrow">›</span></a>
+        <a class="figure-link" href="figure_44_cusma_planning_horizon.html"><span class="figure-num">Fig. 44</span><span class="figure-name">CUSMA Planning Horizon</span><span class="figure-arrow">›</span></a>
+    </div>
+
+    <div class="footer">
+        Crab Market Review, March 2026 &bull; Prepared for the Ministry of Fisheries and Aquaculture, Province of Newfoundland<br>
+        John Sackton &bull; Seafood Datasearch &bull; jsackton@seafoodlink.com
+    </div>
+</div>
+
+<script>
+function checkPass() {
+    const input = document.getElementById('passInput').value;
+    // Simple hash check (not cryptographically secure, but sufficient for access gating)
+    if (input === 'NL_Crab_2026') {
+        document.getElementById('authOverlay').style.display = 'none';
+        document.getElementById('mainContent').classList.remove('hidden');
+        sessionStorage.setItem('nlcrab2026_auth', 'true');
+    } else {
+        document.getElementById('authError').style.display = 'block';
+        document.getElementById('passInput').value = '';
+        document.getElementById('passInput').focus();
+    }
+}
+
+// Check if already authenticated this session
+if (sessionStorage.getItem('nlcrab2026_auth') === 'true') {
+    document.getElementById('authOverlay').style.display = 'none';
+    document.getElementById('mainContent').classList.remove('hidden');
+}
+
+document.getElementById('passInput').focus();
+</script>
+</body>
+</html>

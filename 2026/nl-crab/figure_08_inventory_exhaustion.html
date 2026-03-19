@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figure 8 — Pack Year Front-Loading and H2 Inventory Depletion</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #fff;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 28px 32px 20px;
+        }
+        .figure-number {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 4px;
+        }
+        .title {
+            text-align: center;
+            font-size: 21px;
+            font-weight: 700;
+            color: #222;
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .metric {
+            text-align: center;
+            padding: 14px 10px;
+            border-radius: 8px;
+        }
+        .metric.blue { background: #eff6ff; border: 1px solid #bfdbfe; }
+        .metric.red { background: #fef2f2; border: 1px solid #fecaca; }
+        .metric.gray { background: #f8fafc; border: 1px solid #e2e8f0; }
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .metric.blue .metric-value { color: #2563eb; }
+        .metric.red .metric-value { color: #dc2626; }
+        .metric.gray .metric-value { color: #475569; }
+        .metric-label { font-size: 0.7rem; color: #64748b; line-height: 1.4; text-transform: uppercase; letter-spacing: 0.03em; }
+        .summary-box {
+            background: #f5f7fa;
+            border: 1px solid #dde2e8;
+            border-left: 4px solid #2a5c8f;
+            border-radius: 0 5px 5px 0;
+            padding: 12px 16px;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: #333;
+            margin-bottom: 14px;
+        }
+        .source-line {
+            border-top: 1px solid #ddd;
+            margin-top: 14px;
+            padding-top: 8px;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="figure-number">Figure 8</div>
+    <div class="title">Pack Year Front-Loading and H2 Inventory Depletion</div>
+    <div class="subtitle">Monthly Canadian snow crab imports to US (M lbs), HS 0306144020, by pack year month</div>
+
+    <div class="chart-container">
+        <canvas id="frontLoadChart"></canvas>
+    </div>
+
+    <div class="metrics">
+        <div class="metric blue">
+            <div class="metric-value">115.9M</div>
+            <div class="metric-label">Apr–Sep 2025-26<br>up 12.8% from prior year</div>
+        </div>
+        <div class="metric red">
+            <div class="metric-value">1.6M</div>
+            <div class="metric-label">Oct–Jan 2025-26<br>down 75% from prior year</div>
+        </div>
+        <div class="metric gray">
+            <div class="metric-value">98.7%</div>
+            <div class="metric-label">Share shipped Apr–Sep<br>highest on record</div>
+        </div>
+    </div>
+
+    <div class="summary-box">
+        The 2025-26 pack year shows extreme front-loading. Tariff uncertainty drove buyers to move product onto US contracts during the season months, depleting the pipeline by fall. October through January shipments fell 75% year over year. By contrast, the 2022-23 pack year had unusually heavy H2 shipments as processors liquidated pandemic-era inventory at falling prices. The 2026 season will start with minimal carryover inventory in the US supply chain.
+    </div>
+
+    <div class="source-line">Source: Seafood Datasearch from US Census Bureau (HS 0306144020)</div>
+</div>
+
+<script>
+const FONT = "'Calibri','Segoe UI','Helvetica Neue',sans-serif";
+
+const months = ['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
+
+// Pack year monthly volumes (M lbs) — from Census HS 0306144020
+// 2022-23: heavy H2 (pandemic inventory liquidation)
+const py2223 = [12.21, 25.74, 15.66, 12.78, 6.30, 4.48, 3.46, 2.17, 1.66, 2.90, 2.48, 3.50];
+// 2023-24: transition year
+const py2324 = [14.53, 18.46, 27.47, 27.62, 14.49, 2.18, 1.96, 1.09, 1.08, 1.62, 1.61, 1.83];
+// 2024-25: normal pattern
+const py2425 = [18.02, 35.15, 24.07, 17.85, 5.25, 2.41, 1.83, 1.78, 1.44, 1.27, 0.22, 1.38];
+// 2025-26: extreme front-loading (through Jan 2026)
+const py2526 = [23.60, 33.76, 30.36, 22.03, 4.72, 1.47, 0.62, 0.44, 0.26, 0.26, null, null];
+
+const ctx = document.getElementById('frontLoadChart').getContext('2d');
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: months,
+        datasets: [
+            {
+                label: '2022-23 (inventory liquidation)',
+                data: py2223,
+                backgroundColor: 'rgba(224,112,112,0.25)',
+                borderColor: '#e07070',
+                borderWidth: 1.5,
+                borderDash: [],
+                type: 'line',
+                pointRadius: 3,
+                pointBackgroundColor: '#e07070',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 1.5,
+                tension: 0.3,
+                order: 1
+            },
+            {
+                label: '2024-25',
+                data: py2425,
+                backgroundColor: 'rgba(91,155,213,0.55)',
+                borderColor: '#4080b8',
+                borderWidth: 1,
+                borderRadius: 2,
+                order: 3
+            },
+            {
+                label: '2025-26 (through Jan)',
+                data: py2526,
+                backgroundColor: 'rgba(42,92,143,0.85)',
+                borderColor: '#1a4f7a',
+                borderWidth: 1,
+                borderRadius: 2,
+                order: 2
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false
+        },
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    font: { family: FONT, size: 12 },
+                    color: '#555',
+                    padding: 16,
+                    usePointStyle: true,
+                    pointStyleWidth: 16,
+                }
+            },
+            tooltip: {
+                backgroundColor: '#fff',
+                titleColor: '#222',
+                bodyColor: '#555',
+                borderColor: '#ccc',
+                borderWidth: 1,
+                titleFont: { size: 14, weight: 'bold', family: FONT },
+                bodyFont: { size: 13, family: FONT },
+                padding: 14,
+                boxPadding: 6,
+                callbacks: {
+                    label: function(ctx) {
+                        if (ctx.raw === null) return ctx.dataset.label + ': n/a';
+                        return ctx.dataset.label + ': ' + ctx.raw.toFixed(2) + 'M lbs';
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                grid: { display: false },
+                ticks: {
+                    font: { size: 13, family: FONT },
+                    color: '#444'
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Volume (M lbs)',
+                    font: { size: 13, family: FONT },
+                    color: '#777'
+                },
+                grid: {
+                    color: '#e8e8e8',
+                    borderDash: [3, 3]
+                },
+                ticks: {
+                    font: { size: 13, family: FONT },
+                    color: '#777',
+                    callback: function(v) { return v + 'M'; }
+                },
+                beginAtZero: true
+            }
+        }
+    },
+    plugins: [{
+        id: 'h2AnnotationBox',
+        afterDraw: function(chart) {
+            const ctx = chart.ctx;
+            const xScale = chart.scales.x;
+            const yScale = chart.scales.y;
+            // Draw a light red shading over Oct-Mar (indices 6-11)
+            const x1 = xScale.getPixelForValue(5.5);
+            const x2 = xScale.getPixelForValue(11.5);
+            const y1 = yScale.top;
+            const y2 = yScale.bottom;
+            ctx.save();
+            ctx.fillStyle = 'rgba(239, 68, 68, 0.04)';
+            ctx.fillRect(x1, y1, x2 - x1, y2 - y1);
+            // Label
+            ctx.fillStyle = '#dc2626';
+            ctx.font = 'bold 11px ' + FONT;
+            ctx.textAlign = 'center';
+            ctx.fillText('H2: Post-Season', (x1 + x2) / 2, y1 + 14);
+            ctx.restore();
+        }
+    }]
+});
+</script>
+</body>
+</html>

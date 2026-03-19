@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Figure 56: 2026 Scenario Price Bands</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif; background: #fff; padding: 20px; color: #333; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+        .figure-number { text-align: center; font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+        .title { text-align: center; font-size: 21px; font-weight: 700; color: #222; margin-bottom: 4px; }
+        .subtitle { text-align: center; font-size: 14px; color: #777; margin-bottom: 24px; }
+        .scenario-container { position: relative; padding: 20px 0; }
+        .scenario-row {
+            display: flex; align-items: center; margin-bottom: 16px;
+            position: relative; min-height: 70px;
+        }
+        .scenario-label { width: 200px; flex-shrink: 0; padding-right: 16px; text-align: right; }
+        .scenario-name { font-size: 14px; font-weight: 700; color: #222; }
+        .scenario-prob { font-size: 12px; color: #777; margin-top: 2px; }
+        .scenario-bar-area { flex: 1; position: relative; height: 50px; }
+        .scenario-bar {
+            position: absolute; height: 50px; border-radius: 4px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: opacity 0.2s;
+        }
+        .scenario-bar:hover { opacity: 0.85; }
+        .scenario-bar-text { color: white; font-weight: 700; font-size: 15px; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        .scenario-tooltip {
+            display: none; position: absolute; z-index: 100;
+            background: white; border: 1px solid #ccc; border-radius: 6px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.14); padding: 14px 18px;
+            min-width: 320px; font-size: 13px; top: 60px; left: 50%;
+            transform: translateX(-50%);
+        }
+        .scenario-tooltip.active { display: block; }
+        .ref-line { position: absolute; top: 0; bottom: 0; width: 2px; z-index: 10; }
+        .ref-label { position: absolute; font-size: 11px; white-space: nowrap; z-index: 11; }
+        .model-marker {
+            position: absolute; width: 16px; height: 16px; border-radius: 2px;
+            transform: rotate(45deg) translate(-50%, -50%); border: 2px solid #222;
+            z-index: 12; cursor: pointer;
+        }
+        .model-legend { display: flex; justify-content: center; gap: 24px; margin: 20px 0 16px; flex-wrap: wrap; }
+        .model-legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; }
+        .model-diamond { width: 12px; height: 12px; border-radius: 2px; transform: rotate(45deg); border: 1.5px solid #222; }
+        .summary-box {
+            background: #f5f7fa; border: 1px solid #dde2e8;
+            border-left: 4px solid #2a5c8f; border-radius: 0 5px 5px 0;
+            padding: 14px 18px; font-size: 13.5px; line-height: 1.55; color: #333;
+            margin-bottom: 14px;
+        }
+        .source-line { border-top: 1px solid #ddd; margin-top: 14px; padding-top: 8px; font-size: 12px; color: #999; }
+        .price-axis { display: flex; justify-content: space-between; padding: 0; font-size: 12px; color: #777; margin-top: 4px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="figure-number">Figure 56</div>
+    <div class="title">2026 Season Opener: Scenario Price Bands</div>
+    <div class="subtitle">Expected Apr-May price range referenced to PY2025 buyer price of $8.35/lb (UB NL 5-8 VW Apr-Jul)</div>
+
+    <div class="model-legend">
+        <div class="model-legend-item"><div class="model-diamond" style="background:#22c55e"></div> UB Buyer Model: $8.03</div>
+        <div class="model-legend-item"><div class="model-diamond" style="background:#2a5c8f"></div> Dual Anchor Model: $8.18</div>
+        <div class="model-legend-item"><div class="model-diamond" style="background:#d94801"></div> March Anchor Model: $8.77</div>
+    </div>
+
+    <div class="scenario-container" id="scenarioContainer"></div>
+
+    <div class="summary-box">
+        <strong>Three models, one range.</strong> The scenario bands are informed by three independent 
+        model specifications, all built on 23 years of US customs transaction data. The <strong>March 
+        anchor model</strong> ($8.77) uses the March customs price as its baseline and asks how much the 
+        season opening typically pulls back from the off-season level. The <strong>UB buyer anchor 
+        model</strong> ($8.04) uses the volume-weighted Urner Barry NL 5-8 oz price that buyers actually 
+        paid during PY2025 ($8.35/lb, April through July) and asks whether next season deviates from 
+        that level. The <strong>dual anchor model</strong> ($8.18) uses both: it starts with the customs 
+        volume-weighted buyer reference from the prior season, then adjusts for how much the March price 
+        has moved above or below that reference. The dual anchor captures both the buyer's baseline and 
+        the current market signal in a single equation (R&sup2; = 0.916, the highest of any specification 
+        tested).
+        <br><br>
+        All three converge between $8.00 and $9.00. The most likely outcome is a modest increase of 
+        2-14% over last year's buying price of $8.35, placing the expected Apr-May average in the 
+        $8.50 to $9.50 range. The scenarios above and below reflect the honest uncertainty: the model 
+        cannot rule out a flat market or a significant increase, but it assigns both lower probability 
+        than the base case.
+    </div>
+    <div class="source-line">Source: Seafood Datasearch from US Customs, Urner Barry</div>
+</div>
+
+<script>
+const DATA = {"buyer_ref": 8.35, "march_price": 10.69, "models": [{"name": "UB Buyer Model", "point": 8.03, "color": "#22c55e"}, {"name": "Dual Anchor Model", "point": 8.18, "color": "#2a5c8f"}, {"name": "March Anchor Model", "point": 8.77, "color": "#d94801"}], "scenarios": [{"name": "Flat to slight decline", "lo": 7.5, "hi": 8.5, "prob": "Lower probability", "color": "#5b9bd5", "desc": "New supply normalizes quickly. Off-season run-up was thin-market artifact."}, {"name": "Modest increase (most likely)", "lo": 8.5, "hi": 9.5, "prob": "Base case", "color": "#2a5c8f", "desc": "No inventory, modest supply decline, strong foodservice. Buyer resistance caps upside."}, {"name": "Significant increase", "lo": 9.5, "hi": 10.5, "prob": "Lower probability", "color": "#d94801", "desc": "Off-season pricing partly holds. Requires supply constraints to override buyer resistance."}]};
+const PRICE_MIN = 6.5;
+const PRICE_MAX = 11.5;
+const pxPerDollar = (el) => el.offsetWidth / (PRICE_MAX - PRICE_MIN);
+const priceToLeft = (price, el) => ((price - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100;
+
+function buildScenarios() {
+    const container = document.getElementById('scenarioContainer');
+    let html = '';
+    
+    DATA.scenarios.forEach((s, i) => {
+        const leftPct = priceToLeft(s.lo);
+        const widthPct = priceToLeft(s.hi) - leftPct;
+        
+        html += '<div class="scenario-row" id="row' + i + '">';
+        html += '<div class="scenario-label"><div class="scenario-name">' + s.name + '</div>';
+        html += '<div class="scenario-prob">' + s.prob + '</div></div>';
+        html += '<div class="scenario-bar-area">';
+        html += '<div class="scenario-bar" style="left:' + leftPct + '%;width:' + widthPct + '%;background:' + s.color + ';opacity:0.7" ';
+        html += 'onmouseenter="showTip(' + i + ')" onmouseleave="hideTip(' + i + ')">';
+        html += '<div class="scenario-bar-text">$' + s.lo.toFixed(2) + ' to $' + s.hi.toFixed(2) + '</div>';
+        html += '</div>';
+        
+        // Tooltip
+        html += '<div class="scenario-tooltip" id="tip' + i + '">';
+        html += '<div style="font-weight:700;font-size:16px;color:#222;margin-bottom:6px">' + s.name + '</div>';
+        html += '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #eee">';
+        html += '<span style="color:#555">Range</span><span style="font-weight:600">$' + s.lo.toFixed(2) + ' to $' + s.hi.toFixed(2) + '</span></div>';
+        const chgLo = ((s.lo - DATA.buyer_ref) / DATA.buyer_ref * 100).toFixed(1);
+        const chgHi = ((s.hi - DATA.buyer_ref) / DATA.buyer_ref * 100).toFixed(1);
+        html += '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #eee">';
+        html += '<span style="color:#555">vs PY2025 buyer ($' + DATA.buyer_ref.toFixed(2) + ')</span>';
+        html += '<span style="font-weight:600">' + (chgLo > 0 ? '+' : '') + chgLo + '% to ' + (chgHi > 0 ? '+' : '') + chgHi + '%</span></div>';
+        html += '<div style="margin-top:8px;color:#555;font-size:12.5px;line-height:1.5">' + s.desc + '</div>';
+        html += '</div>';
+        
+        html += '</div></div>';
+    });
+    
+    // Add model markers to middle scenario row
+    html += '<div style="position:relative;height:30px;display:flex"><div style="width:200px;flex-shrink:0"></div>';
+    html += '<div class="scenario-bar-area" style="position:relative;height:30px" id="markerArea">';
+    DATA.models.forEach(m => {
+        const leftPct = priceToLeft(m.point);
+        html += '<div style="position:absolute;left:' + leftPct + '%;top:5px;transform:translateX(-50%)">';
+        html += '<div style="width:14px;height:14px;background:' + m.color + ';border:2px solid #222;border-radius:2px;transform:rotate(45deg);margin:0 auto"></div>';
+        html += '<div style="font-size:10px;color:#555;text-align:center;margin-top:6px;white-space:nowrap">$' + m.point.toFixed(2) + '</div>';
+        html += '</div>';
+    });
+    
+    // Reference lines
+    const buyerLeft = priceToLeft(DATA.buyer_ref);
+    html += '<div style="position:absolute;left:' + buyerLeft + '%;top:-180px;bottom:-10px;width:2px;background:#222;opacity:0.5;z-index:5"></div>';
+    html += '<div style="position:absolute;left:' + buyerLeft + '%;bottom:-30px;transform:translateX(-50%);font-size:11px;font-weight:700;color:#222;white-space:nowrap;z-index:6">';
+    html += 'PY2025 Buyer: $' + DATA.buyer_ref.toFixed(2) + '</div>';
+    
+    const marchLeft = priceToLeft(DATA.march_price);
+    html += '<div style="position:absolute;left:' + marchLeft + '%;top:-180px;bottom:-10px;width:1.5px;background:#d94801;opacity:0.3;border-left:1.5px dashed #d94801;z-index:5"></div>';
+    html += '<div style="position:absolute;left:' + marchLeft + '%;bottom:-30px;transform:translateX(-50%);font-size:11px;color:#d94801;white-space:nowrap;z-index:6">';
+    html += 'March 2026: $' + DATA.march_price.toFixed(2) + '</div>';
+    
+    html += '</div></div>';
+    
+    // Price axis
+    html += '<div style="display:flex;margin-top:40px"><div style="width:200px;flex-shrink:0"></div>';
+    html += '<div style="flex:1;display:flex;justify-content:space-between;font-size:12px;color:#777">';
+    for (let p = 7; p <= 11; p++) {
+        html += '<span>$' + p + '.00</span>';
+    }
+    html += '</div></div>';
+    
+    container.innerHTML = html;
+}
+
+function showTip(i) { document.getElementById('tip' + i).classList.add('active'); }
+function hideTip(i) { document.getElementById('tip' + i).classList.remove('active'); }
+
+buildScenarios();
+</script>
+</body>
+</html>

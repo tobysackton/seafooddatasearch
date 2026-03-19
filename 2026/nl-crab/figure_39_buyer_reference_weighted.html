@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Figure 57: What Buyers Actually Paid</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif; background: #fff; padding: 20px; color: #333; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+        .figure-number { text-align: center; font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+        .title { text-align: center; font-size: 21px; font-weight: 700; color: #222; margin-bottom: 4px; }
+        .subtitle { text-align: center; font-size: 14px; color: #777; margin-bottom: 20px; }
+        .chart-container { position: relative; height: 440px; margin-bottom: 20px; }
+        .summary-box { background: #f5f7fa; border: 1px solid #dde2e8; border-left: 4px solid #2a5c8f; border-radius: 0 5px 5px 0; padding: 14px 18px; font-size: 13.5px; line-height: 1.55; color: #333; margin-bottom: 14px; }
+        .source-line { border-top: 1px solid #ddd; margin-top: 14px; padding-top: 8px; font-size: 12px; color: #999; }
+        .tooltip-outer { position: absolute; pointer-events: none; z-index: 100; background: white; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.14); padding: 14px 18px; min-width: 300px; display: none; font-size: 13px; }
+        .tooltip-header { font-size: 18px; font-weight: 700; color: #222; border-bottom: 2px solid #5b9bd5; padding-bottom: 6px; margin-bottom: 8px; }
+        .tooltip-row { display: flex; justify-content: space-between; padding: 3px 0; }
+        .tooltip-label { color: #555; }
+        .tooltip-value { font-weight: 600; color: #222; font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="figure-number">Figure 57</div>
+    <div class="title">What Buyers Actually Paid</div>
+    <div class="subtitle">Volume-weighted Apr-Jul price by pack year | Customs all-product vs UB NL 5-8 oz specific</div>
+
+    <div class="chart-container">
+        <canvas id="buyerChart"></canvas>
+        <div class="tooltip-outer" id="tooltip57"></div>
+    </div>
+
+    <div class="summary-box">
+        The customs price averages all product forms and origins entering the US market. The UB NL 5-8 oz 
+        price tracks the specific product grade most relevant to retail and foodservice buyers. The two 
+        series diverge significantly in volatile markets: in PY2021 the UB reference ($14.69) ran nearly 
+        double the customs average ($7.58) as product-specific premiums spiked. For PY2025, the UB 
+        buyer reference is $8.35, roughly $1.24 above the customs reference of $7.12.
+    </div>
+    <div class="source-line">Source: Seafood Datasearch from US Customs, Urner Barry</div>
+</div>
+
+<script>
+const DATA = [{"py": 2001, "cust_vw": 3.88, "ub_vw": 3.28, "am_price": 3.86, "vol_M": 56.2}, {"py": 2002, "cust_vw": 3.13, "ub_vw": 3.39, "am_price": 3.14, "vol_M": 79.2}, {"py": 2003, "cust_vw": 3.19, "ub_vw": 4.33, "am_price": 3.26, "vol_M": 76.9}, {"py": 2004, "cust_vw": 3.9, "ub_vw": 4.39, "am_price": 3.74, "vol_M": 95.5}, {"py": 2005, "cust_vw": 4.04, "ub_vw": 3.28, "am_price": 3.62, "vol_M": 91.2}, {"py": 2006, "cust_vw": 3.22, "ub_vw": 3.02, "am_price": 3.32, "vol_M": 83.8}, {"py": 2007, "cust_vw": 2.95, "ub_vw": 4.11, "am_price": 2.92, "vol_M": 85.4}, {"py": 2008, "cust_vw": 3.87, "ub_vw": 4.16, "am_price": 3.77, "vol_M": 90.2}, {"py": 2009, "cust_vw": 4.09, "ub_vw": 3.19, "am_price": 4.08, "vol_M": 81.8}, {"py": 2010, "cust_vw": 3.41, "ub_vw": 4.02, "am_price": 3.48, "vol_M": 99.1}, {"py": 2011, "cust_vw": 3.96, "ub_vw": 5.84, "am_price": 3.84, "vol_M": 79.4}, {"py": 2012, "cust_vw": 5.84, "ub_vw": 4.81, "am_price": 5.91, "vol_M": 79.5}, {"py": 2013, "cust_vw": 4.89, "ub_vw": 4.84, "am_price": 4.91, "vol_M": 79.3}, {"py": 2014, "cust_vw": 4.94, "ub_vw": 5.19, "am_price": 5.03, "vol_M": 96.0}, {"py": 2015, "cust_vw": 5.2, "ub_vw": 4.88, "am_price": 5.2, "vol_M": 87.3}, {"py": 2016, "cust_vw": 5.06, "ub_vw": 6.41, "am_price": 5.17, "vol_M": 86.8}, {"py": 2017, "cust_vw": 6.04, "ub_vw": 7.56, "am_price": 5.85, "vol_M": 83.0}, {"py": 2018, "cust_vw": 7.32, "ub_vw": 8.91, "am_price": 7.28, "vol_M": 81.0}, {"py": 2019, "cust_vw": 8.55, "ub_vw": 8.23, "am_price": 8.32, "vol_M": 64.1}, {"py": 2020, "cust_vw": 8.58, "ub_vw": 8.64, "am_price": 8.75, "vol_M": 71.8}, {"py": 2021, "cust_vw": 7.58, "ub_vw": 14.69, "am_price": 7.35, "vol_M": 79.1}, {"py": 2022, "cust_vw": 13.1, "ub_vw": 9.86, "am_price": 12.76, "vol_M": 88.7}, {"py": 2023, "cust_vw": 11.21, "ub_vw": 4.98, "am_price": 11.97, "vol_M": 93.3}, {"py": 2024, "cust_vw": 5.62, "ub_vw": 6.01, "am_price": 5.58, "vol_M": 113.9}, {"py": 2025, "cust_vw": 7.12, "ub_vw": 8.35, "am_price": 7.21, "vol_M": 107.9}];
+const labels = DATA.map(d => d.py.toString());
+
+const ctx = document.getElementById('buyerChart').getContext('2d');
+const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Customs VW Apr-Jul',
+                data: DATA.map(d => d.cust_vw),
+                backgroundColor: 'rgba(91, 155, 213, 0.55)',
+                borderColor: '#5b9bd5',
+                borderWidth: 1,
+                barPercentage: 0.85,
+                categoryPercentage: 0.8,
+            },
+            {
+                label: 'UB NL 5-8 VW Apr-Jul',
+                data: DATA.map(d => d.ub_vw),
+                backgroundColor: 'rgba(42, 92, 143, 0.75)',
+                borderColor: '#2a5c8f',
+                borderWidth: 1,
+                barPercentage: 0.85,
+                categoryPercentage: 0.8,
+            },
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+                labels: { usePointStyle: true, padding: 16, font: { size: 13 }, color: '#555' }
+            },
+            tooltip: {
+                enabled: false,
+                external: function(context) {
+                    const tip = document.getElementById('tooltip57');
+                    if (context.tooltip.opacity === 0) { tip.style.display = 'none'; return; }
+                    const idx = context.tooltip.dataPoints[0].dataIndex;
+                    const d = DATA[idx];
+                    let h = '<div class="tooltip-header">Pack Year ' + d.py + '</div>';
+                    if (d.cust_vw) h += '<div class="tooltip-row"><span class="tooltip-label">Customs VW Apr-Jul</span><span class="tooltip-value">$' + d.cust_vw.toFixed(2) + '</span></div>';
+                    if (d.ub_vw) h += '<div class="tooltip-row"><span class="tooltip-label">UB NL 5-8 VW Apr-Jul</span><span class="tooltip-value" style="color:#2a5c8f">$' + d.ub_vw.toFixed(2) + '</span></div>';
+                    if (d.cust_vw && d.ub_vw) {
+                        const gap = (d.ub_vw - d.cust_vw).toFixed(2);
+                        h += '<div class="tooltip-row"><span class="tooltip-label">UB Premium</span><span class="tooltip-value">' + (gap > 0 ? '+$' : '-$') + Math.abs(gap) + '</span></div>';
+                    }
+                    if (d.vol_M) h += '<div class="tooltip-row" style="border-top:1px solid #eee;margin-top:4px;padding-top:4px"><span class="tooltip-label">Total Volume</span><span class="tooltip-value">' + d.vol_M + 'M lbs</span></div>';
+                    tip.innerHTML = h;
+                    tip.style.display = 'block';
+                    let left = context.tooltip.caretX + 15;
+                    if (left + 320 > context.chart.chartArea.right + 80) left = context.tooltip.caretX - 330;
+                    tip.style.left = left + 'px';
+                    tip.style.top = Math.max(10, context.tooltip.caretY - 60) + 'px';
+                }
+            }
+        },
+        scales: {
+            x: { grid: { display: false }, ticks: { font: { size: 12 }, color: '#444', maxRotation: 45 } },
+            y: {
+                min: 0, max: 16,
+                grid: { color: '#e8e8e8', drawBorder: false },
+                ticks: { font: { size: 13 }, color: '#777', callback: v => '$' + v, stepSize: 2 },
+                title: { display: true, text: 'Volume-Weighted Price ($/lb)', font: { size: 13 }, color: '#777' }
+            }
+        }
+    }
+});
+</script>
+</body>
+</html>

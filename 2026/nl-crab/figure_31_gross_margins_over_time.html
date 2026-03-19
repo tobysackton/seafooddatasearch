@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 32: Processor Gross Margin by Pack Year</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+    background: #fff; color: #333; padding: 24px; max-width: 1100px; margin: 0 auto;
+  }
+  .title-block { text-align: center; margin-bottom: 18px; }
+  .figure-number { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+  .title { font-size: 21px; font-weight: 700; color: #222; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #777; line-height: 1.4; }
+  .chart-container { position: relative; width: 100%; height: 440px; margin-bottom: 16px; }
+  .legend-row { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; margin-bottom: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; }
+  .legend-bar { width: 14px; height: 14px; border-radius: 2px; }
+  .legend-line-dashed { width: 24px; height: 0; border-top: 2px dashed; }
+  .summary-box {
+    background: #f5f7fa; border: 1px solid #dde2e8; border-left: 4px solid #2a5c8f;
+    border-radius: 0 5px 5px 0; padding: 14px 18px; margin: 16px 0;
+    font-size: 13.5px; line-height: 1.55; color: #333;
+  }
+  .source-line {
+    border-top: 1px solid #ddd; margin-top: 14px; padding-top: 8px;
+    font-size: 12px; color: #999; line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="title-block">
+  <div class="figure-number">Figure 32</div>
+  <div class="title">Processor Gross Margin by Pack Year</div>
+  <div class="subtitle">Volume-Weighted Estimated Gross Margin ($/lb sections) &bull; Pack Years 2015&ndash;16 through 2025&ndash;26</div>
+</div>
+
+<div class="legend-row">
+  <div class="legend-item"><div class="legend-bar" style="background:#ef4444;"></div> Below $2.50</div>
+  <div class="legend-item"><div class="legend-bar" style="background:#f59e0b;"></div> $2.50&ndash;$3.50</div>
+  <div class="legend-item"><div class="legend-bar" style="background:#5b9bd5;"></div> Above $3.50</div>
+  <div class="legend-item"><div class="legend-bar" style="background:rgba(239,68,68,0.35); border: 1.5px dashed #ef4444;"></div> After-season premium to harvesters</div>
+  <div class="legend-item"><div class="legend-line-dashed" style="border-color:#777;"></div> 11-year average</div>
+</div>
+
+<div class="chart-container">
+  <canvas id="marginBarChart"></canvas>
+</div>
+
+<div class="summary-box">
+  <strong>The 2025&ndash;26 volume-weighted gross margin of $3.06/lb before the after-season premium sits above the 11-year average of $2.98.</strong> After deducting the $0.28 CAD/lb harvester premium ($0.30/lb on a sections basis after yield conversion), the effective margin falls to $2.76/lb &mdash; modestly below average. The 2024&ndash;25 margin of $3.12/lb confirms that processors entered the current season from a strong position. The highest margins in the series (2020&ndash;21 at $4.17 and 2021&ndash;22 at $4.50) coincided with the post-pandemic demand surge; the lowest (2022&ndash;23 at $1.73) reflected the abrupt collapse in wholesale pricing against a dock price negotiated at the peak.
+</div>
+
+<div class="source-line">
+  Source: Seafood Datasearch from Urner Barry NL 5-8 oz Low Quotation (wholesale) and FFAW/DFO landed price data (dock cost) &bull; <strong>Methodology:</strong> Gross margin = volume-weighted monthly UB wholesale price minus raw material cost in USD. Volume weights are derived from US Census Bureau monthly frozen snow crab imports as a proxy for the share of each pack year&rsquo;s production sold in a given month. Raw material cost per lb of finished sections = FFAW dock price (CAD/lb landed weight) &times; 1.4706 yield factor (1 lb of sections requires 1/0.68 = 1.4706 lbs of raw crab, reflecting a 68% processing recovery rate) &divide; monthly average CAD/USD exchange rate (Federal Reserve DEXCAUS series). Pack year = April through March following. &bull; 2025&ndash;26: Apr 2025 &ndash; Jan 2026 actual customs volume (10 months); Feb&ndash;Mar 2026 not yet available. After-season premium of $0.28 CAD/lb landed weight = $0.41 CAD/lb sections at 68% yield.
+</div>
+
+<script>
+const DATA = [{"py": "2015-16", "py_start": 2015, "wtd_ub": 4.89, "rawmat": 2.87, "margin": 2.02, "dock_cad": 2.45, "months": 11, "partial": true}, {"py": "2016-17", "py_start": 2016, "wtd_ub": 6.29, "rawmat": 3.41, "margin": 2.88, "dock_cad": 3.0, "months": 12, "partial": false}, {"py": "2017-18", "py_start": 2017, "wtd_ub": 7.01, "rawmat": 4.56, "margin": 2.45, "dock_cad": 4.39, "months": 11, "partial": true}, {"py": "2018-19", "py_start": 2018, "wtd_ub": 8.89, "rawmat": 5.42, "margin": 3.46, "dock_cad": 4.8, "months": 12, "partial": false}, {"py": "2019-20", "py_start": 2019, "wtd_ub": 8.24, "rawmat": 5.58, "margin": 2.65, "dock_cad": 5.07, "months": 11, "partial": true}, {"py": "2020-21", "py_start": 2020, "wtd_ub": 7.75, "rawmat": 3.58, "margin": 4.17, "dock_cad": 3.45, "months": 9, "partial": true}, {"py": "2021-22", "py_start": 2021, "wtd_ub": 11.46, "rawmat": 6.96, "margin": 4.5, "dock_cad": 7.55, "months": 11, "partial": true}, {"py": "2022-23", "py_start": 2022, "wtd_ub": 8.93, "rawmat": 7.2, "margin": 1.73, "dock_cad": 6.35, "months": 12, "partial": false}, {"py": "2023-24", "py_start": 2023, "wtd_ub": 5.21, "rawmat": 2.47, "margin": 2.73, "dock_cad": 2.25, "months": 12, "partial": false}, {"py": "2024-25", "py_start": 2024, "wtd_ub": 6.33, "rawmat": 3.21, "margin": 3.12, "dock_cad": 3.0, "months": 12, "partial": false}, {"py": "2025-26", "py_start": 2025, "wtd_ub": 8.35, "rawmat": 5.29, "margin": 3.06, "dock_cad": 4.97, "months": 10, "partial": true, "premium": 0.3, "margin_after": 2.76}];
+const AVG = 2.98;
+
+const labels = DATA.map(d => d.py);
+const baseValues = DATA.map(d => d.margin_after != null ? d.margin_after : d.margin);
+const premiumSlice = DATA.map(d => d.premium != null ? d.premium : 0);
+
+function barColor(v) {
+  if (v < 2.50) return '#ef4444';
+  if (v <= 3.50) return '#f59e0b';
+  return '#5b9bd5';
+}
+const colors = baseValues.map(barColor);
+
+const ctx = document.getElementById('marginBarChart').getContext('2d');
+
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Gross Margin',
+        data: baseValues,
+        backgroundColor: colors,
+        borderColor: colors,
+        borderWidth: 1,
+        borderRadius: 2,
+        barPercentage: 0.75,
+        stack: 'margin'
+      },
+      {
+        label: 'After-season premium',
+        data: premiumSlice,
+        backgroundColor: premiumSlice.map(v => v > 0 ? 'rgba(239,68,68,0.35)' : 'transparent'),
+        borderColor: premiumSlice.map(v => v > 0 ? '#ef4444' : 'transparent'),
+        borderWidth: premiumSlice.map(v => v > 0 ? 1.5 : 0),
+        borderRadius: 2,
+        barPercentage: 0.75,
+        stack: 'margin'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 0 },
+    plugins: {
+      legend: { display: false },
+      annotation: {
+        annotations: {
+          avgLine: {
+            type: 'line',
+            yMin: AVG,
+            yMax: AVG,
+            borderColor: '#777',
+            borderWidth: 1.5,
+            borderDash: [6, 3],
+            label: {
+              display: true,
+              content: 'Avg: $' + AVG.toFixed(2),
+              position: 'start',
+              font: { size: 11, family: "'Calibri','Segoe UI',sans-serif" },
+              color: '#777',
+              backgroundColor: 'rgba(255,255,255,0.9)',
+              padding: 3
+            }
+          }
+        }
+      },
+      tooltip: {
+        backgroundColor: '#fff',
+        titleColor: '#222',
+        bodyColor: '#555',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        cornerRadius: 6,
+        padding: 12,
+        titleFont: { size: 16, weight: 'bold', family: "'Calibri','Segoe UI',sans-serif" },
+        bodyFont: { size: 13, family: "'Calibri','Segoe UI',sans-serif" },
+        callbacks: {
+          title: function(items) { return 'Pack Year ' + items[0].label; },
+          label: function(ctx) {
+            const d = DATA[ctx.dataIndex];
+            if (ctx.datasetIndex === 1 && ctx.parsed.y > 0) {
+              return 'After-season premium: $' + ctx.parsed.y.toFixed(2) + '/lb';
+            }
+            if (ctx.datasetIndex === 0) {
+              if (d.margin_after != null) return 'Margin after premium: $' + ctx.parsed.y.toFixed(2) + '/lb';
+              return 'Gross margin: $' + ctx.parsed.y.toFixed(2) + '/lb';
+            }
+            return null;
+          },
+          afterBody: function(items) {
+            const d = DATA[items[0].dataIndex];
+            const lines = [];
+            lines.push('Wtd wholesale: $' + d.wtd_ub.toFixed(2) + '/lb');
+            lines.push('Raw material: $' + d.rawmat.toFixed(2) + '/lb');
+            lines.push('Dock (CAD): $' + d.dock_cad.toFixed(2) + '/lb');
+            if (d.margin_after != null) {
+              lines.push('Margin before premium: $' + d.margin.toFixed(2) + '/lb');
+            }
+            return lines;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        stacked: true,
+        grid: { display: false },
+        ticks: {
+          font: { size: 12, family: "'Calibri','Segoe UI',sans-serif" },
+          color: '#444',
+          maxRotation: 45,
+          minRotation: 45
+        }
+      },
+      y: {
+        stacked: true,
+        beginAtZero: true, max: 6,
+        grid: { color: '#e8e8e8', drawBorder: false },
+        ticks: {
+          font: { size: 13, family: "'Calibri','Segoe UI',sans-serif" },
+          color: '#777',
+          callback: v => '$' + v.toFixed(0)
+        },
+        title: {
+          display: true, text: 'Gross Margin ($/lb sections)',
+          font: { size: 13, family: "'Calibri','Segoe UI',sans-serif" }, color: '#777'
+        }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

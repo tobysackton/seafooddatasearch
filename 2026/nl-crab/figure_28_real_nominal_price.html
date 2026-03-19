@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 29: 25 Years of US Snow Crab Supply — Real vs Nominal Price</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+    background: #fff;
+    color: #333;
+    padding: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .title-block { text-align: center; margin-bottom: 18px; }
+  .figure-number { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+  .title { font-size: 21px; font-weight: 700; color: #222; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #777; line-height: 1.4; }
+
+  .chart-container { position: relative; width: 100%; height: 460px; margin-bottom: 16px; }
+
+  .kpi-row { display: flex; gap: 16px; margin-bottom: 18px; justify-content: center; flex-wrap: wrap; }
+  .kpi-card {
+    background: #f8f9fb; border: 1px solid #e2e6ea; border-radius: 6px;
+    padding: 12px 20px; text-align: center; min-width: 170px; flex: 1; max-width: 220px;
+  }
+  .kpi-value { font-size: 24px; font-weight: 700; }
+  .kpi-label { font-size: 11.5px; color: #777; margin-top: 2px; }
+  .kpi-nominal { color: #2a5c8f; }
+  .kpi-real { color: #c0392b; }
+
+  .summary-box {
+    background: #f5f7fa; border: 1px solid #dde2e8; border-left: 4px solid #c0392b;
+    border-radius: 0 5px 5px 0; padding: 14px 18px; margin: 16px 0;
+    font-size: 13.5px; line-height: 1.55; color: #333;
+  }
+
+  .source-line {
+    border-top: 1px solid #ddd; margin-top: 14px; padding-top: 8px;
+    font-size: 12px; color: #999; line-height: 1.5;
+  }
+
+  .legend-row { display: flex; justify-content: center; gap: 22px; flex-wrap: wrap; margin-bottom: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; }
+  .legend-bar { width: 14px; height: 14px; border-radius: 2px; }
+  .legend-line { width: 24px; height: 3px; border-radius: 1px; }
+  .legend-line-dashed { width: 24px; height: 0; border-top: 3px dashed; }
+  .legend-band { width: 14px; height: 14px; border-radius: 2px; background: rgba(245,158,11,0.10); border: 1.5px dashed #f59e0b; }
+
+  .custom-tooltip {
+    position: absolute; pointer-events: none; opacity: 0; transition: opacity 0.15s;
+    background: #fff; border: 1px solid #ccc; border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.14); padding: 14px 18px;
+    min-width: 300px; font-size: 13px; z-index: 100;
+  }
+  .tooltip-year { font-size: 18px; font-weight: 700; color: #222; padding-bottom: 8px; margin-bottom: 8px; border-bottom: 2px solid #5b9bd5; }
+  .tooltip-row { display: flex; justify-content: space-between; padding: 3px 0; }
+  .tooltip-label { color: #555; display: flex; align-items: center; gap: 6px; }
+  .tooltip-swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .tooltip-value { font-weight: 600; color: #222; font-variant-numeric: tabular-nums; }
+  .tooltip-total { border-top: 2px solid #ddd; margin-top: 6px; padding-top: 6px; font-weight: 700; font-size: 14px; }
+  .tooltip-section { border-top: 1px solid #eee; margin-top: 8px; padding-top: 8px; }
+  .tooltip-section-title { font-size: 11px; text-transform: uppercase; color: #999; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .tooltip-note { font-size: 11px; color: #999; margin-top: 6px; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="title-block">
+  <div class="figure-number">Figure 29</div>
+  <div class="title">25 Years of US Snow Crab Supply — Real vs Nominal Price</div>
+  <div class="subtitle">Total US Imports (HS 306144020) by Pack Year, with Urner Barry NL 5-8 oz Section Price<br>Nominal and Inflation-Adjusted (2024-25 Dollars, CPI-U All Items) &bull; 2000-01 through 2025-26</div>
+</div>
+
+<div class="kpi-row">
+  <div class="kpi-card">
+    <div class="kpi-value kpi-nominal">$16.11</div>
+    <div class="kpi-label">Nominal Peak (2021-22)</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value kpi-real">$18.41</div>
+    <div class="kpi-label">Real Peak (2021-22, 2024-25$)</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value kpi-nominal">$3.20</div>
+    <div class="kpi-label">Nominal Trough (2006-07)</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value kpi-real">$4.96</div>
+    <div class="kpi-label">Real Trough (2009-10, 2024-25$)</div>
+  </div>
+</div>
+
+<div class="legend-row">
+  <div class="legend-item"><div class="legend-bar" style="background:#5b9bd5;"></div> Canada</div>
+  <div class="legend-item"><div class="legend-bar" style="background:#e07070;"></div> Russia</div>
+  <div class="legend-item"><div class="legend-bar" style="background:#6bb86b;"></div> Norway</div>
+  <div class="legend-item"><div class="legend-bar" style="background:#9e8fce;"></div> Greenland</div>
+  <div class="legend-item"><div class="legend-line" style="background:#2a5c8f;"></div> Nominal Price ($/lb)</div>
+  <div class="legend-item"><div class="legend-line-dashed" style="border-color:#c0392b;"></div> Real Price (2024-25$)</div>
+  <div class="legend-item"><div class="legend-band"></div> 2017–20 Real Price Range</div>
+</div>
+
+<div class="chart-container">
+  <canvas id="supplyPriceChart"></canvas>
+  <div class="custom-tooltip" id="tooltip"></div>
+</div>
+
+<div class="summary-box">
+  <strong>Inflation adjustment reveals a tighter price range than nominal prices suggest.</strong> In 2024-25 dollars, early 2000s snow crab prices were $5–7/lb — not the $3–4/lb they appear nominally. The real floor of the market has been roughly $5/lb (2024-25$) across 25 years, making the 2023-24 trough of $5.66 (real) one of the lowest points in the entire series. The 2021-22 spike is even more extreme in real terms at $18.41 — nearly 3.7x the long-run average real price of ~$7.50. Current 2025-26 pricing ($9.33 real) sits modestly above the 25-year real average.
+</div>
+
+<div class="source-line">
+  Source: Seafood Datasearch from US Census Bureau via Global Trade Tracker (volume by country) and Urner Barry (NL 5-8 oz Cluster EBP, 2015-present; customs avg unit price pre-2015) &bull; Deflator: CPI-U All Items, NSA (BLS Series CUUR0000SA0), pack year average, base = 2024-25 &bull; Pack year = April through March following (e.g., 2024-25 = Apr 2024 – Mar 2025) &bull; * 2025-26: 9 months data, country split estimated from 2024 ratios; CPI 2025 estimated
+</div>
+
+<script>
+const DATA = [
+  {py:"2000-01",can:56.2,rus:3.5,nor:0.1,grl:5.3,total:65.1,price:3.91,real:7.12,src:"Customs",mo:12,cpi:173.4},
+  {py:"2001-02",can:79.2,rus:6.2,nor:0.0,grl:8.9,total:94.2,price:3.23,real:5.74,src:"Customs",mo:12,cpi:177.8},
+  {py:"2002-03",can:76.9,rus:9.0,nor:0.0,grl:5.2,total:91.1,price:3.44,real:6.01,src:"Customs",mo:12,cpi:180.9},
+  {py:"2003-04",can:95.5,rus:12.5,nor:0.0,grl:3.0,total:111.0,price:4.13,real:7.04,src:"Customs",mo:12,cpi:185.2},
+  {py:"2004-05",can:91.2,rus:13.1,nor:0.0,grl:2.4,total:106.7,price:3.98,real:6.60,src:"Customs",mo:12,cpi:190.5},
+  {py:"2005-06",can:83.8,rus:11.5,nor:0.0,grl:4.7,total:100.0,price:3.21,real:5.15,src:"Customs",mo:12,cpi:196.9},
+  {py:"2006-07",can:85.4,rus:9.0,nor:0.0,grl:2.6,total:97.1,price:3.20,real:4.98,src:"Customs",mo:12,cpi:203.0},
+  {py:"2007-08",can:90.2,rus:10.4,nor:0.0,grl:1.6,total:102.2,price:4.20,real:6.34,src:"Customs",mo:12,cpi:209.3},
+  {py:"2008-09",can:81.8,rus:9.3,nor:0.0,grl:1.4,total:92.6,price:4.16,real:6.11,src:"Customs",mo:12,cpi:215.1},
+  {py:"2009-10",can:99.1,rus:11.3,nor:0.0,grl:1.1,total:111.6,price:3.38,real:4.96,src:"Customs",mo:12,cpi:215.4},
+  {py:"2010-11",can:79.4,rus:13.5,nor:0.0,grl:1.5,total:94.4,price:4.47,real:6.42,src:"Customs",mo:12,cpi:219.8},
+  {py:"2011-12",can:79.5,rus:9.5,nor:0.0,grl:1.1,total:90.1,price:5.59,real:7.81,src:"Customs",mo:12,cpi:226.1},
+  {py:"2012-13",can:79.3,rus:10.1,nor:0.0,grl:1.6,total:91.0,price:5.07,real:6.95,src:"Customs",mo:12,cpi:230.4},
+  {py:"2013-14",can:96.0,rus:14.4,nor:0.1,grl:1.1,total:111.5,price:5.20,real:7.02,src:"Customs",mo:12,cpi:233.9},
+  {py:"2014-15",can:87.3,rus:11.9,nor:0.8,grl:0.7,total:100.6,price:5.29,real:7.06,src:"UB NL 5-8",mo:12,cpi:236.8},
+  {py:"2015-16",can:86.8,rus:13.0,nor:3.7,grl:0.5,total:103.9,price:5.10,real:6.78,src:"UB NL 5-8",mo:12,cpi:237.8},
+  {py:"2016-17",can:83.0,rus:19.3,nor:3.7,grl:0.7,total:106.8,price:7.25,real:9.49,src:"UB NL 5-8",mo:12,cpi:241.3},
+  {py:"2017-18",can:81.0,rus:15.0,nor:1.3,grl:1.5,total:98.8,price:7.98,real:10.22,src:"UB NL 5-8",mo:12,cpi:246.6},
+  {py:"2018-19",can:64.2,rus:24.5,nor:2.1,grl:1.4,total:92.2,price:8.79,real:11.01,src:"UB NL 5-8",mo:12,cpi:252.2},
+  {py:"2019-20",can:71.8,rus:23.9,nor:2.4,grl:2.9,total:100.9,price:8.80,real:10.84,src:"UB NL 5-8",mo:12,cpi:256.5},
+  {py:"2020-21",can:79.1,rus:42.9,nor:4.1,grl:2.8,total:128.9,price:9.23,real:11.14,src:"UB NL 5-8",mo:12,cpi:261.9},
+  {py:"2021-22",can:88.7,rus:37.2,nor:6.0,grl:2.6,total:134.5,price:16.11,real:18.41,src:"UB NL 5-8",mo:12,cpi:276.4},
+  {py:"2022-23",can:93.3,rus:2.4,nor:4.7,grl:2.8,total:103.2,price:8.20,real:8.76,src:"UB NL 5-8",mo:12,cpi:295.7},
+  {py:"2023-24",can:113.9,rus:0.0,nor:7.4,grl:2.8,total:124.1,price:5.50,real:5.66,src:"UB NL 5-8",mo:12,cpi:307.1},
+  {py:"2024-25",can:114.2,rus:0.0,nor:6.2,grl:1.6,total:122.1,price:7.43,real:7.43,src:"UB NL 5-8",mo:12,cpi:315.9},
+  {py:"2025-26",can:116.7,rus:0.0,nor:8.2,grl:2.2,total:127.1,price:9.48,real:9.33,src:"UB NL 5-8",mo:9,cpi:321.0}
+];
+
+const labels = DATA.map(d => d.py);
+const ctx = document.getElementById('supplyPriceChart').getContext('2d');
+const tooltip = document.getElementById('tooltip');
+
+const realAvg = DATA.reduce((s,d) => s + d.real, 0) / DATA.length;
+
+const chart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Canada',
+        data: DATA.map(d => d.can),
+        backgroundColor: DATA.map(d => d.mo < 12 ? 'rgba(91,155,213,0.45)' : 'rgba(91,155,213,0.75)'),
+        yAxisID: 'yVol', order: 6, stack: 'volume'
+      },
+      {
+        label: 'Russia',
+        data: DATA.map(d => d.rus),
+        backgroundColor: DATA.map(d => d.mo < 12 ? 'rgba(224,112,112,0.45)' : 'rgba(224,112,112,0.75)'),
+        yAxisID: 'yVol', order: 5, stack: 'volume'
+      },
+      {
+        label: 'Norway',
+        data: DATA.map(d => d.nor),
+        backgroundColor: DATA.map(d => d.mo < 12 ? 'rgba(107,184,107,0.45)' : 'rgba(107,184,107,0.75)'),
+        yAxisID: 'yVol', order: 4, stack: 'volume'
+      },
+      {
+        label: 'Greenland',
+        data: DATA.map(d => d.grl),
+        backgroundColor: DATA.map(d => d.mo < 12 ? 'rgba(158,143,206,0.45)' : 'rgba(158,143,206,0.75)'),
+        yAxisID: 'yVol', order: 3, stack: 'volume'
+      },
+      {
+        label: 'Nominal Price',
+        data: DATA.map(d => d.price),
+        type: 'line',
+        borderColor: '#2a5c8f',
+        backgroundColor: '#2a5c8f',
+        borderWidth: 2.5,
+        pointRadius: 3.5,
+        pointBackgroundColor: '#2a5c8f',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 1.5,
+        pointHoverRadius: 6,
+        tension: 0.15,
+        yAxisID: 'yPrice',
+        order: 2
+      },
+      {
+        label: 'Real Price (2024-25$)',
+        data: DATA.map(d => d.real),
+        type: 'line',
+        borderColor: '#c0392b',
+        backgroundColor: '#c0392b',
+        borderWidth: 3,
+        borderDash: [8, 4],
+        pointRadius: 4,
+        pointBackgroundColor: '#c0392b',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointHoverRadius: 7,
+        pointStyle: 'rectRot',
+        tension: 0.15,
+        yAxisID: 'yPrice',
+        order: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 0 },
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      annotation: {
+        annotations: {
+          priceBand: {
+            type: 'box',
+            yScaleID: 'yPrice',
+            yMin: 9.49,
+            yMax: 11.01,
+            backgroundColor: 'rgba(245, 158, 11, 0.12)',
+            borderColor: '#f59e0b',
+            borderWidth: 1.5,
+            borderDash: [6, 3]
+          },
+          bandLabelTop: {
+            type: 'line',
+            yScaleID: 'yPrice',
+            yMin: 11.01,
+            yMax: 11.01,
+            borderWidth: 0,
+            label: {
+              display: true,
+              content: '$11.01',
+              position: 'end',
+              font: { size: 10, weight: '600', family: "'Calibri','Segoe UI',sans-serif" },
+              color: '#b45309',
+              backgroundColor: 'rgba(255,255,255,0.92)',
+              padding: { top: 1, bottom: 1, left: 4, right: 4 }
+            }
+          },
+          bandLabelBottom: {
+            type: 'line',
+            yScaleID: 'yPrice',
+            yMin: 9.49,
+            yMax: 9.49,
+            borderWidth: 0,
+            label: {
+              display: true,
+              content: '$9.49',
+              position: 'end',
+              font: { size: 10, weight: '600', family: "'Calibri','Segoe UI',sans-serif" },
+              color: '#b45309',
+              backgroundColor: 'rgba(255,255,255,0.92)',
+              padding: { top: 1, bottom: 1, left: 4, right: 4 }
+            }
+          },
+          bandCallout: {
+            type: 'label',
+            yScaleID: 'yPrice',
+            yValue: 12.5,
+            xValue: '2017-18',
+            content: ['2017\u201320 Real Price', 'Stability Range', '$9.49 \u2013 $11.01'],
+            font: [
+              { size: 12, weight: 'bold', family: "'Calibri','Segoe UI',sans-serif" },
+              { size: 11, family: "'Calibri','Segoe UI',sans-serif" },
+              { size: 12, weight: 'bold', family: "'Calibri','Segoe UI',sans-serif" }
+            ],
+            color: '#92400e',
+            backgroundColor: 'rgba(254, 243, 199, 0.95)',
+            borderColor: '#f59e0b',
+            borderWidth: 1.5,
+            borderRadius: 4,
+            padding: { top: 6, bottom: 6, left: 10, right: 10 }
+          }
+        }
+      },
+      tooltip: {
+        enabled: false,
+        external: function(context) {
+          const tooltipModel = context.tooltip;
+          if (tooltipModel.opacity === 0) { tooltip.style.opacity = 0; return; }
+          const idx = tooltipModel.dataPoints[0].dataIndex;
+          const d = DATA[idx];
+          const partial = d.mo < 12 ? '<div class="tooltip-note">* ' + d.mo + ' months of data; country split estimated</div>' : '';
+          const inflAdj = ((d.real / d.price - 1) * 100).toFixed(0);
+
+          const countries = [
+            {name:'Canada', val:d.can, color:'#5b9bd5'},
+            {name:'Russia', val:d.rus, color:'#e07070'},
+            {name:'Norway', val:d.nor, color:'#6bb86b'},
+            {name:'Greenland', val:d.grl, color:'#9e8fce'}
+          ].filter(c => c.val > 0);
+
+          const countryRows = countries.map(c =>
+            '<div class="tooltip-row">' +
+              '<span class="tooltip-label"><span class="tooltip-swatch" style="background:' + c.color + ';"></span> ' + c.name + '</span>' +
+              '<span class="tooltip-value">' + c.val.toFixed(1) + 'M lbs</span>' +
+            '</div>'
+          ).join('');
+
+          tooltip.innerHTML =
+            '<div class="tooltip-year">' + d.py + '</div>' +
+            countryRows +
+            '<div class="tooltip-row tooltip-total">' +
+              '<span class="tooltip-label">Total</span>' +
+              '<span class="tooltip-value">' + d.total.toFixed(1) + 'M lbs</span>' +
+            '</div>' +
+            '<div class="tooltip-section">' +
+              '<div class="tooltip-section-title">Price Comparison</div>' +
+              '<div class="tooltip-row">' +
+                '<span class="tooltip-label"><span class="tooltip-swatch" style="background:#2a5c8f;"></span> Nominal</span>' +
+                '<span class="tooltip-value">$' + d.price.toFixed(2) + '/lb</span>' +
+              '</div>' +
+              '<div class="tooltip-row">' +
+                '<span class="tooltip-label"><span class="tooltip-swatch" style="background:#c0392b; border-radius:0; transform:rotate(45deg);"></span> Real (2024-25$)</span>' +
+                '<span class="tooltip-value" style="color:#c0392b;">$' + d.real.toFixed(2) + '/lb</span>' +
+              '</div>' +
+              '<div class="tooltip-row">' +
+                '<span class="tooltip-label">Inflation adjustment</span>' +
+                '<span class="tooltip-value" style="font-weight:400;color:#888;">' + (inflAdj > 0 ? '+' : '') + inflAdj + '%</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="tooltip-row" style="margin-top:6px;">' +
+              '<span class="tooltip-label">Price Source</span>' +
+              '<span class="tooltip-value" style="font-weight:400;color:#888;">' + d.src + '</span>' +
+            '</div>' +
+            partial;
+
+          const chartArea = chart.chartArea;
+          let left = tooltipModel.caretX + 14;
+          if (left + 320 > chartArea.right + 40) left = tooltipModel.caretX - 320;
+          tooltip.style.opacity = 1;
+          tooltip.style.left = left + 'px';
+          tooltip.style.top = Math.max(chartArea.top, tooltipModel.caretY - 80) + 'px';
+        }
+      }
+    },
+    scales: {
+      x: {
+        stacked: true,
+        grid: { display: false },
+        ticks: {
+          font: { size: 11, family: "'Calibri','Segoe UI',sans-serif" },
+          color: '#444', maxRotation: 55, minRotation: 55
+        }
+      },
+      yVol: {
+        type: 'linear', position: 'left', stacked: true,
+        beginAtZero: true, max: 160,
+        grid: { color: '#e8e8e8', drawBorder: false },
+        ticks: {
+          font: { size: 13, family: "'Calibri','Segoe UI',sans-serif" },
+          color: '#777', callback: v => v + 'M'
+        },
+        title: {
+          display: true, text: 'Import Volume (Million lbs)',
+          font: { size: 13, family: "'Calibri','Segoe UI',sans-serif" }, color: '#777'
+        }
+      },
+      yPrice: {
+        type: 'linear', position: 'right',
+        beginAtZero: true, max: 20,
+        grid: { drawOnChartArea: false },
+        ticks: {
+          font: { size: 13, weight: '600', family: "'Calibri','Segoe UI',sans-serif" },
+          color: '#2a5c8f', callback: v => '$' + v
+        },
+        title: {
+          display: true, text: 'Price ($/lb)',
+          font: { size: 13, weight: '600', family: "'Calibri','Segoe UI',sans-serif" }, color: '#2a5c8f'
+        }
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

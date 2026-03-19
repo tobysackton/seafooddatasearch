@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Figure 58: Front-Loading Heatmap</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif; background: #fff; padding: 20px; color: #333; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+        .figure-number { text-align: center; font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+        .title { text-align: center; font-size: 21px; font-weight: 700; color: #222; margin-bottom: 4px; }
+        .subtitle { text-align: center; font-size: 14px; color: #777; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th { padding: 10px 8px; font-size: 13px; color: #555; font-weight: 600; border-bottom: 2px solid #ddd; text-align: center; }
+        th.py-col { text-align: left; }
+        td { padding: 8px; text-align: center; font-size: 13px; font-weight: 600; border-bottom: 1px solid #f0f0f0; position: relative; cursor: default; }
+        td.py-cell { text-align: left; font-weight: 700; color: #222; }
+        td.summary-cell { font-weight: 700; color: #2a5c8f; background: #f5f7fa; }
+        .heat-cell { border-radius: 3px; transition: transform 0.1s; }
+        .heat-cell:hover { transform: scale(1.05); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .cell-tooltip {
+            display: none; position: absolute; z-index: 100;
+            background: white; border: 1px solid #ccc; border-radius: 6px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.14); padding: 10px 14px;
+            min-width: 200px; font-size: 12px; text-align: left;
+            top: 100%; left: 50%; transform: translateX(-50%);
+            pointer-events: none;
+        }
+        .heat-cell:hover .cell-tooltip { display: block; }
+        .summary-box { background: #f5f7fa; border: 1px solid #dde2e8; border-left: 4px solid #2a5c8f; border-radius: 0 5px 5px 0; padding: 14px 18px; font-size: 13.5px; line-height: 1.55; color: #333; margin-bottom: 14px; }
+        .source-line { border-top: 1px solid #ddd; margin-top: 14px; padding-top: 8px; font-size: 12px; color: #999; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="figure-number">Figure 58</div>
+    <div class="title">Monthly Import Share by Pack Year</div>
+    <div class="subtitle">Percent of pack year volume arriving each month, season months only | Higher concentration = stronger demand pull</div>
+
+    <table id="heatTable"></table>
+
+    <div class="summary-box">
+        Front-loading measures how quickly product moves across the border at season opening. When 
+        the Apr-Jun share exceeds 70%, it signals strong pull-through demand. PY2023-2024 had the 
+        lowest front-loading in 15 years (57% and 53%), coinciding with the price collapse. PY2025 
+        rebounded to 72%, consistent with the demand recovery that supported higher season prices.
+    </div>
+    <div class="source-line">Source: Seafood Datasearch from US Customs</div>
+</div>
+
+<script>
+const DATA = [{"py": 2010, "total_M": 99.0, "m4": 8.3, "m5": 29.3, "m6": 29.4, "m7": 18.1, "m8": 7.3, "m9": 3.3, "m10": 1.5, "aj_share": 67.0, "avg_price": 3.38}, {"py": 2011, "total_M": 79.0, "m4": 7.8, "m5": 26.3, "m6": 27.2, "m7": 23.7, "m8": 10.2, "m9": 1.9, "m10": 1.4, "aj_share": 61.3, "avg_price": 4.47}, {"py": 2012, "total_M": 79.0, "m4": 13.1, "m5": 38.2, "m6": 20.5, "m7": 15.5, "m8": 6.3, "m9": 2.2, "m10": 1.0, "aj_share": 71.8, "avg_price": 5.59}, {"py": 2013, "total_M": 79.0, "m4": 20.4, "m5": 34.2, "m6": 19.0, "m7": 15.4, "m8": 6.1, "m9": 2.4, "m10": 0.9, "aj_share": 73.6, "avg_price": 5.07}, {"py": 2014, "total_M": 96.0, "m4": 7.0, "m5": 39.8, "m6": 29.2, "m7": 16.9, "m8": 4.0, "m9": 1.5, "m10": 0.4, "aj_share": 76.0, "avg_price": 5.2}, {"py": 2015, "total_M": 87.0, "m4": 5.4, "m5": 26.9, "m6": 34.8, "m7": 21.0, "m8": 6.9, "m9": 2.0, "m10": 0.6, "aj_share": 67.2, "avg_price": 5.37}, {"py": 2016, "total_M": 87.0, "m4": 2.3, "m5": 16.5, "m6": 46.9, "m7": 21.3, "m8": 6.5, "m9": 1.8, "m10": 2.2, "aj_share": 65.6, "avg_price": 5.34}, {"py": 2017, "total_M": 83.0, "m4": 11.5, "m5": 37.5, "m6": 22.5, "m7": 18.4, "m8": 6.6, "m9": 1.6, "m10": 0.5, "aj_share": 71.5, "avg_price": 6.4}, {"py": 2018, "total_M": 81.0, "m4": 7.2, "m5": 31.1, "m6": 27.5, "m7": 23.2, "m8": 5.8, "m9": 1.9, "m10": 0.6, "aj_share": 65.7, "avg_price": 7.47}, {"py": 2019, "total_M": 64.0, "m4": 6.0, "m5": 32.7, "m6": 27.5, "m7": 19.6, "m8": 4.5, "m9": 2.6, "m10": 2.1, "aj_share": 66.2, "avg_price": 8.48}, {"py": 2020, "total_M": 72.0, "m4": 7.8, "m5": 36.7, "m6": 27.2, "m7": 18.4, "m8": 5.4, "m9": 2.0, "m10": 0.7, "aj_share": 71.7, "avg_price": 8.94}, {"py": 2021, "total_M": 79.0, "m4": 2.8, "m5": 29.2, "m6": 36.3, "m7": 22.0, "m8": 5.9, "m9": 1.3, "m10": 0.6, "aj_share": 68.3, "avg_price": 9.26}, {"py": 2022, "total_M": 89.0, "m4": 22.9, "m5": 30.0, "m6": 20.8, "m7": 14.1, "m8": 5.4, "m9": 1.7, "m10": 1.3, "aj_share": 73.7, "avg_price": 14.23}, {"py": 2023, "total_M": 93.0, "m4": 13.1, "m5": 27.6, "m6": 16.8, "m7": 13.7, "m8": 6.7, "m9": 4.8, "m10": 3.7, "aj_share": 57.4, "avg_price": 9.16}, {"py": 2024, "total_M": 114.0, "m4": 12.8, "m5": 16.2, "m6": 24.1, "m7": 24.2, "m8": 12.7, "m9": 1.9, "m10": 1.7, "aj_share": 53.1, "avg_price": 6.17}, {"py": 2025, "total_M": 108.0, "m4": 16.7, "m5": 32.6, "m6": 22.3, "m7": 16.6, "m8": 4.9, "m9": 2.2, "m10": 1.7, "aj_share": 71.6, "avg_price": 7.42}];
+const months = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'];
+const mKeys = ['m4', 'm5', 'm6', 'm7', 'm8', 'm9', 'm10'];
+
+function heatColor(val) {
+    if (val >= 35) return { bg: '#c0392b', fg: 'white' };
+    if (val >= 25) return { bg: '#e07070', fg: 'white' };
+    if (val >= 15) return { bg: '#f5b041', fg: '#333' };
+    if (val >= 8) return { bg: '#f9e79f', fg: '#333' };
+    if (val >= 3) return { bg: '#fef9e7', fg: '#555' };
+    return { bg: '#fff', fg: '#999' };
+}
+
+const table = document.getElementById('heatTable');
+let html = '<thead><tr><th class="py-col">PY</th>';
+months.forEach(m => html += '<th>' + m + '</th>');
+html += '<th style="border-left:2px solid #ddd">A-J %</th>';
+html += '<th>Avg Price</th>';
+html += '<th>Vol (M)</th></tr></thead><tbody>';
+
+DATA.forEach(d => {
+    html += '<tr><td class="py-cell">' + d.py + '</td>';
+    mKeys.forEach(k => {
+        const v = d[k];
+        const c = heatColor(v);
+        html += '<td class="heat-cell" style="background:' + c.bg + ';color:' + c.fg + '">';
+        html += v.toFixed(0) + '%';
+        html += '<div class="cell-tooltip"><strong>' + d.py + '</strong><br>';
+        html += months[mKeys.indexOf(k)] + ': ' + v.toFixed(1) + '% of pack year<br>';
+        html += 'Apr-Jun total: ' + d.aj_share.toFixed(1) + '%<br>';
+        if (d.avg_price) html += 'Avg price: $' + d.avg_price.toFixed(2);
+        html += '</div></td>';
+    });
+    html += '<td class="summary-cell">' + d.aj_share.toFixed(1) + '%</td>';
+    html += '<td style="color:#555">$' + (d.avg_price ? d.avg_price.toFixed(2) : 'N/A') + '</td>';
+    html += '<td style="color:#777">' + d.total_M + 'M</td>';
+    html += '</tr>';
+});
+
+html += '</tbody>';
+table.innerHTML = html;
+</script>
+</body>
+</html>

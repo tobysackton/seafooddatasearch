@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figure 14 — Macro Headwinds: Tariffs, Oil, and the Consumer Outlook</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #fff;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            background: white;
+            padding: 28px 32px 20px;
+        }
+        .figure-number {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 4px;
+        }
+        .title {
+            text-align: center;
+            font-size: 21px;
+            font-weight: 700;
+            color: #222;
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 24px;
+        }
+
+        .headwind-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .headwind-card {
+            border-radius: 10px;
+            padding: 20px 16px;
+            position: relative;
+        }
+        .headwind-card.tariffs {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+        }
+        .headwind-card.oil {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+        }
+        .headwind-card.inflation {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+        }
+
+        .headwind-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .headwind-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .headwind-card.tariffs .headwind-title { color: #92400e; }
+        .headwind-card.oil .headwind-title { color: #991b1b; }
+        .headwind-card.inflation .headwind-title { color: #1e40af; }
+
+        .headwind-stat {
+            margin-bottom: 10px;
+        }
+        .headwind-stat-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+        .headwind-card.tariffs .headwind-stat-value { color: #b45309; }
+        .headwind-card.oil .headwind-stat-value { color: #dc2626; }
+        .headwind-card.inflation .headwind-stat-value { color: #2563eb; }
+        .headwind-stat-label {
+            font-size: 11.5px;
+            color: #555;
+            line-height: 1.4;
+            margin-top: 2px;
+        }
+
+        .headwind-detail {
+            font-size: 11.5px;
+            color: #666;
+            line-height: 1.5;
+            border-top: 1px dashed #ccc;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .timeline {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 18px 24px;
+            margin-bottom: 24px;
+        }
+        .timeline h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .timeline-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        .timeline-date {
+            width: 100px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #475569;
+            flex-shrink: 0;
+        }
+        .timeline-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-top: 4px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        .timeline-dot.amber { background: #f59e0b; }
+        .timeline-dot.red { background: #dc2626; }
+        .timeline-dot.blue { background: #3b82f6; }
+        .timeline-text {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .summary-box {
+            background: #f5f7fa;
+            border: 1px solid #dde2e8;
+            border-left: 4px solid #2a5c8f;
+            border-radius: 0 5px 5px 0;
+            padding: 12px 16px;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: #333;
+            margin-bottom: 14px;
+        }
+        .source-line {
+            border-top: 1px solid #ddd;
+            margin-top: 14px;
+            padding-top: 8px;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="figure-number">Figure 14</div>
+    <div class="title">Macro Headwinds: Tariffs, Oil, and the Consumer Outlook</div>
+    <div class="subtitle">Three compounding pressures on consumer purchasing power entering the 2026 crab season</div>
+
+    <div class="headwind-grid">
+        <div class="headwind-card tariffs">
+            <div class="headwind-title">Tariffs</div>
+            <div class="headwind-stat">
+                <div class="headwind-stat-value">+2.8%</div>
+                <div class="headwind-stat-label">Estimated food price increase from 2025 tariff actions (Yale Budget Lab)</div>
+            </div>
+            <div class="headwind-stat">
+                <div class="headwind-stat-value">3-7%</div>
+                <div class="headwind-stat-label">Additional food price increases expected Apr-Oct 2026 as costs pass through</div>
+            </div>
+            <div class="headwind-detail">
+                Snow crab exempt under USMCA, but tariffs on other goods raise overall food costs and reduce consumer spending power for discretionary items like crab. Retailers absorbed ~80% of tariff costs in 2025; expected to pass through in 2026.
+            </div>
+        </div>
+
+        <div class="headwind-card oil">
+            <div class="headwind-title">Iran War and Oil</div>
+            <div class="headwind-stat">
+                <div class="headwind-stat-value">$106</div>
+                <div class="headwind-stat-label">Brent crude per barrel (Mar 16), up 47% from $72 pre-war (Feb 27)</div>
+            </div>
+            <div class="headwind-stat">
+                <div class="headwind-stat-value">+$0.60</div>
+                <div class="headwind-stat-label">Gasoline price increase per gallon since Feb 27 ($2.98 to $3.58 avg)</div>
+            </div>
+            <div class="headwind-detail">
+                Higher diesel prices raise transportation and cold chain costs throughout the seafood supply chain. Economists estimate March inflation could reach 1% monthly, the highest in four years. Consumer sentiment dropped during the nine days of conflict covered by the March survey.
+            </div>
+        </div>
+
+        <div class="headwind-card inflation">
+            <div class="headwind-title">Inflation Expectations</div>
+            <div class="headwind-stat">
+                <div class="headwind-stat-value">3.4%</div>
+                <div class="headwind-stat-label">Year-ahead inflation expectations (Mar 2026), ending 6-month decline</div>
+            </div>
+            <div class="headwind-stat">
+                <div class="headwind-stat-value">+29%</div>
+                <div class="headwind-stat-label">Cumulative food-at-home price increase since Jan 2020 (BLS CPI)</div>
+            </div>
+            <div class="headwind-detail">
+                Consumers have absorbed six years of compounding food price increases. Even with lower headline inflation, the price level has not come down. When asked, 46% of consumers spontaneously cite high prices as their primary financial concern.
+            </div>
+        </div>
+    </div>
+
+    <div class="timeline">
+        <h3>Timeline: Compounding Pressures, 2025-2026</h3>
+        <div class="timeline-row">
+            <div class="timeline-date">Jan 2025</div>
+            <div class="timeline-dot amber"></div>
+            <div class="timeline-text">New tariff actions begin; consumer sentiment drops from 74.0 to 71.7</div>
+        </div>
+        <div class="timeline-row">
+            <div class="timeline-date">Mar 2025</div>
+            <div class="timeline-dot amber"></div>
+            <div class="timeline-text">Sentiment falls to 57.0 as tariff scope expands; food prices +2.8% from tariffs alone</div>
+        </div>
+        <div class="timeline-row">
+            <div class="timeline-date">Nov 2025</div>
+            <div class="timeline-dot amber"></div>
+            <div class="timeline-text">Sentiment hits 51.0 (year low); middle-income cohorts pull back on restaurant spending</div>
+        </div>
+        <div class="timeline-row">
+            <div class="timeline-date">Feb 28, 2026</div>
+            <div class="timeline-dot red"></div>
+            <div class="timeline-text">US-Israel military action begins against Iran; oil jumps from $72 to $90+ within days</div>
+        </div>
+        <div class="timeline-row">
+            <div class="timeline-date">Mar 9, 2026</div>
+            <div class="timeline-dot red"></div>
+            <div class="timeline-text">Brent crude at $106/bbl; US gasoline up 20%; sentiment falls to 55.5 (prelim)</div>
+        </div>
+        <div class="timeline-row">
+            <div class="timeline-date">Apr-Oct 2026</div>
+            <div class="timeline-dot blue"></div>
+            <div class="timeline-text">Tariff cost pass-through expected to hit food retail (Yale: additional 3-7% on food categories)</div>
+        </div>
+    </div>
+
+    <div class="summary-box">
+        These three pressures are compounding. Tariffs raised costs across the economy in 2025, with the full pass-through to food retail expected in mid-2026, precisely when new-season crab will be entering the market. The Iran conflict has spiked oil and diesel prices, raising transportation and cold chain costs and squeezing consumer budgets further. Inflation expectations have reversed their six-month decline. For the crab market, the practical effect is that the consumer who was already stretched by six years of food price increases now faces additional pressure from fuel costs, tariff pass-through, and economic uncertainty. This is the environment in which producers must set an opening price that generates volume commitments.
+    </div>
+
+    <div class="source-line">Sources: Yale Budget Lab (tariff price estimates); CNBC, NPR, Al Jazeera (oil/gas prices, Mar 2026); U of Michigan Surveys of Consumers (inflation expectations); BLS (Food at Home CPI); Federal Reserve (tariff price note, Mar 2026)</div>
+</div>
+</body>
+</html>

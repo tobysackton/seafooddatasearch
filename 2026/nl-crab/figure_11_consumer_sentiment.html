@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figure 11 — Consumer Sentiment and Crab's Market</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #fff;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            background: white;
+            padding: 28px 32px 20px;
+        }
+        .figure-number {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 4px;
+        }
+        .title {
+            text-align: center;
+            font-size: 21px;
+            font-weight: 700;
+            color: #222;
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 380px;
+            margin-bottom: 20px;
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .metric {
+            text-align: center;
+            padding: 14px 10px;
+            border-radius: 8px;
+        }
+        .metric.red { background: #fef2f2; border: 1px solid #fecaca; }
+        .metric.amber { background: #fffbeb; border: 1px solid #fde68a; }
+        .metric.blue { background: #eff6ff; border: 1px solid #bfdbfe; }
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .metric.red .metric-value { color: #dc2626; }
+        .metric.amber .metric-value { color: #d97706; }
+        .metric.blue .metric-value { color: #2563eb; }
+        .metric-label { font-size: 0.7rem; color: #64748b; line-height: 1.4; text-transform: uppercase; letter-spacing: 0.03em; }
+        .summary-box {
+            background: #f5f7fa;
+            border: 1px solid #dde2e8;
+            border-left: 4px solid #2a5c8f;
+            border-radius: 0 5px 5px 0;
+            padding: 12px 16px;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: #333;
+            margin-bottom: 14px;
+        }
+        .source-line {
+            border-top: 1px solid #ddd;
+            margin-top: 14px;
+            padding-top: 8px;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="figure-number">Figure 11</div>
+    <div class="title">Consumer Sentiment and Crab's Market</div>
+    <div class="subtitle">University of Michigan Consumer Sentiment Index, monthly, Jan 2019 – Mar 2026 (prelim)</div>
+
+    <div class="chart-container">
+        <canvas id="sentimentChart"></canvas>
+    </div>
+
+    <div class="metrics">
+        <div class="metric red">
+            <div class="metric-value">55.5</div>
+            <div class="metric-label">March 2026 (prelim)<br>Down 25% from Dec 2024</div>
+        </div>
+        <div class="metric amber">
+            <div class="metric-value">46%</div>
+            <div class="metric-label">Consumers citing high prices<br>7 months above 40%</div>
+        </div>
+        <div class="metric blue">
+            <div class="metric-value">3.4%</div>
+            <div class="metric-label">Year-ahead inflation<br>expectations (Mar 2026)</div>
+        </div>
+    </div>
+
+    <div class="summary-box">
+        Consumer sentiment collapsed from 74.0 in December 2024 to 51.0 in November 2025 and has barely recovered, sitting at 55.5 in the March 2026 preliminary reading. The decline has been broad-based: tariff uncertainty through 2025, rising food and fuel costs, and the Iran conflict beginning February 28, 2026 have all contributed. Nearly half of consumers spontaneously cite high prices as eroding their personal finances. For crab, this matters directly: at $10+ wholesale and $12+ retail, snow crab is priced out of the range where most households will buy it. Consumer willingness to commit to premium seafood tracks sentiment closely, and sentiment is near its lowest level since the pandemic.
+    </div>
+
+    <div class="source-line">Source: University of Michigan Surveys of Consumers via FRED (UMCSENT). March 2026 is preliminary.</div>
+</div>
+
+<script>
+const FONT = "'Calibri','Segoe UI','Helvetica Neue',sans-serif";
+
+// Monthly data from FRED: Jan 2015 through Mar 2026
+const dates = [
+    '2019-01','2019-02','2019-03','2019-04','2019-05','2019-06','2019-07','2019-08','2019-09','2019-10','2019-11','2019-12',
+    '2020-01','2020-02','2020-03','2020-04','2020-05','2020-06','2020-07','2020-08','2020-09','2020-10','2020-11','2020-12',
+    '2021-01','2021-02','2021-03','2021-04','2021-05','2021-06','2021-07','2021-08','2021-09','2021-10','2021-11','2021-12',
+    '2022-01','2022-02','2022-03','2022-04','2022-05','2022-06','2022-07','2022-08','2022-09','2022-10','2022-11','2022-12',
+    '2023-01','2023-02','2023-03','2023-04','2023-05','2023-06','2023-07','2023-08','2023-09','2023-10','2023-11','2023-12',
+    '2024-01','2024-02','2024-03','2024-04','2024-05','2024-06','2024-07','2024-08','2024-09','2024-10','2024-11','2024-12',
+    '2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12',
+    '2026-01','2026-02','2026-03'
+];
+
+const values = [
+    91.2,93.8,98.4,97.2,100.0,98.2,98.4,89.8,93.2,95.5,96.8,99.3,
+    99.8,101.0,89.1,71.8,72.3,78.1,72.5,74.1,80.4,81.8,76.9,80.7,
+    79.0,76.8,84.9,88.3,82.9,85.5,81.2,70.3,72.8,71.7,67.4,70.6,
+    67.2,62.8,59.4,65.2,58.4,50.0,51.5,55.1,58.6,59.9,56.8,59.7,
+    64.9,67.0,62.0,63.5,59.2,64.4,71.6,69.5,67.7,63.8,61.3,69.7,
+    79.0,76.9,79.4,77.2,69.1,68.2,66.4,67.9,70.1,70.5,71.8,74.0,
+    71.7,64.7,57.0,52.2,52.2,60.7,61.7,58.2,55.1,53.6,51.0,52.9,
+    56.4,56.6,55.5
+];
+
+const labels = dates.map(d => {
+    const [y, m] = d.split('-');
+    const months = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    if (m === '01' || m === '07') return months[parseInt(m)] + ' ' + y.slice(2);
+    return '';
+});
+
+const ctx = document.getElementById('sentimentChart').getContext('2d');
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Consumer Sentiment',
+            data: values,
+            borderColor: '#2a5c8f',
+            backgroundColor: 'rgba(42,92,143,0.08)',
+            borderWidth: 2.5,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            fill: true,
+            tension: 0.3
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: '#fff',
+                titleColor: '#222',
+                bodyColor: '#555',
+                borderColor: '#ccc',
+                borderWidth: 1,
+                titleFont: { size: 13, weight: 'bold', family: FONT },
+                bodyFont: { size: 12, family: FONT },
+                padding: 12,
+                callbacks: {
+                    title: function(items) {
+                        const idx = items[0].dataIndex;
+                        return dates[idx];
+                    },
+                    label: function(ctx) {
+                        return 'Sentiment: ' + ctx.raw.toFixed(1);
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                grid: { display: false },
+                ticks: {
+                    font: { size: 10, family: FONT },
+                    color: '#888',
+                    maxRotation: 0,
+                    autoSkip: false,
+                    callback: function(val, idx) { return labels[idx]; }
+                }
+            },
+            y: {
+                title: { display: true, text: 'Sentiment Index', font: { size: 13, family: FONT }, color: '#777' },
+                grid: { color: '#e8e8e8', borderDash: [3, 3] },
+                ticks: { font: { size: 12, family: FONT }, color: '#777' },
+                min: 40,
+                max: 110
+            }
+        }
+    },
+    plugins: [{
+        id: 'annotations',
+        afterDraw: function(chart) {
+            const ctx = chart.ctx;
+            const xScale = chart.scales.x;
+            const yScale = chart.scales.y;
+
+            function drawAnnotation(dateIdx, label1, label2, yOffset) {
+                const x = xScale.getPixelForValue(dateIdx);
+                const y = yScale.getPixelForValue(values[dateIdx]);
+                ctx.save();
+                ctx.beginPath();
+                ctx.setLineDash([3, 3]);
+                ctx.strokeStyle = '#dc2626';
+                ctx.lineWidth = 1;
+                ctx.moveTo(x, y);
+                ctx.lineTo(x, y + yOffset);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.fillStyle = '#dc2626';
+                ctx.font = '10px ' + FONT;
+                ctx.textAlign = 'center';
+                ctx.fillText(label1, x, y + yOffset + 12);
+                if (label2) ctx.fillText(label2, x, y + yOffset + 23);
+                ctx.restore();
+            }
+
+            // Pandemic: Mar 2020 = index 14 (month 3 of year 2, 0-based)
+            drawAnnotation(14, 'Pandemic', '', -25);
+            // Inflation low: Jun 2022 = index 41
+            drawAnnotation(41, 'Inflation', 'shock', -20);
+            // Tariff anxiety: Mar 2025 = index 74
+            drawAnnotation(74, 'Tariffs +', 'Iran war', -30);
+
+            // Draw "pre-pandemic avg" reference line
+            ctx.save();
+            ctx.beginPath();
+            ctx.setLineDash([6, 4]);
+            ctx.strokeStyle = 'rgba(100,150,100,0.5)';
+            ctx.lineWidth = 1;
+            const avgY = yScale.getPixelForValue(95);
+            ctx.moveTo(xScale.left, avgY);
+            ctx.lineTo(xScale.right, avgY);
+            ctx.stroke();
+            ctx.fillStyle = 'rgba(100,150,100,0.7)';
+            ctx.font = '10px ' + FONT;
+            ctx.textAlign = 'right';
+            ctx.fillText('Pre-pandemic avg ~95', xScale.right - 5, avgY - 5);
+            ctx.restore();
+        }
+    }]
+});
+</script>
+</body>
+</html>

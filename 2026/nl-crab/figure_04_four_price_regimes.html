@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 3b: US Snow Crab Supply and Price — Market Periods, 2009–2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+    background: #fff;
+    color: #333;
+    padding: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .title-block { text-align: center; margin-bottom: 18px; }
+  .figure-number { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+  .title { font-size: 21px; font-weight: 700; color: #222; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #777; line-height: 1.4; }
+
+  .chart-wrapper { position: relative; margin-bottom: 16px; }
+  .period-labels {
+    position: absolute; top: 0; left: 60px; right: 60px; height: 38px;
+    display: flex; pointer-events: none; z-index: 10;
+  }
+  .period-label {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.03em; line-height: 1.25;
+  }
+  .period-sub { font-size: 10px; font-weight: 400; opacity: 0.8; }
+  .chart-container { position: relative; width: 100%; height: 460px; }
+
+  .legend-row { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12.5px; color: #555; }
+  .legend-bar { width: 14px; height: 14px; border-radius: 2px; border: 1px solid #ccc; }
+  .legend-line { width: 24px; height: 3px; border-radius: 1px; }
+  .legend-line-dashed { width: 24px; height: 0; border-top: 3px dashed; }
+  .legend-swatch { width: 14px; height: 14px; border-radius: 2px; border: 1px solid #ccc; }
+
+  .summary-box {
+    background: #f5f7fa; border: 1px solid #dde2e8; border-left: 4px solid #2a5c8f;
+    border-radius: 0 5px 5px 0; padding: 14px 18px; margin: 16px 0;
+    font-size: 13.5px; line-height: 1.55; color: #333;
+  }
+
+  .source-line {
+    border-top: 1px solid #ddd; margin-top: 14px; padding-top: 8px;
+    font-size: 12px; color: #999; line-height: 1.5;
+  }
+
+  .custom-tooltip {
+    position: absolute; pointer-events: none; opacity: 0; transition: opacity 0.15s;
+    background: #fff; border: 1px solid #ccc; border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.14); padding: 14px 18px;
+    min-width: 300px; font-size: 13px; z-index: 100;
+  }
+  .tooltip-year { font-size: 18px; font-weight: 700; color: #222; padding-bottom: 8px; margin-bottom: 8px; border-bottom: 2px solid #5b9bd5; }
+  .tooltip-row { display: flex; justify-content: space-between; padding: 3px 0; }
+  .tooltip-label { color: #555; display: flex; align-items: center; gap: 6px; }
+  .tooltip-swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .tooltip-value { font-weight: 600; color: #222; font-variant-numeric: tabular-nums; }
+  .tooltip-total { border-top: 2px solid #ddd; margin-top: 6px; padding-top: 6px; font-weight: 700; font-size: 14px; }
+  .tooltip-section { border-top: 1px solid #eee; margin-top: 8px; padding-top: 8px; }
+  .tooltip-section-title { font-size: 11px; text-transform: uppercase; color: #999; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .tooltip-note { font-size: 11px; color: #999; margin-top: 6px; font-style: italic; }
+  .tooltip-period { background: #f0f4f8; border-radius: 4px; padding: 4px 8px; margin-top: 6px; font-size: 11.5px; }
+</style>
+</head>
+<body>
+
+<div class="title-block">
+  <div class="figure-number">Figure 3b</div>
+  <div class="title">US Snow Crab Supply and Price — Four Market Periods</div>
+  <div class="subtitle">Total US Imports by Pack Year with UB NL 5-8 oz Price (Nominal &amp; Real 2024-25$)<br>2009-10 through 2025-26 &bull; Shaded periods highlight distinct supply-price regimes</div>
+</div>
+
+<div class="legend-row">
+  <div class="legend-item"><div class="legend-bar" style="background:#5b9bd5; border:none;"></div> Canada</div>
+  <div class="legend-item"><div class="legend-bar" style="background:#e07070; border:none;"></div> Russia</div>
+  <div class="legend-item"><div class="legend-bar" style="background:#6bb86b; border:none;"></div> Norway</div>
+  <div class="legend-item"><div class="legend-bar" style="background:#9e8fce; border:none;"></div> Greenland</div>
+  <div class="legend-item"><div class="legend-line" style="background:#2a5c8f;"></div> Nominal $/lb</div>
+  <div class="legend-item"><div class="legend-line-dashed" style="border-color:#c0392b;"></div> Real $/lb (2024-25$)</div>
+</div>
+<div class="legend-row" style="margin-bottom:10px;">
+  <div class="legend-item"><div class="legend-swatch" style="background:#dceaf7;"></div> Recovery &amp; Absorption</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#d4ecd4;"></div> Demand-Driven Price Rise</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#fde8c8;"></div> Pandemic Boom &amp; Crash</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#e8e0f0;"></div> Post-Crash Recovery</div>
+</div>
+
+<div class="chart-wrapper">
+  <div class="period-labels" id="periodLabels"></div>
+  <div class="chart-container">
+    <canvas id="supplyPriceChart"></canvas>
+    <div class="custom-tooltip" id="tooltip"></div>
+  </div>
+</div>
+
+<div class="summary-box">
+  <strong>Four regimes define the modern snow crab market.</strong> The 2009–2014 recovery absorbed a 20% supply increase without depressing prices, signaling structural demand growth. From 2015–2019, supply held steady while prices nearly doubled — a demand-driven premium era. The pandemic produced a historic spike ($18.41 real in 2021-22) followed by an equally historic crash ($5.66 real in 2023-24). Since mid-2023, prices have recovered 31% on stable volume — a pattern that echoes the 2009–2014 demand-led recovery. The question for 2026: quota cuts may push prices above what this demand recovery can support.
+</div>
+
+<div class="source-line">
+  Source: Seafood Datasearch from US Census Bureau via Global Trade Tracker (volume by country) and Urner Barry (NL 5-8 oz Cluster EBP, 2015-present; customs avg unit price pre-2015) &bull; Deflator: CPI-U All Items, NSA (BLS Series CUUR0000SA0), base = 2024-25 &bull; Pack year = April through March &bull; * 2025-26: 9 months data, country split estimated
+</div>
+
+<script>
+// PERIODS — index-based for Chart.js annotation positioning
+const PERIODS = [
+  { label: "Recovery & Absorption", sub: "Supply absorbed, demand builds", x1: 0, x2: 5, fill: "rgba(220,234,247,0.55)", labelColor: "#1a4f8a" },
+  { label: "Demand-Driven Price Rise", sub: "Stable supply, rising value", x1: 5, x2: 11, fill: "rgba(212,236,212,0.55)", labelColor: "#1a6b1a" },
+  { label: "Pandemic Boom & Crash", sub: "Spike, collapse, destocking", x1: 11, x2: 14, fill: "rgba(253,232,200,0.55)", labelColor: "#b05a00" },
+  { label: "Post-Crash Recovery", sub: "Rising price, stable volume", x1: 14, x2: 16, fill: "rgba(232,224,240,0.55)", labelColor: "#5b3a8a" }
+];
+
+// DATA — 2009-10 onward (indices 0-16)
+const DATA = [
+  {py:"2009-10",can:99.1,rus:11.3,nor:0.0,grl:1.1,total:111.6,price:3.38,real:4.96,src:"Customs",mo:12,cpi:215.4, period:0},
+  {py:"2010-11",can:79.4,rus:13.5,nor:0.0,grl:1.5,total:94.4,price:4.47,real:6.42,src:"Customs",mo:12,cpi:219.8, period:0},
+  {py:"2011-12",can:79.5,rus:9.5,nor:0.0,grl:1.1,total:90.1,price:5.59,real:7.81,src:"Customs",mo:12,cpi:226.1, period:0},
+  {py:"2012-13",can:79.3,rus:10.1,nor:0.0,grl:1.6,total:91.0,price:5.07,real:6.95,src:"Customs",mo:12,cpi:230.4, period:0},
+  {py:"2013-14",can:96.0,rus:14.4,nor:0.1,grl:1.1,total:111.5,price:5.20,real:7.02,src:"Customs",mo:12,cpi:233.9, period:0},
+  {py:"2014-15",can:87.3,rus:11.9,nor:0.8,grl:0.7,total:100.6,price:5.29,real:7.06,src:"UB NL 5-8",mo:12,cpi:236.8, period:0},
+  {py:"2015-16",can:86.8,rus:13.0,nor:3.7,grl:0.5,total:103.9,price:5.10,real:6.78,src:"UB NL 5-8",mo:12,cpi:237.8, period:1},
+  {py:"2016-17",can:83.0,rus:19.3,nor:3.7,grl:0.7,total:106.8,price:7.25,real:9.49,src:"UB NL 5-8",mo:12,cpi:241.3, period:1},
+  {py:"2017-18",can:81.0,rus:15.0,nor:1.3,grl:1.5,total:98.8,price:7.98,real:10.22,src:"UB NL 5-8",mo:12,cpi:246.6, period:1},
+  {py:"2018-19",can:64.2,rus:24.5,nor:2.1,grl:1.4,total:92.2,price:8.79,real:11.01,src:"UB NL 5-8",mo:12,cpi:252.2, period:1},
+  {py:"2019-20",can:71.8,rus:23.9,nor:2.4,grl:2.9,total:100.9,price:8.80,real:10.84,src:"UB NL 5-8",mo:12,cpi:256.5, period:1},
+  {py:"2020-21",can:79.1,rus:42.9,nor:4.1,grl:2.8,total:128.9,price:9.23,real:11.14,src:"UB NL 5-8",mo:12,cpi:261.9, period:2},
+  {py:"2021-22",can:88.7,rus:37.2,nor:6.0,grl:2.6,total:134.5,price:16.11,real:18.41,src:"UB NL 5-8",mo:12,cpi:276.4, period:2},
+  {py:"2022-23",can:93.3,rus:2.4,nor:4.7,grl:2.8,total:103.2,price:8.20,real:8.76,src:"UB NL 5-8",mo:12,cpi:295.7, period:2},
+  {py:"2023-24",can:113.9,rus:0.0,nor:7.4,grl:2.8,total:124.1,price:5.50,real:5.66,src:"UB NL 5-8",mo:12,cpi:307.1, period:2},
+  {py:"2024-25",can:114.2,rus:0.0,nor:6.2,grl:1.6,total:122.1,price:7.43,real:7.43,src:"UB NL 5-8",mo:12,cpi:315.9, period:3},
+  {py:"2025-26",can:116.7,rus:0.0,nor:8.2,grl:2.2,total:127.1,price:9.48,real:9.33,src:"UB NL 5-8",mo:9,cpi:321.0, period:3}
+];
+
+const labels = DATA.map(d => d.py);
+const ctx = document.getElementById('supplyPriceChart').getContext('2d');
+const tooltip = document.getElementById('tooltip');
+
+// Build annotation boxes for period shading
+const annotations = {};
+PERIODS.forEach((p, i) => {
+  annotations['period' + i] = {
+    type: 'box',
+    xMin: p.x1 - 0.5,
+    xMax: p.x2 + 0.5,
+    yMin: 0,
+    yMax: 160,
+    yScaleID: 'yVol',
+    backgroundColor: p.fill,
+    borderWidth: 0,
+    drawTime: 'beforeDatasetsDraw'
+  };
+});
+
+const chart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Canada',
+        data: DATA.map(d => d.can),
+        backgroundColor: DATA.map(d => d.mo < 12 ? 'rgba(91,155,213,0.5)' : 'rgba(91,155,213,0.8)'),
+        yAxisID: 'yVol', order: 6, stack: 'volume'
+      },
+      {
+        label: 'Russia',
+        data: DATA.map(d => d.rus),
+        backgroundColor: DATA.map(d => d.mo < 12 ? 'rgba(224,112,112,0.5)' : 'rgba(224,112,112,0.8)'),
+        yAxisID: 'yVol', order: 5, stack: 'volume'
+      },
+      {
+        label: 'Norway',
+        data: DATA.map(d => d.nor),
+        backgroundColor: DATA.map(d => d.mo < 12 ? 'rgba(107,184,107,0.5)' : 'rgba(107,184,107,0.8)'),
+        yAxisID: 'yVol', order: 4, stack: 'volume'
+      },
+      {
+        label: 'Greenland',
+        data: DATA.map(d => d.grl),
+        backgroundColor: DATA.map(d => d.mo < 12 ? 'rgba(158,143,206,0.5)' : 'rgba(158,143,206,0.8)'),
+        yAxisID: 'yVol', order: 3, stack: 'volume'
+      },
+      {
+        label: 'Nominal Price',
+        data: DATA.map(d => d.price),
+        type: 'line',
+        borderColor: '#2a5c8f',
+        backgroundColor: '#2a5c8f',
+        borderWidth: 2.5,
+        pointRadius: 4,
+        pointBackgroundColor: '#2a5c8f',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 1.5,
+        pointHoverRadius: 6,
+        tension: 0.15,
+        yAxisID: 'yPrice',
+        order: 2
+      },
+      {
+        label: 'Real Price (2024-25$)',
+        data: DATA.map(d => d.real),
+        type: 'line',
+        borderColor: '#c0392b',
+        backgroundColor: '#c0392b',
+        borderWidth: 3,
+        borderDash: [8, 4],
+        pointRadius: 4.5,
+        pointBackgroundColor: '#c0392b',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointHoverRadius: 7,
+        pointStyle: 'rectRot',
+        tension: 0.15,
+        yAxisID: 'yPrice',
+        order: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 0 },
+    interaction: { mode: 'index', intersect: false },
+    layout: { padding: { top: 42 } },
+    plugins: {
+      legend: { display: false },
+      annotation: { annotations: annotations },
+      tooltip: {
+        enabled: false,
+        external: function(context) {
+          const tooltipModel = context.tooltip;
+          if (tooltipModel.opacity === 0) { tooltip.style.opacity = 0; return; }
+          const idx = tooltipModel.dataPoints[0].dataIndex;
+          const d = DATA[idx];
+          const partial = d.mo < 12 ? `<div class="tooltip-note">* ${d.mo} months of data; country split estimated</div>` : '';
+          const inflAdj = ((d.real / d.price - 1) * 100).toFixed(0);
+          const p = PERIODS[d.period];
+
+          const countries = [
+            {name:'Canada', val:d.can, color:'#5b9bd5'},
+            {name:'Russia', val:d.rus, color:'#e07070'},
+            {name:'Norway', val:d.nor, color:'#6bb86b'},
+            {name:'Greenland', val:d.grl, color:'#9e8fce'}
+          ].filter(c => c.val > 0);
+
+          const countryRows = countries.map(c =>
+            `<div class="tooltip-row">
+              <span class="tooltip-label"><span class="tooltip-swatch" style="background:${c.color};"></span> ${c.name}</span>
+              <span class="tooltip-value">${c.val.toFixed(1)}M lbs</span>
+            </div>`
+          ).join('');
+
+          tooltip.innerHTML = `
+            <div class="tooltip-year">${d.py}</div>
+            <div class="tooltip-period" style="background:${p.fill.replace('0.55','0.35')};color:${p.labelColor};">${p.label}</div>
+            ${countryRows}
+            <div class="tooltip-row tooltip-total">
+              <span class="tooltip-label">Total</span>
+              <span class="tooltip-value">${d.total.toFixed(1)}M lbs</span>
+            </div>
+            <div class="tooltip-section">
+              <div class="tooltip-section-title">Price Comparison</div>
+              <div class="tooltip-row">
+                <span class="tooltip-label"><span class="tooltip-swatch" style="background:#2a5c8f;"></span> Nominal</span>
+                <span class="tooltip-value">$${d.price.toFixed(2)}/lb</span>
+              </div>
+              <div class="tooltip-row">
+                <span class="tooltip-label"><span class="tooltip-swatch" style="background:#c0392b; border-radius:0; transform:rotate(45deg);"></span> Real (2024-25$)</span>
+                <span class="tooltip-value" style="color:#c0392b;">$${d.real.toFixed(2)}/lb</span>
+              </div>
+              <div class="tooltip-row">
+                <span class="tooltip-label">Inflation adjustment</span>
+                <span class="tooltip-value" style="font-weight:400;color:#888;">${inflAdj > 0 ? '+' : ''}${inflAdj}%</span>
+              </div>
+            </div>
+            <div class="tooltip-row" style="margin-top:6px;">
+              <span class="tooltip-label">Price Source</span>
+              <span class="tooltip-value" style="font-weight:400;color:#888;">${d.src}</span>
+            </div>
+            ${partial}
+          `;
+
+          const chartArea = chart.chartArea;
+          let left = tooltipModel.caretX + 14;
+          if (left + 320 > chartArea.right + 40) left = tooltipModel.caretX - 320;
+          tooltip.style.opacity = 1;
+          tooltip.style.left = left + 'px';
+          tooltip.style.top = Math.max(chartArea.top, tooltipModel.caretY - 100) + 'px';
+        }
+      }
+    },
+    scales: {
+      x: {
+        stacked: true,
+        grid: { display: false },
+        ticks: {
+          font: { size: 13, family: "'Calibri','Segoe UI',sans-serif" },
+          color: '#444', maxRotation: 45, minRotation: 45
+        }
+      },
+      yVol: {
+        type: 'linear', position: 'left', stacked: true,
+        beginAtZero: true, max: 160,
+        grid: { color: '#e8e8e8', drawBorder: false },
+        ticks: {
+          font: { size: 13, family: "'Calibri','Segoe UI',sans-serif" },
+          color: '#777', callback: v => v + 'M'
+        },
+        title: {
+          display: true, text: 'Import Volume (Million lbs)',
+          font: { size: 13, family: "'Calibri','Segoe UI',sans-serif" }, color: '#777'
+        }
+      },
+      yPrice: {
+        type: 'linear', position: 'right',
+        beginAtZero: true, max: 20,
+        grid: { drawOnChartArea: false },
+        ticks: {
+          font: { size: 13, weight: '600', family: "'Calibri','Segoe UI',sans-serif" },
+          color: '#2a5c8f', callback: v => '$' + v
+        },
+        title: {
+          display: true, text: 'Price ($/lb)',
+          font: { size: 13, weight: '600', family: "'Calibri','Segoe UI',sans-serif" }, color: '#2a5c8f'
+        }
+      }
+    }
+  },
+  plugins: [{
+    id: 'periodLabels',
+    afterDraw(chart) {
+      const ctx = chart.ctx;
+      const xScale = chart.scales.x;
+      const chartArea = chart.chartArea;
+
+      PERIODS.forEach(p => {
+        const x1 = xScale.getPixelForValue(p.x1) - (xScale.getPixelForValue(1) - xScale.getPixelForValue(0)) * 0.4;
+        const x2 = xScale.getPixelForValue(p.x2) + (xScale.getPixelForValue(1) - xScale.getPixelForValue(0)) * 0.4;
+        const cx = (x1 + x2) / 2;
+        const y = chartArea.top - 26;
+
+        ctx.save();
+        ctx.textAlign = 'center';
+        ctx.fillStyle = p.labelColor;
+        ctx.font = 'bold 11.5px Calibri, Segoe UI, sans-serif';
+        ctx.fillText(p.label, cx, y);
+        ctx.font = '10px Calibri, Segoe UI, sans-serif';
+        ctx.globalAlpha = 0.8;
+        ctx.fillText(p.sub, cx, y + 13);
+        ctx.restore();
+      });
+    }
+  }]
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Figure 25: Foodservice Spending by Income Quintile</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Calibri, 'Segoe UI', sans-serif; background: #f8f9fa; padding: 32px; }
+  .panel { background: white; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    padding: 32px; max-width: 960px; margin: 0 auto; }
+  h2 { font-size: 17px; color: #1a3a5c; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #888; margin-bottom: 20px; line-height: 1.5; }
+  .source { font-size: 11px; color: #999; font-style: italic; margin-top: 12px; text-align: right; }
+
+  .callouts { display: flex; gap: 16px; margin-bottom: 20px; }
+  .callout {
+    flex: 1 1 0; min-width: 0; padding: 12px 16px; border-radius: 6px; text-align: center;
+  }
+  .callout .label { font-size: 11px; text-transform: uppercase; color: #666;
+    letter-spacing: 0.4px; white-space: normal; word-break: break-word; line-height: 1.4; }
+  .callout .val { font-size: 20px; font-weight: 700; margin: 4px 0;
+    white-space: normal; word-break: break-all; }
+  .callout .detail { font-size: 11px; color: #888; white-space: normal; word-break: break-word; }
+  .c-orange { background: #fff3cd; } .c-orange .val { color: #856404; }
+  .c-blue   { background: #e8f0fe; } .c-blue .val   { color: #1a3a5c; }
+  .c-green  { background: #d4edda; } .c-green .val  { color: #155724; }
+  canvas { max-height: 420px; }
+</style>
+</head>
+<body>
+<div class="panel">
+  <h2>Figure 25: Foodservice Spending by Income Quintile, 2024</h2>
+  <div class="subtitle">Average annual spending on food away from home (dining out) vs food at home (grocery) per consumer unit, by income quintile. The highest-income households spend 4.3x more dining out than the lowest. The share of food dollars going to restaurants rises with income — but even at the top, grocery spending also increases substantially. The consumers in the middle quartiles are the crab restaurant segment: they dine out regularly but are also the most price-sensitive group.</div>
+
+  <div class="callouts">
+    <div class="callout c-blue">
+      <div class="label">Lowest Quintile FAFH</div>
+      <div class="val">$1,655</div>
+      <div class="detail">Incomes below $30K — 30% of food dollars spent dining out</div>
+    </div>
+    <div class="callout c-orange">
+      <div class="label">National Average FAFH</div>
+      <div class="val">$3,945</div>
+      <div class="detail">39% of food dollars spent dining out</div>
+    </div>
+    <div class="callout c-green">
+      <div class="label">Highest Quintile FAFH</div>
+      <div class="val">~$7,120</div>
+      <div class="detail">Incomes above $156K — 42% of food dollars spent dining out</div>
+    </div>
+  </div>
+
+  <canvas id="chart"></canvas>
+  <div class="source">Source: BLS Consumer Expenditure Survey 2024 (USDL-25-1586, Dec 2025). FAFH lowest quintile confirmed (FRED: CXUFOODAWAYLB0102M); other quintiles estimated. / Seafood Datasearch</div>
+</div>
+
+<script>
+const labels = ['Lowest 20%\n<$30K', 'Second 20%\n$30–57K', 'Third 20%\n$57–95K', 'Fourth 20%\n$95–156K', 'Highest 20%\n>$156K'];
+
+const fafh = [1655, 2450, 3450, 5050, 7120];
+const fah  = [3785, 5550, 5900, 7100, 10000];
+
+const fafhShare = fafh.map((f, i) => +(f / (f + fah[i]) * 100).toFixed(1));
+
+new Chart(document.getElementById('chart'), {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'Food Away From Home (dining out)',
+        data: fafh,
+        backgroundColor: 'rgba(230,126,34,0.82)',
+        borderColor: '#e67e22',
+        borderWidth: 1.5,
+        borderRadius: 3,
+        stack: 'food',
+        order: 2
+      },
+      {
+        label: 'Food At Home (grocery)',
+        data: fah,
+        backgroundColor: 'rgba(26,58,92,0.65)',
+        borderColor: '#1a3a5c',
+        borderWidth: 1.5,
+        borderRadius: 3,
+        stack: 'food',
+        order: 3
+      },
+      {
+        label: 'FAFH % of total food spending',
+        data: fafhShare,
+        type: 'line',
+        borderColor: '#e67e22',
+        borderWidth: 2.5,
+        borderDash: [6, 3],
+        pointRadius: 6,
+        pointBackgroundColor: 'white',
+        pointBorderColor: '#e67e22',
+        pointBorderWidth: 2.5,
+        fill: false,
+        tension: 0.3,
+        yAxisID: 'y2',
+        order: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    layout: { padding: { right: 16, top: 10 } },
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            if (ctx.dataset.label.includes('%')) {
+              return ` ${ctx.dataset.label}: ${ctx.parsed.y}%`;
+            }
+            return ` ${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString()}`;
+          }
+        }
+      },
+      annotation: {
+        annotations: {
+          avgLine: {
+            type: 'line',
+            yMin: 3945, yMax: 3945,
+            yScaleID: 'y',
+            borderColor: 'rgba(230,126,34,0.5)',
+            borderWidth: 1.5,
+            borderDash: [4,3],
+            label: {
+              content: 'National avg FAFH $3,945',
+              display: true,
+              position: 'start',
+              backgroundColor: 'rgba(230,126,34,0.80)',
+              color: 'white',
+              font: { size: 10 },
+              padding: 4,
+              borderRadius: 3
+            }
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        stacked: true,
+        grid: { display: false },
+        ticks: { font: { size: 11 } }
+      },
+      y: {
+        stacked: true,
+        title: { display: true, text: 'Annual Spending per Household ($)' },
+        ticks: { callback: v => '$' + v.toLocaleString() },
+        min: 0,
+        max: 20000
+      },
+      y2: {
+        position: 'right',
+        title: { display: true, text: 'FAFH Share of Total Food (%)' },
+        ticks: { callback: v => v + '%' },
+        min: 25,
+        max: 50,
+        grid: { drawOnChartArea: false }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

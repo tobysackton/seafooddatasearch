@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Figure 23: Foodservice vs Grocery Sales Growth</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Calibri, 'Segoe UI', sans-serif; background: #f8f9fa; padding: 32px; }
+  .panel { background: white; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    padding: 32px; max-width: 960px; margin: 0 auto; }
+  h2 { font-size: 17px; color: #1a3a5c; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #888; margin-bottom: 20px; line-height: 1.5; }
+  .source { font-size: 11px; color: #999; font-style: italic; margin-top: 12px; text-align: right; }
+  .callouts { display: flex; gap: 16px; margin-bottom: 20px; }
+  .callout { flex: 1 1 0; min-width: 0; padding: 12px 16px; border-radius: 6px; text-align: center; }
+  .callout .label { font-size: 11px; text-transform: uppercase; color: #666;
+    letter-spacing: 0.4px; white-space: normal; word-break: break-word; line-height: 1.4; }
+  .callout .val { font-size: 20px; font-weight: 700; margin: 4px 0; white-space: normal; word-break: break-all; }
+  .callout .detail { font-size: 11px; color: #888; white-space: normal; word-break: break-word; }
+  .c-orange { background: #fff3cd; } .c-orange .val { color: #856404; }
+  .c-blue   { background: #e8f0fe; } .c-blue .val   { color: #1a3a5c; }
+  .c-green  { background: #d4edda; } .c-green .val  { color: #155724; }
+  canvas { max-height: 400px; }
+  .data-note { font-size: 11px; color: #bbb; margin-top: 6px; font-style: italic; }
+</style>
+</head>
+<body>
+<div class="panel">
+  <h2>Figure 23: Food Away From Home vs Grocery Store Sales Growth, 2019–2025</h2>
+  <div class="subtitle">Indexed sales growth (2019 = 100). Foodservice collapsed during the pandemic lockdowns but recovered faster than grocery. By 2025 foodservice spending has grown 56% above pre-pandemic levels — outpacing grocery store growth by 17 percentage points. This matters for snow crab: crab dollars are split between these two channels, and the two channels are now moving in opposite directions.</div>
+  <div class="callouts">
+    <div class="callout c-orange">
+      <div class="label">Food Away From Home 2025</div>
+      <div class="val">$1,182B</div>
+      <div class="detail">+56% vs 2019</div>
+    </div>
+    <div class="callout c-blue">
+      <div class="label">Grocery Store Sales 2025</div>
+      <div class="val">$915B</div>
+      <div class="detail">+39% vs 2019</div>
+    </div>
+    <div class="callout c-green">
+      <div class="label">FS Growth Premium</div>
+      <div class="val">+17 pts</div>
+      <div class="detail">FS outpacing grocery since 2021</div>
+    </div>
+  </div>
+  <canvas id="chart"></canvas>
+  <div class="source">Source: U.S. Census Bureau via FRED — RSFSDP (Food Services &amp; Drinking Places), MRTSSM4451USN (Grocery Stores) / Seafood Datasearch</div>
+</div>
+<script>
+const years = ['2019','2020','2021','2022','2023','2024','2025'];
+const fsRaw   = [758, 642, 824, 956, 1067, 1120, 1182];
+const grocRaw = [690.8, 756.3, 790.0, 854.4, 873.6, 891.3, 915.1];
+const fsIdx   = fsRaw.map(v => +(v / fsRaw[0] * 100).toFixed(1));
+const grocIdx = grocRaw.map(v => +(v / grocRaw[0] * 100).toFixed(1));
+new Chart(document.getElementById('chart'), {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [
+      { label: 'Food Away From Home (indexed 2019=100)', data: fsIdx,
+        borderColor: '#e67e22', backgroundColor: 'rgba(230,126,34,0.08)',
+        fill: true, pointRadius: 6, pointBackgroundColor: '#e67e22', tension: 0.3, borderWidth: 3 },
+      { label: 'Grocery Store Sales (indexed 2019=100)', data: grocIdx,
+        borderColor: '#1a3a5c', backgroundColor: 'rgba(26,58,92,0.05)',
+        fill: true, pointRadius: 6, pointBackgroundColor: '#1a3a5c', tension: 0.3, borderWidth: 3 }
+    ]
+  },
+  options: {
+    responsive: true, layout: { padding: { right: 20 } },
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: { callbacks: { label: ctx => {
+        const raw = ctx.datasetIndex === 0 ? fsRaw : grocRaw;
+        return ` ${ctx.dataset.label.split(' (')[0]}: $${raw[ctx.dataIndex]}B  (index ${ctx.parsed.y})`;
+      }}},
+      annotation: { annotations: {
+        baseline: { type: 'line', yMin: 100, yMax: 100, borderColor: 'rgba(100,100,100,0.25)', borderWidth: 1, borderDash: [4,3] },
+        covidDrop: { type: 'label', xValue: '2020', yValue: 82, content: ['Lockdown collapse', 'FS −15%', 'Grocery +10%'],
+          backgroundColor: 'rgba(26,58,92,0.82)', color: 'white', font: { size: 10 }, padding: 5, borderRadius: 4 },
+        crossover: { type: 'label', xValue: '2022', yValue: 152, content: ['FS recovers faster', 'Gap opens 2021→'],
+          backgroundColor: 'rgba(230,126,34,0.85)', color: 'white', font: { size: 10, weight: 'bold' }, padding: 6, borderRadius: 4 }
+      }}
+    },
+    scales: { y: { title: { display: true, text: 'Index (2019 = 100)' }, min: 75, max: 165 } }
+  }
+});
+</script>
+</body>
+</html>

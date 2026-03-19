@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Figure 63: Contract Planning Horizon vs CUSMA Review</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif; background: #fff; padding: 20px; color: #333; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+        .figure-number { text-align: center; font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+        .title { text-align: center; font-size: 21px; font-weight: 700; color: #222; margin-bottom: 4px; }
+        .subtitle { text-align: center; font-size: 14px; color: #777; margin-bottom: 24px; }
+
+        .timeline-area { position: relative; padding: 40px 0 20px; }
+        .timeline-bar { height: 6px; background: #e8e8e8; border-radius: 3px; position: relative; margin: 0 40px; }
+        .month-markers { display: flex; justify-content: space-between; margin: 0 40px; padding-top: 8px; }
+        .month-marker { text-align: center; font-size: 12px; color: #777; width: 60px; }
+        .month-name { font-weight: 600; }
+
+        .event-marker { position: absolute; top: -12px; width: 28px; height: 28px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transform: translateX(-50%); z-index: 10; cursor: pointer; }
+        .event-label { position: absolute; top: -55px; transform: translateX(-50%); white-space: nowrap; font-size: 11px; font-weight: 700; text-align: center; padding: 3px 8px; border-radius: 3px; }
+
+        .phase-bar { position: absolute; height: 24px; top: -9px; border-radius: 4px; opacity: 0.25; }
+
+        .scenario-cards { display: flex; gap: 20px; margin-top: 40px; flex-wrap: wrap; }
+        .scenario-card { flex: 1; min-width: 280px; border: 1px solid #dde2e8; border-radius: 8px; padding: 18px; background: #fff; }
+        .scenario-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+        .scenario-header { font-size: 15px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .scenario-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; color: white; }
+        .scenario-body { font-size: 13px; line-height: 1.55; color: #555; }
+        .scenario-impact { margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee; font-size: 12px; }
+        .impact-label { font-weight: 700; color: #222; }
+
+        .summary-box { background: #f5f7fa; border: 1px solid #dde2e8; border-left: 4px solid #2a5c8f; border-radius: 0 5px 5px 0; padding: 14px 18px; font-size: 13.5px; line-height: 1.55; color: #333; margin-top: 24px; margin-bottom: 14px; }
+        .source-line { border-top: 1px solid #ddd; margin-top: 14px; padding-top: 8px; font-size: 12px; color: #999; }
+
+        .contract-window { position: absolute; height: 34px; top: -14px; border: 2px solid; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+
+        .tooltip-hover { display: none; position: absolute; z-index: 100; background: white; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.14); padding: 12px 16px; min-width: 250px; font-size: 12px; transform: translateX(-50%); bottom: 45px; }
+        .event-marker:hover + .tooltip-hover { display: block; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="figure-number">Figure 63</div>
+    <div class="title">Contract Planning Horizon vs CUSMA Review Date</div>
+    <div class="subtitle">PY2026 season timeline with three CUSMA outcome scenarios | The risk is not a tariff this season, it is the planning horizon</div>
+
+    <div class="timeline-area">
+        <div class="timeline-bar" id="timeline">
+            <!-- Season phase bars -->
+            <div class="phase-bar" style="left:0%;width:8.33%;background:#d4ecd4;top:-9px"></div>
+            <div class="phase-bar" style="left:8.33%;width:25%;background:#dceaf7;top:-9px"></div>
+            <div class="phase-bar" style="left:33.3%;width:25%;background:#fde8c8;top:-9px"></div>
+
+            <!-- Contract window -->
+            <div class="contract-window" style="left:8%;width:25%;border-color:#2a5c8f;background:rgba(42,92,143,0.06);top:22px">
+                <span style="color:#2a5c8f">Typical contract commitment window</span>
+            </div>
+
+            <!-- CUSMA review marker -->
+            <div class="event-marker" style="left:25%;background:#ef4444" id="cusmaMarker"></div>
+            <div class="event-label" style="left:25%;background:#ef4444;color:white">July 1: CUSMA Review</div>
+            <div class="tooltip-hover" style="left:25%">
+                <div style="font-weight:700;font-size:14px;margin-bottom:6px">CUSMA Joint Review</div>
+                <div style="color:#555">The July 1, 2026 six-year review of CUSMA is the key date. The outcome determines whether snow crab trade operates under current duty-free terms, modified rules of origin, or a rolling annual review process.</div>
+            </div>
+
+            <!-- Season open -->
+            <div class="event-marker" style="left:0%;background:#22c55e"></div>
+            <div class="event-label" style="left:4%;background:#22c55e;color:white">Season Open</div>
+
+            <!-- Peak shipping -->
+            <div class="event-marker" style="left:25%;background:#5b9bd5;top:-12px;display:none"></div>
+        </div>
+
+        <!-- Month markers -->
+        <div class="month-markers">
+            <div class="month-marker"><div class="month-name">Apr</div><div>2026</div></div>
+            <div class="month-marker"><div class="month-name">May</div></div>
+            <div class="month-marker"><div class="month-name">Jun</div></div>
+            <div class="month-marker"><div class="month-name">Jul</div></div>
+            <div class="month-marker"><div class="month-name">Aug</div></div>
+            <div class="month-marker"><div class="month-name">Sep</div></div>
+            <div class="month-marker"><div class="month-name">Oct</div></div>
+            <div class="month-marker"><div class="month-name">Nov</div></div>
+            <div class="month-marker"><div class="month-name">Dec</div></div>
+            <div class="month-marker"><div class="month-name">Jan</div><div>2027</div></div>
+            <div class="month-marker"><div class="month-name">Feb</div></div>
+            <div class="month-marker"><div class="month-name">Mar</div></div>
+        </div>
+
+        <!-- Phase labels -->
+        <div style="display:flex;justify-content:space-between;margin:16px 40px 0;font-size:11px">
+            <div style="width:8.33%;text-align:center;color:#1a6b1a">Pre-season</div>
+            <div style="width:25%;text-align:center;color:#1a4f8a">Peak season<br>shipping</div>
+            <div style="width:25%;text-align:center;color:#b05a00">Post-season<br>inventory</div>
+            <div style="width:41.67%;text-align:center;color:#777">Off-season</div>
+        </div>
+    </div>
+
+    <div class="scenario-cards">
+        <div class="scenario-card" style="border-left:4px solid #22c55e">
+            <div class="scenario-header">
+                <span class="scenario-tag" style="background:#22c55e">BASE CASE</span>
+                CUSMA Renewed
+            </div>
+            <div class="scenario-body">
+                CUSMA is renewed with current rules of origin intact. Duty-free access for Canadian snow crab continues without modification. Buyers and sellers operate with full planning visibility through 2032.
+            </div>
+            <div class="scenario-impact">
+                <div class="impact-label">Contract impact:</div>
+                No disruption. Full-season and multi-year commitments viable. Normal pricing dynamics.
+            </div>
+        </div>
+
+        <div class="scenario-card" style="border-left:4px solid #f59e0b">
+            <div class="scenario-header">
+                <span class="scenario-tag" style="background:#f59e0b">MODERATE RISK</span>
+                Tightened Rules
+            </div>
+            <div class="scenario-body">
+                CUSMA renewed with modified rules of origin or enhanced documentation requirements. Operational adjustment period, modest compliance costs. No tariff, but transition uncertainty during negotiation compresses Q2 contracting.
+            </div>
+            <div class="scenario-impact">
+                <div class="impact-label">Contract impact:</div>
+                Pre-July contracts carry execution risk. Buyers hedge with shorter commitments. Sellers may discount early-season product to lock volume before the review date.
+            </div>
+        </div>
+
+        <div class="scenario-card" style="border-left:4px solid #ef4444">
+            <div class="scenario-header">
+                <span class="scenario-tag" style="background:#ef4444">ELEVATED RISK</span>
+                Annual Review
+            </div>
+            <div class="scenario-body">
+                CUSMA enters annual review cycle. No automatic tariff, but duty-free access must be reconfirmed each year. Rolling uncertainty becomes a permanent feature of the trade relationship.
+            </div>
+            <div class="scenario-impact">
+                <div class="impact-label">Contract impact:</div>
+                Contracts beyond July carry structural uncertainty. Buyers limit commitments to pre-July delivery. Processors front-load sales. The planning horizon compresses from 12 months to 3.
+            </div>
+        </div>
+    </div>
+
+    <div class="summary-box">
+        <strong>The risk is not a border payment this season.</strong> None of the three CUSMA scenarios 
+        produces an immediate tariff on Canadian snow crab in PY2026. The risk is the uncertainty 
+        premium that compresses willingness to commit beyond the July 1 review date. In a normal year, 
+        buyers and sellers negotiate contracts covering the full season (April through the following March). 
+        In 2026, the CUSMA review date falls in the middle of peak shipping season. If the review 
+        outcome is uncertain heading into July, buyers will hesitate on second-half commitments and 
+        sellers will push to move product before the review. This front-loading of sales pressure is 
+        the practical market consequence, regardless of the final outcome.
+    </div>
+    <div class="source-line">Source: Seafood Datasearch analysis</div>
+</div>
+</body>
+</html>

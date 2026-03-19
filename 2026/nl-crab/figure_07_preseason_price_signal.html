@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figure 7 — Pre-Season Price Signal: What History Tells Us</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #fff;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            background: white;
+            padding: 28px 32px 20px;
+        }
+        .figure-number {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 4px;
+        }
+        .title {
+            text-align: center;
+            font-size: 21px;
+            font-weight: 700;
+            color: #222;
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        .signal-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .signal {
+            text-align: center;
+            padding: 16px 12px;
+            border-radius: 8px;
+        }
+        .signal.forward {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+        }
+        .signal.current {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+        }
+        .signal.prior {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+        }
+        .signal-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .signal.forward .signal-value { color: #dc2626; }
+        .signal.current .signal-value { color: #16a34a; }
+        .signal.prior .signal-value { color: #2563eb; }
+        .signal-label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.4; }
+        .summary-box {
+            background: #f5f7fa;
+            border: 1px solid #dde2e8;
+            border-left: 4px solid #2a5c8f;
+            border-radius: 0 5px 5px 0;
+            padding: 12px 16px;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: #333;
+            margin-bottom: 14px;
+        }
+        .source-line {
+            border-top: 1px solid #ddd;
+            margin-top: 14px;
+            padding-top: 8px;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="figure-number">Figure 7</div>
+    <div class="title">Pre-Season Price Signal</div>
+    <div class="subtitle">UB NL 5-8 oz: Dec–Mar avg price vs volume-weighted pack year avg, 2015-16 through 2026-27</div>
+
+    <div class="chart-container">
+        <canvas id="preseasonChart"></canvas>
+    </div>
+
+    <div class="signal-box">
+        <div class="signal forward">
+            <div class="signal-value">$10.12</div>
+            <div class="signal-label">2026-27 Pre-Season Signal<br>(Dec 2025 – Mar 2026)</div>
+        </div>
+        <div class="signal current">
+            <div class="signal-value">$8.34</div>
+            <div class="signal-label">2025-26 Vol-Wtd Avg<br>(through Jan 2026)</div>
+        </div>
+        <div class="signal prior">
+            <div class="signal-value">$6.22</div>
+            <div class="signal-label">2024-25 Vol-Wtd Avg<br>(full year, +34% YoY)</div>
+        </div>
+    </div>
+
+    <div class="summary-box">
+        The Dec-Mar wholesale price is a directional indicator. When prices are stable or rising through the pre-season, the available supply has been absorbed and conditions are in place for a normal season. When prices are declining, buyers have unsold inventory and market power shifts to their side. Since 1998, there have been seven years when the March price was lower than January. In those years, prices generally did not recover during the sales season. The 2026-27 signal is positive: prices rose steadily from December through March, confirming a dry market with no carryover overhang. The signal tells us the market will be healthy if opening prices are set where buyers can commit. It does not predict what that price will be.
+    </div>
+
+    <div class="source-line">Source: Urner Barry NL Snow Crab Section 5-8 oz EBP, weekly Low quotes. Pack year averages volume-weighted using US Census monthly import volumes (HS 0306144020) as proxy.</div>
+</div>
+
+<script>
+const FONT = "'Calibri','Segoe UI','Helvetica Neue',sans-serif";
+
+const packYears = ['2015-16','2016-17','2017-18','2018-19','2019-20','2020-21','2021-22','2022-23','2023-24','2024-25','2025-26','2026-27'];
+
+// Pre-season (Dec-Mar) UB NL 5-8 simple avg (vol-weighting makes <$0.10 difference for pre-season)
+const preseasonPrice = [5.21, 5.39, 7.95, 8.06, 8.66, 9.24, 9.90, 16.30, 6.98, 5.41, 8.73, 10.12];
+
+// Pack year VOLUME-WEIGHTED UB NL 5-8 avg (Census monthly vol x UB monthly avg)
+const packYearPrice = [4.90, 6.29, 7.55, 8.89, 8.26, 8.06, 14.86, 8.93, 5.21, 6.22, 8.34, null];
+
+const ctx = document.getElementById('preseasonChart').getContext('2d');
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: packYears,
+        datasets: [
+            {
+                label: 'Pre-Season Signal (Dec–Mar UB Avg)',
+                data: preseasonPrice,
+                backgroundColor: function(ctx) {
+                    if (ctx.dataIndex === 11) return 'rgba(220, 38, 38, 0.7)';
+                    return 'rgba(42,92,143,0.6)';
+                },
+                borderColor: function(ctx) {
+                    if (ctx.dataIndex === 11) return '#b91c1c';
+                    return '#2a5c8f';
+                },
+                borderWidth: 1,
+                borderRadius: 2,
+                order: 2,
+                barPercentage: 0.85,
+                categoryPercentage: 0.7
+            },
+            {
+                label: 'Pack Year Vol-Wtd Avg (UB NL 5-8 oz)',
+                data: packYearPrice,
+                type: 'line',
+                borderColor: '#0d9488',
+                backgroundColor: 'rgba(13,148,136,0.08)',
+                borderWidth: 3,
+                pointRadius: 5,
+                pointBackgroundColor: '#0d9488',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointHoverRadius: 7,
+                fill: false,
+                tension: 0.2,
+                spanGaps: false,
+                order: 1
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    font: { family: FONT, size: 12 },
+                    color: '#555',
+                    padding: 16,
+                    usePointStyle: true,
+                    pointStyleWidth: 16,
+                }
+            },
+            tooltip: {
+                backgroundColor: '#fff',
+                titleColor: '#222',
+                bodyColor: '#555',
+                borderColor: '#ccc',
+                borderWidth: 1,
+                titleFont: { size: 14, weight: 'bold', family: FONT },
+                bodyFont: { size: 13, family: FONT },
+                padding: 14,
+                boxPadding: 6,
+                callbacks: {
+                    label: function(ctx) {
+                        if (ctx.raw === null) return ctx.dataset.label + ': pending';
+                        return ctx.dataset.label + ': $' + ctx.raw.toFixed(2) + '/lb';
+                    },
+                    afterBody: function(items) {
+                        const idx = items[0].dataIndex;
+                        if (packYearPrice[idx] !== null && preseasonPrice[idx]) {
+                            const diff = packYearPrice[idx] - preseasonPrice[idx];
+                            const sign = diff >= 0 ? '+' : '';
+                            return ['', 'Actual vs signal: ' + sign + '$' + diff.toFixed(2)];
+                        }
+                        return [];
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                grid: { display: false },
+                ticks: {
+                    font: { size: 11, family: FONT },
+                    color: function(ctx) { return ctx.index === 11 ? '#dc2626' : '#444'; },
+                    maxRotation: 45,
+                    minRotation: 45
+                }
+            },
+            y: {
+                title: { display: true, text: 'Price ($/lb)', font: { size: 13, family: FONT }, color: '#777' },
+                grid: { color: '#e8e8e8', borderDash: [3, 3] },
+                ticks: {
+                    font: { size: 13, family: FONT },
+                    color: '#777',
+                    callback: function(v) { return '$' + v.toFixed(0); }
+                },
+                min: 0,
+                max: 18,
+                beginAtZero: true
+            }
+        }
+    },
+    plugins: [{
+        id: 'annotations',
+        afterDraw: function(chart) {
+            const ctx = chart.ctx;
+            const meta0 = chart.getDatasetMeta(0);
+            const meta1 = chart.getDatasetMeta(1);
+
+            const forwardBar = meta0.data[11];
+            if (forwardBar) {
+                ctx.save();
+                ctx.fillStyle = '#b91c1c';
+                ctx.font = 'bold 12px ' + FONT;
+                ctx.textAlign = 'center';
+                ctx.fillText('$10.12', forwardBar.x, forwardBar.y - 8);
+                ctx.restore();
+            }
+
+            if (meta1.data[6]) {
+                const pt = meta1.data[6];
+                ctx.save();
+                ctx.fillStyle = '#0d9488';
+                ctx.font = '10px ' + FONT;
+                ctx.textAlign = 'left';
+                ctx.fillText('pandemic', pt.x + 6, pt.y - 6);
+                ctx.fillText('boom', pt.x + 6, pt.y + 5);
+                ctx.restore();
+            }
+            if (meta1.data[7]) {
+                const pt = meta1.data[7];
+                ctx.save();
+                ctx.fillStyle = '#0d9488';
+                ctx.font = '10px ' + FONT;
+                ctx.textAlign = 'left';
+                ctx.fillText('inventory', pt.x + 6, pt.y - 6);
+                ctx.fillText('liquidation', pt.x + 6, pt.y + 5);
+                ctx.restore();
+            }
+
+            const lastBar2 = meta0.data[11];
+            if (lastBar2) {
+                ctx.save();
+                ctx.fillStyle = '#999';
+                ctx.font = 'italic 10px ' + FONT;
+                ctx.textAlign = 'center';
+                const yScale = chart.scales.y;
+                const yPos = yScale.getPixelForValue(10.12) - 20;
+                ctx.fillText('pack year', lastBar2.x, yPos);
+                ctx.fillText('pending', lastBar2.x, yPos + 12);
+                ctx.restore();
+            }
+        }
+    }]
+});
+</script>
+</body>
+</html>

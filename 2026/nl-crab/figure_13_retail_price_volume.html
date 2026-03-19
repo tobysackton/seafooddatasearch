@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figure 12 — Fresh Crab at Retail: Price Up, Volume Down</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #fff;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            background: white;
+            padding: 28px 32px 20px;
+        }
+        .figure-number {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 4px;
+        }
+        .title {
+            text-align: center;
+            font-size: 21px;
+            font-weight: 700;
+            color: #222;
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 20px;
+        }
+        .chart-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .chart-panel {
+            position: relative;
+        }
+        .chart-panel h3 {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #2a5c8f;
+            margin-bottom: 8px;
+        }
+        .chart-wrap {
+            position: relative;
+            height: 300px;
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .metric {
+            text-align: center;
+            padding: 12px 8px;
+            border-radius: 8px;
+        }
+        .metric.red { background: #fef2f2; border: 1px solid #fecaca; }
+        .metric.green { background: #f0fdf4; border: 1px solid #bbf7d0; }
+        .metric.blue { background: #eff6ff; border: 1px solid #bfdbfe; }
+        .metric-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+        .metric.red .metric-value { color: #dc2626; }
+        .metric.green .metric-value { color: #16a34a; }
+        .metric.blue .metric-value { color: #2563eb; }
+        .metric-label { font-size: 0.65rem; color: #64748b; line-height: 1.3; text-transform: uppercase; letter-spacing: 0.03em; }
+        .summary-box {
+            background: #f5f7fa;
+            border: 1px solid #dde2e8;
+            border-left: 4px solid #2a5c8f;
+            border-radius: 0 5px 5px 0;
+            padding: 12px 16px;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: #333;
+            margin-bottom: 14px;
+        }
+        .source-line {
+            border-top: 1px solid #ddd;
+            margin-top: 14px;
+            padding-top: 8px;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="figure-number">Figure 12</div>
+    <div class="title">Fresh Crab at Retail: Price Up, Volume Down</div>
+    <div class="subtitle">Circana monthly fresh crab retail data, Jan 2021 – Feb 2026</div>
+
+    <div class="chart-row">
+        <div class="chart-panel">
+            <h3>Average Retail Price ($/lb)</h3>
+            <div class="chart-wrap"><canvas id="priceChart"></canvas></div>
+        </div>
+        <div class="chart-panel">
+            <h3>Monthly Dollar Sales ($M)</h3>
+            <div class="chart-wrap"><canvas id="salesChart"></canvas></div>
+        </div>
+    </div>
+
+    <div class="metrics">
+        <div class="metric red">
+            <div class="metric-value">$645M</div>
+            <div class="metric-label">Latest 12 mos dollar sales<br>(Mar 2025 – Feb 2026)</div>
+        </div>
+        <div class="metric green">
+            <div class="metric-value">$747M</div>
+            <div class="metric-label">Prior 12 mos dollar sales<br>(Mar 2024 – Feb 2025)</div>
+        </div>
+        <div class="metric red">
+            <div class="metric-value">-14%</div>
+            <div class="metric-label">Dollar sales decline<br>latest 12 vs prior 12 mos</div>
+        </div>
+        <div class="metric red">
+            <div class="metric-value">-25%</div>
+            <div class="metric-label">Volume decline<br>latest 12 vs prior 12 mos</div>
+        </div>
+        <div class="metric blue">
+            <div class="metric-value">+16%</div>
+            <div class="metric-label">Avg price change<br>$10.90 vs $9.42/lb</div>
+        </div>
+    </div>
+
+    <div class="summary-box">
+        Over the latest 12 months, fresh crab retail dollar sales fell 14% to $645 million while volume dropped 25%. The average retail price rose 16%, from $9.42 to $10.90/lb. The pattern is clear: as wholesale prices recovered through 2024 and 2025, retail prices followed, and consumers bought less. Dollar sales declined even with higher prices, meaning the volume loss more than offset the price increase. Crab is selling at prices that a shrinking share of consumers can afford, and retailers cannot justify promotional support at these levels. Without promotions, volume will continue to contract.
+    </div>
+
+    <div class="source-line">Source: Circana (formerly IRI/NPD) via Urner Barry, Total US Food retail, fresh crab, weekly data aggregated to monthly</div>
+</div>
+
+<script>
+const FONT = "'Calibri','Segoe UI','Helvetica Neue',sans-serif";
+
+const months = [
+    'Jan 21','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec',
+    'Jan 22','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec',
+    'Jan 23','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec',
+    'Jan 24','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec',
+    'Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec',
+    'Jan 26','Feb'
+];
+
+// Fresh crab avg retail price ($/lb)
+const freshPrice = [
+    10.94,10.80,10.95,11.36,11.93,12.30,12.65,12.84,13.00,13.10,13.83,14.32,
+    13.32,12.94,11.68,11.94,12.30,11.72,11.38,11.05,11.06,10.98,11.57,11.72,
+    10.92,9.56,10.13,9.87,9.67,9.65,9.01,9.41,9.01,8.95,9.45,9.81,
+    9.18,9.04,9.03,8.97,8.96,9.06,9.24,9.25,8.82,9.40,9.37,10.62,
+    9.97,10.29,10.03,10.02,10.52,10.09,10.32,10.43,10.46,11.01,11.67,12.63,
+    11.83,11.73
+];
+
+// Fresh crab total sales ($M)
+const freshSales = [
+    129.25,99.83,82.92,83.96,112.38,90.27,84.57,92.77,67.99,70.27,58.05,91.87,
+    94.17,61.19,54.36,52.08,73.02,63.49,89.15,68.02,63.45,77.05,56.85,88.56,
+    98.36,82.96,61.93,74.95,74.56,66.96,94.06,58.59,63.05,65.24,55.62,112.67,
+    58.14,66.41,68.38,49.56,64.24,79.53,61.62,53.61,69.16,44.04,49.85,98.83,
+    55.85,52.62,57.13,46.45,53.36,66.53,57.41,59.15,40.84,38.26,48.12,73.86,
+    54.18,49.97
+];
+
+// Price chart — single line, fresh crab only
+const ctx1 = document.getElementById('priceChart').getContext('2d');
+new Chart(ctx1, {
+    type: 'line',
+    data: {
+        labels: months,
+        datasets: [{
+            label: 'Fresh Crab $/lb',
+            data: freshPrice,
+            borderColor: '#2a5c8f',
+            backgroundColor: 'rgba(42,92,143,0.1)',
+            borderWidth: 2.5,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            fill: true,
+            tension: 0.3
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: '#fff', titleColor: '#222', bodyColor: '#555',
+                borderColor: '#ccc', borderWidth: 1,
+                titleFont: { size: 12, family: FONT }, bodyFont: { size: 11, family: FONT },
+                padding: 10,
+                callbacks: {
+                    label: function(ctx) { return 'Fresh Crab: $' + ctx.raw.toFixed(2) + '/lb'; }
+                }
+            }
+        },
+        scales: {
+            x: {
+                grid: { display: false },
+                ticks: {
+                    font: { size: 9, family: FONT }, color: '#888',
+                    maxRotation: 0,
+                    callback: function(val, idx) {
+                        const l = months[idx];
+                        if (l.includes('Jan')) return l;
+                        return '';
+                    }
+                }
+            },
+            y: {
+                title: { display: true, text: '$/lb', font: { size: 12, family: FONT }, color: '#777' },
+                grid: { color: '#e8e8e8', borderDash: [3, 3] },
+                ticks: {
+                    font: { size: 11, family: FONT }, color: '#777',
+                    callback: function(v) { return '$' + v; }
+                },
+                min: 7, max: 15
+            }
+        }
+    }
+});
+
+// Sales chart — single series, fresh crab only
+const ctx2 = document.getElementById('salesChart').getContext('2d');
+new Chart(ctx2, {
+    type: 'bar',
+    data: {
+        labels: months,
+        datasets: [{
+            label: 'Fresh Crab Sales',
+            data: freshSales,
+            backgroundColor: 'rgba(42,92,143,0.6)',
+            borderColor: '#2a5c8f',
+            borderWidth: 0.5,
+            borderRadius: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: '#fff', titleColor: '#222', bodyColor: '#555',
+                borderColor: '#ccc', borderWidth: 1,
+                titleFont: { size: 12, family: FONT }, bodyFont: { size: 11, family: FONT },
+                padding: 10,
+                callbacks: {
+                    label: function(ctx) { return 'Sales: $' + ctx.raw.toFixed(1) + 'M'; }
+                }
+            }
+        },
+        scales: {
+            x: {
+                grid: { display: false },
+                ticks: {
+                    font: { size: 9, family: FONT }, color: '#888',
+                    maxRotation: 0,
+                    callback: function(val, idx) {
+                        const l = months[idx];
+                        if (l.includes('Jan')) return l;
+                        return '';
+                    }
+                }
+            },
+            y: {
+                title: { display: true, text: '$M', font: { size: 12, family: FONT }, color: '#777' },
+                grid: { color: '#e8e8e8', borderDash: [3, 3] },
+                ticks: {
+                    font: { size: 11, family: FONT }, color: '#777',
+                    callback: function(v) { return '$' + v + 'M'; }
+                },
+                min: 0, max: 140
+            }
+        }
+    }
+});
+</script>
+</body>
+</html>

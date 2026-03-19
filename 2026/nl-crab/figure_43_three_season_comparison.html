@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Figure 62: Pre-Season Quotes vs Prior Season Averages</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif; background: #fff; padding: 20px; color: #333; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+        .figure-number { text-align: center; font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+        .title { text-align: center; font-size: 21px; font-weight: 700; color: #222; margin-bottom: 4px; }
+        .subtitle { text-align: center; font-size: 14px; color: #777; margin-bottom: 20px; }
+        .chart-container { position: relative; height: 480px; margin-bottom: 20px; }
+        .stats-row { display: flex; justify-content: center; gap: 28px; margin-bottom: 16px; flex-wrap: wrap; }
+        .stat-box { text-align: center; padding: 10px 18px; border: 1px solid #dde2e8; border-radius: 5px; background: #f9fafb; min-width: 140px; }
+        .stat-value { font-size: 22px; font-weight: 700; }
+        .stat-label { font-size: 12px; color: #777; margin-top: 2px; }
+        .summary-box { background: #f5f7fa; border: 1px solid #dde2e8; border-left: 4px solid #2a5c8f; border-radius: 0 5px 5px 0; padding: 14px 18px; font-size: 13.5px; line-height: 1.55; color: #333; margin-bottom: 14px; }
+        .source-line { border-top: 1px solid #ddd; margin-top: 14px; padding-top: 8px; font-size: 12px; color: #999; }
+        .tooltip-outer { position: absolute; pointer-events: none; z-index: 100; background: white; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.14); padding: 14px 18px; min-width: 280px; display: none; font-size: 13px; }
+        .tooltip-header { font-size: 16px; font-weight: 700; color: #222; border-bottom: 2px solid #5b9bd5; padding-bottom: 6px; margin-bottom: 8px; }
+        .tooltip-row { display: flex; justify-content: space-between; padding: 3px 0; }
+        .tooltip-label { color: #555; }
+        .tooltip-value { font-weight: 600; font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="figure-number">Figure 62</div>
+    <div class="title">Where 2026 Stands: Pre-Season Quotes vs Prior Seasons</div>
+    <div class="subtitle">UB NL 5-8 oz sections ($/lb), monthly average by pack year month | Three-season comparison</div>
+
+    <div class="stats-row">
+        <div class="stat-box">
+            <div class="stat-value" style="color:#bfbfbf">$4.98</div>
+            <div class="stat-label">PY2023 VW Apr-Jul</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-value" style="color:#5b9bd5">$6.02</div>
+            <div class="stat-label">PY2024 VW Apr-Jul</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-value" style="color:#2a5c8f">$8.24</div>
+            <div class="stat-label">PY2025 VW Apr-Jul</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-value" style="color:#d94801">$10.75</div>
+            <div class="stat-label">Current Quote (Mar 2026)</div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="seasonChart"></canvas>
+        <div class="tooltip-outer" id="tooltip62"></div>
+    </div>
+
+    <div class="summary-box">
+        <strong>The buyer's dilemma.</strong> Current pre-season UB quotes for NL 5-8 oz sections 
+        stand at $10.75/lb, 30% above the PY2025 volume-weighted buying price of $8.24 and 79% 
+        above PY2024's $6.02. The three-season overlay shows the escalation: PY2023 traded in a 
+        narrow $4.69 to $5.75 band, PY2024 opened similarly but climbed steadily through the 
+        off-season, and PY2025 opened higher still and never pulled back. The question for PY2026 
+        is whether the season opening brings the typical reversion from off-season levels, or 
+        whether the structural tightness (no inventory, reduced quota) sustains the elevated pricing. 
+        The Section 9 model points to a season opener in the $8.50 to $9.50 range, which would 
+        represent a pullback from $10.75 but an increase over last year's $8.24 buying price.
+    </div>
+    <div class="source-line">Source: Seafood Datasearch from Urner Barry</div>
+</div>
+
+<script>
+const DATA = {"seasons": [{"py": 2023, "label": "PY2023", "color": "#bfbfbf", "months": [{"month": "Apr", "season_idx": 0, "price": 5.18}, {"month": "May", "season_idx": 1, "price": 4.69}, {"month": "Jun", "season_idx": 2, "price": 4.98}, {"month": "Jul", "season_idx": 3, "price": 5.37}, {"month": "Aug", "season_idx": 4, "price": 5.75}, {"month": "Sep", "season_idx": 5, "price": 5.75}, {"month": "Oct", "season_idx": 6, "price": 5.75}, {"month": "Nov", "season_idx": 7, "price": 5.61}, {"month": "Dec", "season_idx": 8, "price": 5.32}, {"month": "Jan", "season_idx": 9, "price": 5.4}, {"month": "Feb", "season_idx": 10, "price": 5.45}, {"month": "Mar", "season_idx": 11, "price": 5.45}], "vw_apr_jul": 4.98, "simple_avg": 5.05}, {"py": 2024, "label": "PY2024", "color": "#5b9bd5", "months": [{"month": "Apr", "season_idx": 0, "price": 5.7}, {"month": "May", "season_idx": 1, "price": 6.19}, {"month": "Jun", "season_idx": 2, "price": 6.06}, {"month": "Jul", "season_idx": 3, "price": 6.05}, {"month": "Aug", "season_idx": 4, "price": 6.1}, {"month": "Sep", "season_idx": 5, "price": 6.77}, {"month": "Oct", "season_idx": 6, "price": 7.54}, {"month": "Nov", "season_idx": 7, "price": 8.21}, {"month": "Dec", "season_idx": 8, "price": 8.4}, {"month": "Jan", "season_idx": 9, "price": 8.64}, {"month": "Feb", "season_idx": 10, "price": 9.11}, {"month": "Mar", "season_idx": 11, "price": 9.25}], "vw_apr_jul": 6.02, "simple_avg": 6.0}, {"py": 2025, "label": "PY2025/26", "color": "#2a5c8f", "months": [{"month": "Apr", "season_idx": 0, "price": 8.05}, {"month": "May", "season_idx": 1, "price": 8.06}, {"month": "Jun", "season_idx": 2, "price": 8.16}, {"month": "Jul", "season_idx": 3, "price": 8.9}, {"month": "Aug", "season_idx": 4, "price": 9.48}, {"month": "Sep", "season_idx": 5, "price": 9.5}, {"month": "Oct", "season_idx": 6, "price": 9.5}, {"month": "Nov", "season_idx": 7, "price": 9.5}, {"month": "Dec", "season_idx": 8, "price": 9.66}, {"month": "Jan", "season_idx": 9, "price": 10.1}, {"month": "Feb", "season_idx": 10, "price": 10.44}, {"month": "Mar", "season_idx": 11, "price": 10.68}], "vw_apr_jul": 8.24, "simple_avg": 8.29}], "current_quote": 10.75, "current_date": "March 9, 2026"};
+
+const MONTH_LABELS = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
+
+const datasets = DATA.seasons.map(s => ({
+    label: s.label + (s.vw_apr_jul ? ' (VW: $' + s.vw_apr_jul.toFixed(2) + ')' : ''),
+    data: MONTH_LABELS.map((_, i) => {
+        const m = s.months.find(m => m.season_idx === i);
+        return m ? m.price : null;
+    }),
+    borderColor: s.color,
+    backgroundColor: s.color,
+    borderWidth: s.py === 2025 ? 3 : 2,
+    pointRadius: s.py === 2025 ? 5 : 4,
+    pointBackgroundColor: s.color,
+    pointBorderColor: '#fff',
+    pointBorderWidth: 1.5,
+    pointHoverRadius: 7,
+    spanGaps: true,
+    tension: 0.1,
+}));
+
+const ctx = document.getElementById('seasonChart').getContext('2d');
+
+// Annotation for current quote and model forecast range
+const annotations = {
+    currentQuote: {
+        type: 'line',
+        yMin: DATA.current_quote,
+        yMax: DATA.current_quote,
+        borderColor: '#d94801',
+        borderWidth: 2,
+        borderDash: [8, 4],
+        label: {
+            display: true,
+            content: 'Current: $' + DATA.current_quote.toFixed(2),
+            position: 'end',
+            backgroundColor: '#d94801',
+            color: 'white',
+            font: { size: 11, weight: 'bold' },
+            padding: 4,
+        }
+    },
+    forecastMid: {
+        type: 'box',
+        yMin: 8.50,
+        yMax: 9.50,
+        xMin: 0,
+        xMax: 2,
+        backgroundColor: 'rgba(42, 92, 143, 0.12)',
+        borderColor: '#2a5c8f',
+        borderWidth: 1,
+        borderDash: [4, 4],
+        label: {
+            display: true,
+            content: 'Model forecast: $8.50-$9.50',
+            position: { x: 'center', y: 'center' },
+            color: '#2a5c8f',
+            font: { size: 11, weight: 'bold' },
+            padding: 6,
+            backgroundColor: 'rgba(255,255,255,0.85)',
+            borderRadius: 3,
+        }
+    },
+};
+
+const chart = new Chart(ctx, {
+    type: 'line',
+    data: { labels: MONTH_LABELS, datasets: datasets },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+            legend: {
+                display: true, position: 'top',
+                labels: { usePointStyle: true, padding: 16, font: { size: 13 }, color: '#555' }
+            },
+            annotation: { annotations: annotations },
+            tooltip: {
+                enabled: false,
+                external: function(context) {
+                    const tip = document.getElementById('tooltip62');
+                    if (context.tooltip.opacity === 0) { tip.style.display = 'none'; return; }
+                    const idx = context.tooltip.dataPoints[0].dataIndex;
+                    const monthName = MONTH_LABELS[idx];
+                    
+                    let h = '<div class="tooltip-header">' + monthName + '</div>';
+                    DATA.seasons.forEach(s => {
+                        const m = s.months.find(m => m.season_idx === idx);
+                        if (m) {
+                            h += '<div class="tooltip-row">';
+                            h += '<span class="tooltip-label"><span style="display:inline-block;width:10px;height:10px;background:' + s.color + ';border-radius:2px;margin-right:6px"></span>' + s.label + '</span>';
+                            h += '<span class="tooltip-value" style="color:' + s.color + '">$' + m.price.toFixed(2) + '</span></div>';
+                        }
+                    });
+                    
+                    // Show year-over-year changes
+                    const py25 = DATA.seasons.find(s => s.py === 2025);
+                    const py24 = DATA.seasons.find(s => s.py === 2024);
+                    const m25 = py25 ? py25.months.find(m => m.season_idx === idx) : null;
+                    const m24 = py24 ? py24.months.find(m => m.season_idx === idx) : null;
+                    if (m25 && m24) {
+                        const chg = ((m25.price - m24.price) / m24.price * 100).toFixed(1);
+                        h += '<div style="border-top:1px solid #eee;margin-top:6px;padding-top:6px">';
+                        h += '<div class="tooltip-row"><span class="tooltip-label">PY2025 vs PY2024</span>';
+                        h += '<span class="tooltip-value" style="color:' + (chg > 0 ? '#d94801' : '#22c55e') + '">' + (chg > 0 ? '+' : '') + chg + '%</span></div></div>';
+                    }
+                    
+                    tip.innerHTML = h;
+                    tip.style.display = 'block';
+                    let left = context.tooltip.caretX + 15;
+                    if (left + 300 > context.chart.chartArea.right + 80) left = context.tooltip.caretX - 310;
+                    tip.style.left = left + 'px';
+                    tip.style.top = Math.max(10, context.tooltip.caretY - 60) + 'px';
+                }
+            },
+        },
+        scales: {
+            x: { grid: { display: false }, ticks: { font: { size: 13 }, color: '#444' } },
+            y: {
+                min: 3, max: 12,
+                grid: { color: '#e8e8e8', drawBorder: false },
+                ticks: { font: { size: 13 }, color: '#777', callback: v => '$' + v, stepSize: 1 },
+                title: { display: true, text: 'UB NL 5-8 oz Price ($/lb)', font: { size: 13 }, color: '#777' }
+            }
+        }
+    }
+});
+</script>
+</body>
+</html>

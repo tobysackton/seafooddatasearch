@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 30: Gulf vs NL 5-8 Price Differential</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+    background: #fff; color: #333; padding: 24px; max-width: 1100px; margin: 0 auto;
+  }
+  .title-block { text-align: center; margin-bottom: 18px; }
+  .figure-number { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+  .title { font-size: 21px; font-weight: 700; color: #222; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #777; line-height: 1.4; }
+  .chart-container { position: relative; width: 100%; height: 460px; margin-bottom: 16px; }
+  .legend-row { display: flex; justify-content: center; gap: 22px; flex-wrap: wrap; margin-bottom: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; }
+  .legend-line { width: 24px; height: 3px; border-radius: 1px; }
+  .legend-bar { width: 14px; height: 14px; border-radius: 2px; }
+  .summary-box {
+    background: #f5f7fa; border: 1px solid #dde2e8; border-left: 4px solid #2a5c8f;
+    border-radius: 0 5px 5px 0; padding: 14px 18px; margin: 16px 0;
+    font-size: 13.5px; line-height: 1.55; color: #333;
+  }
+  .source-line {
+    border-top: 1px solid #ddd; margin-top: 14px; padding-top: 8px;
+    font-size: 12px; color: #999; line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="title-block">
+  <div class="figure-number">Figure 30</div>
+  <div class="title">Gulf vs. NL 5-8 oz Price Differential</div>
+  <div class="subtitle">Monthly Urner Barry Low Quotation EBP &bull; January 2015 through March 2026</div>
+</div>
+
+<div class="legend-row">
+  <div class="legend-item"><div class="legend-line" style="background:#5b9bd5;"></div> NL 5-8 oz ($/lb)</div>
+  <div class="legend-item"><div class="legend-line" style="background:#e8c44a;"></div> Gulf 5-8 oz ($/lb)</div>
+  <div class="legend-item"><div class="legend-bar" style="background:#bfbfbf;"></div> Spread: Gulf minus NL ($/lb)</div>
+</div>
+
+<div class="chart-container">
+  <canvas id="diffChart"></canvas>
+</div>
+
+<div class="summary-box">
+  <strong>The Gulf premium over NL 5-8 on the UB Low quotation has been modest over the full 2015&ndash;2026 period,</strong> averaging $0.18/lb overall but widening materially in the 2023&ndash;2024 cycle as Gulf supply tightened relative to NL. In 2025 the spread averaged $0.54/lb, reflecting the Gulf&rsquo;s differentiated position in foodservice and Asian channels. In 2026, proportional quota cuts to both regions are forecast to stabilize the Gulf&rsquo;s share of combined supply rather than expand it, and we expect the premium to moderate.
+</div>
+
+<div class="source-line">
+  Source: Seafood Datasearch from Urner Barry, NL 5-8 oz and Gulf 5-8 oz Low Quotation monthly EBP
+</div>
+
+<script>
+const RAW = [{"date": "2015-01-01", "nl58": 5.25, "gulf58": 5.35, "spread": 0.1}, {"date": "2015-02-01", "nl58": 5.21, "gulf58": 5.31, "spread": 0.1}, {"date": "2015-03-01", "nl58": 5.14, "gulf58": 5.2, "spread": 0.06}, {"date": "2015-04-01", "nl58": 4.98, "gulf58": 5.07, "spread": 0.09}, {"date": "2015-05-01", "nl58": 4.78, "gulf58": 4.9, "spread": 0.12}, {"date": "2015-06-01", "nl58": 4.89, "gulf58": 4.99, "spread": 0.1}, {"date": "2015-07-01", "nl58": 4.95, "gulf58": 5.0, "spread": 0.05}, {"date": "2015-08-01", "nl58": 4.92, "gulf58": 4.96, "spread": 0.04}, {"date": "2015-09-01", "nl58": 4.9, "gulf58": 4.95, "spread": 0.05}, {"date": "2015-10-01", "nl58": 4.95, "gulf58": 5.0, "spread": 0.05}, {"date": "2015-11-01", "nl58": 5.06, "gulf58": 5.12, "spread": 0.06}, {"date": "2015-12-01", "nl58": 5.17, "gulf58": 5.24, "spread": 0.07}, {"date": "2016-01-01", "nl58": 5.34, "gulf58": 5.44, "spread": 0.1}, {"date": "2016-02-01", "nl58": 5.62, "gulf58": 5.73, "spread": 0.11}, {"date": "2016-04-01", "nl58": 5.8, "gulf58": 5.9, "spread": 0.1}, {"date": "2016-05-01", "nl58": 5.89, "gulf58": 6.0, "spread": 0.11}, {"date": "2016-06-01", "nl58": 6.47, "gulf58": 6.53, "spread": 0.06}, {"date": "2016-07-01", "nl58": 6.66, "gulf58": 6.76, "spread": 0.1}, {"date": "2016-08-01", "nl58": 6.85, "gulf58": 6.95, "spread": 0.1}, {"date": "2016-09-01", "nl58": 7.12, "gulf58": 7.25, "spread": 0.13}, {"date": "2016-10-01", "nl58": 7.54, "gulf58": 7.64, "spread": 0.1}, {"date": "2016-11-01", "nl58": 7.93, "gulf58": 8.03, "spread": 0.1}, {"date": "2016-12-01", "nl58": 7.95, "gulf58": 8.05, "spread": 0.1}, {"date": "2017-01-01", "nl58": 7.95, "gulf58": 8.05, "spread": 0.1}, {"date": "2017-02-01", "nl58": 7.95, "gulf58": 8.05, "spread": 0.1}, {"date": "2017-03-01", "nl58": 7.95, "gulf58": 8.14, "spread": 0.19}, {"date": "2017-05-01", "nl58": 7.18, "gulf58": 7.27, "spread": 0.09}, {"date": "2017-06-01", "nl58": 7.41, "gulf58": 7.49, "spread": 0.08}, {"date": "2017-07-01", "nl58": 7.88, "gulf58": 7.98, "spread": 0.1}, {"date": "2017-08-01", "nl58": 8.1, "gulf58": 8.2, "spread": 0.1}, {"date": "2017-09-01", "nl58": 8.1, "gulf58": 8.2, "spread": 0.1}, {"date": "2017-10-01", "nl58": 8.1, "gulf58": 8.2, "spread": 0.1}, {"date": "2017-11-01", "nl58": 8.1, "gulf58": 8.2, "spread": 0.1}, {"date": "2017-12-01", "nl58": 8.1, "gulf58": 8.2, "spread": 0.1}, {"date": "2018-01-01", "nl58": 8.1, "gulf58": 8.2, "spread": 0.1}, {"date": "2018-02-01", "nl58": 8.1, "gulf58": 8.2, "spread": 0.1}, {"date": "2018-03-01", "nl58": 7.97, "gulf58": 8.08, "spread": 0.11}, {"date": "2018-04-01", "nl58": 7.95, "gulf58": 8.05, "spread": 0.1}, {"date": "2018-05-01", "nl58": 8.84, "gulf58": 8.83, "spread": -0.01}, {"date": "2018-06-01", "nl58": 9.1, "gulf58": 9.13, "spread": 0.03}, {"date": "2018-07-01", "nl58": 9.07, "gulf58": 9.14, "spread": 0.07}, {"date": "2018-08-01", "nl58": 8.81, "gulf58": 8.87, "spread": 0.06}, {"date": "2018-09-01", "nl58": 8.75, "gulf58": 8.8, "spread": 0.05}, {"date": "2018-10-01", "nl58": 8.75, "gulf58": 8.8, "spread": 0.05}, {"date": "2018-11-01", "nl58": 8.75, "gulf58": 8.8, "spread": 0.05}, {"date": "2018-12-01", "nl58": 8.75, "gulf58": 8.8, "spread": 0.05}, {"date": "2019-01-01", "nl58": 8.56, "gulf58": 8.63, "spread": 0.07}, {"date": "2019-02-01", "nl58": 8.63, "gulf58": 8.64, "spread": 0.01}, {"date": "2019-03-01", "nl58": 8.74, "gulf58": 8.81, "spread": 0.07}, {"date": "2019-04-01", "nl58": 8.64, "gulf58": 8.78, "spread": 0.14}, {"date": "2019-05-01", "nl58": 8.04, "gulf58": 8.22, "spread": 0.18}, {"date": "2019-06-01", "nl58": 8.28, "gulf58": 8.34, "spread": 0.06}, {"date": "2019-07-01", "nl58": 8.4, "gulf58": 8.5, "spread": 0.1}, {"date": "2019-08-01", "nl58": 8.43, "gulf58": 8.53, "spread": 0.1}, {"date": "2019-09-01", "nl58": 8.56, "gulf58": 8.66, "spread": 0.1}, {"date": "2019-10-01", "nl58": 8.8, "gulf58": 8.89, "spread": 0.09}, {"date": "2019-11-01", "nl58": 8.97, "gulf58": 9.04, "spread": 0.07}, {"date": "2019-12-01", "nl58": 9.18, "gulf58": 9.28, "spread": 0.1}, {"date": "2020-01-01", "nl58": 9.26, "gulf58": 9.35, "spread": 0.09}, {"date": "2020-02-01", "nl58": 9.3, "gulf58": 9.4, "spread": 0.1}, {"date": "2020-05-01", "nl58": 6.9, "gulf58": 6.95, "spread": 0.05}, {"date": "2020-06-01", "nl58": 7.82, "gulf58": 7.62, "spread": -0.2}, {"date": "2020-07-01", "nl58": 9.22, "gulf58": 9.27, "spread": 0.05}, {"date": "2020-08-01", "nl58": 9.28, "gulf58": 9.38, "spread": 0.1}, {"date": "2020-09-01", "nl58": 9.58, "gulf58": 9.68, "spread": 0.1}, {"date": "2020-10-01", "nl58": 9.77, "gulf58": 9.82, "spread": 0.05}, {"date": "2020-11-01", "nl58": 9.9, "gulf58": 10.0, "spread": 0.1}, {"date": "2020-12-01", "nl58": 9.9, "gulf58": 10.0, "spread": 0.1}, {"date": "2021-01-01", "nl58": 9.9, "gulf58": 10.0, "spread": 0.1}, {"date": "2021-05-01", "nl58": 13.11, "gulf58": 13.18, "spread": 0.07}, {"date": "2021-06-01", "nl58": 14.88, "gulf58": 15.08, "spread": 0.2}, {"date": "2021-07-01", "nl58": 16.24, "gulf58": 16.36, "spread": 0.12}, {"date": "2021-08-01", "nl58": 16.4, "gulf58": 16.5, "spread": 0.1}, {"date": "2021-09-01", "nl58": 16.4, "gulf58": 16.5, "spread": 0.1}, {"date": "2021-10-01", "nl58": 16.56, "gulf58": 16.66, "spread": 0.1}, {"date": "2021-11-01", "nl58": 16.79, "gulf58": 16.9, "spread": 0.11}, {"date": "2021-12-01", "nl58": 16.8, "gulf58": 16.9, "spread": 0.1}, {"date": "2022-01-01", "nl58": 16.8, "gulf58": 16.9, "spread": 0.1}, {"date": "2022-02-01", "nl58": 16.42, "gulf58": 16.52, "spread": 0.1}, {"date": "2022-03-01", "nl58": 15.41, "gulf58": 15.5, "spread": 0.09}, {"date": "2022-04-01", "nl58": 12.07, "gulf58": 12.08, "spread": 0.01}, {"date": "2022-05-01", "nl58": 10.41, "gulf58": 10.53, "spread": 0.12}, {"date": "2022-06-01", "nl58": 8.48, "gulf58": 8.71, "spread": 0.23}, {"date": "2022-07-01", "nl58": 7.53, "gulf58": 7.63, "spread": 0.1}, {"date": "2022-08-01", "nl58": 7.05, "gulf58": 7.15, "spread": 0.1}, {"date": "2022-09-01", "nl58": 7.26, "gulf58": 7.4, "spread": 0.14}, {"date": "2022-10-01", "nl58": 7.84, "gulf58": 7.99, "spread": 0.15}, {"date": "2022-11-01", "nl58": 7.9, "gulf58": 8.05, "spread": 0.15}, {"date": "2022-12-01", "nl58": 7.77, "gulf58": 7.91, "spread": 0.14}, {"date": "2023-01-01", "nl58": 7.27, "gulf58": 7.4, "spread": 0.13}, {"date": "2023-02-01", "nl58": 6.91, "gulf58": 7.1, "spread": 0.19}, {"date": "2023-03-01", "nl58": 6.07, "gulf58": 6.21, "spread": 0.14}, {"date": "2023-04-01", "nl58": 5.17, "gulf58": 5.24, "spread": 0.07}, {"date": "2023-05-01", "nl58": 4.65, "gulf58": 4.85, "spread": 0.2}, {"date": "2023-06-01", "nl58": 4.97, "gulf58": 5.05, "spread": 0.08}, {"date": "2023-07-01", "nl58": 5.29, "gulf58": 5.42, "spread": 0.13}, {"date": "2023-08-01", "nl58": 5.74, "gulf58": 5.84, "spread": 0.1}, {"date": "2023-09-01", "nl58": 5.75, "gulf58": 5.85, "spread": 0.1}, {"date": "2023-10-01", "nl58": 5.75, "gulf58": 5.85, "spread": 0.1}, {"date": "2023-11-01", "nl58": 5.63, "gulf58": 5.85, "spread": 0.22}, {"date": "2023-12-01", "nl58": 5.32, "gulf58": 5.85, "spread": 0.53}, {"date": "2024-01-01", "nl58": 5.4, "gulf58": 5.94, "spread": 0.54}, {"date": "2024-02-01", "nl58": 5.45, "gulf58": 6.0, "spread": 0.55}, {"date": "2024-03-01", "nl58": 5.45, "gulf58": 6.0, "spread": 0.55}, {"date": "2024-04-01", "nl58": 5.64, "gulf58": 6.31, "spread": 0.67}, {"date": "2024-05-01", "nl58": 6.19, "gulf58": 6.54, "spread": 0.35}, {"date": "2024-06-01", "nl58": 6.06, "gulf58": 6.6, "spread": 0.54}, {"date": "2024-07-01", "nl58": 6.05, "gulf58": 6.6, "spread": 0.55}, {"date": "2024-08-01", "nl58": 6.09, "gulf58": 6.6, "spread": 0.51}, {"date": "2024-09-01", "nl58": 6.67, "gulf58": 6.85, "spread": 0.18}, {"date": "2024-10-01", "nl58": 7.46, "gulf58": 7.56, "spread": 0.1}, {"date": "2024-11-01", "nl58": 8.21, "gulf58": 8.33, "spread": 0.12}, {"date": "2024-12-01", "nl58": 8.38, "gulf58": 8.62, "spread": 0.24}, {"date": "2025-01-01", "nl58": 8.62, "gulf58": 8.82, "spread": 0.2}, {"date": "2025-02-01", "nl58": 9.11, "gulf58": 9.23, "spread": 0.12}, {"date": "2025-03-01", "nl58": 9.25, "gulf58": 9.5, "spread": 0.25}, {"date": "2025-04-01", "nl58": 8.03, "gulf58": 9.5, "spread": 1.47}, {"date": "2025-05-01", "nl58": 8.07, "gulf58": 9.46, "spread": 1.39}, {"date": "2025-06-01", "nl58": 8.1, "gulf58": 9.21, "spread": 1.11}, {"date": "2025-07-01", "nl58": 8.79, "gulf58": 9.43, "spread": 0.64}, {"date": "2025-08-01", "nl58": 9.48, "gulf58": 9.9, "spread": 0.42}, {"date": "2025-09-01", "nl58": 9.5, "gulf58": 10.05, "spread": 0.55}, {"date": "2025-10-01", "nl58": 9.5, "gulf58": 10.04, "spread": 0.54}, {"date": "2025-11-01", "nl58": 9.5, "gulf58": 9.95, "spread": 0.45}, {"date": "2025-12-01", "nl58": 9.66, "gulf58": 9.95, "spread": 0.29}, {"date": "2026-01-01", "nl58": 10.11, "gulf58": 10.21, "spread": 0.1}, {"date": "2026-02-01", "nl58": 10.44, "gulf58": 10.58, "spread": 0.14}, {"date": "2026-03-01", "nl58": 10.5, "gulf58": 11.0, "spread": 0.5}];
+
+const labels = RAW.map(d => d.date);
+const nl58 = RAW.map(d => d.nl58);
+const gulf58 = RAW.map(d => d.gulf58);
+const spread = RAW.map(d => Math.max(0, d.spread));
+
+const ctx = document.getElementById('diffChart').getContext('2d');
+
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Spread',
+        data: spread,
+        backgroundColor: 'rgba(191,191,191,0.5)',
+        borderColor: '#bfbfbf',
+        borderWidth: 1,
+        yAxisID: 'ySpread',
+        order: 3
+      },
+      {
+        label: 'NL 5-8 oz',
+        data: nl58,
+        type: 'line',
+        borderColor: '#5b9bd5',
+        backgroundColor: '#5b9bd5',
+        borderWidth: 2.5,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        tension: 0.15,
+        yAxisID: 'yPrice',
+        order: 1
+      },
+      {
+        label: 'Gulf 5-8 oz',
+        data: gulf58,
+        type: 'line',
+        borderColor: '#e8c44a',
+        backgroundColor: '#e8c44a',
+        borderWidth: 2.5,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        tension: 0.15,
+        yAxisID: 'yPrice',
+        order: 2
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 0 },
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#fff',
+        titleColor: '#222',
+        bodyColor: '#555',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        cornerRadius: 6,
+        padding: 12,
+        titleFont: { size: 14, weight: 'bold', family: "'Calibri','Segoe UI',sans-serif" },
+        bodyFont: { size: 13, family: "'Calibri','Segoe UI',sans-serif" },
+        callbacks: {
+          title: function(items) {
+            const d = new Date(items[0].label);
+            return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+          },
+          label: function(ctx) {
+            if (ctx.datasetIndex === 0) return 'Spread: $' + ctx.parsed.y.toFixed(2) + '/lb';
+            return ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(2) + '/lb';
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: {
+          font: { size: 11, family: "'Calibri','Segoe UI',sans-serif" },
+          color: '#444',
+          maxRotation: 0,
+          callback: function(val, idx) {
+            const dateStr = this.getLabelForValue(val);
+            const d = new Date(dateStr);
+            if (d.getMonth() === 0 || d.getMonth() === 6) {
+              return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+            }
+            return '';
+          },
+          autoSkip: true,
+          maxTicksLimit: 24
+        }
+      },
+      yPrice: {
+        type: 'linear', position: 'left',
+        beginAtZero: true, max: 18,
+        grid: { color: '#e8e8e8', drawBorder: false },
+        ticks: {
+          font: { size: 13, family: "'Calibri','Segoe UI',sans-serif" },
+          color: '#777',
+          callback: v => '$' + v
+        },
+        title: {
+          display: true, text: 'Price ($/lb)',
+          font: { size: 13, family: "'Calibri','Segoe UI',sans-serif" }, color: '#777'
+        }
+      },
+      ySpread: {
+        type: 'linear', position: 'right',
+        beginAtZero: true, max: 2,
+        grid: { drawOnChartArea: false },
+        ticks: {
+          font: { size: 13, weight: '600', family: "'Calibri','Segoe UI',sans-serif" },
+          color: '#888',
+          callback: v => '$' + v.toFixed(1)
+        },
+        title: {
+          display: true, text: 'Spread ($/lb)',
+          font: { size: 13, family: "'Calibri','Segoe UI',sans-serif" }, color: '#888'
+        }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

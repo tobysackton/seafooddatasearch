@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Figure 24: Foodservice Growth Normalizes Above Grocery</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Calibri, 'Segoe UI', sans-serif; background: #f8f9fa; padding: 32px; }
+  .panel { background: white; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    padding: 32px; max-width: 960px; margin: 0 auto; }
+  h2 { font-size: 17px; color: #1a3a5c; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #888; margin-bottom: 20px; line-height: 1.5; }
+  .source { font-size: 11px; color: #999; font-style: italic; margin-top: 12px; text-align: right; }
+  .callouts { display: flex; gap: 16px; margin-bottom: 20px; }
+  .callout { flex: 1 1 0; min-width: 0; padding: 12px 16px; border-radius: 6px; text-align: center; }
+  .callout .label { font-size: 11px; text-transform: uppercase; color: #666;
+    letter-spacing: 0.4px; white-space: normal; word-break: break-word; line-height: 1.4; }
+  .callout .val { font-size: 20px; font-weight: 700; margin: 4px 0; white-space: normal; word-break: break-all; }
+  .callout .detail { font-size: 11px; color: #888; white-space: normal; word-break: break-word; }
+  .c-orange { background: #fff3cd; } .c-orange .val { color: #856404; }
+  .c-blue   { background: #e8f0fe; } .c-blue .val   { color: #1a3a5c; }
+  .c-green  { background: #d4edda; } .c-green .val  { color: #155724; }
+  canvas { max-height: 400px; }
+</style>
+</head>
+<body>
+<div class="panel">
+  <h2>Figure 24: Foodservice Growth Normalizes Above Grocery, 2019–2025</h2>
+  <div class="subtitle">Year-over-year sales growth (%) — Food Services &amp; Drinking Places vs Grocery Stores. After the post-pandemic surge, foodservice growth decelerated but stabilized in 2025 at 5.6% — still outpacing grocery's 2.7%. The gap has not closed. Foodservice continues on a faster growth path than retail grocery, driven by higher-income consumers who maintained dining-out habits through the inflation period.</div>
+  <div class="callouts">
+    <div class="callout c-orange">
+      <div class="label">Foodservice Growth 2025</div>
+      <div class="val">+5.6%</div>
+      <div class="detail">Stabilized — same as 2019 baseline</div>
+    </div>
+    <div class="callout c-blue">
+      <div class="label">Grocery Growth 2025</div>
+      <div class="val">+2.7%</div>
+      <div class="detail">Steady but slower since 2022</div>
+    </div>
+    <div class="callout c-green">
+      <div class="label">FS Growth Premium</div>
+      <div class="val">+2.9 pts</div>
+      <div class="detail">Normalized gap vs +9 pts in 2023</div>
+    </div>
+  </div>
+  <canvas id="chart"></canvas>
+  <div class="source">Source: U.S. Census Bureau via FRED — RSFSDP (Food Services &amp; Drinking Places), MRTSSM4451USN (Grocery Stores) / Seafood Datasearch</div>
+</div>
+<script>
+const fsRaw   = { 2018: 717354, 2019: 757792, 2020: 642417, 2021: 823897, 2022: 956401, 2023: 1066809, 2024: 1119567, 2025: 1181837 };
+const grocRaw = { 2018: 668136, 2019: 690828, 2020: 756300, 2021: 790027, 2022: 854434, 2023: 873641, 2024: 891279, 2025: 915111 };
+const years = [2019, 2020, 2021, 2022, 2023, 2024, 2025];
+function yoy(data, yr) { return +((data[yr] - data[yr-1]) / data[yr-1] * 100).toFixed(1); }
+const fsGrowth   = years.map(y => yoy(fsRaw, y));
+const grocGrowth = years.map(y => yoy(grocRaw, y));
+new Chart(document.getElementById('chart'), {
+  type: 'bar',
+  data: {
+    labels: years.map(String),
+    datasets: [
+      { label: 'Foodservice YoY Growth %', data: fsGrowth,
+        backgroundColor: years.map(y => y === 2020 ? 'rgba(230,126,34,0.35)' : 'rgba(230,126,34,0.80)'),
+        borderColor: '#e67e22', borderWidth: 1.5, borderRadius: 3, order: 2 },
+      { label: 'Grocery Stores YoY Growth %', data: grocGrowth,
+        backgroundColor: years.map(y => y === 2020 ? 'rgba(26,58,92,0.35)' : 'rgba(26,58,92,0.75)'),
+        borderColor: '#1a3a5c', borderWidth: 1.5, borderRadius: 3, order: 3 },
+      { label: 'Foodservice trend', data: fsGrowth, type: 'line',
+        borderColor: '#e67e22', borderWidth: 2.5, pointRadius: 5,
+        pointBackgroundColor: '#e67e22', fill: false, tension: 0.3, order: 1 }
+    ]
+  },
+  options: {
+    responsive: true, layout: { padding: { right: 16, top: 10 } },
+    plugins: {
+      legend: { position: 'top', labels: { filter: item => item.text !== 'Foodservice trend' } },
+      tooltip: { callbacks: { label: ctx => {
+        if (ctx.dataset.label === 'Foodservice trend') return null;
+        return ` ${ctx.dataset.label}: ${ctx.parsed.y > 0 ? '+' : ''}${ctx.parsed.y}%`;
+      }}},
+      annotation: { annotations: {
+        zeroline: { type: 'line', yMin: 0, yMax: 0, borderColor: 'rgba(0,0,0,0.2)', borderWidth: 1 },
+        pandemic: { type: 'label', xValue: '2020', yValue: -18, content: ['Pandemic', 'lockdowns'],
+          backgroundColor: 'rgba(26,58,92,0.75)', color: 'white', font: { size: 10 }, padding: 5, borderRadius: 4 },
+        normalize: { type: 'label', xValue: '2025', yValue: 10, content: ['Growth', 'normalizes'],
+          backgroundColor: 'rgba(230,126,34,0.85)', color: 'white', font: { size: 10, weight: 'bold' }, padding: 5, borderRadius: 4 }
+      }}
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: { title: { display: true, text: 'Year-over-Year Growth (%)' }, ticks: { callback: v => v + '%' }, min: -20, max: 35 }
+    }
+  }
+});
+</script>
+</body>
+</html>

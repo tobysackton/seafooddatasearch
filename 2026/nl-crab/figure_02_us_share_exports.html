@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 2: US Share of Canadian Snow Crab Exports, 2015-2025</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.12.7/Recharts.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<style>* { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif; background: #fff; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = Recharts;
+const DATA = [
+  { year: 2015, "United States": 94.8, Japan: 10.7, China: 21.5, Vietnam: 2.1, Indonesia: 2.6, Other: 3.2, us_pct: 70.3, total: 134.8 },
+  { year: 2016, "United States": 90.6, Japan: 8.7, China: 18.8, Vietnam: 2.1, Indonesia: 2.3, Other: 4.9, us_pct: 71.1, total: 127.4 },
+  { year: 2017, "United States": 93.8, Japan: 12.8, China: 25.4, Vietnam: 2.7, Indonesia: 3.6, Other: 3.4, us_pct: 66.2, total: 141.7 },
+  { year: 2018, "United States": 72.6, Japan: 6.7, China: 19.1, Vietnam: 3.1, Indonesia: 3.6, Other: 2.0, us_pct: 67.9, total: 107.0 },
+  { year: 2019, "United States": 84.1, Japan: 7.1, China: 12.1, Vietnam: 4.2, Indonesia: 4.5, Other: 2.2, us_pct: 73.6, total: 114.3 },
+  { year: 2020, "United States": 91.8, Japan: 4.8, China: 8.6, Vietnam: 2.6, Indonesia: 1.7, Other: 1.4, us_pct: 82.8, total: 110.9 },
+  { year: 2021, "United States": 105.3, Japan: 7.4, China: 9.9, Vietnam: 2.2, Indonesia: 2.1, Other: 1.4, us_pct: 82.0, total: 128.3 },
+  { year: 2022, "United States": 101.1, Japan: 5.2, China: 13.2, Vietnam: 6.0, Indonesia: 5.8, Other: 1.8, us_pct: 76.0, total: 133.0 },
+  { year: 2023, "United States": 135.3, Japan: 5.6, China: 11.7, Vietnam: 4.8, Indonesia: 3.7, Other: 1.9, us_pct: 83.0, total: 163.0 },
+  { year: 2024, "United States": 123.7, Japan: 7.5, China: 10.2, Vietnam: 5.4, Indonesia: 3.8, Other: 1.8, us_pct: 81.2, total: 152.3 },
+  { year: 2025, "United States": 127.5, Japan: 3.8, China: 3.8, Vietnam: 5.5, Indonesia: 1.9, Other: 1.2, us_pct: 88.7, total: 143.8 },
+];
+const COLORS = {"United States":"#5b9bd5",Japan:"#e07070",China:"#e8c44a",Vietnam:"#6bb86b",Indonesia:"#9e8fce",Other:"#bfbfbf"};
+const STACK_ORDER = ["United States","China","Japan","Vietnam","Indonesia","Other"];
+const CustomTooltip = ({ active, payload, label }) => {
+  if (!active || !payload?.length) return null;
+  const data = payload[0]?.payload;
+  const rows = STACK_ORDER.map(k=>({k,v:data[k]||0,p:data.total>0?((data[k]||0)/data.total*100):0})).filter(r=>r.v>=0.1);
+  return React.createElement('div',{style:{background:"#fff",border:"1px solid #ccc",borderRadius:6,padding:"14px 18px",fontSize:13,color:"#333",boxShadow:"0 4px 16px rgba(0,0,0,0.14)",fontFamily:"'Calibri',sans-serif",minWidth:280}},
+    React.createElement('div',{style:{fontSize:18,fontWeight:700,color:"#222",marginBottom:8,paddingBottom:6,borderBottom:"2px solid #5b9bd5"}},label),
+    React.createElement('div',{style:{display:"grid",gridTemplateColumns:"20px 1fr 80px 50px",gap:"0 8px",fontSize:11,color:"#888",textTransform:"uppercase",letterSpacing:"0.04em",marginBottom:4,paddingBottom:3,borderBottom:"1px solid #eee"}},
+      React.createElement('span'),React.createElement('span',null,'Market'),React.createElement('span',{style:{textAlign:"right"}},'Volume'),React.createElement('span',{style:{textAlign:"right"}},'Share')),
+    rows.map(({k,v,p})=>React.createElement('div',{key:k,style:{display:"grid",gridTemplateColumns:"20px 1fr 80px 50px",gap:"0 8px",padding:"3px 0",fontWeight:k==="United States"?700:400,color:k==="United States"?"#333":"#555"}},
+      React.createElement('span',{style:{width:12,height:12,background:COLORS[k],borderRadius:2,display:"inline-block",marginTop:2}}),React.createElement('span',null,k),
+      React.createElement('span',{style:{textAlign:"right",fontVariantNumeric:"tabular-nums"}},v.toFixed(1)+"M lbs"),React.createElement('span',{style:{textAlign:"right",fontVariantNumeric:"tabular-nums"}},p.toFixed(1)+"%"))),
+    React.createElement('div',{style:{display:"grid",gridTemplateColumns:"20px 1fr 80px 50px",gap:"0 8px",marginTop:6,paddingTop:6,borderTop:"2px solid #ddd",fontWeight:700,fontSize:14}},
+      React.createElement('span'),React.createElement('span',null,'Total Exports'),React.createElement('span',{style:{textAlign:"right",fontVariantNumeric:"tabular-nums"}},data.total.toFixed(1)+"M lbs"),React.createElement('span')),
+    React.createElement('div',{style:{marginTop:10,background:"#eef4fb",border:"1px solid #c4d9ee",borderRadius:4,padding:"8px 10px",display:"flex",justifyContent:"space-between",alignItems:"center"}},
+      React.createElement('span',{style:{fontSize:13,color:"#3a6ea5"}},"US Share of Total"),React.createElement('span',{style:{fontSize:22,fontWeight:700,color:"#2a5c8f"}},data.us_pct+"%")));
+};
+const RenderLegend=(props)=>{const{payload}=props;return React.createElement('div',{style:{display:"flex",justifyContent:"center",gap:18,flexWrap:"wrap",paddingTop:6,fontSize:13}},payload.map((e,i)=>React.createElement('div',{key:i,style:{display:"flex",alignItems:"center",gap:5}},e.value==="US Share %"?React.createElement('div',{style:{width:18,height:2,background:"#2a5c8f",borderRadius:1}}):React.createElement('div',{style:{width:12,height:12,background:e.color,borderRadius:2}}),React.createElement('span',{style:{color:"#555"}},e.value))));};
+function Figure2(){return React.createElement('div',{style:{background:"#fff",color:"#333",fontFamily:"'Calibri','Segoe UI','Helvetica Neue',sans-serif",padding:"24px 32px 16px",maxWidth:880,margin:"0 auto"}},
+  React.createElement('div',{style:{textAlign:"center",marginBottom:20}},React.createElement('div',{style:{fontSize:12,color:"#999",letterSpacing:"0.08em",textTransform:"uppercase"}},"Figure 2"),React.createElement('h2',{style:{fontSize:21,fontWeight:700,margin:"4px 0 4px",color:"#222"}},"US Share of Canadian Snow Crab Exports, 2015\u20132025"),React.createElement('div',{style:{fontSize:14,color:"#777"}},"Volume in millions of lbs \u00b7 HS 030614 \u00b7 All frozen crab")),
+  React.createElement(ResponsiveContainer,{width:"100%",height:440},React.createElement(ComposedChart,{data:DATA,margin:{top:10,right:55,left:10,bottom:5}},
+    React.createElement(CartesianGrid,{strokeDasharray:"3 3",stroke:"#e8e8e8",vertical:false}),
+    React.createElement(XAxis,{dataKey:"year",tick:{fontSize:14,fill:"#444"},axisLine:{stroke:"#ccc"},tickLine:{stroke:"#ccc"}}),
+    React.createElement(YAxis,{yAxisId:"vol",tick:{fontSize:13,fill:"#777"},axisLine:false,tickLine:false,tickFormatter:v=>v+"M"}),
+    React.createElement(YAxis,{yAxisId:"pct",orientation:"right",domain:[50,100],tick:{fontSize:13,fill:"#2a5c8f",fontWeight:600},axisLine:false,tickLine:false,tickFormatter:v=>v+"%"}),
+    React.createElement(Tooltip,{content:React.createElement(CustomTooltip),cursor:{fill:"rgba(0,0,0,0.04)"}}),
+    React.createElement(Legend,{content:React.createElement(RenderLegend)}),
+    ...STACK_ORDER.map(k=>React.createElement(Bar,{key:k,yAxisId:"vol",dataKey:k,stackId:"exports",fill:COLORS[k],barSize:46})),
+    React.createElement(Line,{yAxisId:"pct",dataKey:"us_pct",stroke:"#2a5c8f",strokeWidth:3,dot:{r:5,fill:"#2a5c8f",stroke:"#fff",strokeWidth:2.5},activeDot:{r:7,fill:"#2a5c8f",stroke:"#fff",strokeWidth:3},name:"US Share %"}))),
+  React.createElement('div',{style:{background:"#f5f7fa",border:"1px solid #dde2e8",borderLeft:"4px solid #2a5c8f",borderRadius:"0 5px 5px 0",padding:"12px 18px",marginTop:14,fontSize:13.5,color:"#333",lineHeight:1.55}},
+    "US dominance of Canadian snow crab exports is driven by price: in 2025, US buyers paid $13.28 CAD/lb compared to an average of $9.53 for all other markets \u2014 a 39% premium that makes the US the rational destination for processors. With China\u2019s retaliatory tariff now removed and the US share already having slipped from 83% to 81% between 2023 and 2024, some rebalancing toward alternative markets is possible in 2026."),
+  React.createElement('div',{style:{marginTop:14,paddingTop:8,borderTop:"1px solid #ddd",fontSize:12,color:"#999"}},"Source: Seafood Datasearch from Global Trade Tracker"));}
+ReactDOM.render(React.createElement(Figure2),document.getElementById('root'));
+</script>
+</body>
+</html>

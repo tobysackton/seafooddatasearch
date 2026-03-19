@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Figure 61: 2026 Quota in Context</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif; background: #fff; padding: 20px; color: #333; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+        .figure-number { text-align: center; font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+        .title { text-align: center; font-size: 21px; font-weight: 700; color: #222; margin-bottom: 4px; }
+        .subtitle { text-align: center; font-size: 14px; color: #777; margin-bottom: 20px; }
+        .chart-container { position: relative; height: 460px; margin-bottom: 20px; }
+        .stats-row { display: flex; justify-content: center; gap: 28px; margin-bottom: 16px; flex-wrap: wrap; }
+        .stat-box { text-align: center; padding: 10px 18px; border: 1px solid #dde2e8; border-radius: 5px; background: #f9fafb; min-width: 140px; }
+        .stat-value { font-size: 22px; font-weight: 700; }
+        .stat-label { font-size: 12px; color: #777; margin-top: 2px; }
+        .summary-box { background: #f5f7fa; border: 1px solid #dde2e8; border-left: 4px solid #2a5c8f; border-radius: 0 5px 5px 0; padding: 14px 18px; font-size: 13.5px; line-height: 1.55; color: #333; margin-bottom: 14px; }
+        .source-line { border-top: 1px solid #ddd; margin-top: 14px; padding-top: 8px; font-size: 12px; color: #999; }
+        .tooltip-outer { position: absolute; pointer-events: none; z-index: 100; background: white; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.14); padding: 14px 18px; min-width: 300px; display: none; font-size: 13px; }
+        .tooltip-header { font-size: 18px; font-weight: 700; color: #222; border-bottom: 2px solid #5b9bd5; padding-bottom: 6px; margin-bottom: 8px; }
+        .tooltip-row { display: flex; justify-content: space-between; padding: 3px 0; }
+        .tooltip-label { color: #555; }
+        .tooltip-value { font-weight: 600; font-variant-numeric: tabular-nums; }
+        .est-tag { font-size: 10px; font-weight: 700; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="figure-number">Figure 61</div>
+    <div class="title">2026 Combined Quota: The Supply Constraint</div>
+    <div class="subtitle">Canadian snow crab total allowable catch, NL and Gulf combined (tonnes, excl. test catch), 2016-2026</div>
+
+    <div class="stats-row">
+        <div class="stat-box">
+            <div class="stat-value" style="color:#2a5c8f">77,281</div>
+            <div class="stat-label">2026 Combined Quota (t)</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-value" style="color:#ef4444">-3.9%</div>
+            <div class="stat-label">vs 2025</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-value" style="color:#e07070">16,268</div>
+            <div class="stat-label">2026 Gulf Quota (t)</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-value" style="color:#5b9bd5">61,013</div>
+            <div class="stat-label">2026 NL Quota (t)</div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="quotaChart"></canvas>
+        <div class="tooltip-outer" id="tooltip61"></div>
+    </div>
+
+    <div class="summary-box">
+        <strong>Supply is tightening into 2026.</strong> The combined NL and Gulf quota for 2026 is 
+        77,281 tonnes, down 3.9% from 2025 and the first year-over-year decline since 2020. The Gulf 
+        quota was cut to 16,268 tonnes, its lowest since 2016 and a 63% decline from the 2017 peak. 
+        NL quota held near its 2025 level at 61,013 tonnes but did not increase for the first time 
+        in five years. This supply picture, combined with the near-zero carryover inventory documented 
+        in earlier sections, means the 2026 season opens with less available product than any year 
+        since 2020. The constraining factor for 2026 pricing is demand, not supply.
+    </div>
+    <div class="source-line">Source: Seafood Datasearch from DFO quota announcements. 2026 NL quota estimated pending final announcement.</div>
+</div>
+
+<script>
+const DATA = {"years": ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"], "gulf": [21611, 43475, 24439, 32215, 31152, 24124, 33160, 35775, 25261, 17885, 16268], "nl": [45305, 34530, 28930, 26494, 29151, 37786, 50021, 54277, 57120, 62432, 61013], "total": [66916, 78005, 53369, 58709, 60303, 61910, 83181, 90052, 82381, 80317, 77281], "yoy_total": [null, 16.6, -31.6, 10.0, 2.7, 2.7, 34.4, 8.3, -8.5, -2.5, -3.8], "yoy_nl": [null, -23.8, -16.2, -8.4, 10.0, 29.6, 32.4, 8.5, 5.2, 9.3, -2.3], "yoy_gulf": [null, 101.2, -43.8, 31.8, -3.3, -22.6, 37.5, 7.9, -29.4, -29.2, -9.0]};
+
+const FONT = "'Calibri','Segoe UI','Helvetica Neue',sans-serif";
+const ctx = document.getElementById('quotaChart').getContext('2d');
+
+// Custom plugin to mark 2026 as estimated
+const estPlugin = {
+    id: 'estLabel',
+    afterDatasetsDraw(chart) {
+        const { ctx, scales } = chart;
+        const lastIdx = DATA.years.length - 1;
+        const x = scales.x.getPixelForValue(lastIdx);
+        const y = scales.y.getPixelForValue(DATA.total[lastIdx]) - 12;
+        ctx.save();
+        ctx.font = 'bold 10px ' + FONT;
+        ctx.fillStyle = '#f59e0b';
+        ctx.textAlign = 'center';
+        ctx.fillText('EST.', x, y);
+        ctx.restore();
+    }
+};
+
+// Hatching pattern for 2026
+const patternCanvas = document.createElement('canvas');
+patternCanvas.width = 10; patternCanvas.height = 10;
+const pctx = patternCanvas.getContext('2d');
+pctx.strokeStyle = 'rgba(42,92,143,0.3)';
+pctx.lineWidth = 1.5;
+pctx.beginPath(); pctx.moveTo(0, 10); pctx.lineTo(10, 0); pctx.stroke();
+
+const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: DATA.years,
+        datasets: [
+            {
+                label: 'Gulf Quota',
+                data: DATA.gulf,
+                backgroundColor: DATA.years.map(y => y === '2026' ? 'rgba(224,112,112,0.5)' : 'rgba(224,112,112,0.75)'),
+                borderColor: '#c55050',
+                borderWidth: 1,
+                borderDash: [],
+                stack: 'quota',
+            },
+            {
+                label: 'Newfoundland Quota',
+                data: DATA.nl,
+                backgroundColor: DATA.years.map(y => y === '2026' ? 'rgba(91,155,213,0.5)' : 'rgba(91,155,213,0.75)'),
+                borderColor: '#4080b8',
+                borderWidth: 1,
+                stack: 'quota',
+            },
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+            legend: {
+                display: true, position: 'top',
+                labels: { usePointStyle: true, padding: 16, font: { size: 13, family: FONT }, color: '#555' }
+            },
+            tooltip: {
+                enabled: false,
+                external: function(context) {
+                    const tip = document.getElementById('tooltip61');
+                    if (context.tooltip.opacity === 0) { tip.style.display = 'none'; return; }
+                    const idx = context.tooltip.dataPoints[0].dataIndex;
+                    const yr = DATA.years[idx];
+                    const isEst = yr === '2026';
+                    
+                    let h = '<div class="tooltip-header">' + yr;
+                    if (isEst) h += ' <span class="est-tag">ESTIMATED</span>';
+                    h += '</div>';
+                    
+                    h += '<div class="tooltip-row"><span class="tooltip-label"><span style="display:inline-block;width:10px;height:10px;background:#5b9bd5;border-radius:2px;margin-right:6px"></span>Newfoundland</span>';
+                    h += '<span class="tooltip-value">' + DATA.nl[idx].toLocaleString() + ' t</span></div>';
+                    
+                    h += '<div class="tooltip-row"><span class="tooltip-label"><span style="display:inline-block;width:10px;height:10px;background:#e07070;border-radius:2px;margin-right:6px"></span>Gulf</span>';
+                    h += '<span class="tooltip-value">' + DATA.gulf[idx].toLocaleString() + ' t</span></div>';
+                    
+                    h += '<div class="tooltip-row" style="border-top:1px solid #eee;margin-top:4px;padding-top:4px;font-weight:700">';
+                    h += '<span class="tooltip-label">Combined Total</span>';
+                    h += '<span class="tooltip-value" style="color:#2a5c8f">' + DATA.total[idx].toLocaleString() + ' t</span></div>';
+                    
+                    if (DATA.yoy_total[idx] !== null) {
+                        const chg = DATA.yoy_total[idx];
+                        const color = chg > 0 ? '#22c55e' : '#ef4444';
+                        h += '<div class="tooltip-row"><span class="tooltip-label">Year-over-year</span>';
+                        h += '<span class="tooltip-value" style="color:' + color + '">' + (chg > 0 ? '+' : '') + chg + '%</span></div>';
+                    }
+                    
+                    if (DATA.yoy_gulf[idx] !== null) {
+                        h += '<div style="border-top:1px solid #eee;margin-top:4px;padding-top:4px">';
+                        const gchg = DATA.yoy_gulf[idx];
+                        h += '<div class="tooltip-row"><span class="tooltip-label">Gulf YoY</span>';
+                        h += '<span class="tooltip-value" style="color:' + (gchg > 0 ? '#22c55e' : '#ef4444') + '">' + (gchg > 0 ? '+' : '') + gchg + '%</span></div>';
+                        const nchg = DATA.yoy_nl[idx];
+                        h += '<div class="tooltip-row"><span class="tooltip-label">NL YoY</span>';
+                        h += '<span class="tooltip-value" style="color:' + (nchg > 0 ? '#22c55e' : '#ef4444') + '">' + (nchg > 0 ? '+' : '') + nchg + '%</span></div>';
+                        h += '</div>';
+                    }
+                    
+                    tip.innerHTML = h;
+                    tip.style.display = 'block';
+                    let left = context.tooltip.caretX + 15;
+                    if (left + 320 > context.chart.chartArea.right + 80) left = context.tooltip.caretX - 335;
+                    tip.style.left = left + 'px';
+                    tip.style.top = Math.max(10, context.tooltip.caretY - 60) + 'px';
+                }
+            },
+        },
+        scales: {
+            x: { 
+                stacked: true,
+                grid: { display: false }, 
+                ticks: { font: { size: 13, family: FONT }, color: '#444' } 
+            },
+            y: {
+                stacked: true,
+                min: 0, max: 100000,
+                grid: { color: '#e8e8e8', drawBorder: false },
+                ticks: { 
+                    font: { size: 13, family: FONT }, color: '#777',
+                    callback: function(v) { return (v/1000) + 'K'; },
+                    stepSize: 20000,
+                },
+                title: { display: true, text: 'Total Allowable Catch (tonnes)', font: { size: 13, family: FONT }, color: '#777' }
+            }
+        }
+    },
+    plugins: [estPlugin],
+});
+</script>
+</body>
+</html>

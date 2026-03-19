@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Figure 26: UB NL 5-8 vs 8-up Weekly Prices 2025–2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Calibri, 'Segoe UI', sans-serif; background: #f8f9fa; padding: 32px; }
+  .panel { background: white; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    padding: 32px; max-width: 1020px; margin: 0 auto; }
+  h2 { font-size: 17px; color: #1a3a5c; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #888; margin-bottom: 20px; line-height: 1.5; }
+  .source { font-size: 11px; color: #999; font-style: italic; margin-top: 12px; text-align: right; }
+  .callouts { display: flex; gap: 16px; margin-bottom: 20px; }
+  .callout { flex: 1 1 0; min-width: 0; padding: 12px 16px; border-radius: 6px; text-align: center; }
+  .callout .label { font-size: 11px; text-transform: uppercase; color: #666;
+    letter-spacing: 0.4px; white-space: normal; word-break: break-word; line-height: 1.4; }
+  .callout .val { font-size: 20px; font-weight: 700; margin: 4px 0; }
+  .callout .detail { font-size: 11px; color: #888; }
+  .c-orange { background: #fff3cd; } .c-orange .val { color: #856404; }
+  .c-blue   { background: #e8f0fe; } .c-blue .val   { color: #1a3a5c; }
+  .c-red    { background: #fde8e8; } .c-red .val    { color: #721c24; }
+  canvas { max-height: 420px; }
+</style>
+</head>
+<body>
+<div class="panel">
+  <h2>Figure 26: NL Snow Crab Weekly Wholesale Prices — 5-8 oz vs 8-up, Jan 2025–Mar 2026</h2>
+  <div class="subtitle">Urner Barry quoted prices (EBP, USD/lb). The 8-up premium over 5-8 oz is the key foodservice demand signal: a wide spread indicates strong foodservice buying for larger grades. In 2025, 8-ups peaked at $13.50 from April through September while 5-8s bottomed in June at $7.95 — a spread of $5.40. Since then, 8-ups have compressed steadily while 5-8s have risen sharply. By March 2026 the spread has collapsed to $1.25 — the narrowest on record in this series — as 5-8 inventory exhaustion drives prices up while 8-up demand moderates.</div>
+  <div class="callouts">
+    <div class="callout c-blue">
+      <div class="label">5-8 oz Mar 9, 2026</div>
+      <div class="val">$10.75/lb</div>
+      <div class="detail">+26% vs Apr 2025 season open ($8.50)</div>
+    </div>
+    <div class="callout c-orange">
+      <div class="label">8-up Mar 9, 2026</div>
+      <div class="val">$12.00/lb</div>
+      <div class="detail">Down from $13.50 peak (Apr–Sep 2025)</div>
+    </div>
+    <div class="callout c-red">
+      <div class="label">Current Spread</div>
+      <div class="val">$1.25/lb</div>
+      <div class="detail">Compressed from $5.40 peak — 11.6% premium vs 68% at peak</div>
+    </div>
+  </div>
+  <canvas id="chart"></canvas>
+  <div class="source">Source: Urner Barry / Expana, NL Cluster EBP weekly. Data through March 9, 2026. Blank periods = no UB quotation (product unavailable / no market). / Seafood Datasearch</div>
+</div>
+<script>
+const data = [
+  { d: 'Jan 6',        nl58: 8.50,  nl8up: 12.20 },
+  { d: 'Jan 13',       nl58: 8.60,  nl8up: 12.45 },
+  { d: 'Jan 20',       nl58: 8.70,  nl8up: 12.50 },
+  { d: 'Jan 27',       nl58: 8.75,  nl8up: 12.55 },
+  { d: 'Feb 3',        nl58: 8.88,  nl8up: 12.68 },
+  { d: 'Feb 10',       nl58: 9.10,  nl8up: 12.80 },
+  { d: 'Feb 17',       nl58: 9.20,  nl8up: 12.93 },
+  { d: 'Feb 24',       nl58: 9.25,  nl8up: 13.20 },
+  { d: 'Mar 3',        nl58: 9.25,  nl8up: null  },
+  { d: 'Mar 10',       nl58: null,  nl8up: null  },
+  { d: 'Mar 17',       nl58: null,  nl8up: null  },
+  { d: 'Mar 24',       nl58: null,  nl8up: null  },
+  { d: 'Mar 31',       nl58: null,  nl8up: null  },
+  { d: 'Apr 7',        nl58: null,  nl8up: null  },
+  { d: 'Apr 14',       nl58: null,  nl8up: null  },
+  { d: 'Apr 21',       nl58: 8.00,  nl8up: null  },
+  { d: 'Apr 28',       nl58: 8.10,  nl8up: 13.50 },
+  { d: 'May 5',        nl58: 8.10,  nl8up: 13.47 },
+  { d: 'May 12',       nl58: 8.10,  nl8up: 13.45 },
+  { d: 'May 19',       nl58: 8.05,  nl8up: 13.40 },
+  { d: 'May 26',       nl58: 8.00,  nl8up: 13.35 },
+  { d: 'Jun 2',        nl58: 7.95,  nl8up: 13.35 },
+  { d: 'Jun 9',        nl58: 8.10,  nl8up: 13.35 },
+  { d: 'Jun 16',       nl58: 8.10,  nl8up: 13.35 },
+  { d: 'Jun 23',       nl58: 8.25,  nl8up: 13.35 },
+  { d: 'Jun 30',       nl58: 8.40,  nl8up: 13.35 },
+  { d: 'Jul 7',        nl58: 8.60,  nl8up: 13.35 },
+  { d: 'Jul 14',       nl58: 8.80,  nl8up: 13.45 },
+  { d: 'Jul 21',       nl58: 8.93,  nl8up: 13.47 },
+  { d: 'Jul 28',       nl58: 9.25,  nl8up: 13.50 },
+  { d: 'Aug 4',        nl58: 9.43,  nl8up: 13.50 },
+  { d: 'Aug 11',       nl58: 9.50,  nl8up: 13.50 },
+  { d: 'Aug 18',       nl58: 9.50,  nl8up: 13.50 },
+  { d: 'Aug 25',       nl58: 9.50,  nl8up: 13.50 },
+  { d: 'Sep 1',        nl58: 9.50,  nl8up: 13.50 },
+  { d: 'Sep 8',        nl58: 9.50,  nl8up: 13.50 },
+  { d: 'Sep 15',       nl58: 9.50,  nl8up: 13.50 },
+  { d: 'Sep 22',       nl58: 9.50,  nl8up: 13.50 },
+  { d: 'Sep 29',       nl58: 9.50,  nl8up: 13.50 },
+  { d: 'Oct 6',        nl58: 9.50,  nl8up: 13.50 },
+  { d: 'Oct 13',       nl58: 9.50,  nl8up: 13.38 },
+  { d: 'Oct 20',       nl58: 9.50,  nl8up: 13.18 },
+  { d: 'Oct 27',       nl58: 9.50,  nl8up: 13.10 },
+  { d: 'Nov 3',        nl58: 9.50,  nl8up: 13.10 },
+  { d: 'Nov 10',       nl58: 9.50,  nl8up: 13.05 },
+  { d: 'Nov 17',       nl58: 9.50,  nl8up: 12.88 },
+  { d: 'Nov 24',       nl58: 9.50,  nl8up: 12.75 },
+  { d: 'Dec 1',        nl58: 9.57,  nl8up: 12.70 },
+  { d: 'Dec 8',        nl58: 9.65,  nl8up: 12.55 },
+  { d: 'Dec 15',       nl58: 9.70,  nl8up: 12.50 },
+  { d: 'Dec 22',       nl58: 9.70,  nl8up: 12.50 },
+  { d: 'Dec 29',       nl58: 9.70,  nl8up: 12.50 },
+  { d: "Jan 5 '26",   nl58: 9.80,  nl8up: 12.38 },
+  { d: "Jan 12 '26",  nl58: 9.97,  nl8up: 12.25 },
+  { d: "Jan 19 '26",  nl58: 10.25, nl8up: 12.25 },
+  { d: "Jan 26 '26",  nl58: 10.40, nl8up: 12.25 },
+  { d: "Feb 2 '26",   nl58: 10.40, nl8up: 12.12 },
+  { d: "Feb 9 '26",   nl58: 10.40, nl8up: 12.00 },
+  { d: "Feb 16 '26",  nl58: 10.45, nl8up: 12.00 },
+  { d: "Feb 23 '26",  nl58: 10.50, nl8up: 12.00 },
+  { d: "Mar 2 '26",   nl58: 10.62, nl8up: 12.00 },
+  { d: "Mar 9 '26",   nl58: 10.75, nl8up: 12.00 },
+];
+const labels = data.map(r => r.d);
+const nl58   = data.map(r => r.nl58);
+const nl8up  = data.map(r => r.nl8up);
+const spread = data.map(r => (r.nl58 != null && r.nl8up != null) ? +(r.nl8up - r.nl58).toFixed(2) : null);
+new Chart(document.getElementById('chart'), {
+  type: 'line',
+  data: { labels, datasets: [
+    { label: 'NL 5-8 oz (EBP)', data: nl58, borderColor: '#1a3a5c',
+      backgroundColor: 'rgba(26,58,92,0.06)', fill: true, pointRadius: 2, pointHoverRadius: 5,
+      tension: 0.2, borderWidth: 2.5, spanGaps: false, yAxisID: 'y' },
+    { label: 'NL 8 oz & Up (EBP)', data: nl8up, borderColor: '#e67e22',
+      backgroundColor: 'rgba(230,126,34,0.05)', fill: true, pointRadius: 2, pointHoverRadius: 5,
+      tension: 0.2, borderWidth: 2.5, spanGaps: false, yAxisID: 'y' },
+    { label: '8-up Premium over 5-8 ($/lb)', data: spread, borderColor: '#c0392b',
+      borderDash: [5,3], backgroundColor: 'transparent', fill: false, pointRadius: 2,
+      pointHoverRadius: 5, tension: 0.2, borderWidth: 2, spanGaps: false, yAxisID: 'y2' }
+  ]},
+  options: {
+    responsive: true, interaction: { mode: 'index', intersect: false },
+    layout: { padding: { right: 16, top: 10 } },
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: { callbacks: { label: ctx => {
+        if (ctx.parsed.y == null) return null;
+        return ` ${ctx.dataset.label.split(' (')[0]}: $${ctx.parsed.y.toFixed(2)}/lb`;
+      }}},
+      annotation: { annotations: {
+        seasonOpen: { type: 'box', xMin: 'Mar 3', xMax: 'Apr 21',
+          backgroundColor: 'rgba(200,200,200,0.18)', borderColor: 'rgba(150,150,150,0.3)', borderWidth: 1,
+          label: { content: 'No quotation\n(season transition)', display: true,
+            position: { x: 'center', y: 'start' }, color: '#999', font: { size: 9 }, padding: 3 } },
+        peakSpread: { type: 'label', xValue: 'Jun 2', yValue: 16, yScaleID: 'y',
+          content: ['Peak spread: $5.40', '8-up +68% over 5-8'],
+          backgroundColor: 'rgba(230,126,34,0.85)', color: 'white',
+          font: { size: 10, weight: 'bold' }, padding: 6, borderRadius: 4 },
+        spreadCollapse: { type: 'label', xValue: "Jan 26 '26", yValue: 16, yScaleID: 'y',
+          content: ['Spread collapses', '5-8 surges, 8-up flat'],
+          backgroundColor: 'rgba(26,58,92,0.82)', color: 'white',
+          font: { size: 10, weight: 'bold' }, padding: 6, borderRadius: 4 }
+      }}
+    },
+    scales: {
+      x: { ticks: { maxTicksLimit: 14, maxRotation: 45, font: { size: 10 } }, grid: { display: false } },
+      y: { position: 'left', title: { display: true, text: 'USD / lb (EBP)' },
+        ticks: { callback: v => '$' + v.toFixed(2) }, min: 7, max: 15 },
+      y2: { position: 'right', title: { display: true, text: '8-up Premium over 5-8 ($/lb)' },
+        ticks: { callback: v => '$' + v.toFixed(2) }, min: 0, max: 7, grid: { drawOnChartArea: false } }
+    }
+  }
+});
+</script>
+</body>
+</html>
