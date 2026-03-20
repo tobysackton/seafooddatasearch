@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 12: Consumer Savings Drawdown</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Calibri, 'Segoe UI', sans-serif; background: #f8f9fa; color: #333; padding: 32px; }
+  .panel { background: white; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    padding: 32px; max-width: 960px; margin: 0 auto; }
+  h2 { font-size: 17px; color: #1a3a5c; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #888; margin-bottom: 20px; }
+  .source { font-size: 11px; color: #999; font-style: italic; margin-top: 12px; text-align: right; }
+  .callouts { display: flex; gap: 16px; margin-bottom: 20px; }
+  .callout { flex: 1; padding: 12px 16px; border-radius: 6px; text-align: center; }
+  .callout .label { font-size: 11px; text-transform: uppercase; color: #666; letter-spacing: 0.4px; }
+  .callout .val { font-size: 24px; font-weight: 700; margin: 2px 0; }
+  .callout .detail { font-size: 11px; color: #888; }
+  .c-blue { background: #e8f0fe; }
+  .c-blue .val { color: #1a3a5c; }
+  .c-green { background: #d4edda; }
+  .c-green .val { color: #155724; }
+  .c-red { background: #f8d7da; }
+  .c-red .val { color: #721c24; }
+  .c-orange { background: #fff3cd; }
+  .c-orange .val { color: #856404; }
+  canvas { max-height: 420px; }
+</style>
+</head>
+<body>
+<div class="panel">
+  <h2>Figure 12: Consumer Savings Drawdown — Current Status</h2>
+  <div class="subtitle">U.S. Personal Saving Rate (% of Disposable Income), Monthly, Jan 2019 – Jan 2026</div>
+
+  <div class="callouts">
+    <div class="callout c-blue">
+      <div class="label">Pre-COVID Baseline</div>
+      <div class="val">7.2%</div>
+      <div class="detail">2019 average</div>
+    </div>
+    <div class="callout c-green">
+      <div class="label">COVID Peak</div>
+      <div class="val">31.8%</div>
+      <div class="detail">April 2020</div>
+    </div>
+    <div class="callout c-red">
+      <div class="label">Post-Stimulus Trough</div>
+      <div class="val">2.2%</div>
+      <div class="detail">June 2022</div>
+    </div>
+    <div class="callout c-orange">
+      <div class="label">Current</div>
+      <div class="val">4.5%</div>
+      <div class="detail">Jan 2026 — below pre-COVID</div>
+    </div>
+  </div>
+
+  <canvas id="chart"></canvas>
+  <div class="source">Source: U.S. Bureau of Economic Analysis via FRED (PSAVERT) / Seafood Datasearch</div>
+</div>
+
+<script>
+const labels = [
+  'Jan 19','Feb 19','Mar 19','Apr 19','May 19','Jun 19','Jul 19','Aug 19','Sep 19','Oct 19','Nov 19','Dec 19',
+  'Jan 20','Feb 20','Mar 20','Apr 20','May 20','Jun 20','Jul 20','Aug 20','Sep 20','Oct 20','Nov 20','Dec 20',
+  'Jan 21','Feb 21','Mar 21','Apr 21','May 21','Jun 21','Jul 21','Aug 21','Sep 21','Oct 21','Nov 21','Dec 21',
+  'Jan 22','Feb 22','Mar 22','Apr 22','May 22','Jun 22','Jul 22','Aug 22','Sep 22','Oct 22','Nov 22','Dec 22',
+  'Jan 23','Feb 23','Mar 23','Apr 23','May 23','Jun 23','Jul 23','Aug 23','Sep 23','Oct 23','Nov 23','Dec 23',
+  'Jan 24','Feb 24','Mar 24','Apr 24','May 24','Jun 24','Jul 24','Aug 24','Sep 24','Oct 24','Nov 24','Dec 24',
+  'Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25',
+  'Jan 26'
+];
+
+const data = [
+  8.4,8.5,7.9,7.6,7.3,7.1,6.8,6.9,7.0,7.1,6.9,6.2,
+  6.8,7.5,12.4,31.8,22.6,18.3,17.9,13.9,13.3,12.8,12.0,11.8,
+  19.5,13.0,26.2,12.4,10.0,8.8,9.5,8.7,7.6,7.0,6.6,6.6,
+  4.2,4.1,3.2,2.6,2.6,2.2,3.3,3.2,3.4,3.4,3.8,4.2,
+  4.9,5.5,6.0,5.8,6.1,5.8,5.5,5.6,5.3,5.4,5.6,5.6,
+  6.4,6.1,5.9,5.8,5.8,5.7,5.3,5.2,4.8,5.0,4.9,4.3,
+  5.1,5.2,5.1,5.5,4.9,4.6,4.5,4.4,4.3,4.0,4.0,4.0,
+  4.5
+];
+
+const baselineVal = 7.2;
+
+new Chart(document.getElementById('chart'), {
+  type: 'line',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Personal Saving Rate (%)',
+      data: data,
+      borderColor: '#1a3a5c',
+      backgroundColor: function(ctx) {
+        const chart = ctx.chart;
+        const {ctx: c, chartArea} = chart;
+        if (!chartArea) return 'rgba(26,58,92,0.1)';
+        const gradient = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+        gradient.addColorStop(0, 'rgba(39,174,96,0.2)');
+        gradient.addColorStop(0.7, 'rgba(192,57,43,0.08)');
+        gradient.addColorStop(1, 'rgba(192,57,43,0.15)');
+        return gradient;
+      },
+      fill: true,
+      pointRadius: data.map((v,i) => {
+        if (i === 15) return 7;
+        if (i === 26) return 7;
+        if (i === 41) return 7;
+        if (i === data.length-1) return 7;
+        return 1.5;
+      }),
+      pointBackgroundColor: data.map((v,i) => {
+        if (i === 15 || i === 26) return '#27ae60';
+        if (i === 41) return '#c0392b';
+        if (i === data.length-1) return '#e67e22';
+        return '#1a3a5c';
+      }),
+      tension: 0.3,
+      borderWidth: 2.5
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      annotation: {
+        annotations: {
+          baseline: {
+            type: 'line', yMin: 7.2, yMax: 7.2,
+            borderColor: 'rgba(26,58,92,0.5)', borderWidth: 2, borderDash: [6, 4],
+            label: { display: true, content: '2019 avg: 7.2%', position: 'end',
+              backgroundColor: 'rgba(26,58,92,0.8)', color: 'white', font: { size: 11 }, padding: 4 }
+          },
+          covidPeak: {
+            type: 'label', xValue: 'Apr 20', yValue: 33.5,
+            content: ['COVID stimulus', '31.8%'],
+            backgroundColor: 'rgba(39,174,96,0.9)', color: 'white',
+            font: { size: 11, weight: 'bold' }, padding: 6, borderRadius: 4
+          },
+          stimPeak: {
+            type: 'label', xValue: 'Mar 21', yValue: 28,
+            content: ['2nd stimulus', '26.2%'],
+            backgroundColor: 'rgba(39,174,96,0.9)', color: 'white',
+            font: { size: 11, weight: 'bold' }, padding: 6, borderRadius: 4
+          },
+          trough: {
+            type: 'label', xValue: 'Jun 22', yValue: 0.5,
+            content: ['Trough: 2.2%'],
+            backgroundColor: 'rgba(192,57,43,0.9)', color: 'white',
+            font: { size: 11, weight: 'bold' }, padding: 6, borderRadius: 4
+          },
+          current: {
+            type: 'label', xValue: 'Jan 26', yValue: 6.5,
+            content: ['Jan 2026: 4.5%'],
+            backgroundColor: 'rgba(230,126,34,0.9)', color: 'white',
+            font: { size: 11, weight: 'bold' }, padding: 6, borderRadius: 4
+          },
+          tariffZone: {
+            type: 'box', xMin: 'Jan 25', xMax: 'Jan 26', yMin: 0, yMax: 35,
+            backgroundColor: 'rgba(192,57,43,0.04)', borderColor: 'rgba(192,57,43,0.15)', borderWidth: 1,
+            label: { display: true, content: 'Tariff era', position: { x: 'center', y: 'start' },
+              color: 'rgba(192,57,43,0.5)', font: { size: 10, style: 'italic' } }
+          }
+        }
+      },
+      tooltip: { callbacks: { label: function(ctx) { return 'Saving rate: ' + ctx.raw + '%'; } } }
+    },
+    scales: {
+      y: { title: { display: true, text: 'Personal Saving Rate (%)' }, min: 0, max: 35,
+        ticks: { callback: v => v + '%' } },
+      x: { ticks: { maxRotation: 45, callback: function(val, index) {
+        const l = labels[index];
+        if (l.startsWith('Jan')) return l;
+        if (l === 'Apr 20' || l === 'Mar 21' || l === 'Jun 22') return l;
+        return '';
+      } } }
+    }
+  }
+});
+</script>
+</body>
+</html>

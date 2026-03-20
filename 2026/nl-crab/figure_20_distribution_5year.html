@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 20: Store Distribution — Five-Year History</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Calibri, 'Segoe UI', sans-serif; background: #f8f9fa; color: #333; padding: 30px 40px; }
+  .callout-row { display: flex; gap: 14px; margin-bottom: 24px; flex-wrap: wrap; }
+  .callout { flex: 1; min-width: 160px; padding: 16px 20px; border-radius: 8px; text-align: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .callout .clabel { font-size: 11px; text-transform: uppercase; color: #666; letter-spacing: 0.4px; }
+  .callout .cval { font-size: 28px; font-weight: 700; margin: 4px 0; }
+  .callout .cdetail { font-size: 12px; color: #888; }
+  .cb { background: #e8f0fe; } .cb .cval { color: #1a3a5c; }
+  .cr { background: #f8d7da; } .cr .cval { color: #721c24; }
+  .co { background: #fff3cd; } .co .cval { color: #856404; }
+  .chart-panel { background: white; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); padding: 28px; margin-bottom: 24px; }
+  .chart-panel h2 { font-size: 16px; color: #1a3a5c; margin-bottom: 4px; }
+  .chart-panel .subtitle { font-size: 12px; color: #888; margin-bottom: 16px; }
+  .chart-panel .source { font-size: 11px; color: #999; font-style: italic; margin-top: 12px; text-align: right; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #f0f4f8; padding: 8px 12px; text-align: center; font-weight: 600; color: #1a3a5c;
+    border-bottom: 2px solid #ddd; }
+  td { padding: 7px 12px; border-bottom: 1px solid #eee; text-align: center; }
+  td:first-child { text-align: left; font-weight: 600; }
+  .neg { color: #c0392b; font-weight: 600; }
+</style>
+</head>
+<body>
+
+  <div class="callout-row">
+    <div class="callout cb">
+      <div class="clabel">Jan 2021 (Peak)</div>
+      <div class="cval">971</div>
+      <div class="cdetail">distribution points</div>
+    </div>
+    <div class="callout co">
+      <div class="clabel">Sep 2025 (Pre-Cliff)</div>
+      <div class="cval">754</div>
+      <div class="cdetail">-22.4% from peak</div>
+    </div>
+    <div class="callout cr">
+      <div class="clabel">Oct 2025 (Cliff)</div>
+      <div class="cval">651</div>
+      <div class="cdetail">-13.7% in one month</div>
+    </div>
+    <div class="callout cr">
+      <div class="clabel">Feb 2026 (Current)</div>
+      <div class="cval">650</div>
+      <div class="cdetail">-33.0% from peak — holding at floor</div>
+    </div>
+  </div>
+
+  <div class="chart-panel">
+    <h2>Figure 20: Store Distribution Decline — Full Five-Year History</h2>
+    <div class="subtitle">Average Circana Distribution Points, Food Channel, Monthly Jan 2021 – Feb 2026. Distribution measures the number of stores carrying fresh crab.</div>
+    <canvas id="chartMonthly" style="max-height:520px;"></canvas>
+    <div class="source">Source: Seafood Datasearch analysis of Circana data</div>
+  </div>
+
+  <div class="chart-panel">
+    <h2>Quarterly Distribution — Full Series</h2>
+    <canvas id="chartQuarterly" style="max-height:400px;"></canvas>
+    <div class="source">Source: Seafood Datasearch analysis of Circana data</div>
+  </div>
+
+  <div class="chart-panel">
+    <h2>Distribution Summary Table</h2>
+    <table>
+      <thead>
+        <tr><th style="text-align:left">Year</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>Annual Avg</th><th>vs Peak Year</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>2021</td><td>953</td><td>899</td><td>822</td><td>827</td><td>875</td><td>—</td></tr>
+        <tr><td>2022</td><td>826</td><td>809</td><td>811</td><td>843</td><td>822</td><td class="neg">-6.1%</td></tr>
+        <tr><td>2023</td><td>849</td><td>831</td><td>808</td><td>825</td><td>828</td><td class="neg">-5.4%</td></tr>
+        <tr><td>2024</td><td>824</td><td>815</td><td>803</td><td>801</td><td>811</td><td class="neg">-7.4%</td></tr>
+        <tr><td>2025</td><td>789</td><td>778</td><td>770</td><td>654</td><td>748</td><td class="neg">-14.6%</td></tr>
+        <tr><td>2026</td><td>653</td><td>—</td><td>—</td><td>—</td><td>653</td><td class="neg">-25.4%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+<script>
+const blue = '#1a3a5c';
+const red = '#c0392b';
+
+// Monthly data
+const monthLabels = [
+  'Jan 21','Feb 21','Mar 21','Apr 21','May 21','Jun 21','Jul 21','Aug 21','Sep 21','Oct 21','Nov 21','Dec 21',
+  'Jan 22','Feb 22','Mar 22','Apr 22','May 22','Jun 22','Jul 22','Aug 22','Sep 22','Oct 22','Nov 22','Dec 22',
+  'Jan 23','Feb 23','Mar 23','Apr 23','May 23','Jun 23','Jul 23','Aug 23','Sep 23','Oct 23','Nov 23','Dec 23',
+  'Jan 24','Feb 24','Mar 24','Apr 24','May 24','Jun 24','Jul 24','Aug 24','Sep 24','Oct 24','Nov 24','Dec 24',
+  'Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25',
+  'Jan 26','Feb 26'
+];
+const monthData = [
+  971.1,970.8,913.0,907.9,901.8,887.9,850.7,815.2,801.7,790.3,824.5,873.7,
+  847.3,825.2,800.7,801.8,811.4,812.2,811.7,810.3,810.5,811.6,845.1,879.6,
+  849.1,861.4,835.8,819.8,840.3,834.9,818.7,804.2,798.6,793.4,813.3,864.8,
+  819.0,841.9,813.0,799.8,817.5,824.4,818.4,810.8,784.9,769.0,779.7,843.7,
+  794.0,798.1,777.2,771.4,780.0,782.1,787.4,768.0,754.0,650.9,630.6,687.6,
+  656.1,650.4
+];
+
+new Chart(document.getElementById('chartMonthly'), {
+  type: 'line',
+  data: {
+    labels: monthLabels,
+    datasets: [{
+      label: 'Avg Distribution Points',
+      data: monthData,
+      borderColor: blue,
+      backgroundColor: 'rgba(26,58,92,0.06)',
+      fill: true,
+      pointRadius: monthData.map((v,i) => {
+        if (i === 0) return 6;   // peak
+        if (i === 57) return 7;  // cliff
+        if (i === monthData.length-1) return 6; // current
+        return 1;
+      }),
+      pointBackgroundColor: monthData.map((v,i) => {
+        if (i === 0) return '#27ae60';
+        if (i >= 57 && i <= 58) return red;
+        if (i === monthData.length-1) return red;
+        return blue;
+      }),
+      tension: 0.3,
+      borderWidth: 2.5
+    }]
+  },
+  options: {
+    responsive: true,
+    layout: { padding: { top: 50, right: 30, bottom: 10, left: 10 } },
+    plugins: {
+      legend: { display: false },
+      annotation: {
+        clip: false,
+        annotations: {
+          phaseLabel: {
+            type: 'label', xValue: 'Jul 22', yValue: 1060,
+            content: ['Phase 1: Gradual erosion', '971 → ~770 over 4.5 years (-20.7%)'],
+            backgroundColor: 'rgba(26,58,92,0.8)', color: 'white',
+            font: { size: 11, weight: 'bold' }, padding: { x: 12, y: 7 }, borderRadius: 4
+          },
+          peakDot: {
+            type: 'label', xValue: 'Apr 21', yValue: 1000,
+            content: ['Peak: 971'],
+            backgroundColor: 'rgba(39,174,96,0.85)', color: 'white',
+            font: { size: 11, weight: 'bold' }, padding: { x: 8, y: 5 }, borderRadius: 4
+          },
+          cliffLabel: {
+            type: 'label', xValue: 'Jul 25', yValue: 600,
+            content: ['Phase 2: Cliff drop', 'Oct 2025 — 770 → 651', 'in one month (-15.5%)'],
+            backgroundColor: 'rgba(192,57,43,0.9)', color: 'white',
+            font: { size: 12, weight: 'bold' }, padding: { x: 12, y: 7 }, borderRadius: 4
+          },
+          cliffArrow: {
+            type: 'line', xMin: 'Sep 25', xMax: 'Oct 25',
+            yMin: 754, yMax: 651,
+            borderColor: red, borderWidth: 2.5
+          },
+          currentLabel: {
+            type: 'label', xValue: 'Jan 26', yValue: 560,
+            content: ['Feb 2026: 650 pts', 'No recovery — holding at floor'],
+            backgroundColor: 'rgba(230,126,34,0.9)', color: 'white',
+            font: { size: 11, weight: 'bold' }, padding: { x: 10, y: 6 }, borderRadius: 4
+          },
+          noBounce: {
+            type: 'label', xValue: 'Dec 25', yValue: 730,
+            content: ['No holiday bounce', 'for first time ever'],
+            backgroundColor: 'rgba(114,28,36,0.85)', color: 'white',
+            font: { size: 10, weight: 'bold' }, padding: { x: 8, y: 5 }, borderRadius: 4
+          },
+          // Green shading for past holiday bounces
+          hol21: { type: 'box', xMin: 'Oct 21', xMax: 'Dec 21',
+            backgroundColor: 'rgba(39,174,96,0.06)', borderColor: 'rgba(39,174,96,0.25)', borderWidth: 1 },
+          hol22: { type: 'box', xMin: 'Oct 22', xMax: 'Dec 22',
+            backgroundColor: 'rgba(39,174,96,0.06)', borderColor: 'rgba(39,174,96,0.25)', borderWidth: 1 },
+          hol23: { type: 'box', xMin: 'Oct 23', xMax: 'Dec 23',
+            backgroundColor: 'rgba(39,174,96,0.06)', borderColor: 'rgba(39,174,96,0.25)', borderWidth: 1 },
+          hol24: { type: 'box', xMin: 'Oct 24', xMax: 'Dec 24',
+            backgroundColor: 'rgba(39,174,96,0.06)', borderColor: 'rgba(39,174,96,0.25)', borderWidth: 1 }
+        }
+      }
+    },
+    scales: {
+      y: { title: { display: true, text: 'Distribution Points' }, min: 530, max: 1080 },
+      x: { ticks: { maxRotation: 45, autoSkip: true, maxTicksLimit: 18 } }
+    }
+  }
+});
+
+// Quarterly bar chart
+const dqLabels = ['Q1 21','Q2 21','Q3 21','Q4 21','Q1 22','Q2 22','Q3 22','Q4 22','Q1 23','Q2 23','Q3 23','Q4 23','Q1 24','Q2 24','Q3 24','Q4 24','Q1 25','Q2 25','Q3 25','Q4 25','Q1 26'];
+const dqData = [953,899,822,827, 826,809,811,843, 849,831,808,825, 824,815,803,801, 789,778,770,654, 653];
+const dqColors = dqData.map(v => v < 700 ? red : (v < 790 ? '#e67e22' : '#3498db'));
+
+new Chart(document.getElementById('chartQuarterly'), {
+  type: 'bar',
+  data: {
+    labels: dqLabels,
+    datasets: [{
+      label: 'Avg Distribution Points',
+      data: dqData,
+      backgroundColor: dqColors,
+      borderRadius: 3
+    }]
+  },
+  options: {
+    responsive: true,
+    layout: { padding: { top: 30 } },
+    plugins: {
+      legend: { display: false },
+      annotation: {
+        clip: false,
+        annotations: {
+          baseline: {
+            type: 'line', yMin: 875, yMax: 875,
+            borderColor: 'rgba(26,58,92,0.4)', borderWidth: 1.5, borderDash: [6,4],
+            label: { display: true, content: '2021 avg: 875', position: 'start',
+              backgroundColor: 'rgba(26,58,92,0.7)', color: 'white', font: { size: 10 }, padding: 4 }
+          }
+        }
+      }
+    },
+    scales: {
+      y: { title: { display: true, text: 'Distribution Points' }, min: 550, max: 1000 },
+      x: { ticks: { maxRotation: 45 } }
+    }
+  }
+});
+</script>
+</body>
+</html>
