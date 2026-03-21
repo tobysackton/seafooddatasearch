@@ -1,1 +1,205 @@
-<!-- SUPERSEDED -- see figure_36_crabmeat_triangle.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 35 — The Crabmeat Triangle: Canadian Sections to SE Asia</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-mWzy91L4rxANDGs9nSqvy.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+  }
+  .container {
+    max-width: 780px;
+    width: 100%;
+    padding: 28px 32px 20px;
+  }
+  .figure-number {
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+  .title {
+    text-align: center;
+    font-size: 21px;
+    font-weight: 700;
+    color: #222;
+    line-height: 1.2;
+    margin-bottom: 5px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 20px;
+  }
+  .chart-wrap {
+    position: relative;
+    height: 380px;
+    margin-bottom: 14px;
+  }
+  .summary-box {
+    background: #f5f7fa;
+    border: 1px solid #dde2e8;
+    border-left: 4px solid #2a5c8f;
+    border-radius: 0 5px 5px 0;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    font-size: 13.5px;
+    color: #333;
+    line-height: 1.55;
+  }
+  .source-line {
+    border-top: 1px solid #ddd;
+    padding-top: 8px;
+    font-size: 12px;
+    color: #999;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="figure-number">Figure 35</div>
+  <div class="title">Canadian Snow Crab Sections to SE Asia Reprocessors, 2015–2025</div>
+  <div class="subtitle">Annual Canadian export volume to China, Vietnam, Indonesia, and Thailand (million lbs)</div>
+
+  <div class="chart-wrap">
+    <canvas id="chart"></canvas>
+  </div>
+
+  <div class="summary-box">
+    The China channel was disrupted by the 25% tariff imposed in March 2025. Chinese imports of Canadian sections collapsed from 6.5M lbs in 2024 to 2.9M lbs in 2025, while Vietnam grew from 3.7M to 4.5M lbs as a partial substitute. The Carney-Xi resolution effective March 1, 2026 restores the China channel heading into the new season — the key new element for 2026 that was not present in 2025.
+  </div>
+
+  <div class="source-line">Source: Global Trade Tracker, HS 030614, Canada as reporter, export flow, 2015–2025. Quantities converted from kg to lbs (1 kg = 2.20462 lbs).</div>
+</div>
+
+<script>
+var years = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+
+// Actual data from GTT CSV (million lbs)
+var china     = [11.71, 9.35, 9.60, 9.05, 5.48, 6.00, 5.90, 7.72, 6.97, 6.54, 2.91];
+var vietnam   = [1.57, 1.24, 1.71, 1.38, 2.22, 1.80, 1.42, 4.36, 2.43, 3.65, 4.46];
+var indonesia = [2.12, 1.43, 2.54, 2.61, 2.51, 1.32, 0.70, 3.81, 2.58, 2.48, 1.08];
+var thailand  = [1.12, 0.57, 0.40, 0.07, 0.07, 0.00, 0.04, 0.07, 0.07, 0.27, 0.00];
+
+var ctx = document.getElementById('chart').getContext('2d');
+
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [
+      { label: 'China', data: china, backgroundColor: '#d4b84a', stack: 'a' },
+      { label: 'Vietnam', data: vietnam, backgroundColor: '#6bb86b', stack: 'a' },
+      { label: 'Indonesia', data: indonesia, backgroundColor: '#9e8fce', stack: 'a' },
+      { label: 'Thailand', data: thailand, backgroundColor: '#c87070', stack: 'a' },
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        stacked: true,
+        grid: { display: false },
+        ticks: {
+          font: { family: "'Calibri','Segoe UI',sans-serif", size: 13 },
+          color: '#444'
+        }
+      },
+      y: {
+        stacked: true,
+        max: 18,
+        ticks: {
+          stepSize: 2,
+          font: { family: "'Calibri','Segoe UI',sans-serif", size: 12 },
+          color: '#777'
+        },
+        title: {
+          display: true,
+          text: 'Million lbs',
+          font: { family: "'Calibri','Segoe UI',sans-serif", size: 12 },
+          color: '#777'
+        },
+        grid: { color: '#e8e8e8', drawBorder: false }
+      }
+    },
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          usePointStyle: true,
+          pointStyle: 'rectRounded',
+          padding: 18,
+          font: { family: "'Calibri','Segoe UI',sans-serif", size: 13 },
+          color: '#555'
+        }
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        callbacks: {
+          label: function(ctx) {
+            if (ctx.raw === 0) return null;
+            return ctx.dataset.label + ': ' + ctx.raw.toFixed(2) + 'M';
+          },
+          afterBody: function(items) {
+            var total = 0;
+            items.forEach(function(i) { total += i.raw; });
+            return ['\nTotal: ' + total.toFixed(2) + 'M lbs'];
+          }
+        },
+        backgroundColor: '#fff',
+        titleColor: '#222',
+        titleFont: { size: 15, weight: 'bold', family: "'Calibri',sans-serif" },
+        bodyColor: '#555',
+        bodyFont: { size: 13, family: "'Calibri',sans-serif" },
+        borderColor: '#ccc',
+        borderWidth: 1,
+        padding: 12,
+        cornerRadius: 6
+      },
+      annotation: {
+        annotations: {
+          tariffLine: {
+            type: 'line',
+            xMin: 10.35,
+            xMax: 10.35,
+            borderColor: '#dc2626',
+            borderWidth: 2,
+            borderDash: [5, 3],
+            label: {
+              display: true,
+              content: ['China tariff', 'Mar 2025'],
+              position: 'start',
+              backgroundColor: 'transparent',
+              color: '#dc2626',
+              font: { size: 11, family: "'Calibri',sans-serif" },
+              padding: 4
+            }
+          }
+        }
+      }
+    },
+    interaction: { mode: 'index', intersect: false }
+  }
+});
+</script>
+</body>
+</html>
