@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 17: Retail Price Trends 2021–2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Calibri, 'Segoe UI', sans-serif; background: #f8f9fa; color: #333; padding: 30px 40px; }
+  .stat-row { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .stat-card { flex: 1; min-width: 160px; background: white; border-radius: 8px; padding: 16px 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08); text-align: center; }
+  .stat-card .label { font-size: 11px; text-transform: uppercase; color: #888; letter-spacing: 0.5px; }
+  .stat-card .value { font-size: 28px; font-weight: 700; margin: 4px 0; }
+  .stat-card .detail { font-size: 12px; color: #666; }
+  .stat-card.negative .value { color: #c0392b; }
+  .stat-card.neutral .value { color: #1a3a5c; }
+  .chart-panel { background: white; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); padding: 28px; margin-bottom: 24px; }
+  .chart-panel h2 { font-size: 16px; color: #1a3a5c; margin-bottom: 4px; }
+  .chart-panel .subtitle { font-size: 12px; color: #888; margin-bottom: 16px; }
+  .chart-panel .source { font-size: 11px; color: #999; font-style: italic; margin-top: 12px; text-align: right; }
+</style>
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-mWzy91L4rxANDGs9nSqvy.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};;
+  plausible.init()
+</script>
+</head>
+<body>
+  <div class="stat-row">
+    <div class="stat-card neutral"><div class="label">Q1 2025</div><div class="value">$9.66</div><div class="detail">per lb</div></div>
+    <div class="stat-card neutral"><div class="label">Q4 2025</div><div class="value">$11.47</div><div class="detail">+18.7% vs Q1</div></div>
+    <div class="stat-card negative"><div class="label">Q1 2026</div><div class="value">$11.49</div><div class="detail">Step-change, not spike</div></div>
+  </div>
+
+  <div class="chart-panel">
+    <h2>Figure 17a: Retail Price Trends 2021–2026 — Quarterly National Average</h2>
+    <div class="subtitle">Avg Price per lb, Food Channel. Note the Q4 2025 step-change holding into Q1 2026.</div>
+    <canvas id="chartPrice" style="max-height:480px;"></canvas>
+    <div class="source">Source: Seafood Datasearch analysis of Circana data</div>
+  </div>
+
+  <div class="chart-panel">
+    <h2>Figure 17b: Q4 2025 Price Escalation and Q1 2026 Step-Change</h2>
+    <div class="subtitle">Volume (bars) vs Price (line) — 2025 Q1 through 2026 Q1</div>
+    <canvas id="chartPriceVol" style="max-height:420px;"></canvas>
+    <div class="source">Source: Seafood Datasearch analysis of Circana data</div>
+  </div>
+
+<script>
+const blue = '#1a3a5c';
+const red = '#c0392b';
+
+// === 17a: Full quarterly price series ===
+const qLabels = [
+  'Q1 21','Q2 21','Q3 21','Q4 21',
+  'Q1 22','Q2 22','Q3 22','Q4 22',
+  'Q1 23','Q2 23','Q3 23','Q4 23',
+  'Q1 24','Q2 24','Q3 24','Q4 24',
+  'Q1 25','Q2 25','Q3 25','Q4 25',
+  'Q1 26'
+];
+const qPrices = [10.62,11.46,12.24,13.28, 12.36,12.07,11.48,11.49, 9.99,9.52,8.85,9.08, 8.66,8.50,8.75,9.63, 9.66,9.93,10.08,11.47, 11.49];
+
+new Chart(document.getElementById('chartPrice'), {
+  type: 'line',
+  data: {
+    labels: qLabels,
+    datasets: [{
+      label: 'Avg Price ($/lb)',
+      data: qPrices,
+      borderColor: blue,
+      backgroundColor: 'rgba(26,58,92,0.08)',
+      fill: true,
+      pointRadius: 4,
+      pointBackgroundColor: qPrices.map((p,i) => i >= 16 ? red : blue),
+      tension: 0.3,
+      borderWidth: 2.5
+    }]
+  },
+  options: {
+    responsive: true,
+    layout: { padding: { top: 40, bottom: 10, left: 10, right: 30 } },
+    plugins: {
+      legend: { display: false },
+      annotation: {
+        clip: false,
+        annotations: {
+          peakPrice: {
+            type: 'label', xValue: 'Q2 21', yValue: 14.5,
+            content: ['COVID-era peak', '$13.28/lb (Q4 2021)'],
+            backgroundColor: 'rgba(26,58,92,0.85)', color: 'white',
+            font: { size: 11, weight: 'bold' }, padding: { x: 10, y: 6 }, borderRadius: 4
+          },
+          peakLine: {
+            type: 'line', xMin: 'Q4 21', xMax: 'Q4 21',
+            yMin: 13.28, yMax: 14.1,
+            borderColor: 'rgba(26,58,92,0.4)', borderWidth: 1
+          },
+          troughPrice: {
+            type: 'label', xValue: 'Q2 24', yValue: 7.4,
+            content: ['Trough: $8.50/lb', '(Q2 2024)'],
+            backgroundColor: 'rgba(39,174,96,0.85)', color: 'white',
+            font: { size: 11, weight: 'bold' }, padding: { x: 10, y: 6 }, borderRadius: 4
+          },
+          stepChange: {
+            type: 'label', xValue: 'Q4 25', yValue: 12.8,
+            content: ['$11.47 → $11.49', 'Step-change holding'],
+            backgroundColor: 'rgba(192,57,43,0.85)', color: 'white',
+            font: { size: 11, weight: 'bold' }, padding: { x: 10, y: 6 }, borderRadius: 4
+          },
+          stepLine: {
+            type: 'line', xMin: 'Q4 25', xMax: 'Q1 26',
+            yMin: 11.47, yMax: 11.49,
+            borderColor: red, borderWidth: 3
+          }
+        }
+      }
+    },
+    scales: {
+      y: { title: { display: true, text: '$/lb' }, min: 7, max: 15.5 }
+    }
+  }
+});
+
+// === 17b: Price vs Volume (2025–2026 zoom) ===
+new Chart(document.getElementById('chartPriceVol'), {
+  type: 'bar',
+  data: {
+    labels: ['Q1 2025','Q2 2025','Q3 2025','Q4 2025','Q1 2026'],
+    datasets: [
+      { label: 'Volume (M lbs)', data: [17.1, 16.7, 15.6, 14.0, 9.1],
+        backgroundColor: ['#3498db','#3498db','#3498db','#3498db',red],
+        borderRadius: 4, yAxisID: 'y', order: 2 },
+      { label: 'Avg Price ($/lb)', data: [9.66, 9.93, 10.08, 11.47, 11.49],
+        type: 'line', borderColor: red,
+        pointBackgroundColor: red, pointRadius: 6, yAxisID: 'y1', borderWidth: 3, tension: 0.3, order: 1 }
+    ]
+  },
+  options: {
+    responsive: true,
+    layout: { padding: { top: 30, right: 20 } },
+    plugins: {
+      legend: { position: 'top' },
+      annotation: {
+        clip: false,
+        annotations: {
+          volDrop: {
+            type: 'label', xValue: 'Q1 2026', yValue: 5,
+            content: ['Q1 2026: 9.1M lbs', '-46.8% vs Q1 2025'],
+            backgroundColor: 'rgba(192,57,43,0.85)', color: 'white',
+            font: { size: 11, weight: 'bold' }, padding: { x: 10, y: 6 }, borderRadius: 4
+          },
+          priceFlat: {
+            type: 'label', xValue: 'Q3 2025', yValue: 12.5,
+            content: ['+18.7% price escalation', 'Q1 → Q4 2025'],
+            backgroundColor: 'rgba(26,58,92,0.8)', color: 'white',
+            font: { size: 10, weight: 'bold' }, padding: { x: 10, y: 5 }, borderRadius: 4
+          }
+        }
+      }
+    },
+    scales: {
+      y: { title: { display: true, text: 'Volume (M lbs)' }, beginAtZero: true, max: 22 },
+      y1: { position: 'right', title: { display: true, text: '$/lb' },
+        min: 8, max: 13, grid: { drawOnChartArea: false } }
+    }
+  }
+});
+</script>
+</body>
+</html>

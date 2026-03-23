@@ -1,1 +1,187 @@
-<!-- SUPERSEDED -- see figure_37_japan_crabmeat_by_country.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 36 — Japan Crabmeat Imports by Processing Country</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-mWzy91L4rxANDGs9nSqvy.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+  }
+  .container {
+    max-width: 780px;
+    width: 100%;
+    padding: 28px 32px 20px;
+  }
+  .figure-number {
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+  .title {
+    text-align: center;
+    font-size: 21px;
+    font-weight: 700;
+    color: #222;
+    line-height: 1.2;
+    margin-bottom: 5px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 20px;
+  }
+  .chart-wrap {
+    position: relative;
+    height: 380px;
+    margin-bottom: 14px;
+  }
+  .summary-box {
+    background: #f5f7fa;
+    border: 1px solid #dde2e8;
+    border-left: 4px solid #2a5c8f;
+    border-radius: 0 5px 5px 0;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    font-size: 13.5px;
+    color: #333;
+    line-height: 1.55;
+  }
+  .source-line {
+    border-top: 1px solid #ddd;
+    padding-top: 8px;
+    font-size: 12px;
+    color: #999;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="figure-number">Figure 36</div>
+  <div class="title">Japan Crabmeat Imports by Processing Country, 2015–2025</div>
+  <div class="subtitle">Annual import volume (million lbs, HS 1605); China dominant, Vietnam at record high in 2025</div>
+
+  <div class="chart-wrap">
+    <canvas id="chart"></canvas>
+  </div>
+
+  <div class="summary-box">
+    The structural shift from China to Vietnam in crabmeat processing is driven by Japanese buyers diversifying away from China for geopolitical reasons, not price. Vietnam reached a record 71.4M lbs in 2025 while China declined to 184M lbs. This is a medium-term structural trend that is independent of the tariff resolution — Japanese buyers are building permanent alternative supply chains.
+  </div>
+
+  <div class="source-line">Source: Global Trade Tracker, HS 1605, Japan as reporter, import flow, 2015–2025.</div>
+</div>
+
+<script>
+var years = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+
+// Actual data from GTT CSV (million lbs)
+var china     = [192.63, 201.73, 204.19, 198.60, 199.47, 182.58, 193.68, 193.38, 181.67, 191.11, 184.09];
+var vietnam   = [55.90, 57.93, 62.70, 64.03, 66.04, 65.33, 60.56, 67.76, 61.76, 65.13, 71.38];
+var thailand  = [60.67, 60.36, 59.96, 59.39, 59.63, 50.29, 53.61, 59.89, 53.93, 51.15, 51.42];
+var indonesia = [19.42, 18.73, 19.74, 20.05, 21.34, 21.61, 23.33, 27.34, 22.67, 20.75, 23.32];
+var korea     = [12.49, 10.89, 9.36, 6.36, 4.68, 3.82, 4.79, 5.98, 6.33, 5.47, 6.53];
+var other     = [29.27, 26.33, 23.17, 23.54, 27.17, 21.24, 15.51, 17.78, 22.65, 18.69, 21.81];
+
+var ctx = document.getElementById('chart').getContext('2d');
+
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [
+      { label: 'China', data: china, backgroundColor: '#d4b84a', stack: 'a' },
+      { label: 'Vietnam', data: vietnam, backgroundColor: '#6bb86b', stack: 'a' },
+      { label: 'Thailand', data: thailand, backgroundColor: '#c87070', stack: 'a' },
+      { label: 'Indonesia', data: indonesia, backgroundColor: '#9e8fce', stack: 'a' },
+      { label: 'Korea', data: korea, backgroundColor: '#5b9bd5', stack: 'a' },
+      { label: 'Other', data: other, backgroundColor: '#bfbfbf', stack: 'a' },
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        stacked: true,
+        grid: { display: false },
+        ticks: {
+          font: { family: "'Calibri','Segoe UI',sans-serif", size: 13 },
+          color: '#444'
+        }
+      },
+      y: {
+        stacked: true,
+        max: 400,
+        ticks: {
+          stepSize: 50,
+          font: { family: "'Calibri','Segoe UI',sans-serif", size: 12 },
+          color: '#777'
+        },
+        title: {
+          display: true,
+          text: 'Million lbs',
+          font: { family: "'Calibri','Segoe UI',sans-serif", size: 12 },
+          color: '#777'
+        },
+        grid: { color: '#e8e8e8', drawBorder: false }
+      }
+    },
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          usePointStyle: true,
+          pointStyle: 'rectRounded',
+          padding: 18,
+          font: { family: "'Calibri','Segoe UI',sans-serif", size: 13 },
+          color: '#555'
+        }
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        callbacks: {
+          label: function(ctx) {
+            if (ctx.raw === 0) return null;
+            return ctx.dataset.label + ': ' + ctx.raw.toFixed(1) + 'M';
+          },
+          afterBody: function(items) {
+            var total = 0;
+            items.forEach(function(i) { total += i.raw; });
+            return ['\nTotal: ' + total.toFixed(1) + 'M lbs'];
+          }
+        },
+        backgroundColor: '#fff',
+        titleColor: '#222',
+        titleFont: { size: 15, weight: 'bold', family: "'Calibri',sans-serif" },
+        bodyColor: '#555',
+        bodyFont: { size: 13, family: "'Calibri',sans-serif" },
+        borderColor: '#ccc',
+        borderWidth: 1,
+        padding: 12,
+        cornerRadius: 6
+      }
+    },
+    interaction: { mode: 'index', intersect: false }
+  }
+});
+</script>
+</body>
+</html>

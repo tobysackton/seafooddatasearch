@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 19: Holiday Week Performance 2023–2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Calibri, 'Segoe UI', sans-serif; background: #f8f9fa; color: #333; padding: 30px 40px; }
+  .chart-panel { background: white; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); padding: 28px; margin-bottom: 24px; }
+  .chart-panel h2 { font-size: 16px; color: #1a3a5c; margin-bottom: 4px; }
+  .chart-panel .subtitle { font-size: 12px; color: #888; margin-bottom: 16px; }
+  .chart-panel .source { font-size: 11px; color: #999; font-style: italic; margin-top: 12px; text-align: right; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #f0f4f8; padding: 8px 12px; text-align: left; font-weight: 600; color: #1a3a5c;
+    border-bottom: 2px solid #ddd; }
+  td { padding: 7px 12px; border-bottom: 1px solid #eee; }
+  tr:hover td { background: #f8fbff; }
+</style>
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-mWzy91L4rxANDGs9nSqvy.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};;
+  plausible.init()
+</script>
+</head>
+<body>
+  <div class="chart-panel">
+    <h2>Figure 19: Holiday Week Performance by Year 2023–2026</h2>
+    <div class="subtitle">Total Sales ($M) in holiday weeks, Food Channel. Valentine's 2026 shows first clear elasticity signal.</div>
+    <canvas id="chart" style="max-height:500px;"></canvas>
+    <div class="source">Source: Seafood Datasearch analysis of Circana data</div>
+  </div>
+
+  <div class="chart-panel">
+    <h2>Holiday Detail Table</h2>
+    <table>
+      <thead><tr><th>Holiday</th><th>Year</th><th>Sales ($M)</th><th>Avg Price ($/lb)</th><th>Vol (M lbs)</th></tr></thead>
+      <tbody id="holidayTable"></tbody>
+    </table>
+  </div>
+
+<script>
+const holidays = [
+  {name: 'July 4th', yr: 2023, sales: 22.1, price: 8.85, vol: 2.50},
+  {name: 'July 4th', yr: 2024, sales: 20.8, price: 8.72, vol: 2.39},
+  {name: 'July 4th', yr: 2025, sales: 21.2, price: 9.51, vol: 2.23},
+  {name: 'Christmas', yr: 2023, sales: 28.6, price: 9.22, vol: 3.10},
+  {name: 'Christmas', yr: 2024, sales: 25.1, price: 9.85, vol: 2.55},
+  {name: 'Christmas', yr: 2025, sales: 23.3, price: 12.96, vol: 1.80},
+  {name: 'NYE', yr: 2024, sales: 32.1, price: 9.64, vol: 3.33},
+  {name: 'NYE', yr: 2025, sales: 29.4, price: 13.66, vol: 2.15},
+  {name: "Valentine's", yr: 2025, sales: 17.8, price: 10.96, vol: 1.62},
+  {name: "Valentine's", yr: 2026, sales: 16.9, price: 12.55, vol: 1.35},
+];
+
+const gray = '#95a5a6';
+const lightBlue = '#4da6ff';
+const red = '#c0392b';
+
+new Chart(document.getElementById('chart'), {
+  type: 'bar',
+  data: {
+    labels: ['July 4\n2023','July 4\n2024','July 4\n2025','Xmas\n2023','Xmas\n2024','Xmas\n2025','NYE\n2024','NYE\n2025',"Val\n2025","Val\n2026"],
+    datasets: [
+      { label: 'Sales ($M)', data: holidays.map(h => h.sales),
+        backgroundColor: holidays.map(h => h.yr >= 2025 ? (h.yr === 2026 ? red : lightBlue) : gray),
+        borderRadius: 4, order: 2 },
+      { label: 'Price ($/lb)', data: holidays.map(h => h.price), type: 'line', borderColor: '#e67e22',
+        pointBackgroundColor: '#e67e22', pointRadius: 5, yAxisID: 'y1', borderWidth: 2.5, tension: 0.3, order: 1 }
+    ]
+  },
+  options: {
+    responsive: true,
+    layout: { padding: { top: 40, right: 20, bottom: 10 } },
+    plugins: {
+      legend: { position: 'top' },
+      annotation: {
+        clip: false,
+        annotations: {
+          xmasCollapse: {
+            type: 'label', xValue: 3, yValue: 34,
+            content: ['Xmas vol collapsed:', '3.10M → 1.80M lbs (-42%)'],
+            backgroundColor: 'rgba(192,57,43,0.85)', color: 'white',
+            font: { size: 11, weight: 'bold' }, padding: { x: 10, y: 6 }, borderRadius: 4
+          },
+          valSignal: {
+            type: 'label', xValue: 8.5, yValue: 22,
+            content: ["Val '26: sales -5%", 'but vol -17% at $12.55/lb', 'First elasticity signal'],
+            backgroundColor: 'rgba(192,57,43,0.85)', color: 'white',
+            font: { size: 11, weight: 'bold' }, padding: { x: 10, y: 6 }, borderRadius: 4
+          },
+          priceNote: {
+            type: 'label', xValue: 6, yValue: 15.5,
+            content: ['NYE price: $9.64 → $13.66', '+41.7% year-over-year'],
+            backgroundColor: 'rgba(230,126,34,0.85)', color: 'white',
+            font: { size: 10, weight: 'bold' }, padding: { x: 10, y: 5 }, borderRadius: 4
+          }
+        }
+      }
+    },
+    scales: {
+      y: { title: { display: true, text: 'Sales ($M)' }, beginAtZero: true, max: 40 },
+      y1: { position: 'right', title: { display: true, text: '$/lb' },
+        min: 7, max: 16.5, grid: { drawOnChartArea: false } }
+    }
+  }
+});
+
+// Table
+const tbody = document.getElementById('holidayTable');
+holidays.forEach(h => {
+  tbody.innerHTML += `<tr><td>${h.name}</td><td>${h.yr}</td><td>$${h.sales.toFixed(1)}M</td><td>$${h.price.toFixed(2)}</td><td>${h.vol.toFixed(2)}M</td></tr>`;
+});
+</script>
+</body>
+</html>
