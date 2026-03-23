@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure R-3: Gulf vs Newfoundland 5-8 oz Weekly Price</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fff; color: #333; padding: 20px; }
+  .container { max-width: 960px; margin: 0 auto; }
+  .figure-label { text-align: center; color: #666; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; }
+  h1 { text-align: center; font-size: 20px; color: #1a5276; margin-bottom: 2px; font-weight: 700; }
+  .subtitle { text-align: center; font-size: 12.5px; color: #666; margin-bottom: 18px; }
+  .chart-wrapper { position: relative; margin-bottom: 12px; }
+  canvas { display: block; margin: 0 auto; }
+  .callout-box { background: #f8f9fa; border: 1px solid #ddd; border-radius: 4px; padding: 14px 16px; margin: 16px 0; font-size: 12.5px; line-height: 1.6; color: #444; }
+  .callout-box strong { color: #1a5276; }
+  .source { font-size: 10.5px; color: #999; margin-top: 10px; }
+  .legend-row { display: flex; justify-content: center; gap: 28px; margin-bottom: 14px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #555; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .legend-line { width: 22px; height: 3px; border-radius: 2px; display: inline-block; }
+  .stats-row { display: flex; gap: 20px; justify-content: center; margin: 14px 0; flex-wrap: wrap; }
+  .stat-card { background: #f0f6fb; border-radius: 6px; padding: 10px 18px; text-align: center; min-width: 140px; }
+  .stat-val { font-size: 20px; font-weight: 700; color: #1a5276; }
+  .stat-label { font-size: 10.5px; color: #777; margin-top: 2px; }
+  .tooltip-box { position: absolute; background: rgba(255,255,255,0.96); border: 1px solid #ccc; border-radius: 4px; padding: 8px 12px; font-size: 11.5px; pointer-events: none; display: none; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.1); line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="figure-label">Figure R-3 (Revised)</div>
+  <h1>Gulf vs Newfoundland 5-8 oz Wholesale Price</h1>
+  <div class="subtitle">Weekly Urner Barry COMTELL data, January 2024 &ndash; March 2026</div>
+
+  <div class="legend-row">
+    <div class="legend-item"><div class="legend-dot" style="background:#2874a6;"></div> Newfoundland 5-8 oz</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#c0392b;"></div> Gulf 5-8 oz</div>
+    <div class="legend-item"><div class="legend-line" style="background:#e8a317;"></div> Gulf Premium (right axis)</div>
+  </div>
+
+  <div class="stats-row" id="statsRow"></div>
+
+  <div class="chart-wrapper">
+    <canvas id="priceChart" width="920" height="420"></canvas>
+    <div class="tooltip-box" id="tooltip"></div>
+  </div>
+
+  <div class="callout-box" id="calloutBox"></div>
+  <div class="source">Source: Urner Barry COMTELL weekly data. Gulf = Gulf of St. Lawrence Cluster 5-8 oz EBP; NL = Newfoundland Cluster 5-8 oz EBP.</div>
+</div>
+
+<script>
+var rawData = [{"date":"2024-01-01","nl":5.3,"gulf":5.85,"premium":0.55},{"date":"2024-01-08","nl":5.4,"gulf":5.95,"premium":0.55},{"date":"2024-01-15","nl":5.42,"gulf":5.97,"premium":0.55},{"date":"2024-01-22","nl":5.45,"gulf":6,"premium":0.55},{"date":"2024-01-29","nl":5.45,"gulf":6,"premium":0.55},{"date":"2024-02-05","nl":5.45,"gulf":6,"premium":0.55},{"date":"2024-02-12","nl":5.45,"gulf":6,"premium":0.55},{"date":"2024-02-19","nl":5.45,"gulf":6,"premium":0.55},{"date":"2024-02-26","nl":5.45,"gulf":6,"premium":0.55},{"date":"2024-03-04","nl":5.45,"gulf":6,"premium":0.55},{"date":"2024-03-11","nl":5.45,"gulf":6,"premium":0.55},{"date":"2024-03-18","nl":5.45,"gulf":6,"premium":0.55},{"date":"2024-03-25","nl":5.45,"gulf":6,"premium":0.55},{"date":"2024-04-01","nl":5.45,"gulf":6,"premium":0.55},{"date":"2024-04-29","nl":6.2,"gulf":6.5,"premium":0.3},{"date":"2024-05-06","nl":6.2,"gulf":6.5,"premium":0.3},{"date":"2024-05-13","nl":6.22,"gulf":6.55,"premium":0.33},{"date":"2024-05-20","nl":6.22,"gulf":6.6,"premium":0.38},{"date":"2024-05-27","nl":6.12,"gulf":6.6,"premium":0.48},{"date":"2024-06-03","nl":6.08,"gulf":6.6,"premium":0.52},{"date":"2024-06-10","nl":6.05,"gulf":6.6,"premium":0.55},{"date":"2024-06-17","nl":6.05,"gulf":6.6,"premium":0.55},{"date":"2024-06-24","nl":6.05,"gulf":6.6,"premium":0.55},{"date":"2024-07-01","nl":6.05,"gulf":6.6,"premium":0.55},{"date":"2024-07-08","nl":6.05,"gulf":6.6,"premium":0.55},{"date":"2024-07-15","nl":6.05,"gulf":6.6,"premium":0.55},{"date":"2024-07-22","nl":6.05,"gulf":6.6,"premium":0.55},{"date":"2024-07-29","nl":6.05,"gulf":6.6,"premium":0.55},{"date":"2024-08-05","nl":6.05,"gulf":6.6,"premium":0.55},{"date":"2024-08-12","nl":6.05,"gulf":6.6,"premium":0.55},{"date":"2024-08-19","nl":6.08,"gulf":6.6,"premium":0.52},{"date":"2024-08-26","nl":6.2,"gulf":6.6,"premium":0.4},{"date":"2024-09-02","nl":6.3,"gulf":6.6,"premium":0.3},{"date":"2024-09-09","nl":6.5,"gulf":6.65,"premium":0.15},{"date":"2024-09-16","nl":6.88,"gulf":7,"premium":0.12},{"date":"2024-09-23","nl":7,"gulf":7.15,"premium":0.15},{"date":"2024-09-30","nl":7.15,"gulf":7.35,"premium":0.2},{"date":"2024-10-07","nl":7.33,"gulf":7.5,"premium":0.17},{"date":"2024-10-14","nl":7.55,"gulf":7.7,"premium":0.15},{"date":"2024-10-21","nl":7.55,"gulf":7.7,"premium":0.15},{"date":"2024-10-28","nl":7.75,"gulf":7.9,"premium":0.15},{"date":"2024-11-04","nl":8,"gulf":8.15,"premium":0.15},{"date":"2024-11-11","nl":8.25,"gulf":8.5,"premium":0.25},{"date":"2024-11-18","nl":8.25,"gulf":8.5,"premium":0.25},{"date":"2024-11-25","nl":8.35,"gulf":8.6,"premium":0.25},{"date":"2024-12-02","nl":8.35,"gulf":8.6,"premium":0.25},{"date":"2024-12-09","nl":8.35,"gulf":8.6,"premium":0.25},{"date":"2024-12-16","nl":8.35,"gulf":8.6,"premium":0.25},{"date":"2024-12-23","nl":8.43,"gulf":8.68,"premium":0.25},{"date":"2024-12-30","nl":8.5,"gulf":8.75,"premium":0.25},{"date":"2025-01-06","nl":8.5,"gulf":8.75,"premium":0.25},{"date":"2025-01-13","nl":8.6,"gulf":8.85,"premium":0.25},{"date":"2025-01-20","nl":8.7,"gulf":8.95,"premium":0.25},{"date":"2025-01-27","nl":8.75,"gulf":9,"premium":0.25},{"date":"2025-02-03","nl":8.88,"gulf":9.12,"premium":0.24},{"date":"2025-02-10","nl":9.1,"gulf":9.35,"premium":0.25},{"date":"2025-02-17","nl":9.2,"gulf":9.45,"premium":0.25},{"date":"2025-02-24","nl":9.25,"gulf":9.5,"premium":0.25},{"date":"2025-04-21","nl":8,"gulf":9.5,"premium":1.5},{"date":"2025-04-28","nl":8.1,"gulf":9.5,"premium":1.4},{"date":"2025-05-05","nl":8.1,"gulf":9.5,"premium":1.4},{"date":"2025-05-12","nl":8.1,"gulf":9.5,"premium":1.4},{"date":"2025-05-19","nl":8.05,"gulf":9.35,"premium":1.3},{"date":"2025-05-26","nl":8,"gulf":9.25,"premium":1.25},{"date":"2025-06-02","nl":7.95,"gulf":9.2,"premium":1.25},{"date":"2025-06-09","nl":8.1,"gulf":9.2,"premium":1.1},{"date":"2025-06-16","nl":8.1,"gulf":9.2,"premium":1.1},{"date":"2025-06-23","nl":8.25,"gulf":9.2,"premium":0.95},{"date":"2025-06-30","nl":8.4,"gulf":9.3,"premium":0.9},{"date":"2025-07-07","nl":8.6,"gulf":9.4,"premium":0.8},{"date":"2025-07-14","nl":8.8,"gulf":9.5,"premium":0.7},{"date":"2025-07-21","nl":8.93,"gulf":9.5,"premium":0.57},{"date":"2025-07-28","nl":9.25,"gulf":9.7,"premium":0.45},{"date":"2025-08-04","nl":9.43,"gulf":9.8,"premium":0.37},{"date":"2025-08-11","nl":9.5,"gulf":9.9,"premium":0.4},{"date":"2025-08-18","nl":9.5,"gulf":10.05,"premium":0.55},{"date":"2025-08-25","nl":9.5,"gulf":10.05,"premium":0.55},{"date":"2025-09-01","nl":9.5,"gulf":10.05,"premium":0.55},{"date":"2025-09-08","nl":9.5,"gulf":10.05,"premium":0.55},{"date":"2025-09-15","nl":9.5,"gulf":10.05,"premium":0.55},{"date":"2025-09-22","nl":9.5,"gulf":10.05,"premium":0.55},{"date":"2025-09-29","nl":9.5,"gulf":10.05,"premium":0.55},{"date":"2025-10-06","nl":9.5,"gulf":10.05,"premium":0.55},{"date":"2025-10-13","nl":9.5,"gulf":10.05,"premium":0.55},{"date":"2025-10-20","nl":9.5,"gulf":10,"premium":0.5},{"date":"2025-10-27","nl":9.5,"gulf":9.95,"premium":0.45},{"date":"2025-11-03","nl":9.5,"gulf":9.95,"premium":0.45},{"date":"2025-11-10","nl":9.5,"gulf":9.95,"premium":0.45},{"date":"2025-11-17","nl":9.5,"gulf":9.95,"premium":0.45},{"date":"2025-11-24","nl":9.5,"gulf":9.95,"premium":0.45},{"date":"2025-12-01","nl":9.57,"gulf":9.95,"premium":0.38},{"date":"2025-12-08","nl":9.65,"gulf":9.95,"premium":0.3},{"date":"2025-12-15","nl":9.7,"gulf":9.95,"premium":0.25},{"date":"2025-12-22","nl":9.7,"gulf":9.95,"premium":0.25},{"date":"2025-12-29","nl":9.7,"gulf":9.95,"premium":0.25},{"date":"2026-01-05","nl":9.8,"gulf":9.95,"premium":0.15},{"date":"2026-01-12","nl":9.97,"gulf":10.05,"premium":0.08},{"date":"2026-01-19","nl":10.25,"gulf":10.35,"premium":0.1},{"date":"2026-01-26","nl":10.4,"gulf":10.5,"premium":0.1},{"date":"2026-02-02","nl":10.4,"gulf":10.5,"premium":0.1},{"date":"2026-02-09","nl":10.4,"gulf":10.5,"premium":0.1},{"date":"2026-02-16","nl":10.45,"gulf":10.57,"premium":0.12},{"date":"2026-02-23","nl":10.5,"gulf":10.75,"premium":0.25},{"date":"2026-03-02","nl":10.5,"gulf":11,"premium":0.5}];
+
+// ── helpers ──
+function parseDate(s) { var p = s.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+function fmtDate(d) { var m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return m[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); }
+function fmtShort(d) { var m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return m[d.getMonth()] + ' \'' + String(d.getFullYear()).slice(2); }
+
+// ── stats ──
+var premiums = rawData.map(function(d){ return d.premium; });
+var peakPrem = Math.max.apply(null, premiums);
+var peakIdx = premiums.indexOf(peakPrem);
+var peakWeek = rawData[peakIdx];
+var minPrem = Math.min.apply(null, premiums);
+var minIdx = premiums.indexOf(minPrem);
+var minWeek = rawData[minIdx];
+var avgPrem = premiums.reduce(function(a,b){ return a+b; }, 0) / premiums.length;
+var latest = rawData[rawData.length - 1];
+
+document.getElementById('statsRow').innerHTML =
+  '<div class="stat-card"><div class="stat-val">$' + peakPrem.toFixed(2) + '</div><div class="stat-label">Peak Weekly Premium<br>' + fmtDate(parseDate(peakWeek.date)) + '</div></div>' +
+  '<div class="stat-card"><div class="stat-val">$' + latest.premium.toFixed(2) + '</div><div class="stat-label">Current Premium<br>' + fmtDate(parseDate(latest.date)) + '</div></div>' +
+  '<div class="stat-card"><div class="stat-val">$' + avgPrem.toFixed(2) + '</div><div class="stat-label">Average Premium<br>Jan 2024 – Mar 2026</div></div>' +
+  '<div class="stat-card"><div class="stat-val">$' + minPrem.toFixed(2) + '</div><div class="stat-label">Minimum Premium<br>' + fmtDate(parseDate(minWeek.date)) + '</div></div>';
+
+// callout
+var firstDollar = rawData.filter(function(d){ return d.premium >= 1.0; })[0];
+var weeksAboveDollar = rawData.filter(function(d){ return d.premium >= 1.0; }).length;
+var spring2025 = rawData.filter(function(d){ return d.date >= '2025-03-01' && d.date <= '2025-06-30'; });
+var springAvg = spring2025.length ? spring2025.reduce(function(a,d){ return a + d.premium; }, 0) / spring2025.length : 0;
+
+document.getElementById('calloutBox').innerHTML =
+  '<strong>Weekly data reveals sharper premium dynamics than monthly averages.</strong> ' +
+  'The Gulf premium first crossed $1.00/lb the week of ' + fmtDate(parseDate(firstDollar.date)) +
+  ' and peaked at <strong>$' + peakPrem.toFixed(2) + '/lb</strong> the week of ' + fmtDate(parseDate(peakWeek.date)) +
+  ' \u2014 when Gulf product entered a dry market ahead of the NL season. The premium stayed above $1.00 for <strong>' + weeksAboveDollar + ' weeks</strong>. ' +
+  'The spring 2025 average premium (Mar\u2013Jun) was <strong>$' + springAvg.toFixed(2) + '/lb</strong>. ' +
+  'It then compressed through the summer as NL supply arrived, falling to $' + minPrem.toFixed(2) + ' by ' + fmtShort(parseDate(minWeek.date)) + '. ' +
+  'Entering 2026, the premium is widening again: from $0.08 in mid-January to <strong>$' + latest.premium.toFixed(2) + '</strong> in early March, before the production season has begun.';
+
+// ── chart drawing ──
+var canvas = document.getElementById('priceChart');
+var dpr = window.devicePixelRatio || 1;
+var W = 920, H = 420;
+canvas.width = W * dpr; canvas.height = H * dpr;
+canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+var ctx = canvas.getContext('2d');
+ctx.scale(dpr, dpr);
+
+// chart area
+var pad = { top: 15, right: 72, bottom: 50, left: 68 };
+var cw = W - pad.left - pad.right;
+var ch = H - pad.top - pad.bottom;
+
+// scales
+var dates = rawData.map(function(d){ return parseDate(d.date).getTime(); });
+var xMin = dates[0], xMax = dates[dates.length-1];
+var yMin = 4.5, yMax = 12;
+var y1Min = -0.25, y1Max = 2.0;
+
+function xScale(t) { return pad.left + (t - xMin) / (xMax - xMin) * cw; }
+function yScale(v) { return pad.top + ch - (v - yMin) / (yMax - yMin) * ch; }
+function y1Scale(v) { return pad.top + ch - (v - y1Min) / (y1Max - y1Min) * ch; }
+
+// grid lines & y-axis ticks (left)
+ctx.strokeStyle = 'rgba(0,0,0,0.06)';
+ctx.lineWidth = 1;
+ctx.font = '11px Segoe UI, sans-serif';
+ctx.textAlign = 'right';
+ctx.fillStyle = '#666';
+for (var v = 5; v <= 12; v += 0.5) {
+  var yy = yScale(v);
+  if (v % 1 === 0) {
+    ctx.beginPath(); ctx.moveTo(pad.left, yy); ctx.lineTo(W - pad.right, yy); ctx.stroke();
+    ctx.fillText('$' + v.toFixed(2), pad.left - 6, yy + 4);
+  }
+}
+
+// y-axis label left
+ctx.save();
+ctx.translate(14, pad.top + ch/2);
+ctx.rotate(-Math.PI/2);
+ctx.textAlign = 'center';
+ctx.font = '12px Segoe UI, sans-serif';
+ctx.fillStyle = '#555';
+ctx.fillText('Wholesale Price (USD/lb)', 0, 0);
+ctx.restore();
+
+// right axis ticks
+ctx.textAlign = 'left';
+ctx.fillStyle = '#e8a317';
+ctx.font = '11px Segoe UI, sans-serif';
+for (var v = 0; v <= 2.0; v += 0.25) {
+  var yy = y1Scale(v);
+  var label = (v >= 0 ? '+' : '') + '$' + v.toFixed(2);
+  ctx.fillText(label, W - pad.right + 8, yy + 4);
+}
+
+// y-axis label right
+ctx.save();
+ctx.translate(W - 8, pad.top + ch/2);
+ctx.rotate(Math.PI/2);
+ctx.textAlign = 'center';
+ctx.font = '12px Segoe UI, sans-serif';
+ctx.fillStyle = '#e8a317';
+ctx.fillText('Gulf Premium (USD/lb)', 0, 0);
+ctx.restore();
+
+// x-axis: month labels
+ctx.textAlign = 'center';
+ctx.fillStyle = '#666';
+ctx.font = '11px Segoe UI, sans-serif';
+var shownMonths = {};
+for (var i = 0; i < rawData.length; i++) {
+  var d = parseDate(rawData[i].date);
+  var mKey = d.getFullYear() + '-' + d.getMonth();
+  if (!shownMonths[mKey]) {
+    shownMonths[mKey] = true;
+    var x = xScale(d.getTime());
+    // tick
+    ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+    ctx.beginPath(); ctx.moveTo(x, pad.top + ch); ctx.lineTo(x, pad.top + ch + 5); ctx.stroke();
+    // label - show every other month to avoid crowding
+    if (d.getMonth() % 2 === 0) {
+      ctx.save();
+      ctx.translate(x, pad.top + ch + 24);
+      ctx.rotate(-0.5);
+      ctx.fillText(fmtShort(d), 0, 0);
+      ctx.restore();
+    }
+  }
+}
+
+// ── draw premium fill area ──
+ctx.beginPath();
+ctx.moveTo(xScale(dates[0]), y1Scale(0));
+for (var i = 0; i < rawData.length; i++) {
+  ctx.lineTo(xScale(dates[i]), y1Scale(rawData[i].premium));
+}
+ctx.lineTo(xScale(dates[dates.length-1]), y1Scale(0));
+ctx.closePath();
+ctx.fillStyle = 'rgba(232,163,23,0.15)';
+ctx.fill();
+
+// ── draw premium line ──
+ctx.beginPath();
+for (var i = 0; i < rawData.length; i++) {
+  var x = xScale(dates[i]), y = y1Scale(rawData[i].premium);
+  if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+}
+ctx.strokeStyle = '#e8a317';
+ctx.lineWidth = 2;
+ctx.stroke();
+
+// ── draw NL line ──
+ctx.beginPath();
+for (var i = 0; i < rawData.length; i++) {
+  var x = xScale(dates[i]), y = yScale(rawData[i].nl);
+  if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+}
+ctx.strokeStyle = '#2874a6';
+ctx.lineWidth = 2.5;
+ctx.stroke();
+
+// ── draw Gulf line ──
+ctx.beginPath();
+for (var i = 0; i < rawData.length; i++) {
+  var x = xScale(dates[i]), y = yScale(rawData[i].gulf);
+  if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+}
+ctx.strokeStyle = '#c0392b';
+ctx.lineWidth = 2.5;
+ctx.stroke();
+
+// ── axes border ──
+ctx.strokeStyle = '#bbb';
+ctx.lineWidth = 1;
+ctx.beginPath();
+ctx.moveTo(pad.left, pad.top);
+ctx.lineTo(pad.left, pad.top + ch);
+ctx.lineTo(W - pad.right, pad.top + ch);
+ctx.lineTo(W - pad.right, pad.top);
+ctx.stroke();
+
+// ── tooltip on hover ──
+var tooltipEl = document.getElementById('tooltip');
+canvas.addEventListener('mousemove', function(e) {
+  var rect = canvas.getBoundingClientRect();
+  var mx = e.clientX - rect.left;
+  var my = e.clientY - rect.top;
+
+  // find nearest data point
+  var best = -1, bestDist = 999999;
+  for (var i = 0; i < rawData.length; i++) {
+    var dx = Math.abs(mx - xScale(dates[i]));
+    if (dx < bestDist) { bestDist = dx; best = i; }
+  }
+  if (best >= 0 && bestDist < 20) {
+    var d = rawData[best];
+    var dt = parseDate(d.date);
+    tooltipEl.style.display = 'block';
+    tooltipEl.innerHTML = '<strong>' + fmtDate(dt) + '</strong><br>' +
+      '<span style="color:#2874a6">\u25CF</span> NL 5-8 oz: <strong>$' + d.nl.toFixed(2) + '</strong>/lb<br>' +
+      '<span style="color:#c0392b">\u25CF</span> Gulf 5-8 oz: <strong>$' + d.gulf.toFixed(2) + '</strong>/lb<br>' +
+      '<span style="color:#e8a317">\u2014</span> Premium: <strong>+$' + d.premium.toFixed(2) + '</strong>/lb';
+
+    var tx = xScale(dates[best]) + 12;
+    if (tx + 200 > W) tx = xScale(dates[best]) - 210;
+    tooltipEl.style.left = tx + 'px';
+    tooltipEl.style.top = (my - 30) + 'px';
+
+    // draw crosshair
+    redraw(best);
+  } else {
+    tooltipEl.style.display = 'none';
+    redraw(-1);
+  }
+});
+
+canvas.addEventListener('mouseleave', function() {
+  tooltipEl.style.display = 'none';
+  redraw(-1);
+});
+
+// Save the base image so we can redraw quickly with crosshair
+var baseImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+function redraw(hoverIdx) {
+  ctx.putImageData(baseImage, 0, 0);
+  if (hoverIdx >= 0) {
+    var x = xScale(dates[hoverIdx]);
+    ctx.save();
+    ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath();
+    ctx.moveTo(x, pad.top);
+    ctx.lineTo(x, pad.top + ch);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // dots
+    var d = rawData[hoverIdx];
+    [[d.nl, '#2874a6', yScale], [d.gulf, '#c0392b', yScale], [d.premium, '#e8a317', y1Scale]].forEach(function(item) {
+      ctx.beginPath();
+      ctx.arc(x, item[2](item[0]), 4.5, 0, Math.PI*2);
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+      ctx.strokeStyle = item[1];
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+    });
+    ctx.restore();
+  }
+}
+</script>
+</body>
+</html>
