@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Snow Crab Price Elasticity — UB NL 5-8 oz vs US Import Volume</title>
+<style>
+  body { margin: 0; padding: 20px; background: #fff; font-family: 'Segoe UI', Arial, sans-serif; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 18px; color: #1a3a5c; margin: 0 0 4px 0; font-weight: 700; }
+  .subtitle { font-size: 13px; color: #556; margin: 0 0 16px 0; }
+  .charts { display: flex; gap: 24px; flex-wrap: wrap; }
+  .chart-box { flex: 1; min-width: 460px; }
+  .chart-title { font-size: 14px; font-weight: 600; color: #2c3e50; margin: 0 0 6px 0; }
+  canvas { display: block; border: 1px solid #e0e4e8; border-radius: 4px; background: #fafbfc; }
+  .footer { font-size: 11px; color: #888; margin-top: 12px; line-height: 1.5; }
+  .stat-row { display: flex; gap: 16px; margin: 12px 0 16px 0; flex-wrap: wrap; }
+  .stat-card { background: #f0f4f8; border-radius: 6px; padding: 10px 16px; min-width: 180px; flex: 1; }
+  .stat-card.highlight { background: #1a3a5c; }
+  .stat-card.highlight .stat-label { color: #8ab4d8; }
+  .stat-card.highlight .stat-value { color: #fff; }
+  .stat-card.highlight .stat-detail { color: #a0c4e0; }
+  .stat-label { font-size: 11px; color: #667; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-value { font-size: 22px; font-weight: 700; color: #1a3a5c; margin: 2px 0; }
+  .stat-detail { font-size: 11px; color: #889; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Snow Crab Price Elasticity: How Supply Volume Drives Price</h1>
+  <p class="subtitle">Urner Barry NL 5-8 oz sections vs Canadian exports to US (customs volume, lbs) | Pack years 2012–2024</p>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-label">Full-Period Price Flexibility</div>
+      <div class="stat-value">&minus;1.26</div>
+      <div class="stat-detail">1% volume change &rarr; 1.3% price move (2012–2024, log-log)</div>
+    </div>
+    <div class="stat-card highlight">
+      <div class="stat-label">Recent (2022–2024)</div>
+      <div class="stat-value">&minus;2.59</div>
+      <div class="stat-detail">1% volume change &rarr; 2.6% price move — sensitivity doubled</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Post-Pandemic Peak (2021–23)</div>
+      <div class="stat-value">&minus;5.00</div>
+      <div class="stat-detail">Extreme volatility during inventory correction</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">2026 Supply Forecast</div>
+      <div class="stat-value">&minus;3.5%</div>
+      <div class="stat-detail">Combined Gulf + NL + Alaska + Norway opilio &rarr; +9.1% elasticity-driven price support</div>
+    </div>
+  </div>
+
+  <div class="charts">
+    <div class="chart-box">
+      <p class="chart-title">A. Price vs Volume: The Inverse Relationship (Log Scale)</p>
+      <canvas id="scatter" width="520" height="420"></canvas>
+    </div>
+    <div class="chart-box">
+      <p class="chart-title">B. Rolling 3-Year Price Flexibility — Intensifying Sensitivity</p>
+      <canvas id="rolling" width="520" height="420"></canvas>
+    </div>
+  </div>
+
+  <p class="footer">Sources: Urner Barry NL 5-8 oz snow crab sections (weekly &rarr; pack-year average); US Customs Canadian import volume (lbs, monthly aggregated to pack year Apr–Mar). Price flexibility = %&Delta;Price &divide; %&Delta;Volume from log-log OLS. Negative &beta; = supply-driven market (lower volume &rarr; higher price). 2026E applies &beta; = &minus;2.59 (2022–24 rolling) to &minus;3.5% estimated global supply reduction (Gulf + NL quota cuts + Alaska + Norway opilio). This represents the elasticity-driven price component only; additional factors (tariffs, demand shifts, inventory) would layer on top.</p>
+</div>
+
+<script>
+// === DATA ===
+var annual = [
+  {year:2012, price:4.96, vol:136.4},
+  {year:2013, price:5.14, vol:141.2},
+  {year:2014, price:5.22, vol:139.3},
+  {year:2015, price:5.10, vol:133.8},
+  {year:2016, price:7.17, vol:127.5},
+  {year:2017, price:7.92, vol:142.3},
+  {year:2018, price:8.72, vol:108.5},
+  {year:2019, price:8.76, vol:112.0},
+  {year:2020, price:9.28, vol:111.5},
+  {year:2021, price:15.48, vol:129.2},
+  {year:2022, price:8.05, vol:141.3},
+  {year:2023, price:5.38, vol:159.0},
+  {year:2024, price:7.25, vol:156.3}
+];
+
+var rolling3 = [
+  {label:'12–14', midYear:2013, beta:1.15},
+  {label:'13–15', midYear:2014, beta:0.26},
+  {label:'14–16', midYear:2015, beta:-3.71},
+  {label:'15–17', midYear:2016, beta:1.19},
+  {label:'16–18', midYear:2017, beta:-0.42},
+  {label:'17–19', midYear:2018, beta:-0.38},
+  {label:'18–20', midYear:2019, beta:0.87},
+  {label:'19–21', midYear:2020, beta:3.72},
+  {label:'20–22', midYear:2021, beta:-0.20},
+  {label:'21–23', midYear:2022, beta:-5.00},
+  {label:'22–24', midYear:2023, beta:-2.59}
+];
+
+var COL_BLUE = '#1a5276';
+var COL_RED = '#c0392b';
+var COL_TEAL = '#148f77';
+var COL_GRAY = '#95a5a6';
+var COL_ORANGE = '#d35400';
+
+// === SCATTER PLOT ===
+(function(){
+  var c = document.getElementById('scatter');
+  var ctx = c.getContext('2d');
+  var W = c.width, H = c.height;
+  var pad = {top:25, right:30, bottom:55, left:60};
+  var pw = W - pad.left - pad.right;
+  var ph = H - pad.top - pad.bottom;
+
+  var pts = annual.map(function(d){
+    return {x: Math.log(d.vol), y: Math.log(d.price), year: d.year, price: d.price, vol: d.vol};
+  });
+
+  var xMin = 4.58, xMax = 5.10;
+  var yMin = 1.45, yMax = 2.85;
+
+  function tx(v){ return pad.left + (v - xMin)/(xMax - xMin) * pw; }
+  function ty(v){ return pad.top + ph - (v - yMin)/(yMax - yMin) * ph; }
+
+  ctx.fillStyle = '#fafbfc';
+  ctx.fillRect(0, 0, W, H);
+
+  // Grid
+  ctx.strokeStyle = '#e8ecf0'; ctx.lineWidth = 0.5;
+  for(var gx = 4.6; gx <= 5.1; gx += 0.1){
+    ctx.beginPath(); ctx.moveTo(tx(gx), pad.top); ctx.lineTo(tx(gx), pad.top+ph); ctx.stroke();
+  }
+  for(var gy = 1.5; gy <= 2.8; gy += 0.2){
+    ctx.beginPath(); ctx.moveTo(pad.left, ty(gy)); ctx.lineTo(pad.left+pw, ty(gy)); ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = '#bbb'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(pad.left, pad.top+ph); ctx.lineTo(pad.left+pw, pad.top+ph); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(pad.left, pad.top); ctx.lineTo(pad.left, pad.top+ph); ctx.stroke();
+
+  // X labels
+  ctx.fillStyle = '#667'; ctx.font = '11px Segoe UI, Arial'; ctx.textAlign = 'center';
+  [100, 110, 120, 130, 140, 150, 160].forEach(function(v){
+    var lv = Math.log(v);
+    if(lv >= xMin && lv <= xMax) ctx.fillText(v + 'M', tx(lv), pad.top+ph+16);
+  });
+  ctx.fillText('Canadian Exports to US (M lbs, pack year)', pad.left+pw/2, H-8);
+
+  // Y labels
+  ctx.textAlign = 'right';
+  [5, 6, 7, 8, 9, 10, 12, 15].forEach(function(p){
+    var lp = Math.log(p);
+    if(lp >= yMin && lp <= yMax) ctx.fillText('$'+p, pad.left-6, ty(lp)+4);
+  });
+  ctx.save(); ctx.translate(14, pad.top+ph/2); ctx.rotate(-Math.PI/2);
+  ctx.textAlign = 'center'; ctx.fillText('UB NL 5-8 oz ($/lb)', 0, 0); ctx.restore();
+
+  // Full regression
+  var n = pts.length;
+  var mx = pts.reduce(function(s,p){return s+p.x;},0)/n;
+  var my = pts.reduce(function(s,p){return s+p.y;},0)/n;
+  var cov = pts.reduce(function(s,p){return s+(p.x-mx)*(p.y-my);},0)/n;
+  var varx = pts.reduce(function(s,p){return s+(p.x-mx)*(p.x-mx);},0)/n;
+  var beta = cov/varx;
+  var alpha = my - beta*mx;
+
+  // Residual SE for confidence band
+  var sse = pts.reduce(function(s,p){var r=p.y-(alpha+beta*p.x); return s+r*r;},0);
+  var se = Math.sqrt(sse/(n-2));
+
+  // Draw confidence band (approximate)
+  ctx.fillStyle = 'rgba(26,82,118,0.08)';
+  ctx.beginPath();
+  var steps = 50;
+  for(var i=0; i<=steps; i++){
+    var xv = xMin + (xMax-xMin)*i/steps;
+    var yv = alpha + beta*xv + 1.96*se;
+    if(i===0) ctx.moveTo(tx(xv), ty(yv)); else ctx.lineTo(tx(xv), ty(yv));
+  }
+  for(var i=steps; i>=0; i--){
+    var xv = xMin + (xMax-xMin)*i/steps;
+    var yv = alpha + beta*xv - 1.96*se;
+    ctx.lineTo(tx(xv), ty(yv));
+  }
+  ctx.closePath(); ctx.fill();
+
+  // Regression line
+  ctx.strokeStyle = COL_BLUE; ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(tx(xMin), ty(alpha + beta*xMin));
+  ctx.lineTo(tx(xMax), ty(alpha + beta*xMax));
+  ctx.stroke();
+
+  // Direction arrow annotation
+  ctx.strokeStyle = COL_BLUE; ctx.lineWidth = 1.5;
+  var arX1 = tx(4.98), arY1 = ty(alpha + beta*4.98);
+  var arX2 = tx(4.72), arY2 = ty(alpha + beta*4.72);
+  ctx.beginPath(); ctx.moveTo(arX1, arY1-20); ctx.lineTo(arX2, arY2-20); ctx.stroke();
+  // Arrowhead
+  ctx.beginPath();
+  ctx.moveTo(arX2, arY2-20);
+  ctx.lineTo(arX2+8, arY2-26);
+  ctx.lineTo(arX2+8, arY2-14);
+  ctx.closePath(); ctx.fillStyle = COL_BLUE; ctx.fill();
+  ctx.fillStyle = COL_BLUE; ctx.font = '10px Segoe UI, Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Less volume → higher price', (arX1+arX2)/2, arY1-26);
+
+  // Points with era coloring
+  pts.forEach(function(p){
+    var era;
+    if(p.year <= 2019) era = 'pre';
+    else if(p.year <= 2021) era = 'pandemic';
+    else era = 'recent';
+
+    var col = era === 'pre' ? COL_TEAL : (era === 'pandemic' ? COL_ORANGE : COL_BLUE);
+    var size = era === 'recent' ? 7 : (era === 'pandemic' ? 6 : 5);
+
+    ctx.beginPath(); ctx.arc(tx(p.x), ty(p.y), size, 0, Math.PI*2);
+    ctx.fillStyle = col; ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
+
+    // Label
+    ctx.fillStyle = col;
+    ctx.font = (era === 'recent' ? 'bold ' : '') + '10px Segoe UI, Arial';
+    ctx.textAlign = 'center';
+    var offY = -10, offX = 0;
+    if(p.year === 2019) { offY = 12; }
+    if(p.year === 2018) { offX = -16; offY = -2; }
+    if(p.year === 2020) { offX = 16; offY = 4; }
+    if(p.year === 2013) { offY = 12; }
+    if(p.year === 2014) { offX = 16; offY = 0; }
+    if(p.year === 2012) { offX = -16; offY = 4; }
+    if(p.year === 2017) { offY = 12; }
+    if(p.year === 2021) { offX = -18; offY = 2; }
+    if(p.year === 2024) { offX = -16; offY = 6; }
+    if(p.year === 2023) { offY = 14; }
+    if(p.year === 2015) { offX = -14; offY = 6; }
+    ctx.fillText("'" + String(p.year).slice(2), tx(p.x) + offX, ty(p.y) + offY);
+  });
+
+  // === 2026 ESTIMATED POINT ===
+  // -3.5% global supply reduction (Gulf+NL+Alaska+Norway opilio) from 2024 PY
+  var vol2024 = 156.3;
+  var price2024 = 7.25;
+  var supplyChg = -0.035;
+  var betaRecent = -2.59;
+  var vol2026 = vol2024 * (1 + supplyChg);  // 150.8M
+  var priceChgPct = betaRecent * supplyChg;  // +9.1%
+  var price2026 = price2024 * (1 + priceChgPct);  // ~$7.91
+  var x2026 = Math.log(vol2026);
+  var y2026 = Math.log(price2026);
+
+  // Dashed connector from 2024 to 2026E
+  ctx.strokeStyle = '#c0392b';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4,3]);
+  ctx.beginPath();
+  ctx.moveTo(tx(Math.log(vol2024)), ty(Math.log(price2024)));
+  ctx.lineTo(tx(x2026), ty(y2026));
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 2026E point — diamond shape
+  var dx26 = tx(x2026), dy26 = ty(y2026);
+  var ds = 8;
+  ctx.beginPath();
+  ctx.moveTo(dx26, dy26 - ds);
+  ctx.lineTo(dx26 + ds, dy26);
+  ctx.lineTo(dx26, dy26 + ds);
+  ctx.lineTo(dx26 - ds, dy26);
+  ctx.closePath();
+  ctx.fillStyle = '#c0392b';
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Label
+  ctx.fillStyle = '#c0392b';
+  ctx.font = 'bold 11px Segoe UI, Arial';
+  ctx.textAlign = 'left';
+  ctx.fillText("2026E", dx26 + 12, dy26 - 6);
+
+  // Annotation box
+  var abx = dx26 - 120, aby = dy26 - 72;
+  // Make sure it's on screen
+  if(abx < pad.left + 5) abx = pad.left + 5;
+
+  ctx.fillStyle = '#fdf2f2';
+  ctx.strokeStyle = '#c0392b';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.roundRect(abx, aby, 175, 52, 4);
+  ctx.fill(); ctx.stroke();
+
+  ctx.fillStyle = '#c0392b';
+  ctx.font = '10px Segoe UI, Arial';
+  ctx.textAlign = 'left';
+  ctx.fillText('−3.5% supply (incl. AK + Norway)', abx + 6, aby + 14);
+  ctx.font = 'bold 11px Segoe UI, Arial';
+  ctx.fillText('→ +9.1% price from elasticity', abx + 6, aby + 30);
+  ctx.font = '10px Segoe UI, Arial';
+  ctx.fillStyle = '#885';
+  ctx.fillText('($7.25 → $7.91 pack-year avg)', abx + 6, aby + 44);
+
+  // Connector line from box to point
+  ctx.strokeStyle = '#c0392b88';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(abx + 140, aby + 52);
+  ctx.lineTo(dx26, dy26 - ds - 2);
+  ctx.stroke();
+
+  // Legend
+  ctx.font = '10px Segoe UI, Arial'; ctx.textAlign = 'left';
+  var lx = pad.left + pw - 155, ly = pad.top + 12;
+
+  ctx.beginPath(); ctx.arc(lx+4, ly, 4, 0, Math.PI*2); ctx.fillStyle = COL_TEAL; ctx.fill();
+  ctx.fillStyle = '#445'; ctx.fillText('2012–2019', lx+14, ly+4);
+  ly += 14;
+  ctx.beginPath(); ctx.arc(lx+4, ly, 4, 0, Math.PI*2); ctx.fillStyle = COL_ORANGE; ctx.fill();
+  ctx.fillStyle = '#445'; ctx.fillText('2020–2021 (pandemic)', lx+14, ly+4);
+  ly += 14;
+  ctx.beginPath(); ctx.arc(lx+4, ly, 5, 0, Math.PI*2); ctx.fillStyle = COL_BLUE; ctx.fill();
+  ctx.fillStyle = '#445'; ctx.font = 'bold 10px Segoe UI, Arial';
+  ctx.fillText('2022–2024 (recent)', lx+14, ly+4);
+  ly += 16;
+  // 2026E diamond in legend
+  ctx.beginPath();
+  ctx.moveTo(lx+4, ly-4); ctx.lineTo(lx+8, ly); ctx.lineTo(lx+4, ly+4); ctx.lineTo(lx, ly);
+  ctx.closePath(); ctx.fillStyle = '#c0392b'; ctx.fill();
+  ctx.fillStyle = '#c0392b'; ctx.font = 'bold 10px Segoe UI, Arial';
+  ctx.fillText('2026E (−3.5% supply)', lx+14, ly+4);
+  ly += 16;
+  ctx.font = '10px Segoe UI, Arial'; ctx.fillStyle = '#667';
+  ctx.fillText('β = ' + beta.toFixed(2) + '  (R² = 0.22)', lx, ly+4);
+})();
+
+// === ROLLING BAR CHART ===
+(function(){
+  var c = document.getElementById('rolling');
+  var ctx = c.getContext('2d');
+  var W = c.width, H = c.height;
+  var pad = {top:25, right:20, bottom:60, left:60};
+  var pw = W - pad.left - pad.right;
+  var ph = H - pad.top - pad.bottom;
+
+  var data = rolling3;
+  var n = data.length;
+  var barW = Math.min(34, (pw - 20) / n - 4);
+  var gap = (pw - n * barW) / (n + 1);
+
+  var yMin = -6, yMax = 5;
+  function ty(v){ return pad.top + ph - (v - yMin)/(yMax - yMin) * ph; }
+
+  ctx.fillStyle = '#fafbfc'; ctx.fillRect(0, 0, W, H);
+
+  // Shaded zones
+  ctx.fillStyle = '#e8d5c822';
+  ctx.fillRect(pad.left, ty(yMax), pw, ty(0)-ty(yMax));
+  ctx.fillStyle = '#d5e8f422';
+  ctx.fillRect(pad.left, ty(0), pw, ty(yMin)-ty(0));
+
+  // Zone labels
+  ctx.font = '9px Segoe UI, Arial';
+  ctx.fillStyle = '#d3560088'; ctx.textAlign = 'right';
+  ctx.fillText('Positive: demand-driven (price + volume rise together)', pad.left+pw-4, ty(yMax)+12);
+  ctx.fillStyle = '#1a527688';
+  ctx.fillText('Negative: supply-driven (less volume → higher price)', pad.left+pw-4, ty(yMin)-4);
+
+  // Grid
+  ctx.strokeStyle = '#e4e8ec'; ctx.lineWidth = 0.5;
+  for(var gy = -6; gy <= 4; gy += 1){
+    ctx.beginPath(); ctx.moveTo(pad.left, ty(gy)); ctx.lineTo(pad.left+pw, ty(gy)); ctx.stroke();
+  }
+
+  // Zero line
+  ctx.strokeStyle = '#555'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(pad.left, ty(0)); ctx.lineTo(pad.left+pw, ty(0)); ctx.stroke();
+
+  // Y axis
+  ctx.strokeStyle = '#bbb'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(pad.left, pad.top); ctx.lineTo(pad.left, pad.top+ph); ctx.stroke();
+
+  // Y labels
+  ctx.fillStyle = '#667'; ctx.font = '11px Segoe UI, Arial'; ctx.textAlign = 'right';
+  for(var gy = -6; gy <= 4; gy += 1){
+    ctx.fillText((gy>0?'+':'')+gy, pad.left-6, ty(gy)+4);
+  }
+  ctx.save(); ctx.translate(14, pad.top+ph/2); ctx.rotate(-Math.PI/2);
+  ctx.textAlign = 'center'; ctx.fillText('Price Flexibility (β = %ΔP / %ΔV)', 0, 0); ctx.restore();
+
+  // Bars
+  data.forEach(function(d, i){
+    var x = pad.left + gap + i*(barW+gap);
+    var y0 = ty(0);
+    var yVal = Math.max(Math.min(d.beta, yMax), yMin);
+    var y1 = ty(yVal);
+
+    var isNeg = d.beta < 0;
+    var isLast2 = i >= n-2;
+
+    if(isNeg){
+      ctx.fillStyle = isLast2 ? COL_BLUE : '#2980b9';
+    } else {
+      ctx.fillStyle = '#e67e22';
+    }
+    if(isLast2 && isNeg) ctx.fillStyle = COL_BLUE;
+
+    // Bar
+    var r = 3;
+    ctx.beginPath();
+    if(d.beta >= 0){
+      ctx.moveTo(x, y0); ctx.lineTo(x, y1+r);
+      ctx.quadraticCurveTo(x, y1, x+r, y1);
+      ctx.lineTo(x+barW-r, y1);
+      ctx.quadraticCurveTo(x+barW, y1, x+barW, y1+r);
+      ctx.lineTo(x+barW, y0);
+    } else {
+      ctx.moveTo(x, y0); ctx.lineTo(x, y1-r);
+      ctx.quadraticCurveTo(x, y1, x+r, y1);
+      ctx.lineTo(x+barW-r, y1);
+      ctx.quadraticCurveTo(x+barW, y1, x+barW, y1-r);
+      ctx.lineTo(x+barW, y0);
+    }
+    ctx.closePath(); ctx.fill();
+
+    // Value on bar
+    ctx.fillStyle = '#333';
+    ctx.font = (isLast2 ? 'bold ' : '') + '10px Segoe UI, Arial';
+    ctx.textAlign = 'center';
+    var valY = d.beta >= 0 ? y1-6 : y1+13;
+    ctx.fillText((d.beta > 0 ? '+' : '') + d.beta.toFixed(1), x+barW/2, valY);
+
+    // X label
+    ctx.fillStyle = isLast2 ? COL_BLUE : '#556';
+    ctx.font = (isLast2 ? 'bold ' : '') + '9.5px Segoe UI, Arial';
+    ctx.save();
+    ctx.translate(x+barW/2, pad.top+ph+8);
+    ctx.rotate(-Math.PI/4);
+    ctx.textAlign = 'right';
+    ctx.fillText("'" + d.label, 0, 0);
+    ctx.restore();
+  });
+
+  // Annotation callout for last bar
+  var lastI = n-1;
+  var lastX = pad.left + gap + lastI*(barW+gap) + barW/2;
+  var lastY = ty(data[lastI].beta);
+
+  ctx.strokeStyle = COL_BLUE; ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(lastX-50, lastY+28);
+  ctx.lineTo(lastX-6, lastY+8);
+  ctx.stroke();
+  // Arrowhead
+  ctx.beginPath();
+  ctx.moveTo(lastX-6, lastY+8);
+  ctx.lineTo(lastX-12, lastY+14);
+  ctx.lineTo(lastX-14, lastY+6);
+  ctx.closePath(); ctx.fillStyle = COL_BLUE; ctx.fill();
+
+  // Callout box
+  var bx = lastX - 170, by = lastY + 22;
+  ctx.fillStyle = '#eaf2f8';
+  ctx.strokeStyle = COL_BLUE;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.roundRect(bx, by, 130, 38, 4);
+  ctx.fill(); ctx.stroke();
+
+  ctx.fillStyle = COL_BLUE;
+  ctx.font = 'bold 11px Segoe UI, Arial';
+  ctx.textAlign = 'left';
+  ctx.fillText('1% volume shift →', bx+6, by+14);
+  ctx.fillText('2.6% price response', bx+6, by+30);
+
+  // Also annotate the 2021-23 peak
+  var peakI = n-2;
+  var peakX = pad.left + gap + peakI*(barW+gap) + barW/2;
+  var peakY = ty(data[peakI].beta);
+
+  ctx.fillStyle = '#667'; ctx.font = '9px Segoe UI, Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Post-pandemic', peakX, peakY+26);
+  ctx.fillText('correction peak', peakX, peakY+36);
+})();
+</script>
+</body>
+</html>

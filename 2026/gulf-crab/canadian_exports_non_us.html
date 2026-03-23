@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Canadian Snow Crab Exports — Non-US Markets, 2015–2025</title>
+<style>
+  body { font-family: 'Calibri', 'Segoe UI', 'Helvetica Neue', sans-serif; background: #fff; margin: 20px; }
+  .chart-container { width: 900px; margin: 0 auto; }
+  h2 { font-size: 15px; font-weight: 600; color: #1a1a1a; text-align: center; margin-bottom: 4px; }
+  .subtitle { font-size: 12px; color: #555; text-align: center; margin-bottom: 16px; }
+  canvas { display: block; }
+  .source-box { width: 876px; margin: 16px auto 0 auto; padding: 8px 12px; background: #f5f7fa; border-left: 4px solid #2a5c8f; font-size: 11px; color: #444; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="chart-container">
+  <h2>Canadian Snow Crab Exports to Non-US Markets, 2015&ndash;2025</h2>
+  <p class="subtitle">Annual exports by destination (million lbs) &amp; non-US share of total Canadian exports (right axis)</p>
+  <canvas id="chart" width="900" height="500"></canvas>
+</div>
+<div class="source-box">
+  <strong>Source:</strong> Global Trade Tracker, HS 030614, Canada as reporter, export flow, 2015&ndash;2025. Quantities in million lbs. SE Asia includes Vietnam, Thailand, Indonesia, Philippines (primarily reprocessing for US re-export). 2025 data is partial year (Jan&ndash;Oct). Non-US share declined from 23.7% in 2015 to 8.5% in 2025 as the US absorbed an increasing proportion of Canadian production.
+</div>
+
+<script>
+(function(){
+  var c = document.getElementById('chart');
+  var ctx = c.getContext('2d');
+  var W = c.width, H = c.height;
+
+  // === DATA from Figure 34 ===
+  var years = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+  var japan  = [10.2,  6.5,  9.5,  4.9,  5.5,  4.1,  5.3,  3.4,  3.8,  4.2,  2.2];
+  var china  = [11.7,  9.4,  9.6,  9.1,  5.5,  6.0,  5.9,  7.7,  7.0,  6.5,  2.9];
+  var seasia = [ 4.8,  3.2,  4.6,  4.1,  4.8,  3.1,  2.2,  8.2,  5.1,  6.4,  5.5];
+  var other  = [ 0.6,  1.1,  1.0,  0.8,  0.9,  0.9,  1.0,  1.1,  1.5,  0.7,  0.5];
+  var us     = [87.4, 83.1, 81.0, 63.3, 72.6, 78.6, 88.2, 85.9, 117.7, 112.6, 120.0];
+
+  // Non-US totals and share
+  var nonUS = [], nonUSshare = [];
+  for(var i = 0; i < years.length; i++){
+    var tot = japan[i] + china[i] + seasia[i] + other[i];
+    nonUS.push(tot);
+    var grandTotal = tot + us[i];
+    nonUSshare.push((tot / grandTotal) * 100);
+  }
+
+  // Stack order (bottom to top): China, Japan, SE Asia, Other
+  var stacks = [
+    {name: 'China',                 data: china,  color: '#e8c44a'},
+    {name: 'Japan',                 data: japan,  color: '#e07070'},
+    {name: 'SE Asia (reprocessing)',data: seasia, color: '#6bb86b'},
+    {name: 'Other',                 data: other,  color: '#bfbfbf'}
+  ];
+
+  // Layout
+  var pad = {top: 30, right: 72, bottom: 80, left: 62};
+  var pw = W - pad.left - pad.right;
+  var ph = H - pad.top - pad.bottom;
+  var n = years.length;
+
+  // Y axis max for bars
+  var maxNonUS = Math.max.apply(null, nonUS);
+  var yMax = Math.ceil(maxNonUS / 5) * 5 + 5; // round up to nice number
+  if(yMax < 35) yMax = 35;
+
+  // Y2 axis for share line
+  var y2Min = 0, y2Max = 30;
+
+  function tx(i){ return pad.left + (i + 0.5) / n * pw; }
+  function ty(v){ return pad.top + ph - (v / yMax) * ph; }
+  function ty2(v){ return pad.top + ph - ((v - y2Min) / (y2Max - y2Min)) * ph; }
+
+  var barW = pw / n * 0.65;
+
+  // Background
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, W, H);
+
+  // Grid lines
+  ctx.strokeStyle = '#e8e8e8';
+  ctx.lineWidth = 0.5;
+  for(var g = 0; g <= yMax; g += 5){
+    var gy = ty(g);
+    ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(pad.left + pw, gy); ctx.stroke();
+  }
+
+  // Draw stacked bars
+  for(var i = 0; i < n; i++){
+    var x = tx(i) - barW/2;
+    var baseY = 0;
+
+    for(var s = 0; s < stacks.length; s++){
+      var val = stacks[s].data[i];
+      var y0 = ty(baseY);
+      var y1 = ty(baseY + val);
+      var barH = y0 - y1;
+
+      ctx.fillStyle = stacks[s].color;
+
+      // Rounded top corners on the last (topmost) segment
+      if(s === stacks.length - 1 && barH > 4){
+        var r = 3;
+        ctx.beginPath();
+        ctx.moveTo(x, y0);
+        ctx.lineTo(x, y1 + r);
+        ctx.quadraticCurveTo(x, y1, x + r, y1);
+        ctx.lineTo(x + barW - r, y1);
+        ctx.quadraticCurveTo(x + barW, y1, x + barW, y1 + r);
+        ctx.lineTo(x + barW, y0);
+        ctx.closePath();
+        ctx.fill();
+      } else {
+        ctx.fillRect(x, y1, barW, barH);
+      }
+
+      baseY += val;
+    }
+
+    // Total label on top of bar
+    ctx.fillStyle = '#333';
+    ctx.font = 'bold 10px Calibri, Segoe UI, Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(nonUS[i].toFixed(1), tx(i), ty(baseY) - 5);
+  }
+
+  // Non-US share line (right axis)
+  ctx.strokeStyle = '#2a5c8f';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  for(var i = 0; i < n; i++){
+    var px = tx(i), py = ty2(nonUSshare[i]);
+    if(i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+
+  // Line points with value labels
+  for(var i = 0; i < n; i++){
+    var px = tx(i), py = ty2(nonUSshare[i]);
+    ctx.beginPath();
+    ctx.arc(px, py, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#2a5c8f';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Share label
+    ctx.fillStyle = '#2a5c8f';
+    ctx.font = '10px Calibri, Segoe UI, Arial';
+    ctx.textAlign = 'center';
+    var labelOff = -12;
+    // Avoid overlap with bar labels
+    if(nonUSshare[i] > 20) labelOff = 14;
+    ctx.fillText(nonUSshare[i].toFixed(1) + '%', px, py + labelOff);
+  }
+
+  // Axes
+  ctx.strokeStyle = '#999';
+  ctx.lineWidth = 1;
+  // Left axis
+  ctx.beginPath(); ctx.moveTo(pad.left, pad.top); ctx.lineTo(pad.left, pad.top + ph); ctx.stroke();
+  // Bottom axis
+  ctx.beginPath(); ctx.moveTo(pad.left, pad.top + ph); ctx.lineTo(pad.left + pw, pad.top + ph); ctx.stroke();
+  // Right axis
+  ctx.beginPath(); ctx.moveTo(pad.left + pw, pad.top); ctx.lineTo(pad.left + pw, pad.top + ph); ctx.stroke();
+
+  // Left Y labels
+  ctx.fillStyle = '#555';
+  ctx.font = '11px Calibri, Segoe UI, Arial';
+  ctx.textAlign = 'right';
+  for(var g = 0; g <= yMax; g += 5){
+    ctx.fillText(g, pad.left - 6, ty(g) + 4);
+  }
+  // Left Y title
+  ctx.save();
+  ctx.translate(14, pad.top + ph/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.textAlign = 'center';
+  ctx.font = '12px Calibri, Segoe UI, Arial';
+  ctx.fillStyle = '#444';
+  ctx.fillText('Million lbs', 0, 0);
+  ctx.restore();
+
+  // Right Y labels
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#2a5c8f';
+  for(var g = 0; g <= y2Max; g += 5){
+    ctx.fillText(g + '%', pad.left + pw + 6, ty2(g) + 4);
+  }
+  // Right Y title
+  ctx.save();
+  ctx.translate(W - 8, pad.top + ph/2);
+  ctx.rotate(Math.PI/2);
+  ctx.textAlign = 'center';
+  ctx.font = '12px Calibri, Segoe UI, Arial';
+  ctx.fillStyle = '#2a5c8f';
+  ctx.fillText('Non-US Share of Total (%)', 0, 0);
+  ctx.restore();
+
+  // X labels
+  ctx.fillStyle = '#444';
+  ctx.font = '12px Calibri, Segoe UI, Arial';
+  ctx.textAlign = 'center';
+  for(var i = 0; i < n; i++){
+    ctx.fillText(years[i], tx(i), pad.top + ph + 18);
+    if(i === n - 1){
+      ctx.fillStyle = '#888';
+      ctx.font = '9px Calibri, Segoe UI, Arial';
+      ctx.fillText('(Jan–Oct)', tx(i), pad.top + ph + 30);
+      ctx.fillStyle = '#444';
+      ctx.font = '12px Calibri, Segoe UI, Arial';
+    }
+  }
+
+  // Legend
+  var legendItems = [
+    {name: 'China', color: '#e8c44a'},
+    {name: 'Japan', color: '#e07070'},
+    {name: 'SE Asia (reprocessing)', color: '#6bb86b'},
+    {name: 'Other', color: '#bfbfbf'},
+    {name: 'Non-US share (%)', color: '#2a5c8f', isLine: true}
+  ];
+
+  var lx = pad.left + 20;
+  var ly = pad.top + ph + 45;
+  var lgap = 0;
+
+  ctx.font = '11px Calibri, Segoe UI, Arial';
+  legendItems.forEach(function(item){
+    if(item.isLine){
+      // Line symbol
+      ctx.strokeStyle = item.color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(lx + lgap, ly);
+      ctx.lineTo(lx + lgap + 18, ly);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(lx + lgap + 9, ly, 3, 0, Math.PI*2);
+      ctx.fillStyle = item.color;
+      ctx.fill();
+    } else {
+      ctx.fillStyle = item.color;
+      ctx.fillRect(lx + lgap, ly - 6, 14, 12);
+      ctx.strokeStyle = '#ccc';
+      ctx.lineWidth = 0.5;
+      ctx.strokeRect(lx + lgap, ly - 6, 14, 12);
+    }
+    ctx.fillStyle = '#444';
+    ctx.textAlign = 'left';
+    ctx.fillText(item.name, lx + lgap + 20, ly + 4);
+    lgap += ctx.measureText(item.name).width + 38;
+  });
+
+  // Annotation: narrative callout
+  var ax = pad.left + pw * 0.55, ay = pad.top + 16;
+  ctx.fillStyle = '#f5f0e8';
+  ctx.strokeStyle = '#c9a84c';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.roundRect(ax, ay, 240, 56, 4);
+  ctx.fill(); ctx.stroke();
+
+  ctx.fillStyle = '#7a6520';
+  ctx.font = '11px Calibri, Segoe UI, Arial';
+  ctx.textAlign = 'left';
+  ctx.fillText('Non-US markets contracted 60%', ax + 8, ay + 16);
+  ctx.fillText('from 27.3M lbs (2015) to 11.1M (2025 ann.)', ax + 8, ay + 30);
+  ctx.font = 'bold 11px Calibri, Segoe UI, Arial';
+  ctx.fillStyle = '#2a5c8f';
+  ctx.fillText('US now absorbs 91.5% of Canadian exports', ax + 8, ay + 46);
+
+})();
+</script>
+</body>
+</html>
