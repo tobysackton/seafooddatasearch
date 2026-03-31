@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gulf 5-8 oz: NL Season Opener Model + Gulf Premium</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+    background: #ffffff;
+    color: #1a2a3a;
+    padding: 28px 32px 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6b7f93;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #10253F;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: #6b7f93;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+
+  /* ── Formula banner ── */
+  .formula-banner {
+    border: 1.5px solid #c8d6e2;
+    border-radius: 8px;
+    padding: 10px 18px;
+    text-align: center;
+    font-size: 14.5px;
+    color: #2c3e50;
+    margin-bottom: 16px;
+    background: #f8fbfd;
+  }
+  .formula-banner .result {
+    color: #C85A20;
+    font-weight: 700;
+  }
+
+  /* ── Stat callouts ── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .stat-box {
+    border-radius: 8px;
+    padding: 10px 12px 11px;
+    text-align: center;
+  }
+  .stat-box.blue  { background: #EBF2F9; }
+  .stat-box.gray  { background: #F1F4F7; }
+  .stat-box.red   { background: #FEF0EA; }
+  .stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #10253F;
+    line-height: 1.15;
+  }
+  .stat-box.red .stat-value { color: #C85A20; }
+  .stat-label {
+    font-size: 10.5px;
+    color: #6b7f93;
+    line-height: 1.35;
+    margin-top: 3px;
+  }
+
+  /* ── Chart wrapper ── */
+  .chart-wrap {
+    position: relative;
+    height: 340px;
+    margin-bottom: 20px;
+  }
+  canvas { width: 100% !important; }
+
+  /* ── Sensitivity table ── */
+  .tbl-wrap {
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+  thead tr {
+    background: #10253F;
+    color: #fff;
+  }
+  thead th {
+    padding: 7px 12px;
+    text-align: right;
+    font-weight: 600;
+    font-size: 11.5px;
+    letter-spacing: 0.02em;
+  }
+  thead th:first-child { text-align: left; }
+  tbody tr:nth-child(even) { background: #f5f8fb; }
+  tbody tr:nth-child(odd)  { background: #ffffff; }
+  tbody tr.bold-row { font-weight: 700; background: #EBF2F9; }
+  tbody tr.footer-row {
+    background: #e8f4ee;
+    font-weight: 700;
+    font-size: 12px;
+  }
+  tbody td {
+    padding: 6px 12px;
+    text-align: right;
+    color: #1a2a3a;
+    border-bottom: 1px solid #e2eaf2;
+  }
+  tbody td:first-child { text-align: left; }
+  .highlight { color: #C85A20; font-weight: 700; }
+  .footer-cell-wide {
+    text-align: center !important;
+    color: #10253F;
+  }
+</style>
+</head>
+<body>
+
+<p class="eyebrow">NB Snow Crab 2026 — Opening Price Estimate</p>
+<h1>Gulf 5-8 oz: NL Season Opener Model + Gulf Premium</h1>
+<p class="subtitle">Urner Barry wholesale, April–May 2026 projected opening range</p>
+
+<div class="formula-banner">
+  NL Model Forecast <strong>$8.77</strong> + Gulf Premium <strong>$0.80–$1.30</strong> = <span class="result">$9.57 — $10.07</span>
+</div>
+
+<div class="stat-row">
+  <div class="stat-box blue">
+    <div class="stat-value">$8.77</div>
+    <div class="stat-label">NL Model Forecast<br>Apr–May 2026</div>
+  </div>
+  <div class="stat-box gray">
+    <div class="stat-value">$7.17–$10.72</div>
+    <div class="stat-label">NL 80% CI<br>Season Opener Model</div>
+  </div>
+  <div class="stat-box gray">
+    <div class="stat-value">$0.80–$1.30</div>
+    <div class="stat-label">Gulf Premium<br>2026 Estimate</div>
+  </div>
+  <div class="stat-box red">
+    <div class="stat-value">$9.77</div>
+    <div class="stat-label">Central Estimate<br>Gulf Opening</div>
+  </div>
+</div>
+
+<div class="chart-wrap">
+  <canvas id="myChart"></canvas>
+</div>
+
+<div class="tbl-wrap">
+<table>
+  <thead>
+    <tr>
+      <th>NL Base</th>
+      <th>NL Price</th>
+      <th>+ $0.80</th>
+      <th>+ $1.00</th>
+      <th>+ $1.30</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Lower 80% CI</td>
+      <td>$7.17</td>
+      <td>$7.97</td>
+      <td>$8.17</td>
+      <td>$8.47</td>
+    </tr>
+    <tr class="bold-row">
+      <td><strong>Model Central</strong></td>
+      <td><strong>$8.77</strong></td>
+      <td><strong>$9.57</strong></td>
+      <td><strong class="highlight">$9.77</strong></td>
+      <td><strong>$10.07</strong></td>
+    </tr>
+    <tr>
+      <td>Upper 80% CI</td>
+      <td>$10.72</td>
+      <td>$11.52</td>
+      <td>$11.72</td>
+      <td>$12.02</td>
+    </tr>
+    <tr class="footer-row">
+      <td>Opening Range</td>
+      <td></td>
+      <td colspan="3" class="footer-cell-wide">
+        Central: $9.57–$10.07 &nbsp;|&nbsp; Full: $7.97–$12.02
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<script>
+// ── Data ──────────────────────────────────────────────────────────────────
+// Monthly UB wholesale prices, Jul 2024 – May 2026
+// Sources: Urner Barry; NL Crab Market Review 2026; ISB Snow Crab Market Outlook 2026
+// Projected values (Apr–May 2026) are model estimates, not actuals
+
+const labels = [
+  "Jul '24","Aug '24","Sep '24","Oct '24","Nov '24","Dec '24",
+  "Jan '25","Feb '25","Mar '25","Apr '25","May '25","Jun '25",
+  "Jul '25","Aug '25","Sep '25","Oct '25","Nov '25","Dec '25",
+  "Jan '26","Feb '26","Mar '26",
+  "Apr '26","May '26"
+];
+
+// Projection starts at index 21 (Apr '26)
+const PROJ_START = 21;
+
+// NL 5-8 oz actual (solid blue), null for projected period
+const nlActual = [
+  6.00, 6.30, 7.25, 8.20, 8.20, 8.20,
+  8.25, 9.00, 9.00, 8.00, 8.10, 8.20,
+  8.20, 8.60, 9.30, 9.70, 9.70, 9.57,
+  10.00, 10.50, 10.75,
+  null, null
+];
+
+// Gulf 5-8 oz actual (solid red), null for projected period
+const gulfActual = [
+  6.65, 7.50, 8.40, 9.00, 9.30, 9.20,
+  9.25, 9.30, 9.30, 9.50, 9.20, 9.10,
+  8.80, 9.20, 9.80, 10.30, 10.40, 10.20,
+  10.70, 11.00, 11.00,
+  null, null
+];
+
+// Projected NL dashed — bridge from Mar '26 actual down to $8.77
+const nlProjected = new Array(PROJ_START - 1).fill(null).concat([10.75, 8.77, 8.77]);
+
+// Projected Gulf central dashed — bridge from Mar '26 actual down to $9.77
+const gulfProjCentral = new Array(PROJ_START - 1).fill(null).concat([11.00, 9.77, 9.77]);
+
+// Gulf central range band (shaded orange): $9.57–$10.07
+const gulfCentralUpper = new Array(PROJ_START).fill(null).concat([10.07, 10.07]);
+const gulfCentralLower = new Array(PROJ_START).fill(null).concat([9.57, 9.57]);
+
+// Gulf full range band (shaded light): $7.97–$12.02
+const gulfFullUpper = new Array(PROJ_START).fill(null).concat([12.02, 12.02]);
+const gulfFullLower  = new Array(PROJ_START).fill(null).concat([7.97, 7.97]);
+
+// ── Background plugin (projected zone shading) ────────────────────────────
+const projectionBgPlugin = {
+  id: 'projectionBg',
+  beforeDraw(chart) {
+    const { ctx, chartArea, scales } = chart;
+    const xScale = scales.x;
+    if (!xScale || !chartArea) return;
+    // Apr '26 is index 21 — get pixel position of left edge between Mar and Apr
+    const x1 = xScale.getPixelForValue(20.5);
+    const x2 = chartArea.right;
+    ctx.save();
+    ctx.fillStyle = 'rgba(240, 244, 248, 0.75)';
+    ctx.fillRect(x1, chartArea.top, x2 - x1, chartArea.bottom - chartArea.top);
+    // "PROJECTED" label
+    ctx.fillStyle = '#8fa5ba';
+    ctx.font = '600 10px Segoe UI, Calibri, Arial';
+    ctx.textAlign = 'left';
+    ctx.fillText('PROJECTED', x1 + 6, chartArea.top + 14);
+    // Dashed vertical divider
+    ctx.beginPath();
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = '#b0bfcf';
+    ctx.lineWidth = 1;
+    ctx.moveTo(x1, chartArea.top);
+    ctx.lineTo(x1, chartArea.bottom);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  }
+};
+
+// ── Right-side price labels plugin ───────────────────────────────────────
+const priceLabelPlugin = {
+  id: 'priceLabels',
+  afterDatasetsDraw(chart) {
+    const { ctx, scales, chartArea } = chart;
+    if (!scales.x || !chartArea) return;
+
+    const labels = [
+      { value: 10.07, color: '#C85A20', text: '$10.07', bold: false },
+      { value: 9.77,  color: '#C85A20', text: '$9.77',  bold: true  },
+      { value: 9.57,  color: '#555',    text: '$9.57',  bold: false },
+      { value: 8.77,  color: '#1565a8', text: '$8.77',  bold: false },
+    ];
+
+    const xRight = chartArea.right + 6;
+    ctx.save();
+    labels.forEach(({ value, color, text, bold }) => {
+      const y = scales.y.getPixelForValue(value);
+      ctx.fillStyle = color;
+      ctx.font = `${bold ? '700' : '500'} 11px Segoe UI, Calibri, Arial`;
+      ctx.textAlign = 'left';
+      ctx.fillText(text, xRight, y + 4);
+    });
+    ctx.restore();
+  }
+};
+
+// ── Chart configuration ───────────────────────────────────────────────────
+const ctx = document.getElementById('myChart').getContext('2d');
+
+Chart.register(projectionBgPlugin, priceLabelPlugin);
+
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      // ── Bands (drawn first, behind lines) ─────────────────────────────
+      {
+        label: 'Full range (NL 80% CI + premium)',
+        data: gulfFullUpper,
+        borderWidth: 0,
+        pointRadius: 0,
+        fill: '+1',
+        backgroundColor: 'rgba(200, 90, 32, 0.10)',
+        tension: 0,
+        spanGaps: false,
+        order: 10
+      },
+      {
+        label: '_fullLower',
+        data: gulfFullLower,
+        borderWidth: 0,
+        pointRadius: 0,
+        fill: false,
+        backgroundColor: 'transparent',
+        tension: 0,
+        spanGaps: false,
+        order: 10
+      },
+      {
+        label: 'Central range ($8.77 + $0.80–$1.30)',
+        data: gulfCentralUpper,
+        borderWidth: 0,
+        pointRadius: 0,
+        fill: '+1',
+        backgroundColor: 'rgba(200, 90, 32, 0.22)',
+        tension: 0,
+        spanGaps: false,
+        order: 9
+      },
+      {
+        label: '_centralLower',
+        data: gulfCentralLower,
+        borderWidth: 0,
+        pointRadius: 0,
+        fill: false,
+        backgroundColor: 'transparent',
+        tension: 0,
+        spanGaps: false,
+        order: 9
+      },
+      // ── Actual lines ───────────────────────────────────────────────────
+      {
+        label: 'NL 5-8 oz (actual)',
+        data: nlActual,
+        borderColor: '#1565a8',
+        backgroundColor: '#1565a8',
+        borderWidth: 2.5,
+        pointRadius: (ctx) => {
+          const i = ctx.dataIndex;
+          return (i === 0 || i === 20) ? 4 : 2.5;
+        },
+        pointBackgroundColor: '#1565a8',
+        tension: 0.3,
+        spanGaps: false,
+        order: 3
+      },
+      {
+        label: 'Gulf 5-8 oz (actual)',
+        data: gulfActual,
+        borderColor: '#C85A20',
+        backgroundColor: '#C85A20',
+        borderWidth: 2.5,
+        pointRadius: (ctx) => {
+          const i = ctx.dataIndex;
+          return (i === 0 || i === 20) ? 4 : 2.5;
+        },
+        pointBackgroundColor: '#C85A20',
+        tension: 0.3,
+        spanGaps: false,
+        order: 2
+      },
+      // ── Projected dashed lines ─────────────────────────────────────────
+      {
+        label: '_nlProj',
+        data: nlProjected,
+        borderColor: '#1565a8',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderDash: [6, 4],
+        pointRadius: (ctx) => ctx.dataIndex >= PROJ_START ? 4 : 0,
+        pointBackgroundColor: '#1565a8',
+        tension: 0,
+        spanGaps: false,
+        order: 4
+      },
+      {
+        label: '_gulfProj',
+        data: gulfProjCentral,
+        borderColor: '#C85A20',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderDash: [6, 4],
+        pointRadius: (ctx) => ctx.dataIndex >= PROJ_START ? 4 : 0,
+        pointBackgroundColor: '#C85A20',
+        tension: 0,
+        spanGaps: false,
+        order: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: 'index',
+      intersect: false
+    },
+    layout: {
+      padding: { right: 52, top: 8, bottom: 4 }
+    },
+    plugins: {
+      legend: {
+        position: 'top',
+        align: 'start',
+        labels: {
+          filter: (item) => !item.text.startsWith('_'),
+          boxWidth: 14,
+          boxHeight: 14,
+          padding: 16,
+          font: { size: 11.5, family: 'Segoe UI, Calibri, Arial' },
+          color: '#2c3e50',
+          usePointStyle: false,
+          generateLabels(chart) {
+            const datasets = chart.data.datasets;
+            return [
+              {
+                text: 'NL 5-8 oz (actual)',
+                fillStyle: '#1565a8',
+                strokeStyle: '#1565a8',
+                lineWidth: 2.5,
+                datasetIndex: datasets.findIndex(d => d.label === 'NL 5-8 oz (actual)')
+              },
+              {
+                text: 'Gulf 5-8 oz (actual)',
+                fillStyle: '#C85A20',
+                strokeStyle: '#C85A20',
+                lineWidth: 2.5,
+                datasetIndex: datasets.findIndex(d => d.label === 'Gulf 5-8 oz (actual)')
+              },
+              {
+                text: 'Full range (NL 80% CI + premium)',
+                fillStyle: 'rgba(200, 90, 32, 0.15)',
+                strokeStyle: 'transparent',
+                lineWidth: 0,
+                datasetIndex: 0
+              },
+              {
+                text: 'Central range ($8.77 + $0.80–$1.30)',
+                fillStyle: 'rgba(200, 90, 32, 0.30)',
+                strokeStyle: 'transparent',
+                lineWidth: 0,
+                datasetIndex: 2
+              }
+            ];
+          }
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(16, 37, 63, 0.92)',
+        titleFont: { size: 12, weight: '600', family: 'Segoe UI, Calibri, Arial' },
+        bodyFont: { size: 11.5, family: 'Segoe UI, Calibri, Arial' },
+        padding: 10,
+        cornerRadius: 6,
+        callbacks: {
+          label(ctx) {
+            if (ctx.dataset.label.startsWith('_')) return null;
+            if (ctx.parsed.y === null) return null;
+            return ` ${ctx.dataset.label}: $${ctx.parsed.y.toFixed(2)}`;
+          }
+        },
+        filter(item) {
+          return !item.dataset.label.startsWith('_') && item.parsed.y !== null;
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(0,0,0,0.06)', drawTicks: false },
+        border: { color: '#c8d6e2' },
+        ticks: {
+          font: { size: 10.5, family: 'Segoe UI, Calibri, Arial' },
+          color: '#6b7f93',
+          maxRotation: 35,
+          padding: 6
+        }
+      },
+      y: {
+        min: 5.50,
+        max: 13.00,
+        grid: { color: 'rgba(0,0,0,0.06)', drawTicks: false },
+        border: { color: '#c8d6e2' },
+        ticks: {
+          stepSize: 1.00,
+          font: { size: 11, family: 'Segoe UI, Calibri, Arial' },
+          color: '#6b7f93',
+          callback: v => `$${v.toFixed(2)}`,
+          padding: 6
+        },
+        title: {
+          display: true,
+          text: 'UB Wholesale (USD/lb)',
+          font: { size: 11, family: 'Segoe UI, Calibri, Arial', weight: '500' },
+          color: '#6b7f93',
+          padding: { bottom: 8 }
+        }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
