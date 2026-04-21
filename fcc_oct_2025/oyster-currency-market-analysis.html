@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oyster Export Price Analysis - Currency vs Market Effects</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .chart-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        .analysis-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+        .analysis-table th, .analysis-table td {
+            padding: 8px;
+            text-align: right;
+            border: 1px solid #ddd;
+        }
+        .analysis-table th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+        .analysis-table td:first-child, .analysis-table th:first-child {
+            text-align: left;
+        }
+        .highlight-row {
+            background-color: #fffacd;
+        }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #007bff;
+        }
+        .summary-card h3 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 5px 0;
+            border-bottom: 1px dotted #ddd;
+        }
+        .positive {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .negative {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .neutral {
+            color: #6c757d;
+        }
+        .table-container {
+            overflow-x: auto;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .insights {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .insights h4 {
+            margin-top: 0;
+            color: #495057;
+        }
+        .insights ul {
+            margin: 10px 0;
+        }
+        .insights li {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Canadian Oyster Export Price Analysis: Currency vs Market Effects</h1>
+    
+    <div class="summary-cards">
+        <div class="summary-card">
+            <h3>Overall Price Changes (Jan 2022 - Jul 2025)</h3>
+            <div class="metric">
+                <span>USD Price Change:</span>
+                <span id="usdTotalChange" class="positive"></span>
+            </div>
+            <div class="metric">
+                <span>CAD Price Change:</span>
+                <span id="cadTotalChange" class="positive"></span>
+            </div>
+            <div class="metric">
+                <span>Exchange Rate Change:</span>
+                <span id="fxTotalChange" class="negative"></span>
+            </div>
+        </div>
+        
+        <div class="summary-card">
+            <h3>Price Decomposition (2025 YTD)</h3>
+            <div class="metric">
+                <span>Market Effect (CAD):</span>
+                <span id="marketEffect2025" class="positive"></span>
+            </div>
+            <div class="metric">
+                <span>Currency Effect:</span>
+                <span id="currencyEffect2025" class="negative"></span>
+            </div>
+            <div class="metric">
+                <span>Total USD Change:</span>
+                <span id="totalEffect2025" class="positive"></span>
+            </div>
+        </div>
+        
+        <div class="summary-card">
+            <h3>Volume Impact Analysis</h3>
+            <div class="metric">
+                <span>Volume Change (2025 YTD):</span>
+                <span id="volumeChange2025" class="negative"></span>
+            </div>
+            <div class="metric">
+                <span>Volume-Price Correlation:</span>
+                <span id="volumePriceCorr" class="neutral"></span>
+            </div>
+            <div class="metric">
+                <span>Supply Elasticity:</span>
+                <span id="elasticity" class="neutral"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Price Trends: USD vs CAD with Exchange Rate</h2>
+        <div class="chart-wrapper">
+            <canvas id="priceChart"></canvas>
+        </div>
+        <div class="insights">
+            <h4>Key Insights:</h4>
+            <ul id="priceInsights"></ul>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Exchange Rate Impact on Pricing</h2>
+        <div class="chart-wrapper">
+            <canvas id="fxChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Price Change Attribution Analysis</h2>
+        <div class="chart-wrapper">
+            <canvas id="attributionChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Monthly Detailed Analysis</h2>
+        <div class="table-container">
+            <table class="analysis-table" id="detailTable">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Volume (kg)</th>
+                        <th>CAD/lb</th>
+                        <th>USD/lb</th>
+                        <th>Implied FX (USD/CAD)</th>
+                        <th>Vol Change %</th>
+                        <th>CAD Change %</th>
+                        <th>USD Change %</th>
+                        <th>FX Impact %</th>
+                        <th>Market Impact %</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Volume data from previous analysis
+        const volumeData = {
+            '202201': 314938, '202202': 442630, '202203': 469069, '202204': 329671,
+            '202205': 513042, '202206': 658498, '202207': 657704, '202208': 593062,
+            '202209': 519848, '202210': 542981, '202211': 466790, '202212': 495559,
+            '202301': 405630, '202302': 397306, '202303': 355868, '202304': 353874,
+            '202305': 511055, '202306': 497612, '202307': 551180, '202308': 562630,
+            '202309': 429602, '202310': 464428, '202311': 401724, '202312': 479309,
+            '202401': 369532, '202402': 397749, '202403': 413184, '202404': 413557,
+            '202405': 458222, '202406': 506120, '202407': 458421, '202408': 444900,
+            '202409': 406376, '202410': 380209, '202411': 361779, '202412': 395572,
+            '202501': 252378, '202502': 287183, '202503': 307536, '202504': 307595,
+            '202505': 359505, '202506': 378257, '202507': 422793
+        };
+
+        // Price data from currency file
+        const priceData = {
+            // CAD prices
+            '202201': {cad: 6.173496, usd: 4.894118},
+            '202202': {cad: 6.331869, usd: 4.97856},
+            '202203': {cad: 6.414539, usd: 5.067389},
+            '202204': {cad: 6.550567, usd: 5.186886},
+            '202205': {cad: 6.106199, usd: 4.752576},
+            '202206': {cad: 6.395524, usd: 4.982946},
+            '202207': {cad: 6.122058, usd: 4.731955},
+            '202208': {cad: 6.163207, usd: 4.773581},
+            '202209': {cad: 5.880456, usd: 4.412777},
+            '202210': {cad: 6.283051, usd: 4.58368},
+            '202211': {cad: 6.366789, usd: 4.738075},
+            '202212': {cad: 6.510263, usd: 4.789918},
+            '202301': {cad: 6.858466, usd: 5.10991},
+            '202302': {cad: 6.981102, usd: 5.190305},
+            '202303': {cad: 7.054871, usd: 5.155417},
+            '202304': {cad: 6.888627, usd: 5.109739},
+            '202305': {cad: 7.057443, usd: 5.218609},
+            '202306': {cad: 6.90058, usd: 5.194662},
+            '202307': {cad: 6.10189, usd: 4.619905},
+            '202308': {cad: 6.621435, usd: 4.913488},
+            '202309': {cad: 6.631405, usd: 4.898138},
+            '202310': {cad: 6.257896, usd: 4.563198},
+            '202311': {cad: 7.129943, usd: 5.200093},
+            '202312': {cad: 6.847851, usd: 5.100716},
+            '202401': {cad: 6.912023, usd: 5.149253},
+            '202402': {cad: 7.155524, usd: 5.299362},
+            '202403': {cad: 7.01124, usd: 5.179511},
+            '202404': {cad: 6.087487, usd: 4.450025},
+            '202405': {cad: 6.288588, usd: 4.601264},
+            '202406': {cad: 6.532332, usd: 4.764486},
+            '202407': {cad: 7.152365, usd: 5.21606},
+            '202408': {cad: 6.87364, usd: 5.030944},
+            '202409': {cad: 6.993151, usd: 5.16389},
+            '202410': {cad: 7.651421, usd: 5.56184},
+            '202411': {cad: 7.465209, usd: 5.344868},
+            '202412': {cad: 7.715179, usd: 5.418062},
+            '202501': {cad: 8.548045, usd: 5.940191},
+            '202502': {cad: 8.475878, usd: 5.93094},
+            '202503': {cad: 7.872667, usd: 5.483895},
+            '202504': {cad: 8.006154, usd: 5.721919},
+            '202505': {cad: 7.790586, usd: 5.617055},
+            '202506': {cad: 7.585163, usd: 5.548982},
+            '202507': {cad: 7.434601, usd: 5.429959}
+        };
+
+        // Calculate implied exchange rates and analysis
+        const analysisData = [];
+        const dates = Object.keys(priceData).sort();
+        
+        dates.forEach((date, index) => {
+            const current = priceData[date];
+            const impliedFx = current.usd / current.cad;
+            const volume = volumeData[date] || 0;
+            
+            let volChange = 0, cadChange = 0, usdChange = 0, fxChange = 0;
+            
+            if (index > 0) {
+                const prevDate = dates[index - 1];
+                const prev = priceData[prevDate];
+                const prevVol = volumeData[prevDate] || 0;
+                const prevFx = prev.usd / prev.cad;
+                
+                volChange = prevVol > 0 ? ((volume - prevVol) / prevVol * 100) : 0;
+                cadChange = ((current.cad - prev.cad) / prev.cad * 100);
+                usdChange = ((current.usd - prev.usd) / prev.usd * 100);
+                fxChange = ((impliedFx - prevFx) / prevFx * 100);
+            }
+            
+            // Market impact is CAD price change, currency impact is FX change
+            const marketImpact = cadChange;
+            const currencyImpact = fxChange;
+            
+            analysisData.push({
+                date,
+                volume,
+                cad: current.cad,
+                usd: current.usd,
+                fx: impliedFx,
+                volChange,
+                cadChange,
+                usdChange,
+                fxChange,
+                marketImpact,
+                currencyImpact
+            });
+        });
+
+        // Format labels
+        const labels = dates.map(d => {
+            const year = d.substring(0, 4);
+            const month = parseInt(d.substring(4, 6));
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${monthNames[month - 1]} ${year.substring(2)}`;
+        });
+
+        // Price Chart
+        const priceCtx = document.getElementById('priceChart').getContext('2d');
+        new Chart(priceCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'USD Price/lb',
+                    data: analysisData.map(d => d.usd),
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    borderWidth: 2,
+                    yAxisID: 'y'
+                }, {
+                    label: 'CAD Price/lb',
+                    data: analysisData.map(d => d.cad),
+                    borderColor: '#dc3545',
+                    backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                    borderWidth: 2,
+                    yAxisID: 'y'
+                }, {
+                    label: 'Implied FX Rate (USD/CAD)',
+                    data: analysisData.map(d => d.fx),
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    yAxisID: 'y1'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45,
+                            autoSkip: true,
+                            maxTicksLimit: 20
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Price per lb'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toFixed(2);
+                            }
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Exchange Rate (USD/CAD)'
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // FX Impact Chart
+        const fxCtx = document.getElementById('fxChart').getContext('2d');
+        new Chart(fxCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Exchange Rate (USD/CAD)',
+                    data: analysisData.map(d => d.fx),
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                    borderWidth: 2,
+                    yAxisID: 'y'
+                }, {
+                    label: 'Volume (000 kg)',
+                    data: analysisData.map(d => d.volume / 1000),
+                    borderColor: '#6c757d',
+                    backgroundColor: 'rgba(108, 117, 125, 0.1)',
+                    borderWidth: 2,
+                    yAxisID: 'y1'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45,
+                            autoSkip: true,
+                            maxTicksLimit: 20
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Exchange Rate (USD/CAD)'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Volume (000 kg)'
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Attribution Chart - Stacked Bar
+        const attributionCtx = document.getElementById('attributionChart').getContext('2d');
+        new Chart(attributionCtx, {
+            type: 'bar',
+            data: {
+                labels: labels.slice(-24), // Last 24 months
+                datasets: [{
+                    label: 'Market Effect (CAD Price)',
+                    data: analysisData.slice(-24).map(d => d.cadChange),
+                    backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                    borderColor: '#28a745',
+                    borderWidth: 1
+                }, {
+                    label: 'Currency Effect (FX)',
+                    data: analysisData.slice(-24).map(d => d.fxChange),
+                    backgroundColor: 'rgba(220, 53, 69, 0.7)',
+                    borderColor: '#dc3545',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        title: {
+                            display: true,
+                            text: 'Month-over-Month Change (%)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.raw.toFixed(2) + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Populate table
+        const tableBody = document.getElementById('tableBody');
+        analysisData.forEach((item, index) => {
+            const row = tableBody.insertRow();
+            if (item.date.startsWith('2025')) {
+                row.className = 'highlight-row';
+            }
+            
+            const year = item.date.substring(0, 4);
+            const month = parseInt(item.date.substring(4, 6));
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            row.insertCell(0).textContent = `${monthNames[month - 1]} ${year}`;
+            row.insertCell(1).textContent = item.volume.toLocaleString();
+            row.insertCell(2).textContent = '$' + item.cad.toFixed(3);
+            row.insertCell(3).textContent = '$' + item.usd.toFixed(3);
+            row.insertCell(4).textContent = item.fx.toFixed(4);
+            row.insertCell(5).textContent = item.volChange.toFixed(1) + '%';
+            row.insertCell(6).textContent = item.cadChange.toFixed(1) + '%';
+            row.insertCell(7).textContent = item.usdChange.toFixed(1) + '%';
+            row.insertCell(8).textContent = item.fxChange.toFixed(1) + '%';
+            row.insertCell(9).textContent = item.marketImpact.toFixed(1) + '%';
+        });
+
+        // Calculate summary statistics
+        const firstData = analysisData[0];
+        const lastData = analysisData[analysisData.length - 1];
+        const usdTotalChange = ((lastData.usd - firstData.usd) / firstData.usd * 100).toFixed(1);
+        const cadTotalChange = ((lastData.cad - firstData.cad) / firstData.cad * 100).toFixed(1);
+        const fxTotalChange = ((lastData.fx - firstData.fx) / firstData.fx * 100).toFixed(1);
+
+        document.getElementById('usdTotalChange').textContent = '+' + usdTotalChange + '%';
+        document.getElementById('cadTotalChange').textContent = '+' + cadTotalChange + '%';
+        document.getElementById('fxTotalChange').textContent = fxTotalChange + '% (CAD weaker)';
+
+        // 2025 YTD analysis
+        const data2025 = analysisData.filter(d => d.date.startsWith('2025'));
+        const data2024End = analysisData.find(d => d.date === '202412');
+        
+        if (data2025.length > 0 && data2024End) {
+            const last2025 = data2025[data2025.length - 1];
+            const cadChange2025 = ((last2025.cad - data2024End.cad) / data2024End.cad * 100);
+            const usdChange2025 = ((last2025.usd - data2024End.usd) / data2024End.usd * 100);
+            const fxChange2025 = ((last2025.fx - data2024End.fx) / data2024End.fx * 100);
+            
+            document.getElementById('marketEffect2025').textContent = '+' + cadChange2025.toFixed(1) + '%';
+            document.getElementById('currencyEffect2025').textContent = fxChange2025.toFixed(1) + '%';
+            document.getElementById('totalEffect2025').textContent = '+' + usdChange2025.toFixed(1) + '%';
+            
+            // Volume change
+            const vol2025Avg = data2025.reduce((sum, d) => sum + d.volume, 0) / data2025.length;
+            const vol2024 = analysisData.filter(d => d.date.startsWith('2024'));
+            const vol2024Avg = vol2024.slice(0, 7).reduce((sum, d) => sum + d.volume, 0) / 7;
+            const volChange = ((vol2025Avg - vol2024Avg) / vol2024Avg * 100);
+            
+            document.getElementById('volumeChange2025').textContent = volChange.toFixed(1) + '%';
+        }
+
+        // Calculate correlation
+        const volumes = analysisData.map(d => d.volume);
+        const cadPrices = analysisData.map(d => d.cad);
+        
+        // Simple correlation calculation
+        const n = volumes.length;
+        const sumX = volumes.reduce((a, b) => a + b, 0);
+        const sumY = cadPrices.reduce((a, b) => a + b, 0);
+        const sumXY = volumes.reduce((total, x, i) => total + x * cadPrices[i], 0);
+        const sumX2 = volumes.reduce((total, x) => total + x * x, 0);
+        const sumY2 = cadPrices.reduce((total, y) => total + y * y, 0);
+        
+        const correlation = (n * sumXY - sumX * sumY) / 
+            Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+        
+        document.getElementById('volumePriceCorr').textContent = correlation.toFixed(3);
+        document.getElementById('elasticity').textContent = 'Inelastic (correlation: ' + correlation.toFixed(3) + ')';
+
+        // Add insights
+        const insights = [
+            `USD prices increased ${usdTotalChange}% from Jan 2022 to Jul 2025`,
+            `CAD prices increased ${cadTotalChange}%, indicating strong market fundamentals`,
+            `CAD depreciated ${Math.abs(fxTotalChange)}% against USD, dampening USD price increases`,
+            `Without currency depreciation, USD prices would have increased approximately ${cadTotalChange}%`,
+            `2025 shows accelerated CAD price increases, suggesting supply constraints`,
+            `Negative correlation (${correlation.toFixed(3)}) between volume and price confirms supply-driven pricing`
+        ];
+        
+        const insightsList = document.getElementById('priceInsights');
+        insights.forEach(insight => {
+            const li = document.createElement('li');
+            li.textContent = insight;
+            insightsList.appendChild(li);
+        });
+    </script>
+</body>
+</html>

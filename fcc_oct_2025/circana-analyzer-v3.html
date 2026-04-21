@@ -1,0 +1,1668 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circana Data Analyzer - v3</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f3f4f6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #1f2937;
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        
+        .subtitle {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .stage {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .stage.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .stage-title {
+            color: #1f2937;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .file-input-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-input-area:hover {
+            border-color: #6366f1;
+            background: #eff6ff;
+        }
+        
+        .file-input-area input {
+            display: none;
+        }
+        
+        .segment-selector {
+            margin-top: 20px;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+        
+        .segment-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 8px;
+            margin-top: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .segment-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .segment-item:hover {
+            background: #f3f4f6;
+        }
+        
+        .segment-item input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        
+        .segment-item.selected {
+            background: #eff6ff;
+            border-color: #6366f1;
+        }
+        
+        .button {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .button:hover:not(:disabled) {
+            background: #4f46e5;
+            transform: translateY(-1px);
+        }
+        
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .button-secondary {
+            background: #6b7280;
+        }
+        
+        .button-secondary:hover:not(:disabled) {
+            background: #4b5563;
+        }
+        
+        .button-success {
+            background: #10b981;
+        }
+        
+        .button-success:hover:not(:disabled) {
+            background: #059669;
+        }
+        
+        .date-range-panel {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .date-range-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+        
+        .date-range-section {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .date-range-section.active {
+            border-color: #6366f1;
+            background: #eff6ff;
+        }
+        
+        .date-range-title {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .date-selectors {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .date-display {
+            background: #e5e7eb;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #374151;
+            margin-top: 8px;
+        }
+        
+        .chart-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .control-label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .select-input {
+            padding: 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
+            font-size: 14px;
+            min-width: 120px;
+        }
+        
+        .toggle-group {
+            display: flex;
+            gap: 4px;
+            background: #f3f4f6;
+            padding: 2px;
+            border-radius: 6px;
+        }
+        
+        .toggle-button {
+            padding: 6px 12px;
+            border: none;
+            background: transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .toggle-button.active {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-top: 20px;
+        }
+        
+        .status-message {
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+        
+        .status-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        
+        .status-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+        
+        .status-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #3b82f6;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .stat-card {
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid #6366f1;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .info-box {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #78350f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Circana Data Analyzer</h1>
+            <div class="subtitle">Version 3 - Enhanced chart configurations with proper date labels</div>
+        </div>
+        
+        <!-- Stage 1: Data Loading -->
+        <div class="stage" id="stage1">
+            <div class="stage-title">Stage 1: Load and Select Data</div>
+            
+            <!-- File Upload -->
+            <div class="file-input-area" onclick="document.getElementById('fileInput').click()">
+                <input type="file" id="fileInput" accept=".csv,.xlsx,.xls">
+                <div style="font-size: 16px; font-weight: 600; color: #4b5563;">Click to upload file</div>
+                <div style="font-size: 14px; color: #9ca3af; margin-top: 4px;">CSV or Excel format</div>
+            </div>
+            
+            <div id="fileStatus" class="status-message hidden"></div>
+            
+            <!-- Segment Selection -->
+            <div id="segmentSelector" class="segment-selector hidden">
+                <div style="font-weight: 600; color: #1f2937;">Select 1 or 2 segments to analyze:</div>
+                <div id="segmentList" class="segment-list"></div>
+                <button id="loadDataBtn" class="button" style="margin-top: 16px;" onclick="loadSelectedSegments()">
+                    Load Selected Segments
+                </button>
+            </div>
+        </div>
+        
+        <!-- Stage 2: Date Range Selection and Visualization -->
+        <div class="stage hidden" id="stage2">
+            <div class="stage-title">Stage 2: Set Date Ranges and Visualize</div>
+            
+            <!-- Date Range Selection Panel -->
+            <div class="date-range-panel">
+                <div style="font-weight: 600; margin-bottom: 12px;">Step 1: Define Analysis Periods</div>
+                
+                <div class="date-range-row">
+                    <div class="date-range-section">
+                        <div class="date-range-title">Primary Period</div>
+                        <div class="date-selectors">
+                            <select id="primaryStart" class="select-input"></select>
+                            <span>to</span>
+                            <select id="primaryEnd" class="select-input"></select>
+                        </div>
+                        <div id="primaryDisplay" class="date-display"></div>
+                    </div>
+                    
+                    <div class="date-range-section">
+                        <div class="date-range-title">Comparison Period (for YoY)</div>
+                        <div style="margin-bottom: 8px;">
+                            <label style="font-size: 13px;">
+                                <input type="checkbox" id="autoComparison" checked onchange="toggleComparisonMode()">
+                                Auto-calculate (12 months prior)
+                            </label>
+                        </div>
+                        <div class="date-selectors" id="comparisonSelectors">
+                            <select id="comparisonStart" class="select-input" disabled></select>
+                            <span>to</span>
+                            <select id="comparisonEnd" class="select-input" disabled></select>
+                        </div>
+                        <div id="comparisonDisplay" class="date-display"></div>
+                    </div>
+                </div>
+                
+                <button class="button button-success" onclick="applyDateRanges()">Apply Date Ranges</button>
+            </div>
+            
+            <!-- Visualization Panel -->
+            <div id="visualizationPanel" class="hidden">
+                <div style="font-weight: 600; margin-bottom: 12px;">Step 2: Choose Visualization</div>
+                
+                <!-- Info box showing active periods -->
+                <div id="periodInfo" class="info-box"></div>
+                
+                <!-- Chart Controls -->
+                <div class="chart-controls">
+                    <div class="control-group">
+                        <label class="control-label">Chart Type</label>
+                        <select id="chartType" class="select-input" onchange="updateChart()">
+                            <option value="trend">Trend Over Time</option>
+                            <option value="yoy">Year-over-Year Comparison</option>
+                            <option value="period">Period Total Comparison</option>
+                            <option value="segment" id="segmentOption">Segment Comparison</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label class="control-label">Metric</label>
+                        <div class="toggle-group">
+                            <button class="toggle-button active" onclick="setMetric('volume')">Volume</button>
+                            <button class="toggle-button" onclick="setMetric('price')">Price</button>
+                            <button class="toggle-button" onclick="setMetric('both')">Both</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Statistics Summary -->
+                <div id="statsSummary" class="stats-summary"></div>
+                
+                <!-- Chart -->
+                <div class="chart-container">
+                    <canvas id="mainChart"></canvas>
+                </div>
+                
+                <!-- Export Buttons -->
+                <div class="export-buttons">
+                    <button class="button button-secondary" onclick="exportChart()">Export Chart</button>
+                    <button class="button button-secondary" onclick="exportData()">Export Data (CSV)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Global state object
+        const state = {
+            rawData: [],
+            processedData: [],
+            loadedData: [],
+            selectedSegments: [],
+            currentChart: null,
+            currentMetric: 'volume',
+            chartType: 'trend',
+            availableMonths: [],
+            dateRanges: {
+                primary: { start: null, end: null },
+                comparison: { start: null, end: null }
+            },
+            primaryData: [],
+            comparisonData: []
+        };
+        
+        // Debug function
+        function debug(message) {
+            console.log(message);
+        }
+        
+        // File input handler
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            resetState();
+            showStatus('info', 'Loading file...');
+            debug('File selected: ' + file.name);
+            
+            const reader = new FileReader();
+            const fileName = file.name.toLowerCase();
+            
+            if (fileName.endsWith('.csv')) {
+                reader.onload = function(event) {
+                    processCsvFile(event.target.result);
+                };
+                reader.readAsText(file);
+            } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+                reader.onload = function(event) {
+                    processExcelFile(event.target.result);
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        });
+        
+        // Reset state
+        function resetState() {
+            state.rawData = [];
+            state.processedData = [];
+            state.loadedData = [];
+            state.selectedSegments = [];
+            state.availableMonths = [];
+            state.dateRanges = {
+                primary: { start: null, end: null },
+                comparison: { start: null, end: null }
+            };
+            state.primaryData = [];
+            state.comparisonData = [];
+            
+            if (state.currentChart) {
+                state.currentChart.destroy();
+                state.currentChart = null;
+            }
+            
+            document.getElementById('segmentSelector').classList.add('hidden');
+            document.getElementById('stage2').classList.add('hidden');
+            document.getElementById('visualizationPanel').classList.add('hidden');
+        }
+        
+        // Process CSV file
+        function processCsvFile(content) {
+            debug('Processing CSV file');
+            Papa.parse(content, {
+                header: true,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    state.rawData = results.data;
+                    debug('CSV parsed: ' + state.rawData.length + ' rows');
+                    processRawData();
+                }
+            });
+        }
+        
+        // Process Excel file
+        function processExcelFile(content) {
+            debug('Processing Excel file');
+            try {
+                const workbook = XLSX.read(content, { type: 'array' });
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                state.rawData = XLSX.utils.sheet_to_json(worksheet, { raw: false });
+                debug('Excel parsed: ' + state.rawData.length + ' rows');
+                processRawData();
+            } catch (error) {
+                debug('Error: ' + error.message);
+                showStatus('error', 'Error reading Excel file');
+            }
+        }
+        
+        // Process raw data
+        function processRawData() {
+            if (!state.rawData || state.rawData.length === 0) {
+                showStatus('error', 'No data found in file');
+                return;
+            }
+            
+            // Detect fields
+            const fieldMap = detectFields(state.rawData[0]);
+            if (!fieldMap) {
+                showStatus('error', 'Required fields not found (segment, weekending, total vol, avg price)');
+                return;
+            }
+            
+            // Process and aggregate to monthly
+            const processed = [];
+            const monthlyData = {};
+            
+            state.rawData.forEach(row => {
+                const segment = row[fieldMap.segment];
+                const weekEnding = parseDate(row[fieldMap.weekEnding]);
+                
+                if (segment && weekEnding) {
+                    const year = weekEnding.getFullYear();
+                    const month = weekEnding.getMonth();
+                    const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`;
+                    const segmentKey = segment.trim();
+                    
+                    if (!monthlyData[segmentKey]) {
+                        monthlyData[segmentKey] = {};
+                    }
+                    
+                    if (!monthlyData[segmentKey][monthKey]) {
+                        monthlyData[segmentKey][monthKey] = {
+                            segment: segmentKey,
+                            year: year,
+                            month: month,
+                            monthKey: monthKey,
+                            displayMonth: getMonthName(month) + '-' + String(year).substr(-2),
+                            totalVolume: 0,
+                            priceSum: 0,
+                            count: 0
+                        };
+                    }
+                    
+                    const volume = parseNumber(row[fieldMap.totalVol]);
+                    const price = parseNumber(row[fieldMap.avgPrice]);
+                    
+                    monthlyData[segmentKey][monthKey].totalVolume += volume;
+                    monthlyData[segmentKey][monthKey].priceSum += price * volume;
+                    monthlyData[segmentKey][monthKey].count++;
+                }
+            });
+            
+            // Calculate average prices and flatten to array
+            Object.values(monthlyData).forEach(segment => {
+                Object.values(segment).forEach(month => {
+                    if (month.totalVolume > 0) {
+                        month.avgPrice = month.priceSum / month.totalVolume;
+                    } else {
+                        month.avgPrice = 0;
+                    }
+                    processed.push(month);
+                });
+            });
+            
+            state.processedData = processed;
+            debug('Processed ' + processed.length + ' monthly records');
+            
+            // Display segment selector
+            displaySegmentSelector();
+            showStatus('success', 'File processed successfully');
+        }
+        
+        // Detect fields in data
+        function detectFields(sampleRow) {
+            const fields = Object.keys(sampleRow);
+            const fieldMap = {};
+            
+            fields.forEach(field => {
+                const lower = field.toLowerCase().trim();
+                if (lower === 'segment') fieldMap.segment = field;
+                if (lower.includes('weekending') || lower.includes('week ending') || lower.includes('week_ending')) 
+                    fieldMap.weekEnding = field;
+                if (lower.includes('total vol') || lower.includes('total_vol') || lower.includes('totalvol')) 
+                    fieldMap.totalVol = field;
+                if (lower.includes('avg price') || lower.includes('avg_price') || lower.includes('avgprice')) 
+                    fieldMap.avgPrice = field;
+            });
+            
+            if (!fieldMap.segment || !fieldMap.weekEnding || !fieldMap.totalVol || !fieldMap.avgPrice) {
+                return null;
+            }
+            
+            return fieldMap;
+        }
+        
+        // Display segment selector
+        function displaySegmentSelector() {
+            const segments = [...new Set(state.processedData.map(d => d.segment))].sort();
+            const segmentList = document.getElementById('segmentList');
+            
+            segmentList.innerHTML = '';
+            segments.forEach(segment => {
+                const item = document.createElement('div');
+                item.className = 'segment-item';
+                item.innerHTML = `
+                    <input type="checkbox" id="seg_${segment}" value="${segment}" onchange="toggleSegment('${segment}')">
+                    <label for="seg_${segment}" style="cursor: pointer; flex: 1;">${segment}</label>
+                `;
+                segmentList.appendChild(item);
+            });
+            
+            document.getElementById('segmentSelector').classList.remove('hidden');
+        }
+        
+        // Toggle segment selection
+        function toggleSegment(segment) {
+            const checkbox = document.getElementById(`seg_${segment}`);
+            const item = checkbox.parentElement;
+            
+            if (checkbox.checked) {
+                if (state.selectedSegments.length >= 2) {
+                    checkbox.checked = false;
+                    showStatus('error', 'Maximum 2 segments can be selected');
+                    return;
+                }
+                state.selectedSegments.push(segment);
+                item.classList.add('selected');
+            } else {
+                state.selectedSegments = state.selectedSegments.filter(s => s !== segment);
+                item.classList.remove('selected');
+            }
+            
+            debug('Selected segments: ' + state.selectedSegments.join(', '));
+        }
+        
+        // Load selected segments
+        function loadSelectedSegments() {
+            if (state.selectedSegments.length === 0) {
+                showStatus('error', 'Please select at least one segment');
+                return;
+            }
+            
+            // Filter data for selected segments
+            state.loadedData = state.processedData
+                .filter(d => state.selectedSegments.includes(d.segment))
+                .sort((a, b) => a.monthKey.localeCompare(b.monthKey));
+            
+            // Get available months
+            state.availableMonths = [...new Set(state.loadedData.map(d => d.monthKey))].sort();
+            
+            debug('Loaded ' + state.loadedData.length + ' records');
+            
+            // Populate date selectors
+            populateDateSelectors();
+            
+            // Enable/disable segment comparison option
+            const segmentOption = document.getElementById('segmentOption');
+            if (state.selectedSegments.length === 2) {
+                segmentOption.disabled = false;
+                segmentOption.textContent = 'Segment Comparison';
+            } else {
+                segmentOption.disabled = true;
+                segmentOption.textContent = 'Segment Comparison (requires 2 segments)';
+            }
+            
+            // Show stage 2
+            document.getElementById('stage2').classList.remove('hidden');
+        }
+        
+        // Populate date selectors
+        function populateDateSelectors() {
+            const months = state.availableMonths;
+            const primaryStart = document.getElementById('primaryStart');
+            const primaryEnd = document.getElementById('primaryEnd');
+            const comparisonStart = document.getElementById('comparisonStart');
+            const comparisonEnd = document.getElementById('comparisonEnd');
+            
+            // Clear existing options
+            [primaryStart, primaryEnd, comparisonStart, comparisonEnd].forEach(select => {
+                select.innerHTML = '';
+            });
+            
+            // Add options
+            months.forEach((monthKey, index) => {
+                const display = getMonthYearDisplay(monthKey);
+                
+                // Primary selectors
+                const opt1 = new Option(display, monthKey);
+                const opt2 = new Option(display, monthKey);
+                primaryStart.add(opt1);
+                primaryEnd.add(opt2);
+                
+                // Comparison selectors
+                const opt3 = new Option(display, monthKey);
+                const opt4 = new Option(display, monthKey);
+                comparisonStart.add(opt3);
+                comparisonEnd.add(opt4);
+            });
+            
+            // Set defaults for primary (last 12 complete months if available)
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+            const currentMonthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            
+            // Check if current month is incomplete
+            let endIndex = months.length - 1;
+            if (months[endIndex] === currentMonthKey && currentDate.getDate() < 25) {
+                endIndex = Math.max(0, endIndex - 1);
+            }
+            
+            const startIndex = Math.max(0, endIndex - 11);
+            primaryStart.selectedIndex = startIndex;
+            primaryEnd.selectedIndex = endIndex;
+            
+            // Update displays
+            updateDateDisplays();
+        }
+        
+        // Toggle comparison mode
+        function toggleComparisonMode() {
+            const auto = document.getElementById('autoComparison').checked;
+            document.getElementById('comparisonStart').disabled = auto;
+            document.getElementById('comparisonEnd').disabled = auto;
+            
+            if (auto) {
+                updateDateDisplays();
+            }
+        }
+        
+        // Update date displays
+        function updateDateDisplays() {
+            const primaryStart = document.getElementById('primaryStart').value;
+            const primaryEnd = document.getElementById('primaryEnd').value;
+            
+            if (primaryStart && primaryEnd) {
+                const startDisplay = getMonthYearDisplay(primaryStart);
+                const endDisplay = getMonthYearDisplay(primaryEnd);
+                const monthCount = getMonthCount(primaryStart, primaryEnd);
+                
+                document.getElementById('primaryDisplay').innerHTML = 
+                    `<strong>${startDisplay}</strong> to <strong>${endDisplay}</strong> (${monthCount} months)`;
+                
+                // Auto-calculate comparison period if enabled
+                if (document.getElementById('autoComparison').checked) {
+                    const compStart = calculatePriorYearMonth(primaryStart);
+                    const compEnd = calculatePriorYearMonth(primaryEnd);
+                    
+                    // Set the comparison selectors
+                    const compStartSelect = document.getElementById('comparisonStart');
+                    const compEndSelect = document.getElementById('comparisonEnd');
+                    
+                    // Find and select the calculated months if they exist
+                    for (let i = 0; i < compStartSelect.options.length; i++) {
+                        if (compStartSelect.options[i].value === compStart) {
+                            compStartSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                    
+                    for (let i = 0; i < compEndSelect.options.length; i++) {
+                        if (compEndSelect.options[i].value === compEnd) {
+                            compEndSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                    
+                    const compStartDisplay = getMonthYearDisplay(compStart);
+                    const compEndDisplay = getMonthYearDisplay(compEnd);
+                    const compMonthCount = getMonthCount(compStart, compEnd);
+                    
+                    document.getElementById('comparisonDisplay').innerHTML = 
+                        `<strong>${compStartDisplay}</strong> to <strong>${compEndDisplay}</strong> (${compMonthCount} months)`;
+                }
+            }
+            
+            // Manual comparison display
+            if (!document.getElementById('autoComparison').checked) {
+                const compStart = document.getElementById('comparisonStart').value;
+                const compEnd = document.getElementById('comparisonEnd').value;
+                
+                if (compStart && compEnd) {
+                    const compStartDisplay = getMonthYearDisplay(compStart);
+                    const compEndDisplay = getMonthYearDisplay(compEnd);
+                    const compMonthCount = getMonthCount(compStart, compEnd);
+                    
+                    document.getElementById('comparisonDisplay').innerHTML = 
+                        `<strong>${compStartDisplay}</strong> to <strong>${compEndDisplay}</strong> (${compMonthCount} months)`;
+                }
+            }
+        }
+        
+        // Apply date ranges and prepare data
+        function applyDateRanges() {
+            const primaryStart = document.getElementById('primaryStart').value;
+            const primaryEnd = document.getElementById('primaryEnd').value;
+            const comparisonStart = document.getElementById('comparisonStart').value;
+            const comparisonEnd = document.getElementById('comparisonEnd').value;
+            
+            if (!primaryStart || !primaryEnd) {
+                showStatus('error', 'Please select primary period dates');
+                return;
+            }
+            
+            if (!comparisonStart || !comparisonEnd) {
+                showStatus('error', 'Please select comparison period dates');
+                return;
+            }
+            
+            // Store date ranges
+            state.dateRanges.primary = { start: primaryStart, end: primaryEnd };
+            state.dateRanges.comparison = { start: comparisonStart, end: comparisonEnd };
+            
+            // Filter data for each period
+            state.primaryData = state.loadedData.filter(d => 
+                d.monthKey >= primaryStart && d.monthKey <= primaryEnd
+            );
+            
+            state.comparisonData = state.loadedData.filter(d => 
+                d.monthKey >= comparisonStart && d.monthKey <= comparisonEnd
+            );
+            
+            debug(`Primary period: ${state.primaryData.length} records`);
+            debug(`Comparison period: ${state.comparisonData.length} records`);
+            
+            // Update period info
+            const periodInfo = document.getElementById('periodInfo');
+            periodInfo.innerHTML = `
+                <strong>Active Periods:</strong><br>
+                Primary: ${getMonthYearDisplay(primaryStart)} to ${getMonthYearDisplay(primaryEnd)}<br>
+                Comparison: ${getMonthYearDisplay(comparisonStart)} to ${getMonthYearDisplay(comparisonEnd)}
+            `;
+            
+            // Show visualization panel
+            document.getElementById('visualizationPanel').classList.remove('hidden');
+            
+            // Update statistics
+            updateStatistics();
+            
+            // Initialize chart
+            updateChart();
+            
+            showStatus('success', 'Date ranges applied successfully');
+        }
+        
+        // Update statistics summary
+        function updateStatistics() {
+            const container = document.getElementById('statsSummary');
+            const primaryData = state.primaryData;
+            const comparisonData = state.comparisonData;
+            
+            if (primaryData.length === 0) {
+                container.innerHTML = '<div class="stat-card"><div class="stat-label">No data in selected range</div></div>';
+                return;
+            }
+            
+            const primaryVolume = primaryData.reduce((sum, d) => sum + d.totalVolume, 0);
+            const primaryAvgPrice = primaryData.reduce((sum, d) => sum + d.avgPrice * d.totalVolume, 0) / primaryVolume;
+            
+            const compVolume = comparisonData.reduce((sum, d) => sum + d.totalVolume, 0);
+            const compAvgPrice = comparisonData.reduce((sum, d) => sum + d.avgPrice * d.totalVolume, 0) / compVolume;
+            
+            const volumeChange = compVolume > 0 ? ((primaryVolume - compVolume) / compVolume * 100) : 0;
+            const priceChange = compAvgPrice > 0 ? ((primaryAvgPrice - compAvgPrice) / compAvgPrice * 100) : 0;
+            
+            container.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-label">Primary Volume</div>
+                    <div class="stat-value">${formatNumber(primaryVolume)}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Primary Avg Price</div>
+                    <div class="stat-value">$${primaryAvgPrice.toFixed(2)}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Volume Change</div>
+                    <div class="stat-value" style="color: ${volumeChange >= 0 ? '#059669' : '#dc2626'};">
+                        ${volumeChange >= 0 ? '+' : ''}${volumeChange.toFixed(1)}%
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Price Change</div>
+                    <div class="stat-value" style="color: ${priceChange >= 0 ? '#059669' : '#dc2626'};">
+                        ${priceChange >= 0 ? '+' : ''}${priceChange.toFixed(1)}%
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Set metric
+        function setMetric(metric) {
+            state.currentMetric = metric;
+            
+            // Update toggle buttons
+            document.querySelectorAll('.toggle-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            updateChart();
+        }
+        
+        // Update chart based on current selections
+        function updateChart() {
+            const chartType = document.getElementById('chartType').value;
+            state.chartType = chartType;
+            
+            switch(chartType) {
+                case 'trend':
+                    drawTrendChart();
+                    break;
+                case 'yoy':
+                    drawYoyChart();
+                    break;
+                case 'period':
+                    drawPeriodChart();
+                    break;
+                case 'segment':
+                    if (state.selectedSegments.length === 2) {
+                        drawSegmentComparison();
+                    }
+                    break;
+            }
+        }
+        
+        // Get ordered month labels for the primary period
+        function getOrderedMonthLabels(data) {
+            // Get unique monthKeys and sort them
+            const uniqueMonths = [...new Set(data.map(d => d.monthKey))].sort();
+            
+            // Return display labels with year
+            return uniqueMonths.map(monthKey => {
+                const [year, month] = monthKey.split('-');
+                return getMonthName(parseInt(month) - 1) + '-' + year.substr(-2);
+            });
+        }
+        
+        // Draw trend chart
+        function drawTrendChart() {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            
+            if (state.currentChart) {
+                state.currentChart.destroy();
+            }
+            
+            // Get ordered labels from primary data
+            const labels = getOrderedMonthLabels(state.primaryData);
+            const uniqueMonths = [...new Set(state.primaryData.map(d => d.monthKey))].sort();
+            const datasets = [];
+            
+            if (state.currentMetric === 'both') {
+                // Combo chart: bars for volume, line for price
+                state.selectedSegments.forEach((segment, idx) => {
+                    const segmentData = state.primaryData.filter(d => d.segment === segment);
+                    
+                    // Volume as bars
+                    datasets.push({
+                        type: 'bar',
+                        label: segment + ' Volume',
+                        data: uniqueMonths.map(monthKey => {
+                            const point = segmentData.find(d => d.monthKey === monthKey);
+                            return point ? point.totalVolume : 0;
+                        }),
+                        backgroundColor: idx === 0 ? 'rgba(99, 102, 241, 0.7)' : 'rgba(16, 185, 129, 0.7)',
+                        yAxisID: 'y'
+                    });
+                    
+                    // Price as line
+                    datasets.push({
+                        type: 'line',
+                        label: segment + ' Price',
+                        data: uniqueMonths.map(monthKey => {
+                            const point = segmentData.find(d => d.monthKey === monthKey);
+                            return point ? point.avgPrice : null;
+                        }),
+                        borderColor: idx === 0 ? '#ef4444' : '#f59e0b',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.3,
+                        yAxisID: 'y1'
+                    });
+                });
+            } else {
+                // Single metric charts
+                state.selectedSegments.forEach((segment, idx) => {
+                    const segmentData = state.primaryData.filter(d => d.segment === segment);
+                    
+                    if (state.currentMetric === 'volume') {
+                        datasets.push({
+                            type: 'line',
+                            label: segment + ' Volume',
+                            data: uniqueMonths.map(monthKey => {
+                                const point = segmentData.find(d => d.monthKey === monthKey);
+                                return point ? point.totalVolume : 0;
+                            }),
+                            borderColor: idx === 0 ? '#6366f1' : '#10b981',
+                            backgroundColor: idx === 0 ? 'rgba(99, 102, 241, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.3,
+                            yAxisID: 'y'
+                        });
+                    } else if (state.currentMetric === 'price') {
+                        datasets.push({
+                            type: 'line',
+                            label: segment + ' Price',
+                            data: uniqueMonths.map(monthKey => {
+                                const point = segmentData.find(d => d.monthKey === monthKey);
+                                return point ? point.avgPrice : null;
+                            }),
+                            borderColor: idx === 0 ? '#ef4444' : '#f59e0b',
+                            fill: false,
+                            tension: 0.3,
+                            yAxisID: 'y'
+                        });
+                    }
+                });
+            }
+            
+            state.currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: getChartOptions()
+            });
+        }
+        
+        // Draw YoY chart
+        function drawYoyChart() {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            
+            if (state.currentChart) {
+                state.currentChart.destroy();
+            }
+            
+            // Get ordered labels from primary data
+            const primaryLabels = getOrderedMonthLabels(state.primaryData);
+            const primaryMonths = [...new Set(state.primaryData.map(d => d.monthKey))].sort();
+            const datasets = [];
+            
+            if (state.currentMetric === 'both') {
+                // Grouped bars for volume, lines for price
+                state.selectedSegments.forEach((segment, idx) => {
+                    const primarySegData = state.primaryData.filter(d => d.segment === segment);
+                    const compSegData = state.comparisonData.filter(d => d.segment === segment);
+                    
+                    // Volume bars - current period
+                    datasets.push({
+                        type: 'bar',
+                        label: segment + ' Volume (Current)',
+                        data: primaryMonths.map(monthKey => {
+                            const point = primarySegData.find(d => d.monthKey === monthKey);
+                            return point ? point.totalVolume : 0;
+                        }),
+                        backgroundColor: idx === 0 ? 'rgba(99, 102, 241, 0.7)' : 'rgba(16, 185, 129, 0.7)',
+                        yAxisID: 'y'
+                    });
+                    
+                    // Volume bars - comparison period (mapped to same months)
+                    const comparisonVolumeData = primaryMonths.map(monthKey => {
+                        const [year, month] = monthKey.split('-');
+                        const priorYearKey = `${parseInt(year) - 1}-${month}`;
+                        const point = compSegData.find(d => d.monthKey === priorYearKey);
+                        return point ? point.totalVolume : 0;
+                    });
+                    
+                    datasets.push({
+                        type: 'bar',
+                        label: segment + ' Volume (Previous)',
+                        data: comparisonVolumeData,
+                        backgroundColor: idx === 0 ? 'rgba(99, 102, 241, 0.3)' : 'rgba(16, 185, 129, 0.3)',
+                        yAxisID: 'y'
+                    });
+                    
+                    // Price lines - current period
+                    datasets.push({
+                        type: 'line',
+                        label: segment + ' Price (Current)',
+                        data: primaryMonths.map(monthKey => {
+                            const point = primarySegData.find(d => d.monthKey === monthKey);
+                            return point ? point.avgPrice : null;
+                        }),
+                        borderColor: idx === 0 ? '#ef4444' : '#f59e0b',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.3,
+                        yAxisID: 'y1'
+                    });
+                    
+                    // Price lines - comparison period
+                    const comparisonPriceData = primaryMonths.map(monthKey => {
+                        const [year, month] = monthKey.split('-');
+                        const priorYearKey = `${parseInt(year) - 1}-${month}`;
+                        const point = compSegData.find(d => d.monthKey === priorYearKey);
+                        return point ? point.avgPrice : null;
+                    });
+                    
+                    datasets.push({
+                        type: 'line',
+                        label: segment + ' Price (Previous)',
+                        data: comparisonPriceData,
+                        borderColor: idx === 0 ? '#ef4444' : '#f59e0b',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.3,
+                        yAxisID: 'y1'
+                    });
+                });
+            } else {
+                // Single metric
+                state.selectedSegments.forEach((segment, idx) => {
+                    const primarySegData = state.primaryData.filter(d => d.segment === segment);
+                    const compSegData = state.comparisonData.filter(d => d.segment === segment);
+                    
+                    const metricKey = state.currentMetric === 'volume' ? 'totalVolume' : 'avgPrice';
+                    
+                    // Current period
+                    datasets.push({
+                        type: 'line',
+                        label: `${segment} ${state.currentMetric === 'volume' ? 'Volume' : 'Price'} (Current)`,
+                        data: primaryMonths.map(monthKey => {
+                            const point = primarySegData.find(d => d.monthKey === monthKey);
+                            return point ? point[metricKey] : null;
+                        }),
+                        borderColor: idx === 0 ? '#6366f1' : '#10b981',
+                        backgroundColor: idx === 0 ? 'rgba(99, 102, 241, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        yAxisID: 'y'
+                    });
+                    
+                    // Previous period
+                    const comparisonData = primaryMonths.map(monthKey => {
+                        const [year, month] = monthKey.split('-');
+                        const priorYearKey = `${parseInt(year) - 1}-${month}`;
+                        const point = compSegData.find(d => d.monthKey === priorYearKey);
+                        return point ? point[metricKey] : null;
+                    });
+                    
+                    datasets.push({
+                        type: 'line',
+                        label: `${segment} ${state.currentMetric === 'volume' ? 'Volume' : 'Price'} (Previous)`,
+                        data: comparisonData,
+                        borderColor: idx === 0 ? '#a78bfa' : '#6ee7b7',
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        tension: 0.3,
+                        yAxisID: 'y'
+                    });
+                });
+            }
+            
+            state.currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: primaryLabels,
+                    datasets: datasets
+                },
+                options: getChartOptions()
+            });
+        }
+        
+        // Draw period comparison chart
+        function drawPeriodChart() {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            
+            if (state.currentChart) {
+                state.currentChart.destroy();
+            }
+            
+            const labels = state.selectedSegments;
+            const datasets = [];
+            
+            if (state.currentMetric === 'both') {
+                // Grouped bars for volume, lines for price
+                // Volume bars
+                const primaryVolumes = labels.map(seg => 
+                    state.primaryData.filter(d => d.segment === seg)
+                        .reduce((sum, d) => sum + d.totalVolume, 0)
+                );
+                const compVolumes = labels.map(seg => 
+                    state.comparisonData.filter(d => d.segment === seg)
+                        .reduce((sum, d) => sum + d.totalVolume, 0)
+                );
+                
+                datasets.push({
+                    type: 'bar',
+                    label: 'Primary Period Volume',
+                    data: primaryVolumes,
+                    backgroundColor: 'rgba(99, 102, 241, 0.7)',
+                    yAxisID: 'y'
+                });
+                
+                datasets.push({
+                    type: 'bar',
+                    label: 'Comparison Period Volume',
+                    data: compVolumes,
+                    backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                    yAxisID: 'y'
+                });
+                
+                // Price lines
+                const primaryPrices = labels.map(seg => {
+                    const segData = state.primaryData.filter(d => d.segment === seg);
+                    const totalVol = segData.reduce((sum, d) => sum + d.totalVolume, 0);
+                    const totalPrice = segData.reduce((sum, d) => sum + d.avgPrice * d.totalVolume, 0);
+                    return totalVol > 0 ? totalPrice / totalVol : 0;
+                });
+                
+                const compPrices = labels.map(seg => {
+                    const segData = state.comparisonData.filter(d => d.segment === seg);
+                    const totalVol = segData.reduce((sum, d) => sum + d.totalVolume, 0);
+                    const totalPrice = segData.reduce((sum, d) => sum + d.avgPrice * d.totalVolume, 0);
+                    return totalVol > 0 ? totalPrice / totalVol : 0;
+                });
+                
+                datasets.push({
+                    type: 'line',
+                    label: 'Primary Period Avg Price',
+                    data: primaryPrices,
+                    borderColor: '#ef4444',
+                    borderWidth: 2,
+                    fill: false,
+                    yAxisID: 'y1'
+                });
+                
+                datasets.push({
+                    type: 'line',
+                    label: 'Comparison Period Avg Price',
+                    data: compPrices,
+                    borderColor: '#f59e0b',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    fill: false,
+                    yAxisID: 'y1'
+                });
+            } else if (state.currentMetric === 'volume') {
+                const primaryVolumes = labels.map(seg => 
+                    state.primaryData.filter(d => d.segment === seg)
+                        .reduce((sum, d) => sum + d.totalVolume, 0)
+                );
+                const compVolumes = labels.map(seg => 
+                    state.comparisonData.filter(d => d.segment === seg)
+                        .reduce((sum, d) => sum + d.totalVolume, 0)
+                );
+                
+                datasets.push({
+                    type: 'bar',
+                    label: 'Primary Period Volume',
+                    data: primaryVolumes,
+                    backgroundColor: '#6366f1',
+                    yAxisID: 'y'
+                });
+                
+                datasets.push({
+                    type: 'bar',
+                    label: 'Comparison Period Volume',
+                    data: compVolumes,
+                    backgroundColor: '#10b981',
+                    yAxisID: 'y'
+                });
+            } else {
+                const primaryPrices = labels.map(seg => {
+                    const segData = state.primaryData.filter(d => d.segment === seg);
+                    const totalVol = segData.reduce((sum, d) => sum + d.totalVolume, 0);
+                    const totalPrice = segData.reduce((sum, d) => sum + d.avgPrice * d.totalVolume, 0);
+                    return totalVol > 0 ? totalPrice / totalVol : 0;
+                });
+                
+                const compPrices = labels.map(seg => {
+                    const segData = state.comparisonData.filter(d => d.segment === seg);
+                    const totalVol = segData.reduce((sum, d) => sum + d.totalVolume, 0);
+                    const totalPrice = segData.reduce((sum, d) => sum + d.avgPrice * d.totalVolume, 0);
+                    return totalVol > 0 ? totalPrice / totalVol : 0;
+                });
+                
+                datasets.push({
+                    type: 'bar',
+                    label: 'Primary Period Avg Price',
+                    data: primaryPrices,
+                    backgroundColor: '#ef4444',
+                    yAxisID: 'y'
+                });
+                
+                datasets.push({
+                    type: 'bar',
+                    label: 'Comparison Period Avg Price',
+                    data: compPrices,
+                    backgroundColor: '#f59e0b',
+                    yAxisID: 'y'
+                });
+            }
+            
+            state.currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: getChartOptions()
+            });
+        }
+        
+        // Draw segment comparison
+        function drawSegmentComparison() {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            
+            if (state.currentChart) {
+                state.currentChart.destroy();
+            }
+            
+            const labels = getOrderedMonthLabels(state.primaryData);
+            const uniqueMonths = [...new Set(state.primaryData.map(d => d.monthKey))].sort();
+            const seg1Data = state.primaryData.filter(d => d.segment === state.selectedSegments[0]);
+            const seg2Data = state.primaryData.filter(d => d.segment === state.selectedSegments[1]);
+            
+            const datasets = [];
+            
+            if (state.currentMetric === 'both') {
+                // Volume grouped bars, price lines on secondary axis
+                datasets.push({
+                    type: 'bar',
+                    label: state.selectedSegments[0] + ' Volume',
+                    data: uniqueMonths.map(monthKey => {
+                        const point = seg1Data.find(d => d.monthKey === monthKey);
+                        return point ? point.totalVolume : 0;
+                    }),
+                    backgroundColor: 'rgba(99, 102, 241, 0.7)',
+                    yAxisID: 'y'
+                });
+                
+                datasets.push({
+                    type: 'bar',
+                    label: state.selectedSegments[1] + ' Volume',
+                    data: uniqueMonths.map(monthKey => {
+                        const point = seg2Data.find(d => d.monthKey === monthKey);
+                        return point ? point.totalVolume : 0;
+                    }),
+                    backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                    yAxisID: 'y'
+                });
+                
+                datasets.push({
+                    type: 'line',
+                    label: state.selectedSegments[0] + ' Price',
+                    data: uniqueMonths.map(monthKey => {
+                        const point = seg1Data.find(d => d.monthKey === monthKey);
+                        return point ? point.avgPrice : null;
+                    }),
+                    borderColor: '#ef4444',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.3,
+                    yAxisID: 'y1'
+                });
+                
+                datasets.push({
+                    type: 'line',
+                    label: state.selectedSegments[1] + ' Price',
+                    data: uniqueMonths.map(monthKey => {
+                        const point = seg2Data.find(d => d.monthKey === monthKey);
+                        return point ? point.avgPrice : null;
+                    }),
+                    borderColor: '#f59e0b',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.3,
+                    yAxisID: 'y1'
+                });
+            } else if (state.currentMetric === 'volume') {
+                datasets.push({
+                    type: 'bar',
+                    label: state.selectedSegments[0] + ' Volume',
+                    data: uniqueMonths.map(monthKey => {
+                        const point = seg1Data.find(d => d.monthKey === monthKey);
+                        return point ? point.totalVolume : 0;
+                    }),
+                    backgroundColor: '#6366f1',
+                    yAxisID: 'y'
+                });
+                
+                datasets.push({
+                    type: 'bar',
+                    label: state.selectedSegments[1] + ' Volume',
+                    data: uniqueMonths.map(monthKey => {
+                        const point = seg2Data.find(d => d.monthKey === monthKey);
+                        return point ? point.totalVolume : 0;
+                    }),
+                    backgroundColor: '#10b981',
+                    yAxisID: 'y'
+                });
+            } else {
+                datasets.push({
+                    type: 'bar',
+                    label: state.selectedSegments[0] + ' Price',
+                    data: uniqueMonths.map(monthKey => {
+                        const point = seg1Data.find(d => d.monthKey === monthKey);
+                        return point ? point.avgPrice : 0;
+                    }),
+                    backgroundColor: '#ef4444',
+                    yAxisID: 'y'
+                });
+                
+                datasets.push({
+                    type: 'bar',
+                    label: state.selectedSegments[1] + ' Price',
+                    data: uniqueMonths.map(monthKey => {
+                        const point = seg2Data.find(d => d.monthKey === monthKey);
+                        return point ? point.avgPrice : 0;
+                    }),
+                    backgroundColor: '#f59e0b',
+                    yAxisID: 'y'
+                });
+            }
+            
+            state.currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+ },
+                options: getChartOptions()
+            });
+        }
+        
+        // Get chart options
+        function getChartOptions() {
+            const options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                if (context.dataset.label.includes('Volume')) {
+                                    return context.dataset.label + ': ' + formatNumber(context.parsed.y);
+                                } else if (context.dataset.label.includes('Price')) {
+                                    return context.dataset.label + ': $' + context.parsed.y.toFixed(2);
+                                }
+                                return context.dataset.label + ': ' + context.parsed.y;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: state.currentMetric === 'price' ? 'Price ($)' : 'Volume'
+                        },
+                        ticks: state.currentMetric === 'price' ? {
+                            callback: value => '$' + value.toFixed(2)
+                        } : {}
+                    }
+                }
+            };
+            
+            if (state.currentMetric === 'both') {
+                options.scales.y.title.text = 'Volume';
+                options.scales.y1 = {
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'Price ($)'
+                    },
+                    grid: {
+                        drawOnChartArea: false
+                    },
+                    ticks: {
+                        callback: value => '$' + value.toFixed(2)
+                    }
+                };
+            }
+            
+            return options;
+        }
+        
+        // Export functions
+        function exportChart() {
+            if (!state.currentChart) {
+                showStatus('error', 'No chart to export');
+                return;
+            }
+            
+            const canvas = document.getElementById('mainChart');
+            const link = document.createElement('a');
+            link.download = `circana_${state.chartType}_${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            
+            showStatus('success', 'Chart exported');
+        }
+        
+        function exportData() {
+            if (state.primaryData.length === 0) {
+                showStatus('error', 'No data to export');
+                return;
+            }
+            
+            let csv = 'Period,Segment,Year,Month,Month Display,Total Volume,Average Price\n';
+            
+            // Export primary data
+            state.primaryData.forEach(row => {
+                csv += `Primary,${row.segment},${row.year},${row.month + 1},${row.displayMonth},${row.totalVolume},${row.avgPrice.toFixed(2)}\n`;
+            });
+            
+            // Export comparison data
+            state.comparisonData.forEach(row => {
+                csv += `Comparison,${row.segment},${row.year},${row.month + 1},${row.displayMonth},${row.totalVolume},${row.avgPrice.toFixed(2)}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `circana_data_${Date.now()}.csv`;
+            link.click();
+            
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+            
+            showStatus('success', 'Data exported');
+        }
+        
+        // Utility functions
+        function parseDate(dateStr) {
+            if (!dateStr) return null;
+            let date = new Date(dateStr);
+            if (isNaN(date)) {
+                const parts = dateStr.split('/');
+                if (parts.length === 3) {
+                    const month = parseInt(parts[0]) - 1;
+                    const day = parseInt(parts[1]);
+                    let year = parseInt(parts[2]);
+                    if (year < 100) year += 2000;
+                    date = new Date(year, month, day);
+                }
+            }
+            return isNaN(date) ? null : date;
+        }
+        
+        function parseNumber(value) {
+            if (typeof value === 'number') return value;
+            if (!value) return 0;
+            const cleaned = String(value).replace(/[,$]/g, '');
+            return parseFloat(cleaned) || 0;
+        }
+        
+        function getMonthName(month) {
+            const names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return names[month];
+        }
+        
+        function getMonthYearDisplay(monthKey) {
+            const [year, month] = monthKey.split('-');
+            return getMonthName(parseInt(month) - 1) + '-' + year.substr(-2);
+        }
+        
+        function getMonthCount(startKey, endKey) {
+            const [startYear, startMonth] = startKey.split('-').map(Number);
+            const [endYear, endMonth] = endKey.split('-').map(Number);
+            return (endYear - startYear) * 12 + (endMonth - startMonth) + 1;
+        }
+        
+        function calculatePriorYearMonth(monthKey) {
+            const [year, month] = monthKey.split('-').map(Number);
+            return `${year - 1}-${String(month).padStart(2, '0')}`;
+        }
+        
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toFixed(0);
+        }
+        
+        function showStatus(type, message) {
+            const statusEl = document.getElementById('fileStatus');
+            statusEl.className = 'status-message status-' + type;
+            statusEl.textContent = message;
+            statusEl.classList.remove('hidden');
+            
+            if (type === 'success' || type === 'info') {
+                setTimeout(() => {
+                    statusEl.classList.add('hidden');
+                }, 3000);
+            }
+        }
+        
+        // Initialize - add event listeners
+        document.getElementById('primaryStart').addEventListener('change', updateDateDisplays);
+        document.getElementById('primaryEnd').addEventListener('change', updateDateDisplays);
+        document.getElementById('comparisonStart').addEventListener('change', updateDateDisplays);
+        document.getElementById('comparisonEnd').addEventListener('change', updateDateDisplays);
+        
+        debug('Application initialized - v3 with enhanced chart configurations');
+    </script>
+</body>
+</html>
+

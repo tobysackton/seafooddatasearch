@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canadian Oyster Export Analysis - Rolling 12-Month</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/regression/2.0.1/regression.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .chart-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2, h3 {
+            color: #333;
+        }
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        .stats {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+        td:first-child, th:first-child {
+            text-align: left;
+        }
+        .highlight {
+            background-color: #fffacd;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .summary-card {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+        }
+        .trend-up {
+            color: #28a745;
+        }
+        .trend-down {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <h1>Canadian Oyster Export Analysis to US - Rolling 12-Month Analysis</h1>
+    
+    <div class="chart-container">
+        <h2>Monthly Volume & Rolling 12-Month Average (KG)</h2>
+        <div class="chart-wrapper">
+            <canvas id="volumeChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Price per Piece Analysis (60g & 80g Oysters)</h2>
+        <div class="chart-wrapper">
+            <canvas id="priceChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Price per Pound Trend with Linear Regression</h2>
+        <div class="chart-wrapper">
+            <canvas id="trendChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Summary Statistics</h2>
+        <div class="summary-grid">
+            <div class="summary-card">
+                <h4>Latest Period (Jul 2025)</h4>
+                <p>Volume: <strong>422,793 kg</strong></p>
+                <p>Value: <strong>$6.93M USD</strong></p>
+                <p>Price/lb: <strong>$7.43</strong></p>
+                <p>60g piece: <strong>$0.98</strong></p>
+                <p>80g piece: <strong>$1.31</strong></p>
+            </div>
+            <div class="summary-card">
+                <h4>12-Month Comparison</h4>
+                <p>Aug 2023-Jul 2024 Avg Vol: <strong id="period1Vol"></strong></p>
+                <p>Aug 2024-Jul 2025 Avg Vol: <strong id="period2Vol"></strong></p>
+                <p>Volume Change: <strong id="volChange"></strong></p>
+                <p>Price Change: <strong id="priceChange"></strong></p>
+            </div>
+            <div class="summary-card">
+                <h4>Price Trends</h4>
+                <p>$/lb Trend: <strong id="priceTrend"></strong></p>
+                <p>60g Trend: <strong id="trend60g"></strong></p>
+                <p>80g Trend: <strong id="trend80g"></strong></p>
+                <p>R² (Price/lb): <strong id="r2Value"></strong></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Monthly Data Table with Rolling 12-Month Averages</h2>
+        <div class="table-container">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Volume (kg)</th>
+                        <th>Value (USD)</th>
+                        <th>$/lb</th>
+                        <th>60g piece</th>
+                        <th>80g piece</th>
+                        <th>12M Avg Vol</th>
+                        <th>12M Avg $/lb</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Parse the data
+        const rawData = `202201,314938,4286382, $6.17 , $0.82 , $1.09 
+202202,442630,6178846, $6.33 , $0.84 , $1.12 
+202203,469069,6633409, $6.41 , $0.85 , $1.13 
+202204,329671,4760957, $6.55 , $0.87 , $1.16 
+202205,513042,6906508, $6.11 , $0.81 , $1.08 
+202206,658498,9284643, $6.40 , $0.85 , $1.13 
+202207,657704,8876925, $6.12 , $0.81 , $1.08 
+202208,593062,8058263, $6.16 , $0.82 , $1.09 
+202209,519848,6739412, $5.88 , $0.78 , $1.04 
+202210,542981,7521247, $6.28 , $0.83 , $1.11 
+202211,466790,6552041, $6.37 , $0.84 , $1.12 
+202212,495559,7112602, $6.51 , $0.86 , $1.15 
+202301,405630,6133264, $6.86 , $0.91 , $1.21 
+202302,397306,6114821, $6.98 , $0.92 , $1.23 
+202303,355868,5534936, $7.05 , $0.93 , $1.24 
+202304,353874,5374226, $6.89 , $0.91 , $1.21 
+202305,511055,7951511, $7.06 , $0.93 , $1.24 
+202306,497612,7570265, $6.90 , $0.91 , $1.22 
+202307,551180,7414681, $6.10 , $0.81 , $1.08 
+202308,562630,8213147, $6.62 , $0.88 , $1.17 
+202309,429602,6280677, $6.63 , $0.88 , $1.17 
+202310,464428,6407393, $6.26 , $0.83 , $1.10 
+202311,401724,6314638, $7.13 , $0.94 , $1.26 
+202312,479309,7236099, $6.85 , $0.91 , $1.21 
+202401,369532,5631082, $6.91 , $0.91 , $1.22 
+202402,397749,6274587, $7.16 , $0.95 , $1.26 
+202403,413184,6386647, $7.01 , $0.93 , $1.24 
+202404,413557,5550192, $6.09 , $0.81 , $1.07 
+202405,458222,6352778, $6.29 , $0.83 , $1.11 
+202406,506120,7288805, $6.53 , $0.86 , $1.15 
+202407,458421,7228510, $7.15 , $0.95 , $1.26 
+202408,444900,6741923, $6.87 , $0.91 , $1.21 
+202409,406376,6265209, $6.99 , $0.93 , $1.23 
+202410,380209,6413559, $7.65 , $1.01 , $1.35 
+202411,361779,5954152, $7.47 , $0.99 , $1.32 
+202412,395572,6728313, $7.72 , $1.02 , $1.36 
+202501,252378,4756121, $8.55 , $1.13 , $1.51 
+202502,287183,5366338, $8.48 , $1.12 , $1.49 
+202503,307536,5337679, $7.87 , $1.04 , $1.39 
+202504,307595,5429225, $8.01 , $1.06 , $1.41 
+202505,359505,6174612, $7.79 , $1.03 , $1.37 
+202506,378257,6325378, $7.59 , $1.00 , $1.34 
+202507,422793,6929790, $7.43 , $0.98 , $1.31`;
+
+        const data = rawData.split('\n').map(line => {
+            const parts = line.split(',');
+            const dateStr = parts[0];
+            return {
+                date: dateStr,
+                year: parseInt(dateStr.substring(0, 4)),
+                month: parseInt(dateStr.substring(4, 6)),
+                volume: parseInt(parts[1]),
+                value: parseInt(parts[2]),
+                pricePerLb: parseFloat(parts[3].replace('$', '').trim()),
+                price60g: parseFloat(parts[4].replace('$', '').trim()),
+                price80g: parseFloat(parts[5].replace('$', '').trim())
+            };
+        });
+
+        // Calculate rolling 12-month averages
+        const dataWithRolling = data.map((item, index) => {
+            const rolling12 = index >= 11 ? {
+                avgVolume: data.slice(index - 11, index + 1).reduce((sum, d) => sum + d.volume, 0) / 12,
+                avgPrice: data.slice(index - 11, index + 1).reduce((sum, d) => sum + d.pricePerLb, 0) / 12,
+                avg60g: data.slice(index - 11, index + 1).reduce((sum, d) => sum + d.price60g, 0) / 12,
+                avg80g: data.slice(index - 11, index + 1).reduce((sum, d) => sum + d.price80g, 0) / 12
+            } : null;
+            
+            return {
+                ...item,
+                rolling12
+            };
+        });
+
+        // Format labels
+        const labels = data.map(d => {
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${monthNames[d.month - 1]} ${d.year.toString().slice(2)}`;
+        });
+
+        // Volume Chart
+        const volumeCtx = document.getElementById('volumeChart').getContext('2d');
+        new Chart(volumeCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Monthly Volume (kg)',
+                    data: data.map(d => d.volume),
+                    borderColor: '#4ECDC4',
+                    backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.1,
+                    yAxisID: 'y'
+                }, {
+                    label: '12-Month Rolling Avg',
+                    data: dataWithRolling.map(d => d.rolling12 ? d.rolling12.avgVolume : null),
+                    borderColor: '#FF6B6B',
+                    borderWidth: 3,
+                    borderDash: [5, 5],
+                    fill: false,
+                    tension: 0.3,
+                    yAxisID: 'y'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45,
+                            autoSkip: true,
+                            maxTicksLimit: 20
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Volume (kg)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return (value / 1000).toFixed(0) + 'k';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Price Chart
+        const priceCtx = document.getElementById('priceChart').getContext('2d');
+        new Chart(priceCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '60g Piece Price',
+                    data: data.map(d => d.price60g),
+                    borderColor: '#45B7D1',
+                    backgroundColor: 'rgba(69, 183, 209, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.1
+                }, {
+                    label: '80g Piece Price',
+                    data: data.map(d => d.price80g),
+                    borderColor: '#96CEB4',
+                    backgroundColor: 'rgba(150, 206, 180, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.1
+                }, {
+                    label: '60g 12M Avg',
+                    data: dataWithRolling.map(d => d.rolling12 ? d.rolling12.avg60g : null),
+                    borderColor: '#45B7D1',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    fill: false,
+                    tension: 0.3,
+                    pointRadius: 0
+                }, {
+                    label: '80g 12M Avg',
+                    data: dataWithRolling.map(d => d.rolling12 ? d.rolling12.avg80g : null),
+                    borderColor: '#96CEB4',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    fill: false,
+                    tension: 0.3,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45,
+                            autoSkip: true,
+                            maxTicksLimit: 20
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Price per Piece (USD)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toFixed(2);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Trend Chart with regression
+        const priceRegression = regression.linear(data.map((d, i) => [i, d.pricePerLb]));
+        const trendLine = data.map((d, i) => priceRegression.predict(i)[1]);
+
+        const trendCtx = document.getElementById('trendChart').getContext('2d');
+        new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Price per Pound',
+                    data: data.map(d => d.pricePerLb),
+                    borderColor: '#FF6B6B',
+                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.1
+                }, {
+                    label: 'Trend Line',
+                    data: trendLine,
+                    borderColor: '#333',
+                    borderWidth: 2,
+                    borderDash: [10, 5],
+                    fill: false,
+                    pointRadius: 0
+                }, {
+                    label: '12M Rolling Avg',
+                    data: dataWithRolling.map(d => d.rolling12 ? d.rolling12.avgPrice : null),
+                    borderColor: '#FFA500',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    fill: false,
+                    tension: 0.3,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45,
+                            autoSkip: true,
+                            maxTicksLimit: 20
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Price per Pound (USD)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toFixed(2);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Calculate statistics
+        const period1 = data.slice(19, 31); // Aug 2023 - Jul 2024
+        const period2 = data.slice(31, 43); // Aug 2024 - Jul 2025
+        
+        const avgVol1 = period1.reduce((sum, d) => sum + d.volume, 0) / 12;
+        const avgVol2 = period2.reduce((sum, d) => sum + d.volume, 0) / 12;
+        const avgPrice1 = period1.reduce((sum, d) => sum + d.pricePerLb, 0) / 12;
+        const avgPrice2 = period2.reduce((sum, d) => sum + d.pricePerLb, 0) / 12;
+        
+        const volChangePercent = ((avgVol2 - avgVol1) / avgVol1 * 100).toFixed(1);
+        const priceChangePercent = ((avgPrice2 - avgPrice1) / avgPrice1 * 100).toFixed(1);
+        
+        // Update summary statistics
+        document.getElementById('period1Vol').textContent = (avgVol1 / 1000).toFixed(1) + 'k kg';
+        document.getElementById('period2Vol').textContent = (avgVol2 / 1000).toFixed(1) + 'k kg';
+        document.getElementById('volChange').textContent = volChangePercent + '%';
+        document.getElementById('volChange').className = parseFloat(volChangePercent) > 0 ? 'trend-up' : 'trend-down';
+        document.getElementById('priceChange').textContent = '+' + priceChangePercent + '%';
+        document.getElementById('priceChange').className = 'trend-up';
+        
+        const priceTrendValue = priceRegression.equation[0] > 0 ? 'Rising' : 'Declining';
+        document.getElementById('priceTrend').textContent = priceTrendValue + ' ($' + (priceRegression.equation[0] * 12).toFixed(2) + '/year)';
+        document.getElementById('priceTrend').className = priceRegression.equation[0] > 0 ? 'trend-up' : 'trend-down';
+        
+        const reg60g = regression.linear(data.map((d, i) => [i, d.price60g]));
+        const reg80g = regression.linear(data.map((d, i) => [i, d.price80g]));
+        
+        document.getElementById('trend60g').textContent = reg60g.equation[0] > 0 ? 'Rising' : 'Declining';
+        document.getElementById('trend60g').className = reg60g.equation[0] > 0 ? 'trend-up' : 'trend-down';
+        document.getElementById('trend80g').textContent = reg80g.equation[0] > 0 ? 'Rising' : 'Declining';
+        document.getElementById('trend80g').className = reg80g.equation[0] > 0 ? 'trend-up' : 'trend-down';
+        document.getElementById('r2Value').textContent = priceRegression.r2.toFixed(4);
+
+        // Populate table
+        const tableBody = document.getElementById('tableBody');
+        dataWithRolling.forEach((item, index) => {
+            const row = tableBody.insertRow();
+            row.className = index >= dataWithRolling.length - 12 ? 'highlight' : '';
+            
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            row.insertCell(0).textContent = `${monthNames[item.month - 1]} ${item.year}`;
+            row.insertCell(1).textContent = item.volume.toLocaleString();
+            row.insertCell(2).textContent = '$' + item.value.toLocaleString();
+            row.insertCell(3).textContent = '$' + item.pricePerLb.toFixed(2);
+            row.insertCell(4).textContent = '$' + item.price60g.toFixed(2);
+            row.insertCell(5).textContent = '$' + item.price80g.toFixed(2);
+            row.insertCell(6).textContent = item.rolling12 ? item.rolling12.avgVolume.toFixed(0) : '-';
+            row.insertCell(7).textContent = item.rolling12 ? '$' + item.rolling12.avgPrice.toFixed(2) : '-';
+        });
+    </script>
+</body>
+</html>

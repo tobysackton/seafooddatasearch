@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mussels Export Analysis - Industry Pricing Practices vs Currency Effects</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1, h2, h3, h4, h5 {
+            color: #333;
+        }
+        .alert {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .pricing-practice {
+            background-color: #fff8dc;
+            border-left: 4px solid #ff6b6b;
+        }
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #17a2b8;
+        }
+        .summary-card h3 {
+            margin-top: 0;
+            color: #17a2b8;
+        }
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 5px 0;
+            border-bottom: 1px dotted #ddd;
+        }
+        .positive {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .negative {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .neutral {
+            color: #6c757d;
+        }
+        .insights {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .insights h4 {
+            margin-top: 0;
+            color: #495057;
+        }
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .stat-box {
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+        .key-finding {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            border-left: 3px solid #dc3545;
+        }
+        .practice-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 3px solid #17a2b8;
+        }
+    </style>
+</head>
+<body>
+    <h1>Canadian Mussels Export: Industry Pricing Practices vs Currency Effects</h1>
+    
+    <div class="alert">
+        <strong>Analysis Method:</strong> Using official Bank of Canada USD/CAD exchange rates to understand how industry pricing practices interact with currency movements in the mussels trade.
+    </div>
+
+    <div class="summary-cards">
+        <div class="summary-card">
+            <h3>Price Movement Summary</h3>
+            <div class="metric">
+                <span>CAD Price Change (Jan 22-Jul 25):</span>
+                <span class="positive">+20.9%</span>
+            </div>
+            <div class="metric">
+                <span>USD Price Change (Actual):</span>
+                <span class="positive">+5.7%</span>
+            </div>
+            <div class="metric">
+                <span>Exchange Rate Change:</span>
+                <span class="negative">+8.5% USD/CAD</span>
+            </div>
+            <div class="metric">
+                <span>Price Protection from FX:</span>
+                <span class="positive">~15%</span>
+            </div>
+        </div>
+        
+        <div class="summary-card">
+            <h3>Industry Pricing Practice</h3>
+            <div class="metric">
+                <span>Trading Currency:</span>
+                <span class="neutral">USD (standard)</span>
+            </div>
+            <div class="metric">
+                <span>Price Stability Period:</span>
+                <span class="neutral">Variable</span>
+            </div>
+            <div class="metric">
+                <span>Typical Ranges:</span>
+                <span class="neutral">30 days to 6+ months</span>
+            </div>
+            <div class="metric">
+                <span>Avg Price Variance:</span>
+                <span class="neutral">±$0.08/lb</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Price Trends with Official Exchange Rates</h2>
+        <div class="chart-wrapper">
+            <canvas id="priceChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-container pricing-practice">
+        <h2>Industry USD Pricing Practice vs Exchange Rate Reality</h2>
+        <div class="practice-box">
+            <h4>Standard Industry Practice for Mussels:</h4>
+            <ul style="margin: 10px 0;">
+                <li>Sellers quote and maintain <strong>stable USD prices</strong> for defined periods</li>
+                <li>Price guarantee periods vary: <strong>30-90 days</strong> (common) to <strong>6+ months</strong> (established relationships)</li>
+                <li>Not formal contracts but <strong>industry norm</strong> for price stability</li>
+                <li>Protects both buyers and sellers from short-term FX volatility</li>
+            </ul>
+        </div>
+        <div class="chart-wrapper">
+            <canvas id="discrepancyChart"></canvas>
+        </div>
+        <div class="insights">
+            <h4>What the Data Reveals:</h4>
+            <div class="analysis-grid">
+                <div>
+                    <h5>Pattern Explanation:</h5>
+                    <ul style="font-size: 14px;">
+                        <li><strong>Price Stickiness:</strong> USD prices remain stable during guarantee periods while FX rates fluctuate daily</li>
+                        <li><strong>Customs Reality:</strong> Exporters declare CAD values using spot rates, but invoice at guaranteed USD prices</li>
+                        <li><strong>Variable Periods:</strong> Different buyer relationships have different price stability periods</li>
+                        <li><strong>Market Norm:</strong> This practice is standard in the mussels trade</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Statistical Evidence:</h5>
+                    <div id="practiceStats" class="stat-box"></div>
+                </div>
+            </div>
+            <div class="key-finding">
+                <h5 style="color: #dc3545; margin-top: 0;">Key Industry Insight:</h5>
+                <p id="keyFinding" style="font-size: 14px; line-height: 1.6; margin: 0;"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Impact of Price Stability Periods</h2>
+        <div class="chart-wrapper">
+            <canvas id="rollingChart"></canvas>
+        </div>
+        <div class="insights">
+            <h4>Understanding Price Stability Patterns</h4>
+            <p>The rolling averages show how USD price guarantees create systematic patterns. When exchange rates move significantly during a price guarantee period, it creates advantages or disadvantages that persist until prices are reset. Longer guarantee periods (6+ months) create larger potential discrepancies, while shorter periods (30 days) allow more frequent adjustments to market conditions.</p>
+        </div>
+    </div>
+
+    <script>
+        // Mussels data
+        const musselsData = [
+            {date: '2022-01', volume: 824203, cad: 1.63, usd: 1.409465},
+            {date: '2022-02', volume: 869498, cad: 1.69, usd: 1.518118},
+            {date: '2022-03', volume: 1047209, cad: 1.67, usd: 1.522972},
+            {date: '2022-04', volume: 1047206, cad: 1.66, usd: 1.448753},
+            {date: '2022-05', volume: 1144955, cad: 1.61, usd: 1.41259},
+            {date: '2022-06', volume: 1312184, cad: 1.62, usd: 1.389035},
+            {date: '2022-07', volume: 1194510, cad: 1.84, usd: 1.437283},
+            {date: '2022-08', volume: 1221978, cad: 1.70, usd: 1.606073},
+            {date: '2022-09', volume: 950340, cad: 1.91, usd: 1.579958},
+            {date: '2022-10', volume: 930472, cad: 1.97, usd: 1.504211},
+            {date: '2022-11', volume: 843014, cad: 1.97, usd: 1.543579},
+            {date: '2022-12', volume: 1208009, cad: 2.02, usd: 1.445819},
+            {date: '2023-01', volume: 898805, cad: 1.94, usd: 1.395014},
+            {date: '2023-02', volume: 849998, cad: 1.97, usd: 1.367569},
+            {date: '2023-03', volume: 878887, cad: 2.03, usd: 1.443529},
+            {date: '2023-04', volume: 909316, cad: 1.94, usd: 1.421598},
+            {date: '2023-05', volume: 1091985, cad: 1.89, usd: 1.467312},
+            {date: '2023-06', volume: 1069763, cad: 1.86, usd: 1.385778},
+            {date: '2023-07', volume: 1069541, cad: 1.94, usd: 1.484858},
+            {date: '2023-08', volume: 1044309, cad: 2.03, usd: 1.347161},
+            {date: '2023-09', volume: 808479, cad: 2.01, usd: 1.440108},
+            {date: '2023-10', volume: 782755, cad: 2.13, usd: 1.436454},
+            {date: '2023-11', volume: 767877, cad: 2.11, usd: 1.409729},
+            {date: '2023-12', volume: 1123831, cad: 1.99, usd: 1.397467},
+            {date: '2024-01', volume: 716574, cad: 2.16, usd: 1.400339},
+            {date: '2024-02', volume: 743638, cad: 2.13, usd: 1.470712},
+            {date: '2024-03', volume: 779765, cad: 2.04, usd: 1.50335},
+            {date: '2024-04', volume: 766049, cad: 2.11, usd: 1.483162},
+            {date: '2024-05', volume: 876039, cad: 1.98, usd: 1.552622},
+            {date: '2024-06', volume: 932452, cad: 1.91, usd: 1.541709},
+            {date: '2024-07', volume: 1001058, cad: 1.88, usd: 1.480468},
+            {date: '2024-08', volume: 911323, cad: 1.94, usd: 1.290596},
+            {date: '2024-09', volume: 817881, cad: 1.88, usd: 1.331775},
+            {date: '2024-10', volume: 799899, cad: 1.85, usd: 1.319214},
+            {date: '2024-11', volume: 701282, cad: 2.01, usd: 1.313356},
+            {date: '2024-12', volume: 1093606, cad: 2.01, usd: 1.253292},
+            {date: '2025-01', volume: 700277, cad: 2.03, usd: 1.265286},
+            {date: '2025-02', volume: 690385, cad: 2.17, usd: 1.421312},
+            {date: '2025-03', volume: 781357, cad: 2.19, usd: 1.313824},
+            {date: '2025-04', volume: 810254, cad: 2.03, usd: 1.434413},
+            {date: '2025-05', volume: 901403, cad: 1.96, usd: 1.436799},
+            {date: '2025-06', volume: 952964, cad: 1.90, usd: 1.466493},
+            {date: '2025-07', volume: 949555, cad: 1.97, usd: 1.489861}
+        ];
+
+        // Official FX rates
+        const officialFX = {
+            '2022-01': 1.2616, '2022-02': 1.2716, '2022-03': 1.2658, '2022-04': 1.2628,
+            '2022-05': 1.2852, '2022-06': 1.2814, '2022-07': 1.2942, '2022-08': 1.2922,
+            '2022-09': 1.3319, '2022-10': 1.37, '2022-11': 1.3449, '2022-12': 1.3592,
+            '2023-01': 1.3422, '2023-02': 1.345, '2023-03': 1.3682, '2023-04': 1.3485,
+            '2023-05': 1.352, '2023-06': 1.3288, '2023-07': 1.3215, '2023-08': 1.3485,
+            '2023-09': 1.3535, '2023-10': 1.3717, '2023-11': 1.3709, '2023-12': 1.3431,
+            '2024-01': 1.3425, '2024-02': 1.3501, '2024-03': 1.3539, '2024-04': 1.3674,
+            '2024-05': 1.367, '2024-06': 1.3707, '2024-07': 1.3712, '2024-08': 1.3652,
+            '2024-09': 1.3546, '2024-10': 1.3755, '2024-11': 1.3975, '2024-12': 1.424,
+            '2025-01': 1.439, '2025-02': 1.4301, '2025-03': 1.4359, '2025-04': 1.3988,
+            '2025-05': 1.386, '2025-06': 1.3674, '2025-07': 1.3691
+        };
+
+        // Calculate analysis
+        const analysisData = musselsData.map(item => {
+            const fx = officialFX[item.date];
+            const calculatedUSD = item.cad / fx;
+            const discrepancy = item.usd - calculatedUSD;
+            const discrepancyPercent = (discrepancy / calculatedUSD * 100);
+            
+            return {
+                ...item,
+                fx,
+                calculatedUSD,
+                discrepancy,
+                discrepancyPercent
+            };
+        });
+
+        // Labels
+        const labels = analysisData.map(d => {
+            const [year, month] = d.date.split('-');
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${monthNames[parseInt(month) - 1]} ${year.substring(2)}`;
+        });
+
+        // Price Chart
+        const priceCtx = document.getElementById('priceChart').getContext('2d');
+        new Chart(priceCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'CAD Price/lb',
+                    data: analysisData.map(d => d.cad),
+                    borderColor: '#dc3545',
+                    backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                    borderWidth: 2,
+                    yAxisID: 'y'
+                }, {
+                    label: 'USD Price/lb (Industry Practice)',
+                    data: analysisData.map(d => d.usd),
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    borderWidth: 3,
+                    yAxisID: 'y'
+                }, {
+                    label: 'USD Price/lb (If converted daily)',
+                    data: analysisData.map(d => d.calculatedUSD),
+                    borderColor: '#ffc107',
+                    borderDash: [5, 5],
+                    borderWidth: 2,
+                    fill: false,
+                    yAxisID: 'y'
+                }, {
+                    label: 'Exchange Rate (USD/CAD)',
+                    data: analysisData.map(d => d.fx),
+                    borderColor: '#007bff',
+                    borderDash: [10, 5],
+                    borderWidth: 2,
+                    fill: false,
+                    yAxisID: 'y1'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45,
+                            autoSkip: true,
+                            maxTicksLimit: 20
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Price per lb'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toFixed(2);
+                            }
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Exchange Rate'
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Discrepancy Chart
+        const discrepancyCtx = document.getElementById('discrepancyChart').getContext('2d');
+        new Chart(discrepancyCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Price Difference from Daily FX Conversion',
+                    data: analysisData.map(d => d.discrepancy),
+                    backgroundColor: analysisData.map(d => d.discrepancy > 0 ? 'rgba(220, 53, 69, 0.6)' : 'rgba(40, 167, 69, 0.6)'),
+                    borderColor: analysisData.map(d => d.discrepancy > 0 ? '#dc3545' : '#28a745'),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            afterLabel: function(context) {
+                                const index = context.dataIndex;
+                                const percent = analysisData[index].discrepancyPercent;
+                                return `${percent.toFixed(1)}% difference from spot FX conversion`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45,
+                            autoSkip: true,
+                            maxTicksLimit: 20
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'USD/lb Difference'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toFixed(3);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Rolling Analysis Chart - Multiple periods
+        const rollingCtx = document.getElementById('rollingChart').getContext('2d');
+        
+        // Calculate different rolling periods
+        const rolling1Month = analysisData.map(d => d.discrepancy);
+        
+        const rolling3Month = analysisData.map((item, index) => {
+            if (index < 2) return null;
+            const slice = analysisData.slice(index - 2, index + 1);
+            return slice.reduce((sum, d) => sum + d.discrepancy, 0) / 3;
+        });
+        
+        const rolling6Month = analysisData.map((item, index) => {
+            if (index < 5) return null;
+            const slice = analysisData.slice(index - 5, index + 1);
+            return slice.reduce((sum, d) => sum + d.discrepancy, 0) / 6;
+        });
+
+        new Chart(rollingCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Monthly Discrepancy',
+                    data: rolling1Month,
+                    borderColor: '#17a2b8',
+                    backgroundColor: 'rgba(23, 162, 184, 0.1)',
+                    borderWidth: 1,
+                    tension: 0.1
+                }, {
+                    label: '3-Month Avg (Common Practice)',
+                    data: rolling3Month,
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4
+                }, {
+                    label: '6-Month Avg (Long-term Relationships)',
+                    data: rolling6Month,
+                    borderColor: '#6610f2',
+                    backgroundColor: 'rgba(102, 16, 242, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45,
+                            autoSkip: true,
+                            maxTicksLimit: 20
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Average Price Discrepancy (USD/lb)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toFixed(3);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Calculate statistics
+        const avgDiscrepancy = analysisData.reduce((sum, d) => sum + Math.abs(d.discrepancy), 0) / analysisData.length;
+        const maxDiscrepancy = Math.max(...analysisData.map(d => d.discrepancy));
+        const minDiscrepancy = Math.min(...analysisData.map(d => d.discrepancy));
+        const positiveMonths = analysisData.filter(d => d.discrepancy > 0).length;
+        const negativeMonths = analysisData.filter(d => d.discrepancy < 0).length;
+        
+        // Calculate standard deviation of discrepancies
+        const mean = analysisData.reduce((sum, d) => sum + d.discrepancy, 0) / analysisData.length;
+        const variance = analysisData.reduce((sum, d) => sum + Math.pow(d.discrepancy - mean, 2), 0) / analysisData.length;
+        const stdDev = Math.sqrt(variance);
+        
+        document.getElementById('practiceStats').innerHTML = `
+            <p><strong>Avg Absolute Discrepancy:</strong> $${avgDiscrepancy.toFixed(3)}/lb</p>
+            <p><strong>Standard Deviation:</strong> $${stdDev.toFixed(3)}/lb</p>
+            <p><strong>Maximum Variance:</strong> +$${maxDiscrepancy.toFixed(3)}/lb</p>
+            <p><strong>Minimum Variance:</strong> ${minDiscrepancy.toFixed(3)}/lb</p>
+            <p><strong>Months above daily FX price:</strong> ${positiveMonths} (${(positiveMonths/analysisData.length*100).toFixed(0)}%)</p>
+            <p><strong>Months below daily FX price:</strong> ${negativeMonths} (${(negativeMonths/analysisData.length*100).toFixed(0)}%)</p>
+        `;
+        
+        document.getElementById('keyFinding').textContent = 
+            `The mussels trade operates on an industry practice of stable USD pricing, where sellers guarantee prices for periods ranging from 
+            30 days to 6+ months depending on buyer relationships and market conditions. This is not a formal contract system but rather a 
+            standard business practice that provides stability in international trade. The data shows systematic discrepancies averaging 
+            $${avgDiscrepancy.toFixed(2)}/lb between actual transaction prices and theoretical daily FX conversions, reflecting this reality. 
+            These USD price guarantees protect both parties from short-term currency volatility but can create advantages or disadvantages 
+            when exchange rates move significantly during the guarantee period. This practice fundamentally differs from products like oysters 
+            that may be priced in CAD or adjusted more frequently to market conditions.`;
+    </script>
+</body>
+</html>
